@@ -31,3 +31,15 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+
+### Eclipse project files ###
+.classpath
+.project
+.metadata
+.settings/
+bin/
+target/
+*.log
+*.tmp
