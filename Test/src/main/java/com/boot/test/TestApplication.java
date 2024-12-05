@@ -14,9 +14,9 @@ public class TestApplication {
         SpringApplication.run(TestApplication.class, args);
     }
     
-    @RequestMapping("/text")
+    @GetMapping("/test3")
     public String Movetext() {
-    	return "text";
+    	return "test3";
     }
     
     @GetMapping("/test2")
