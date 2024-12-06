@@ -1,0 +1,19 @@
+.header {
+    height: 150px;
+    border-bottom: 1px solid #666;
+}
+
+.loginbox {
+    margin: 10%;
+    border: 1px solid #666;
+    width: 480px;
+    height: 550px;
+    justify-self: center;
+}
+
+.login_btn {
+    border-radius: 5px;
+    border-color: #008ada;
+    color: #fff;
+    background-color: #008ada;
+}
