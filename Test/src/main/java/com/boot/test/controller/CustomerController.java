@@ -1,4 +1,4 @@
-package com.mypage.controller;
+package com.boot.test.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +9,7 @@ public class CustomerController {
 
     @GetMapping("/test4")
     public String myPage(Model model) {
+//        select member one 메서드 이용해서 정보 출력
         model.addAttribute("name", "이창진");
         model.addAttribute("id", "lcj123");
         model.addAttribute("phone", "010-1234-5678");
