@@ -5,16 +5,40 @@
 <title>SelfTop</title>
 </head>
 <body>
-	<div>
-		<img src="img/logo.png" alt="셀프탑 로고 이미지">
-	</div>
-	<h3>당신만의 컴퓨터, 여기서 시작하세요!</h3>
-	<br>
-	<form class="search-box" action="" method="get">
-		<input class="search-txt" type="text" placeholder="상품검색">
-		<button calss="search-btn" type="submit">
-		
-		</button>
-	</form>
+	<div class="container">
+        <!-- 로고와 슬로건 -->
+        <div class="logo">
+            <img src="img/logo.png" alt="셀프탑 로고" width="200px" height="auto">
+            <p class="slogan">당신만의 컴퓨터, 여기서 시작하세요!</p>
+        </div>
+        
+        <!-- 검색창 -->
+        <div class="search-box">
+            <input type="text" placeholder="상품 검색">
+            <button type="button">
+                <img src="img/search-icon.png" alt="검색" width="20px" height="20px">
+            </button>
+        </div>
+
+        <!-- nav bar -->
+        <div class="icon-menu">
+            <div class="icon-item">
+                <img src="img/pc-setup.png" alt="모의 PC 조립">
+                <p>모의 PC 조립</p>
+            </div>
+            <div class="icon-item">
+                <img src="img/cart.png" alt="장바구니">
+                <p>장바구니</p>
+            </div>
+            <div class="icon-item">
+                <img src="img/login.png" alt="로그인">
+                <p>로그인</p>
+            </div>
+            <div class="icon-item">
+                <img src="img/logout.png" alt="로그아웃">
+                <p>로그아웃</p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
