@@ -25,4 +25,9 @@ public class TestController {
     public String test4() {
         return "test4";
     }
+    
+    @GetMapping("/mainPage")
+    public String mainPage() {
+        return "mainPage";
+    }
 }

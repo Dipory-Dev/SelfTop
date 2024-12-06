@@ -1,37 +1,63 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<html>
 <head>
 <meta charset="EUC-KR">
 <title>Insert title here</title>
 </head>
 <body>
-<h1>ë§ˆì´í˜ì´ì§€</h1>
+    <div class="container">
+        <h1>¸¶ÀÌÆäÀÌÁö</h1>
+        <form>
+            <div>
+                <label for="name">ÀÌ¸§:</label>
+                <input type="text" id="name" th:value="${name}" readonly>
+            </div>
+            <div>
+                <label for="username">¾ÆÀÌµğ:</label>
+                <input type="text" id="username" th:value="${username}" readonly>
+            </div>
+            <div>
+                <label for="phone">ÀüÈ­¹øÈ£:</label>
+                <input type="text" id="phone" th:value="${phone}" readonly>
+            </div>
+            <div>
+                <label for="email">ÀÌ¸ŞÀÏ:</label>
+                <div class="email-input">
+                    <input type="text" id="emailFront" th:value="${emailFront}" readonly> @
+                    <input type="text" id="emailBack" th:value="${emailBack}" readonly>
+                </div>
+            </div>
+            <div>
+                <button type="button">Á¤º¸ ¼öÁ¤</button>
+            </div>
+        </form>
+    </div>
+<h1>¸¶ÀÌÆäÀÌÁö</h1>
 <hr>
 <table>
 	<tr>
-		<th>ì•„ì´ë””</th>
+		<th>¾ÆÀÌµğ</th>
 		<td> <textarea rows="1" cols="25" readonly style="resize:none;">(customer.id)</textarea></td>
 	</tr>
 	<tr>
-		<th>ëŒ€í‘œìëª…</th>
+		<th>´ëÇ¥ÀÚ¸í</th>
 		<td> <textarea rows="1" cols="25" readonly style="resize:none;">(ceo_name)</textarea></td>
 	</tr>
 	<tr>
-		<th>ì—…ì²´ëª…</th>
+		<th>¾÷Ã¼¸í</th>
 		<td> <textarea rows="1" cols="25" readonly style="resize:none;">(company_name)</textarea></td>
 	</tr>
 	<tr>
-		<th>ì—°ë½ì²˜</th>
+		<th>¿¬¶ôÃ³</th>
 		<td> <textarea rows="1" cols="25" readonly style="resize:none;">(customer.phone)</textarea></td>
 	</tr>
 	<tr>
-		<th>ì‚¬ì—…ì ë“±ë¡ë²ˆí˜¸</th>
+		<th>»ç¾÷ÀÚ µî·Ï¹øÈ£</th>
 		<td><textarea rows="1" cols="25" readonly style="resize:none;">(seller.business_license)</textarea></td>
 	</tr>
-	<td style="text-align: right;"><button>ì •ë³´ìˆ˜ì •</button></td>
+	<td style="text-align: right;"><button>Á¤º¸¼öÁ¤</button></td>
 </table>
-	
+
 </form>
 
 
