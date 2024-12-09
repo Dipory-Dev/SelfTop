@@ -1,0 +1,42 @@
+.header {
+    height: 100px;
+    border-bottom: 1px solid #666;
+    display: flex;
+    justify-content: space-between;
+}
+
+.loginbox {
+    margin: 10%;
+    border: 1px solid #666;
+    width: 480px;
+    height: 550px;
+    justify-self: center;
+}
+
+.login_btn {
+    border-radius: 5px;
+    border-color: #008ada;
+    color: #fff;
+    background-color: #008ada;
+}
+
+.logo_img {
+    width: 100px;
+}
+
+.log_info {
+    float: left;
+}
+
+.log_txt {
+    display: flex;
+    justify-content: space-between;
+}
+
+a {
+    color: #666;
+}
+
+p {
+    color: #666;
+}
