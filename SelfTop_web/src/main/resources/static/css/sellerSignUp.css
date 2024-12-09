@@ -1,0 +1,272 @@
+* {
+	margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    color: #666666;
+}
+
+header {
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-content img {
+    width: 150px;
+    margin-left: 10%;
+    height: 70px;
+}
+
+.header-content p {
+    margin-right: 10%;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.header-content p:hover {
+    text-decoration: underline;
+}
+
+section#signup-form {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    font-size: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+section#signup-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 32px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+	margin: 0 10px;
+    margin-bottom: 15px;
+}
+
+label {
+    margin-bottom: 5px;
+    display: block;
+}
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.input-group input[type="text"] {
+    width: 60%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#address{
+	padding: 60px;	
+}
+
+.btn-duplicate {
+    padding: 10px 30px;
+    margin-left: 80px;
+    background-color: #928383;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-duplicate:hover {
+    opacity: 0.5;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+}
+
+.input-container input[type="password"] {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 60%;
+}
+
+.pw-requirement {
+    color: red;
+    font-size: 20px;
+    margin-left: 50px;
+}
+
+.btn-business-info,
+.btn-address {
+    padding: 10px 30px;
+    margin-left: 80px;
+    background-color: #008ADA;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-business-info:hover,
+.btn-address:hover {
+    opacity: 0.5;
+}
+
+.email-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.email-container input {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.email-container span {
+    margin: 0 5px;
+}
+
+.email-container select {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.email-container button {
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.email-container button:hover {
+    background-color: #45a049;
+}
+
+.form-group p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.2) translateY(-2px);
+}
+
+.checkbox-group label {
+    font-size: 14px;
+    color: #555;
+    line-height: 2;
+}
+
+.checkbox-group label:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.terms-message {
+    font-size: 12px;
+    color: #ff0000;
+    margin-top: 10px;
+}
+
+.btn-signup {
+	margin-left: 10%;
+    padding: 10px 60px;
+    background-color: #008ADA;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-back {
+    padding: 10px 60px;
+    margin-left: 50px;
+    background-color: #008ADA;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-signup:hover,
+.btn-back:hover {
+    opacity: 0.5;
+}
+
+footer {
+    background-color: #E8E8E8;
+    font-size: 14px;
+    height: 120px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.footer-content img {
+    max-height: 50px;
+    margin-left: 10%;
+}
+
+.footer-text {
+    text-align: right;
+    margin-right: 10%;
+}
+
+.footer-text p, .footer-text span {
+    margin: 5px 0;
+}
