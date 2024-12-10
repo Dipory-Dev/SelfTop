@@ -26,6 +26,16 @@ document.addEventListener('DOMContentLoaded',()=>{
 	        submitButton.removeAttribute('form');
 	    }
 	 });
+	 
+	 //etc textarea height자동 조절
+	 const textareas = document.querySelectorAll('.etc-textarea');
+
+	 textareas.forEach(textarea => {
+	   textarea.addEventListener('input', function () {
+	     this.style.height = 'auto'; // 기존 높이를 초기화
+	     this.style.height = `${this.scrollHeight}px`; // 입력 내용에 따라 높이 조정
+	   });
+	 });
 });
 
         
