@@ -1,14 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
-<h1>kweon Janghyun</h1>
-<h1>Jiseong</h1>
-<h1>Yang Dayeon</h1>
-<h1>lim</h1>
-<h1>kweon,ohwonseok</h1>
+<header>
+
+</header>
+    <div class="container">
+        <h1>마이페이지</h1>
+        <div>
+            <label for="name">이름:</label>
+            <input type="text" id="name" th:value="${name}" readonly>
+        </div>
+        <div>
+            <label for="username">아이디:</label>
+            <input type="text" id="username" th:value="${username}" readonly>
+        </div>
+        <div>
+            <label for="phone">전화번호:</label>
+            <input type="text" id="phone" th:value="${phone}" readonly>
+        </div>
+        <div>
+            <label for="email">이메일:</label>
+            <div class="email-input">
+                <input type="text" id="emailFront" th:value="${emailFront}" readonly> @
+                <input type="text" id="emailBack" th:value="${emailBack}" readonly>
+            </div>
+        </div>
+        <div>
+            <button onclick="/dddd?member_no=~~~~" type="button">정보 수정</button>
+        </div>
+    </div>
+    <h1>마이페이지</h1>
+    <hr>
+    <table>
+        <tr>
+            <th>아이디</th>
+            <td> <textarea rows="1" cols="25" readonly style="resize:none;">(customer.id)</textarea></td>
+        </tr>
+        <tr>
+            <th>대표자명</th>
+            <td> <textarea rows="1" cols="25" readonly style="resize:none;">(ceo_name)</textarea></td>
+        </tr>
+        <tr>
+            <th>업체명</th>
+            <td> <textarea rows="1" cols="25" readonly style="resize:none;">(company_name)</textarea></td>
+        </tr>
+        <tr>
+            <th>연락처</th>
+            <td> <textarea rows="1" cols="25" readonly style="resize:none;">(customer.phone)</textarea></td>
+        </tr>
+        <tr>
+            <th>사업자 등록번호</th>
+            <td><textarea rows="1" cols="25" readonly style="resize:none;">(seller.business_license)</textarea></td>
+        </tr>
+        <td style="text-align: right;"><button>정보수정</button></td>
+    </table>
+<footer>
+
+</footer>
+
 </body>
 </html>
