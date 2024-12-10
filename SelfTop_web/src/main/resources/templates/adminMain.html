@@ -25,7 +25,7 @@
 					    	<option value="">-- 부품 선택 --</option>
 					    	<option value="cpu">CPU</option>
 					    	<option value="ram">RAM</option>
-					    	<option value="motherboard">메인보드</option>
+					    	<option value="mainboard">메인보드</option>
 					    	<option value="case">케이스</option>
 					    	<option value="gpu">그래픽카드</option>
 					    	<option value="power">파워</option>
@@ -41,7 +41,9 @@
 	    <!-- 각 부품별 테이블 -->
 	    <div id="form-container">
 	    
+	    <!-- CPU form -->
             <form id="cpu-form" class="part-form hidden">
+            	<input hidden="hidden" name="category" value="cpu">
                 <table class="product-table">
                     <tr>
                         <th>제품명</th>
@@ -109,12 +111,14 @@
                     </tr>
                     <tr>
                         <th>기타</th>
-                        <td><textarea name="etc" id="etc-textarea"></textarea></td>
+                        <td><textarea name="etc" class="etc-textarea"></textarea></td>
                     </tr>
                 </table>
             </form>
 
+		<!-- Ram form -->
             <form id="ram-form" class="part-form hidden">
+            	<input hidden="hidden" name="category" value="ram">
                 <table class="product-table">
                     <tr>
                         <th>제품명</th>
@@ -124,9 +128,452 @@
                         <th>제조사</th>
                         <td><input type="text" name="company" required></td>
                     </tr>
+                    <tr>
+                        <th>제품분류</th>
+                        <td>
+                        	<select name="ddr" required>
+                        		<option value="">-- DDR 선택 --</option>
+                        		<option value="ddr5">DDR5</option>
+                        		<option value="ddr4">DDR4</option>
+                        		<option value="ddr3">DDR3</option>
+                        		<option value="ddr2">DDR2</option>
+                        	</select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>용량</th>
+                        <td><input type="text" name="storage" required></td>
+                    </tr>
+                    <tr>
+                        <th>사용장치</th>
+                        <td>
+                        	<select name="device" required>
+                        		<option value="">-- 시용장치 선택 --</option>
+                        		<option value="ddr5">데스크탑용</option>
+                        		<option value="ddr4">노트북용</option>
+                        		<option value="ddr3">서버용</option>
+                        	</select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>히트싱크</th>
+                        <td>
+                        	<select name="heatsync" required>
+                        		<option value="">-- 유무 선택 --</option>
+                        		<option value="y">Y</option>
+                        		<option value="n">N</option>
+                        	</select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>소비전력</th>
+                        <td><input type="text" name="watt" required></td>
+                    </tr>
+                    <tr>
+                        <th>제품 출시일</th>
+                        <td><input type="month" name="upload_date" required></td>
+                    </tr>
+                    <tr>
+                        <th>섬네일</th>
+                        <td><input type="text" name="thumbnail" required></td>
+                    </tr>
+                    <tr>
+                        <th>상세 이미지</th>
+                        <td><input type="text" name="content_img" required></td>
+                    </tr>
+                    <tr>
+                        <th>기타</th>
+                        <td><textarea name="etc" class="etc-textarea"></textarea></td>
+                    </tr>
                 </table>
             </form>
             
+        <!-- mainboard form -->
+            <form id="mainboard-form" class="part-form hidden">
+            	<input hidden="hidden" name="category" value="mainboard">
+                <table class="product-table">
+                    <tr>
+                        <th>제품명</th>
+                        <td><input type="text" name="product_name" required></td>
+                    </tr>
+                    <tr>
+                        <th>제조사</th>
+                        <td><input type="text" name="company" required></td>
+                    </tr>
+                    <tr>
+                        <th>소켓</th>
+                        <td><input type="text" name="socket" required></td>
+                    </tr>
+                    <tr>
+                        <th>폼펙터</th>
+                        <td>
+                        	<select name="formfactor" required>
+                        		<option value="">-- 폼팩터 선택 --</option>
+                        		<option value="atx">표준-ATX</option>
+                        		<option value="e-atx">E-ATX</option>
+                        		<option value="m-atx">M-ATX</option>
+                        		<option value="m-itx">M-ITX</option>
+                        	</select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>메모리 슬롯 개수</th>
+                        <td><input type="text" name="memory_slot" required></td>
+                    </tr>
+                    <tr>
+                        <th>메모리 버전</th>
+                        <td>
+                        	<select name="ddr" required>
+                        		<option value="">-- 메모리 선택 --</option>
+                        		<option value="ddr5">DDR5</option>
+                        		<option value="ddr4">DDR4</option>
+                        		<option value="ddr3">DDR3</option>
+                        	</select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>메모리 최대 용량</th>
+                        <td><input type="text" name="max_storage" required></td>
+                    </tr>
+                    <tr>
+                        <th>소비전력</th>
+                        <td><input type="text" name="watt" required></td>
+                    </tr>
+                    <tr>
+                        <th>제품 출시일</th>
+                        <td><input type="month" name="upload_date" required></td>
+                    </tr>
+                    <tr>
+                        <th>섬네일</th>
+                        <td><input type="text" name="thumbnail" required></td>
+                    </tr>
+                    <tr>
+                        <th>상세 이미지</th>
+                        <td><input type="text" name="content_img" required></td>
+                    </tr>
+                    <tr>
+                        <th>기타</th>
+                        <td><textarea name="etc" class="etc-textarea"></textarea></td>
+                    </tr>
+                </table>
+            </form>
+        
+        <!-- case form -->
+            <form id="case-form" class="part-form hidden">
+            	<input hidden="hidden" name="category" value="case">
+                <table class="product-table">
+                    <tr>
+                        <th>제품명</th>
+                        <td><input type="text" name="product_name" required></td>
+                    </tr>
+                    <tr>
+                        <th>제조사</th>
+                        <td><input type="text" name="company" required></td>
+                    </tr>
+                    <tr>
+                        <th>파워포함여부</th>
+                        <td>
+                        	<select name="power_status" required>
+                        		<option value="">-- 유무 선택 --</option>
+                        		<option value="y">Y</option>
+                        		<option value="n">N</option>
+                        	</select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>메인보드 지원규격</th>
+                        <td>
+                        	<select name="formfactor" required>
+                        		<option value="">-- 폼팩터 선택 --</option>
+                        		<option value="atx">표준-ATX</option>
+                        		<option value="e-atx">E-ATX</option>
+                        		<option value="m-atx">M-ATX</option>
+                        		<option value="m-itx">M-ITX</option>
+                        	</select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>제품 규격</th>
+                        <td><input type="text" name="tower_size" required></td>
+                    </tr>
+                    <tr>
+                        <th>VGA 장착 길이</th>
+                        <td><input type="text" name="VGA_length" required></td>
+                    </tr>
+                    <tr>
+                        <th>제품 출시일</th>
+                        <td><input type="month" name="upload_date" required></td>
+                    </tr>
+                    <tr>
+                        <th>섬네일</th>
+                        <td><input type="text" name="thumbnail" required></td>
+                    </tr>
+                    <tr>
+                        <th>상세 이미지</th>
+                        <td><input type="text" name="content_img" required></td>
+                    </tr>
+                    <tr>
+                        <th>기타</th>
+                        <td><textarea name="etc" class="etc-textarea"></textarea></td>
+                    </tr>
+                </table>
+            </form>
+        
+        <!-- GPU form -->
+            <form id="gpu-form" class="part-form hidden">
+            	<input hidden="hidden" name="category" value="gpu">
+                <table class="product-table">
+                    <tr>
+                        <th>제품명</th>
+                        <td><input type="text" name="product_name" required></td>
+                    </tr>
+                    <tr>
+                        <th>제조사</th>
+                        <td><input type="text" name="company" required></td>
+                    </tr>
+                    <tr>
+                        <th>칩셋</th>
+                        <td><input type="text" name="series" required></td>
+                    </tr>
+                    <tr>
+                        <th>메모리 용량</th>
+                        <td><input type="text" name="storage" required></td>
+                    </tr>
+                    <tr>
+                        <th>가로길이</th>
+                        <td><input type="text" name="length" required></td>
+                    </tr>
+                    <tr>
+                        <th>소비전력</th>
+                        <td><input type="text" name="watt" required></td>
+                    </tr>
+                    <tr>
+                        <th>제품 출시일</th>
+                        <td><input type="month" name="upload_date" required></td>
+                    </tr>
+                    <tr>
+                        <th>섬네일</th>
+                        <td><input type="text" name="thumbnail" required></td>
+                    </tr>
+                    <tr>
+                        <th>상세 이미지</th>
+                        <td><input type="text" name="content_img" required></td>
+                    </tr>
+                    <tr>
+                        <th>기타</th>
+                        <td><textarea name="etc" class="etc-textarea"></textarea></td>
+                    </tr>
+                </table>
+            </form>
+            
+    	<!-- power form -->
+            <form id="power-form" class="part-form hidden">
+            	<input hidden="hidden" name="category" value="power">
+                <table class="product-table">
+                    <tr>
+                        <th>제품명</th>
+                        <td><input type="text" name="product_name" required></td>
+                    </tr>
+                    <tr>
+                        <th>제조사</th>
+                        <td><input type="text" name="company" required></td>
+                    </tr>
+                    <tr>
+                        <th>정격출력</th>
+                        <td><input type="text" name="supply" required></td>
+                    </tr>
+                    <tr>
+                        <th>80plus 인증</th>
+                        <td>
+                        	<select name="plus80" required>
+                        		<option value="">-- 등급 선택 --</option>
+                        		<option value="titanium">티타늄</option>
+                        		<option value="platinum">플래티넘</option>
+                        		<option value="gold">골드</option>
+                        		<option value="silver">실버</option>
+                        		<option value="bronze">브론즈</option>
+                        		<option value="standard">스탠다드</option>
+                        	</select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>규격</th>
+                        <td>
+                        	<select name="formfactor" required>
+                        		<option value="">-- 규격 선택 --</option>
+                        		<option value="atx">ATX</option>
+                        		<option value="m-atx">M-ATX</option>
+                        		<option value="tfx">TFX/서버용/기타</option>
+                        	</select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>제품 출시일</th>
+                        <td><input type="month" name="upload_date" required></td>
+                    </tr>
+                    <tr>
+                        <th>섬네일</th>
+                        <td><input type="text" name="thumbnail" required></td>
+                    </tr>
+                    <tr>
+                        <th>상세 이미지</th>
+                        <td><input type="text" name="content_img" required></td>
+                    </tr>
+                    <tr>
+                        <th>기타</th>
+                        <td><textarea name="etc" class="etc-textarea"></textarea></td>
+                    </tr>
+                </table>
+            </form>
+    	
+    	<!-- ssd form -->
+            <form id="ssd-form" class="part-form hidden">
+            	<input hidden="hidden" name="category" value="ssd">
+                <table class="product-table">
+                    <tr>
+                        <th>제품명</th>
+                        <td><input type="text" name="product_name" required></td>
+                    </tr>
+                    <tr>
+                        <th>제조사</th>
+                        <td><input type="text" name="company" required></td>
+                    </tr>
+                    <tr>
+                        <th>용량</th>
+                        <td><input type="text" name="storage" required></td>
+                    </tr>
+                    <tr>
+                        <th>디스크 종류</th>
+                        <td>
+                        	<select name="type" required>
+                        		<option value="">-- 종류 선택 --</option>
+                        		<option value="sata">SATA</option>
+                        		<option value="m.2">M.2</option>
+                        	</select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>소비전력</th>
+                        <td><input type="text" name="watt" required></td>
+                    </tr>
+                    <tr>
+                        <th>제품 출시일</th>
+                        <td><input type="month" name="upload_date" required></td>
+                    </tr>
+                    <tr>
+                        <th>섬네일</th>
+                        <td><input type="text" name="thumbnail" required></td>
+                    </tr>
+                    <tr>
+                        <th>상세 이미지</th>
+                        <td><input type="text" name="content_img" required></td>
+                    </tr>
+                    <tr>
+                        <th>기타</th>
+                        <td><textarea name="etc" class="etc-textarea"></textarea></td>
+                    </tr>
+                </table>
+            </form>
+        
+        <!-- hdd form -->
+            <form id="hdd-form" class="part-form hidden">
+            	<input hidden="hidden" name="category" value="hdd">
+                <table class="product-table">
+                    <tr>
+                        <th>제품명</th>
+                        <td><input type="text" name="product_name" required></td>
+                    </tr>
+                    <tr>
+                        <th>제조사</th>
+                        <td><input type="text" name="company" required></td>
+                    </tr>
+                    <tr>
+                        <th>사용장치</th>
+                        <td>
+                        	<select name="device" required>
+                        		<option value="">-- 사용장치 선택 --</option>
+                        		<option value="pc">PC용</option>
+                        		<option value="server">서버용</option>
+                        		<option value="nas">NAS용</option>
+                        	</select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>메모리 용량</th>
+                        <td><input type="text" name="storage" required></td>
+                    </tr>
+                    <tr>
+                        <th>소비전력</th>
+                        <td><input type="text" name="watt" required></td>
+                    </tr>
+                    <tr>
+                        <th>제품 출시일</th>
+                        <td><input type="month" name="upload_date" required></td>
+                    </tr>
+                    <tr>
+                        <th>섬네일</th>
+                        <td><input type="text" name="thumbnail" required></td>
+                    </tr>
+                    <tr>
+                        <th>상세 이미지</th>
+                        <td><input type="text" name="content_img" required></td>
+                    </tr>
+                    <tr>
+                        <th>기타</th>
+                        <td><textarea name="etc" class="etc-textarea"></textarea></td>
+                    </tr>
+                </table>
+            </form>
+        
+    	<!-- cooler form -->
+            <form id="cooler-form" class="part-form hidden">
+            	<input hidden="hidden" name="category" value="cooler">
+                <table class="product-table">
+                    <tr>
+                        <th>제품명</th>
+                        <td><input type="text" name="product_name" required></td>
+                    </tr>
+                    <tr>
+                        <th>제조사</th>
+                        <td><input type="text" name="company" required></td>
+                    </tr>
+                    <tr>
+                        <th>쿨러종류</th>
+                        <td>
+                        	<select name="cooler_type" required>
+                        		<option value="">-- 종류 선택 --</option>
+                        		<option value="air">공랭식</option>
+                        		<option value="water">수랭식</option>
+                        	</select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>소켓</th>
+                        <td><input type="text" name="company" required></td>
+                    </tr>
+                    <tr>
+                        <th>소비전력</th>
+                        <td><input type="text" name="watt" required></td>
+                    </tr>
+                    <tr>
+                        <th>제품 출시일</th>
+                        <td><input type="month" name="upload_date" required></td>
+                    </tr>
+                    <tr>
+                        <th>섬네일</th>
+                        <td><input type="text" name="thumbnail" required></td>
+                    </tr>
+                    <tr>
+                        <th>상세 이미지</th>
+                        <td><input type="text" name="content_img" required></td>
+                    </tr>
+                    <tr>
+                        <th>기타</th>
+                        <td><textarea name="etc" class="etc-textarea"></textarea></td>
+                    </tr>
+                </table>
+            </form>
+    	
     	</div>
     
     	<div class="submit-btn hidden" id="submit-container">
