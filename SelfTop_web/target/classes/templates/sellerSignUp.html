@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seller_SignUp</title>
     <link rel="stylesheet" href="/css/sellerSignUp.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="/js/sellerSignUp.js"></script>
 </head>
 <body>
     <header>
@@ -14,29 +16,30 @@
         </div>
     </header>
 
-    <section id="signup-form">
+    <main id="signup-form">
         <h2>판매자 회원가입</h2>
         <form action="/sellerSignUp" method="POST">
         	<div class="form-group">
         		<label>ID입력</label>
                 <div class="input-group">
        				<input type="text" id="id" name="id" required>
-        			<button type="button" id="checkDuplicate" class="btn-duplicate">중복확인</button>
+        			<button type="button" id="checkDuplicate" class="btn-duplicate" onclick="checkDuplicateID()">중복확인</button>
     			</div>
+    			<span id="id-error" class="error-message"></span>
             </div>
             <div class="form-group">
     			<label>PW입력</label>
     			<div class="input-container">
-        			<input type="password" id="pw" name="pw" required>
-        			<span class="pw-requirement">비밀번호 조건 명시</span>
+        			<input type="password" id="pw" name="pw" required oninput="validatePassword()">
     			</div>
+    			<span id="pw-error" class="error-message"></span>
 			</div>
             <div class="form-group">
                 <label>PW입력 재확인</label>
                 <div class="input-container">
-                	<input type="password" id="confirmPassword" name="confirmPassword" required>
-                	<span class="pw-requirement">비밀번호 일치 여부</span>
-                </div>	
+                	<input type="password" id="confirmPassword" name="confirmPassword" required oninput="validateConfirmPassword()">
+                </div>
+                <span id="confirm-error" class="error-message"></span>
             </div>
             <div class="form-group">
                 <label>회사명</label>
@@ -53,14 +56,14 @@
             <div class="form-group">
         		<label>사업자등록번호 조회</label>
                 <div class="input-group">
-       				<input type="text" id="business_license" name="business_license" required>
-        			<button type="button" id="checkBusinessInfo" class="btn-business-info">정보조회</button>
+       				<input type="text" id="business_license" name="business_license" placeholder="-없이 10글자 입력" required>
+                	<button type="button" id="checkBusinessInfo" class="btn-business-info" onclick="corp_chk();">정보조회</button>
     			</div>
             </div>
             <div class="form-group">
         		<label>물건배송주소 입력</label>
                 <div class="input-group">
-       				<input type="text" id="address" name="address" required>
+       				<textarea id="address" name="address" required placeholder="주소를 입력해주세요." rows="5"></textarea>
         			<button type="button" id="checkAddress" class="btn-address">주소조회</button>
     			</div>
             </div>
@@ -81,19 +84,29 @@
     		</div>
     		<div class="form-group">
     			<label>약관 동의</label>
-            	<p>회원가입을 위해 아래 약관에 동의해주세요.</p>
-            	<div class="checkbox-group">
-               		<input type="checkbox" id="terms" name="terms" required>
-               		<label>이용약관 및 개인정보처리방침에 동의합니다.</label>
-         	   	</div>
-          		<p class="terms-message">* 약관에 동의하셔야 회원가입이 가능합니다.</p>
-        	</div>
-            <div class="form-group">
-                <button type="submit" class="btn-signup">회원가입</button>
-                <button type="button" class="btn-back" onclick="window.history.back()">돌아가기</button>
-            </div>
+    			<p>회원가입을 위해 아래 약관에 동의해주세요.</p>
+    			<div class="terms-content">
+       	 			<h4>이용약관</h4>
+        			<p>1. 회원은 본 서비스 이용 시 법령을 준수해야 합니다.</p>
+        			<p>2. 본 서비스는 개인적인 목적 외의 사용을 금지합니다.</p>
+        			<p>3. 서비스 이용 시 발생하는 모든 책임은 회원 본인에게 있습니다.</p>
+        			<h4>개인정보처리방침</h4>
+        			<p>1. 수집된 개인정보는 서비스 제공을 위한 목적으로만 사용됩니다.</p>
+        			<p>2. 회원의 개인정보는 회원의 동의 없이 제3자에게 제공되지 않습니다.</p>
+        			<p>3. 기타 개인정보 처리방침은 관련 법령에 따릅니다.</p>
+    			</div>
+    			<div class="checkbox-group">
+        			<input type="checkbox" id="terms" name="terms" required>
+        			<label for="terms">이용약관 및 개인정보처리방침에 동의합니다.</label>
+    			</div>
+    			<span class="terms-message">* 약관에 동의하셔야 회원가입이 가능합니다.</span>
+			</div>
+			<div class="form-group">
+    			<button type="submit" class="btn-signup">회원가입</button>
+    			<button type="button" class="btn-back" onclick="window.history.back()">돌아가기</button>
+			</div>
         </form>
-    </section>
+    </main>
 
     <footer>
     	<div class="footer-content">
