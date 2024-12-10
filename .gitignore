@@ -14,6 +14,8 @@ local.properties
 .loadpath
 .recommenders
 .project
+.classpath
+target/META-INF/maven/
 
 # External tool builders
 .externalToolBuilders/
