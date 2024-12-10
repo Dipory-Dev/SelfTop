@@ -8,13 +8,9 @@
 </head>
 <body>
     <header>
-        <div class="log_info">
-            <img class="logo_img" src="/img/logo.png" alt="로고">
-        </div>
-        <div class="log_info log_txt">
-            <p class="log_info">관리자님&nbsp;</p>
-            <p class="log_info">&nbsp;|&nbsp;&nbsp;</p>
-            <a class="log_info" href="logout"><p>로그아웃</p></a>
+        <div class="header-content">
+            <img src="/img/logo.png">
+           	<p>관리자님&nbsp;|&nbsp;<a href="logout">로그아웃</a></p>
         </div>
     </header>
     
@@ -69,7 +65,13 @@
                     </tr>
                     <tr>
                         <th>내장 그래픽 유뮤</th>
-                        <td><input type="text" name="inner_vga" required></td>
+                        <td>
+                        	<select name="inner_vga" required>
+                        		<option value="">-- 유무 선택 --</option>
+                        		<option value="y">Y</option>
+                        		<option value="n">N</option>
+                        	</select>
+                        </td>
                     </tr>
                     <tr>
                         <th>패키지 형태</th>
@@ -77,7 +79,13 @@
                     </tr>
                     <tr>
                         <th>쿨러 유무</th>
-                        <td><input type="text" name="cooler_status" required></td>
+                        <td>
+                        	<select name="cooler_status" required>
+                        		<option value="">-- 유무 선택 --</option>
+                        		<option value="y">Y</option>
+                        		<option value="n">N</option>
+                        	</select>
+                        </td>
                     </tr>
                     <tr>
                         <th>코어</th>
@@ -89,7 +97,7 @@
                     </tr>
                     <tr>
                         <th>제품 출시일</th>
-                        <td><input type="text" name="upload_date" required></td>
+                        <td><input type="month" name="upload_date" required></td>
                     </tr>
                     <tr>
                         <th>섬네일</th>
@@ -101,7 +109,7 @@
                     </tr>
                     <tr>
                         <th>기타</th>
-                        <td><input type="text" name="etc" required></td>
+                        <td><textarea name="etc" id="etc-textarea"></textarea></td>
                     </tr>
                 </table>
             </form>
