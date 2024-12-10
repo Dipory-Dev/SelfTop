@@ -1,4 +1,4 @@
-// ID 중복 확인 (버튼 클릭 시 유효성 검사 및 서버 요청)
+// ID 중복 확인 (버튼 클릭 시만 유효성 검사)
 function checkDuplicateID() {
     const id = document.getElementById("id").value;
     const idError = document.getElementById("id-error");
@@ -18,12 +18,10 @@ function checkDuplicateID() {
         return;
     }
 
-    // 서버에 중복 확인 요청 (jQuery 사용)
-    $.ajax({
-        url: `/check-duplicate-id?id=${id}`,
-        type: "GET",
-        dataType: "json",
-        success: function (data) {
+    // 서버에 중복 확인 요청
+    fetch(`/check-duplicate-id?id=${id}`)
+        .then(response => response.json())
+        .then(data => {
             if (data.isDuplicate) {
                 idError.textContent = "이미 사용 중인 ID입니다.";
                 idError.style.color = "red";
@@ -31,13 +29,12 @@ function checkDuplicateID() {
                 idError.textContent = "사용 가능한 ID입니다.";
                 idError.style.color = "green";
             }
-        },
-        error: function (error) {
+        })
+        .catch(error => {
             idError.textContent = "중복 확인 중 문제가 발생했습니다.";
             idError.style.color = "red";
             console.error(error);
-        }
-    });
+        });
 }
 
 // 비밀번호 조건 검사
