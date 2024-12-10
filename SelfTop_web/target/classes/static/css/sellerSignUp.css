@@ -2,7 +2,7 @@
 	margin: 0;
     padding: 0;
     font-family: 'Inter', sans-serif;
-    color: #666666;
+    color: #666;
 }
 
 header {
@@ -32,7 +32,7 @@ header {
     text-decoration: underline;
 }
 
-section#signup-form {
+#signup-form {
     max-width: 600px;
     margin: 50px auto;
     padding: 20px;
@@ -42,7 +42,7 @@ section#signup-form {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-section#signup-form h2 {
+#signup-form h2 {
     text-align: center;
     margin-bottom: 20px;
     font-size: 32px;
@@ -55,6 +55,12 @@ form {
 
 .form-group {
 	margin: 0 10px;
+    margin-bottom: 15px;
+}
+
+.form-group p {
+    font-size: 14px;
+    color: #555;
     margin-bottom: 15px;
 }
 
@@ -86,15 +92,13 @@ input[type="text"], input[type="password"] {
     box-sizing: border-box;
 }
 
-#address{
-	padding: 60px;	
-}
-
-.btn-duplicate {
+.btn-duplicate,
+.btn-business-info,
+.btn-address {
     padding: 10px 30px;
     margin-left: 80px;
-    background-color: #928383;
-    color: white;
+    background: #008ADA;
+    color: #fff;
     border: none;
     border-radius: 4px;
     font-size: 20px;
@@ -102,8 +106,12 @@ input[type="text"], input[type="password"] {
     transition: background-color 0.3s ease;
 }
 
-.btn-duplicate:hover {
-    opacity: 0.5;
+.btn-duplicate:hover,
+.btn-business-info:hover,
+.btn-address:hover,
+.btn-signup:hover,
+.btn-back:hover {
+    background: #006bb3;
 }
 
 .input-container {
@@ -119,28 +127,22 @@ input[type="text"], input[type="password"] {
     width: 60%;
 }
 
-.pw-requirement {
+.error-message {
     color: red;
-    font-size: 20px;
-    margin-left: 50px;
+    font-size: 14px;
+    display: block;
+    margin-top: 5px;
 }
 
-.btn-business-info,
-.btn-address {
-    padding: 10px 30px;
-    margin-left: 80px;
-    background-color: #008ADA;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 20px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.btn-business-info:hover,
-.btn-address:hover {
-    opacity: 0.5;
+textarea {
+    width: 60%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    resize: none;
+    margin-bottom: 10px;
 }
 
 .email-container {
@@ -181,10 +183,28 @@ input[type="text"], input[type="password"] {
     background-color: #45a049;
 }
 
-.form-group p {
+.terms-content {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.terms-content h4 {
+    margin: 10px 0 5px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.terms-content p {
     font-size: 14px;
-    color: #555;
-    margin-bottom: 15px;
+    line-height: 1.6;
+    margin: 5px 0;
+
 }
 
 .checkbox-group {
@@ -193,32 +213,36 @@ input[type="text"], input[type="password"] {
     gap: 10px;
 }
 
-.checkbox-group input[type="checkbox"] {
-    margin-right: 10px;
-    transform: scale(1.2) translateY(-2px);
-}
-
 .checkbox-group label {
+    cursor: pointer;
     font-size: 14px;
-    color: #555;
-    line-height: 2;
+    font-size: 14px;
+    line-height: 1;
+    margin: 0;
 }
 
 .checkbox-group label:hover {
     text-decoration: underline;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
     cursor: pointer;
+    vertical-align: middle;
 }
 
 .terms-message {
-    font-size: 12px;
-    color: #ff0000;
+    color: red;
+    font-size: 14px;
+    font-weight: bold;
     margin-top: 10px;
 }
 
 .btn-signup {
 	margin-left: 10%;
     padding: 10px 60px;
-    background-color: #008ADA;
+    background: #008ADA;
     color: white;
     border: none;
     border-radius: 4px;
@@ -230,7 +254,7 @@ input[type="text"], input[type="password"] {
 .btn-back {
     padding: 10px 60px;
     margin-left: 50px;
-    background-color: #008ADA;
+    background: #008ADA;
     color: white;
     border: none;
     border-radius: 4px;
@@ -239,14 +263,10 @@ input[type="text"], input[type="password"] {
     transition: background-color 0.3s ease;
 }
 
-.btn-signup:hover,
-.btn-back:hover {
-    opacity: 0.5;
-}
-
 footer {
     background-color: #E8E8E8;
     font-size: 14px;
+    color: #4f4f4f;
     height: 120px;
 }
 
@@ -258,8 +278,9 @@ footer {
 }
 
 .footer-content img {
-    max-height: 50px;
+	width: 170px;
     margin-left: 10%;
+    height: 90px;
 }
 
 .footer-text {
