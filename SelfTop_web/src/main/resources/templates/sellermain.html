@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Seller</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+function Search(){
+	var startdate = $("#start-date").val(); 
+	var enddate = $("#end-date").val();
+	var keyword = $("#keyword").val();
+	$.ajax({
+		url: "/seller/datesearch",
+		type: "GET",
+		data: {
+			startdate: startdate,  
+			enddate: enddate,
+			keyword:keyword
+			}
+	}).done(function (fragment) {
+		$("#product_view").replaceWith(fragment);
+		        }).fail(function(xhr, status, error) {
+		        	console.error("오류:", error);
+		        	alert("검색 오류");
+		        	});
+	}
+function Reset(){
+	 $("#start-date").val('');
+	 $("#end-date").val('');
+	 $("#keyword").val('');
+	
+	 Search();
+	}
+	
+
+
+</script>
+
+</head>
+<body>
+        <div>
+            <button>판매내역 조회</button>
+            <button>제품재고 관리</button>
+        </div>
+        <div>
+            <input type="date" id="start-date" />
+            <span>~</span>
+            <input type="date" id="end-date" />
+            <button onclick=Search()>기간설정</button>
+        </div>
+        <div>
+            <input type="text" placeholder="검색할 제품 입력" id="keyword">
+            <button onclick=Search()>검색</button>
+        </div>
+        <button onclick=Reset()>초가화</button>
+        <table>
+                <tr>
+                    <th>등록날짜</th>
+                    <th>분류</th>
+                    <th>상품이미지</th>
+                    <th>모델명</th>
+                    <th>수량</th>
+                    <th>등록된가격</th>
+                    <th>상태</th>
+                    <th>구매자정보</th>
+                </tr>
+                
+               <tbody id="product_view" th:fragment="tbody">
+                <tr th:each="dto : ${seller}">
+                    <td th:text="${#dates.format(dto.order_Date, 'MM/dd')}"></td>
+                    <td th:text="${dto.cartegory}"></td>
+                    <td><img th:src="${dto.p_Image}" width="50" height="50" /></td>
+                    <td th:text="${dto.p_model}"></td>
+                    <td th:text="${dto.amount}"></td>
+                    <td th:text="${dto.price}"></td>
+                    <td th:text="${dto.status}"></td>
+                    <td th:text="${dto.c_Inform}"></td>
+                </tr>
+           </tbody>
+        </table>
+    <footer>
+    </footer>
+</body>
+</html>

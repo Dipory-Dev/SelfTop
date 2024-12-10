@@ -1,0 +1,135 @@
+header {
+	postion: sticky;
+    height: 100px;
+    border-bottom: 1px solid #666;
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+}
+
+main{
+	display: flex;
+	justify-content: center;
+}
+
+
+.loginbox {
+    margin: 120px 10%;
+    border: 1px solid #666;
+    width: 480px;
+    height: auto;
+    justify-self: center;
+}
+
+
+.login_section {
+    margin: 50px;
+    justify-self: center;
+}
+
+input::placeholder {
+	font-size: 1.2em;
+	font-weight: bold;
+    text-align: center;
+}
+
+.login_btn {
+	margin-top: 10%;
+    border-radius: 5px;
+    border-color: #008ada;
+    color: #fff;
+    background-color: #008ada;
+}
+
+.logo_img {
+    width: 100px;
+    height: auto;
+    display: block;
+}
+
+.log_info {
+    float: left;
+}
+
+.log_txt {
+    display: flex;
+    justify-content: space-between;
+}
+
+.parts_select{
+	width: 1000px;
+	height: auto;
+	margin-bottom: 20px;
+	
+}
+
+caption{
+	font-size: 25px;
+	font-weight: bold;
+	text-align: left;
+	margin: 20px 10%;
+}
+
+#parts{
+	width: 200px;
+	height: 30px;
+	font-size: 1.2em;
+	margin:0px 10%;
+}
+
+#form-container {
+    margin-bottom: 20px;
+    justify-self: center;
+}
+
+.product-table{
+	width: 800px;
+	margin: 0 auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.product-table th,
+.product-table td {
+    border: 1px solid #ddd;
+    padding: 15px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.product-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    text-align: center;
+    width: 25%;
+}
+
+.product-table td {
+    text-align: center;
+}
+
+#submit-button{
+	width: 200px;
+	height: 60px;
+	font-size: 1.2em;
+	margin-top: 10%;
+    border-radius: 5px;
+    border-color: #008ada;
+    color: #fff;
+    background-color: #008ada;
+    float: right;
+}
+
+
+.hidden {
+	display: none;
+}
+
+a {
+    color: #666;
+}
+
+p {
+    color: #666;
+}

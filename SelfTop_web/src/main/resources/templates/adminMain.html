@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Main</title>
+    <link rel="stylesheet" type="text/css" href="/css/admin.css">
+    <script type="text/javascript" src="/js/admin.js"></script>
+</head>
+<body>
+    <header>
+        <div class="log_info">
+            <img class="logo_img" src="/img/logo.png" alt="로고">
+        </div>
+        <div class="log_info log_txt">
+            <p class="log_info">관리자님&nbsp;</p>
+            <p class="log_info">&nbsp;|&nbsp;&nbsp;</p>
+            <a class="log_info" href="logout"><p>로그아웃</p></a>
+        </div>
+    </header>
+    
+    <main>
+    <div>
+    	<div class="parts_select">
+		    <table class="parts_select">
+		    <caption>대표 모델 관리</caption>
+		        <tr>
+			    	<td align="left">
+					    <select id="parts">
+					    	<option value="">-- 부품 선택 --</option>
+					    	<option value="cpu">CPU</option>
+					    	<option value="ram">RAM</option>
+					    	<option value="motherboard">메인보드</option>
+					    	<option value="case">케이스</option>
+					    	<option value="gpu">그래픽카드</option>
+					    	<option value="power">파워</option>
+					    	<option value="ssd">SSD</option>
+					    	<option value="hdd">HDD</option>
+					    	<option value="cooler">쿨러</option>
+					    </select>
+			   		</td>
+		    	</tr>
+		    </table>
+	    </div>
+	    
+	    <!-- 각 부품별 테이블 -->
+	    <div id="form-container">
+	    
+            <form id="cpu-form" class="part-form hidden">
+                <table class="product-table">
+                    <tr>
+                        <th>제품명</th>
+                        <td><input type="text" name="product_name" required></td>
+                    </tr>
+                    <tr>
+                        <th>소켓</th>
+                        <td><input type="text" name="socket" required></td>
+                    </tr>
+                    <tr>
+                        <th>메모리 규격</th>
+                        <td><input type="text" name="ddr" required></td>
+                    </tr>
+                    <tr>
+                        <th>제조사</th>
+                        <td><input type="text" name="company" required></td>
+                    </tr>
+                    <tr>
+                        <th>세대구분</th>
+                        <td><input type="text" name="generation" required></td>
+                    </tr>
+                    <tr>
+                        <th>내장 그래픽 유뮤</th>
+                        <td><input type="text" name="inner_vga" required></td>
+                    </tr>
+                    <tr>
+                        <th>패키지 형태</th>
+                        <td><input type="text" name="package_type" required></td>
+                    </tr>
+                    <tr>
+                        <th>쿨러 유무</th>
+                        <td><input type="text" name="cooler_status" required></td>
+                    </tr>
+                    <tr>
+                        <th>코어</th>
+                        <td><input type="text" name="core" required></td>
+                    </tr>
+                    <tr>
+                        <th>소비전력</th>
+                        <td><input type="text" name="watt" required></td>
+                    </tr>
+                    <tr>
+                        <th>제품 출시일</th>
+                        <td><input type="text" name="upload_date" required></td>
+                    </tr>
+                    <tr>
+                        <th>섬네일</th>
+                        <td><input type="text" name="thumbnail" required></td>
+                    </tr>
+                    <tr>
+                        <th>상세 이미지</th>
+                        <td><input type="text" name="content_img" required></td>
+                    </tr>
+                    <tr>
+                        <th>기타</th>
+                        <td><input type="text" name="etc" required></td>
+                    </tr>
+                </table>
+            </form>
+
+            <form id="ram-form" class="part-form hidden">
+                <table class="product-table">
+                    <tr>
+                        <th>제품명</th>
+                        <td><input type="text" name="product_name" required></td>
+                    </tr>
+                    <tr>
+                        <th>제조사</th>
+                        <td><input type="text" name="company" required></td>
+                    </tr>
+                </table>
+            </form>
+            
+    	</div>
+    
+    	<div class="submit-btn hidden" id="submit-container">
+            <button type="submit" id="submit-button">추가</button>
+        </div>
+    </div>
+	    
+    </main>
+    
+</body>
+</html>
