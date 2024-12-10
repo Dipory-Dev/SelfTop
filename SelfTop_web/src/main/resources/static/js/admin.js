@@ -28,11 +28,13 @@ document.addEventListener('DOMContentLoaded',()=>{
 	 });
 	 
 	 //etc textarea height자동 조절
-	 const textarea = document.getElementById('etc-textarea');
+	 const textareas = document.querySelectorAll('.etc-textarea');
 
-	 textarea.addEventListener('input', function () {
-	   this.style.height = 'auto'; // 기존 높이를 초기화
-	   this.style.height = `${this.scrollHeight}px`; // 입력 내용에 따라 높이 조정
+	 textareas.forEach(textarea => {
+	   textarea.addEventListener('input', function () {
+	     this.style.height = 'auto'; // 기존 높이를 초기화
+	     this.style.height = `${this.scrollHeight}px`; // 입력 내용에 따라 높이 조정
+	   });
 	 });
 });
 

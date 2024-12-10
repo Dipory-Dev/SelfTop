@@ -11,11 +11,11 @@ import com.boot.selftop_web.seller.model.dto.SellerDto;
 @Mapper
 public interface SellerBoardMapper {
 	
-	@Select(" SELECT * FROM order_test")
+	@Select(" SELECT * FROM ORDER_BOARD")
 	List<SellerDto> selectList();
 
 	@Select("<script>" +
-	        "SELECT * FROM order_test " +
+	        "SELECT * FROM ORDER_BOARD " +
 	        "WHERE 1=1 " +  
 	        "<if test='startdate != null and !startdate.isEmpty()'>" +
 	        "   AND order_date &gt;= #{startdate} " +
