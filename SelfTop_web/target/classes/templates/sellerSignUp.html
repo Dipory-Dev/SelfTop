@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller_SignUp</title>
+    <link rel="stylesheet" href="/css/sellerSignUp.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="/img/logo.png">
+           	<p>로그인</p>
+        </div>
+    </header>
+
+    <section id="signup-form">
+        <h2>판매자 회원가입</h2>
+        <form action="/sellerSignUp" method="POST">
+        	<div class="form-group">
+        		<label>ID입력</label>
+                <div class="input-group">
+       				<input type="text" id="id" name="id" required>
+        			<button type="button" id="checkDuplicate" class="btn-duplicate">중복확인</button>
+    			</div>
+            </div>
+            <div class="form-group">
+    			<label>PW입력</label>
+    			<div class="input-container">
+        			<input type="password" id="pw" name="pw" required>
+        			<span class="pw-requirement">비밀번호 조건 명시</span>
+    			</div>
+			</div>
+            <div class="form-group">
+                <label>PW입력 재확인</label>
+                <div class="input-container">
+                	<input type="password" id="confirmPassword" name="confirmPassword" required>
+                	<span class="pw-requirement">비밀번호 일치 여부</span>
+                </div>	
+            </div>
+            <div class="form-group">
+                <label>회사명</label>
+                <div class="input-group">
+                	<input type="text" id="company_name" name="company_name" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>사업자대표명</label>
+                <div class="input-group">
+                	<input type="text" id="ceo_name" name="ceo_name" required>
+                </div>
+            </div>
+            <div class="form-group">
+        		<label>사업자등록번호 조회</label>
+                <div class="input-group">
+       				<input type="text" id="business_license" name="business_license" required>
+        			<button type="button" id="checkBusinessInfo" class="btn-business-info">정보조회</button>
+    			</div>
+            </div>
+            <div class="form-group">
+        		<label>물건배송주소 입력</label>
+                <div class="input-group">
+       				<input type="text" id="address" name="address" required>
+        			<button type="button" id="checkAddress" class="btn-address">주소조회</button>
+    			</div>
+            </div>
+            <div class="form-group">
+   				<label>이메일 주소</label>
+    			<div class="email-container">
+        			<input type="text" id="email-id" name="email-id" placeholder="이메일 아이디" required>
+        			<span>@</span>
+        			<input type="text" id="email-domain" name="email-domain" placeholder="도메인" required>
+        			<select id="email-domain-select" name="email-domain-select" onchange="document.getElementById('email-domain').value = this.value">
+            			<option value="" selected disabled>선택</option>
+            			<option value="gmail.com">gmail.com</option>
+            			<option value="naver.com">naver.com</option>
+            			<option value="kakao.com">kakao.com</option>
+            			<option value="daum.net">daum.net</option>
+        			</select>
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<label>약관 동의</label>
+            	<p>회원가입을 위해 아래 약관에 동의해주세요.</p>
+            	<div class="checkbox-group">
+               		<input type="checkbox" id="terms" name="terms" required>
+               		<label>이용약관 및 개인정보처리방침에 동의합니다.</label>
+         	   	</div>
+          		<p class="terms-message">* 약관에 동의하셔야 회원가입이 가능합니다.</p>
+        	</div>
+            <div class="form-group">
+                <button type="submit" class="btn-signup">회원가입</button>
+                <button type="button" class="btn-back" onclick="window.history.back()">돌아가기</button>
+            </div>
+        </form>
+    </section>
+
+    <footer>
+    	<div class="footer-content">
+        	<img src="/img/logo.png" alt="로고">
+        	<div class="footer-text">
+            	<p>&copy; 2024 Copyright: SelfTop All rights reserved.</p>
+            	<p>팀원: 김지성, 오원석, 권장현, 양다연, 임성규</p>
+        	  	<p>문의: 02-1234-5678</p>
+           	 	<p>메일: SelfTop@selftop.com</p>
+       	 	</div>
+   		</div>
+	</footer>
+</body>
+</html>
