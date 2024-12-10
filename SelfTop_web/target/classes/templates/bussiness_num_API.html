@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <title>Document</title>
+   
+</head>
+<body>
+    <input type="text" name="corp_reg" id="corp_reg"  placeholder="-없이 10글자 입력">
+    <input type="button" name="corp_button" id="corp_button" value="확 인" onclick="corp_chk();">
+    
+</body>
+<script>
+    function corp_chk() {
+    $("#corp_reg").val($("#corp_reg").val().replace(/[^0-9]/g, ""));
+    reg_num = $("#corp_reg").val();
+
+    if(!reg_num) {
+        alert("사업자등록번호를 입력해주세요.");
+        return false;
+    }
+
+    var data = {
+        "b_no": [reg_num]
+    };
+    
+    $.ajax({
+        url: "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=P7t7mjzfLQo8EBOtv4VHqd1mcQED0dwuGmfOOrQ32dnxlfjZpbIG0KBUE5UoE9ywBHbeFirq2C59XQSJNvD0GA%3D%3D",  // serviceKey 값을 xxxxxx에 입력
+        type: "POST",
+        data: JSON.stringify(data), // json 을 string으로 변환하여 전송
+        dataType: "JSON",
+        traditional: true,
+        contentType: "application/json; charset:UTF-8",
+        accept: "application/json",
+        success: function(result) {
+            console.log(result);
+            if(result.match_cnt == "1") {
+                //성공
+                console.log("success");
+            } else {
+                //실패
+                console.log("fail");
+                alert(result.data[0]["tax_type"]);
+            }
+        },
+        error: function(result) {
+            console.log("error");
+            console.log(result.responseText); //responseText의 에러메세지 확인
+        }
+    });
+}
+</script>
+</html>
