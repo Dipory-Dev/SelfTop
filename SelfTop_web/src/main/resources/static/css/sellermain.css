@@ -80,8 +80,8 @@ main{
 
 .search{
   display: flex;
-  align-items: center;  /* 수직 중앙 정렬 */
-  gap: 10px;  /* 항목 간 간격 설정 */
+  align-items: center;  
+  gap: 10px;  
   border:none;
   border-top:1px solid;
   border-bottom:1px solid;
@@ -91,7 +91,7 @@ main{
 .datesearch{
 	border:1px solid;
 	margin-left:2%;
-	height:50%;
+	height:20px;
 	padding: 5px;
 }
 .datesearch input{
@@ -104,6 +104,7 @@ main{
 	border:1px solid;
 	padding:5px;
 	margin-right:2%;
+	height:20px;
 }
 .searchbox input{
 	
