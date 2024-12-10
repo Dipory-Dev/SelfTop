@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Seller</title>
+<link rel="stylesheet" href="/css/sellermain.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
 function Search(){
@@ -32,28 +33,49 @@ function Reset(){
 	 Search();
 	}
 	
+document.addEventListener('click', function (event) {
+	  if (event.target.classList.contains('info-button')) {
+	    const info = event.target.getAttribute('data-info');
+	    CustomerPopup(info); 
+	  }
+	});
+
+	function CustomerPopup(info) {
+	  alert("구매자 정보: " + info); 
+	}	
+	
 
 
 </script>
 
 </head>
 <body>
-        <div>
-            <button>판매내역 조회</button>
+ <header>
+        <div class="header-content">
+            <img src="/img/logo.png">
+           	<p>로그인</p>
+        </div>
+    </header>
+    <main>
+        <div id="choosecontent">
+            <button class="menuselect">판매내역 조회</button>
             <button>제품재고 관리</button>
         </div>
-        <div>
+        <div class="search">
+        <div class =" datesearch">
             <input type="date" id="start-date" />
             <span>~</span>
             <input type="date" id="end-date" />
-            <button onclick=Search()>기간설정</button>
+            <button class="searchbutton" onclick=Search()>기간설정</button>
         </div>
-        <div>
+        <div class="searchbox">
             <input type="text" placeholder="검색할 제품 입력" id="keyword">
-            <button onclick=Search()>검색</button>
+            <button class="searchbutton" onclick=Search()>검색</button> 
+            <button class="searchbutton" onclick=Reset()>초가화</button>
         </div>
-        <button onclick=Reset()>초가화</button>
-        <table>
+       
+        </div>
+        <table class ="product_table">
                 <tr>
                     <th>등록날짜</th>
                     <th>분류</th>
@@ -72,13 +94,24 @@ function Reset(){
                     <td><img th:src="${dto.p_Image}" width="50" height="50" /></td>
                     <td th:text="${dto.p_model}"></td>
                     <td th:text="${dto.amount}"></td>
-                    <td th:text="${dto.price}"></td>
+                    <td th:text="${dto.price}+ 원 "></td>
                     <td th:text="${dto.status}"></td>
-                    <td th:text="${dto.c_Inform}"></td>
+                    <td><button class="info-button" th:data-info="${dto.c_Inform}">구매자 정보</button></td>
                 </tr>
            </tbody>
         </table>
+        </main>
     <footer>
-    </footer>
+    	<div class="footer-content">
+        	<img src="/img/logo-footer.png" alt="로고">
+        	<div class="footer-text">
+            	<p>&copy; 2024 Copyright: SelfTop All rights reserved.</p>
+            	<p>팀원: 김지성, 오원석, 권장현, 양다연, 임성규</p>
+        	  	<p>문의: 02-1234-5678</p>
+           	 	<p>메일: SelfTop@selftop.com</p>
+       	 	</div>
+   		</div>
+	</footer>
+
 </body>
 </html>

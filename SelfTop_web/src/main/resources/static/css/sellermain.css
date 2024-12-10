@@ -1,0 +1,180 @@
+
+
+header {
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-content img {
+    width: 150px;
+    margin-left: 10%;
+    height: 70px;
+}
+
+.header-content p {
+    margin-right: 10%;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.header-content p:hover {
+    text-decoration: underline;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%; 
+}
+
+
+main{
+  flex: 1;
+  padding-bottom:120px;
+  align-items: center;
+  width:1700px;
+  margin-left:auto;
+  margin-right:auto;
+  border:0.5px solid;
+}
+
+
+#choosecontent {
+  display: flex;
+  padding: 0;  
+  margin: 0;
+  height: 10%;   
+}
+
+#choosecontent button{
+	background: white;
+	height:100%;
+	width:10%;
+	border: none;
+	margin: 0;
+	padding: 0;
+	cursor: pointer;
+	position: relative;
+	
+	
+}
+
+
+#choosecontent button:not(:last-child) {
+  border-right: 2px solid #ccc;  
+}
+
+#choosecontent .menuselect {
+  font-weight: bold;
+}
+
+.search{
+  display: flex;
+  align-items: center;  /* 수직 중앙 정렬 */
+  gap: 10px;  /* 항목 간 간격 설정 */
+  border:none;
+  border-top:1px solid;
+  border-bottom:1px solid;
+  height: 7%;
+}
+
+.datesearch{
+	border:1px solid;
+	margin-left:2%;
+	height:50%;
+	padding: 5px;
+}
+.datesearch input{
+	width:150px;
+}
+
+
+.searchbox{
+	margin-left: auto;
+	border:1px solid;
+	padding:5px;
+	margin-right:2%;
+}
+.searchbox input{
+	
+	width:400px;
+	
+}
+
+.searchbutton{
+	background-color:#008ADA;
+	color:#FFFFFF;
+	border-radius:5px;
+	border:none;
+	height:25px;
+	cursor:pointer;
+}
+
+.product_table{
+	margin-top:20px;
+	margin-left:auto;
+	margin-right:auto;
+	width: 90%; 
+    border-collapse: collapse; 
+	
+}
+
+.product_table th {
+  background-color: #EAEAEA;
+  font-weight: bold;
+  border: 1px solid ;
+}
+
+.product_table td {
+  background-color: #FFFFFF;
+  font-weight: bold;
+  border: 1px solid ;
+  text-align:center;
+}
+
+.info-button{
+	background-color:#008ADA;
+	color:#FFFFFF;
+	border-radius:5px;
+	border:none;
+	height:30px;
+	cursor:pointer;
+}
+
+
+footer {
+    background-color: #E8E8E8;
+    font-size: 14px;
+    height: 120px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.footer-content img {
+    max-height: 50px;
+    margin-left: 10%;
+}
+
+.footer-text {
+    text-align: right;
+    margin-right: 10%;
+}
+
+.footer-text p, .footer-text span {
+    margin: 5px 0;
+}
