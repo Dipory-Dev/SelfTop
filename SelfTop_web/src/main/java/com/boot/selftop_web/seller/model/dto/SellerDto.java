@@ -12,11 +12,11 @@ import java.util.Date;
 @Setter
 public class SellerDto {
     private Date order_Date;       
-    private String cartegory;      
-    private String p_Image;   
-    private String p_model;
+    private String category;      
+    private String thumbnail;   
+    private String product_name;
     private int amount;          
     private int price;         
-    private String status;        
-    private String c_Inform;
+    private String order_status;        
+    private String customer_no;
 }
