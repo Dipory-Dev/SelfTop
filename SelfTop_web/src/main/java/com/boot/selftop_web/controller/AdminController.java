@@ -6,6 +6,10 @@ import com.boot.selftop_web.seller.model.biz.product.CoolerBizImpl;
 import com.boot.selftop_web.seller.model.dto.AdminDto;
 import com.boot.selftop_web.seller.model.dto.product.CoolerDto;
 import jakarta.servlet.http.HttpSession;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -65,31 +70,30 @@ public class AdminController {
     }
 
     @PostMapping("/add")
-    public String addProduct(@RequestParam("category") String category, CoolerDto dto) {
-        System.out.println("Controller : " + category);
-        System.out.println("Controller : " + dto);
-        int res = 0;
-        
-        if (category.equals("CPU")) {
-            
-        } else if (category.equals("RAM")) {
-            
-        } else if (category.equals("메인보드")) {
+    @ResponseBody // JSON 응답을 반환
+    public Map<String, Object> addProduct(@RequestParam("category") String category, CoolerDto dto) {
+        Map<String, Object> response = new HashMap<>();
 
-        } else if (category.equals("케이스")) {
+        try {
+            System.out.println("Controller : " + category);
+            System.out.println("Controller : " + dto);
 
-        } else if (category.equals("그래픽카드")) {
-
-        } else if (category.equals("파워")) {
-
-        } else if (category.equals("SSD")) {
-
-        } else if (category.equals("HDD")) {
-
-        } else if (category.equals("쿨러")) {
-            res = coolerBiz.insert(dto);
+            int res = coolerBiz.insert(dto);
             System.out.println("Controller : " + res);
+
+            if (res > 0) {
+                response.put("success", true);
+                response.put("message", "제품이 성공적으로 추가되었습니다.");
+            } else {
+                response.put("success", false);
+                response.put("message", "제품 추가에 실패했습니다.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.put("success", false);
+            response.put("message", "서버 처리 중 오류가 발생했습니다.");
         }
-        return "redirect:/admin/main";
+
+        return response;
     }
 }
