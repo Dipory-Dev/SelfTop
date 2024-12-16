@@ -6,8 +6,14 @@
 }
 
 header {
+	position: fixed;
     padding: 10px 20px;
     border-bottom: 1px solid #ccc;
+    z-index: 1000;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: white;
 }
 
 .header-content {
@@ -30,6 +36,10 @@ header {
 
 .header-content p:hover {
     text-decoration: underline;
+}
+
+body {
+    padding-top: 90px; /* 헤더의 높이를 고려하여 본문이 아래에서 시작하도록 여백 추가 */
 }
 
 #signup-form {
@@ -91,8 +101,6 @@ input[type="text"], input[type="password"] {
     border-radius: 4px;
     box-sizing: border-box;
 }
-
-
 
 .btn-duplicate,
 .btn-business-info,
@@ -173,18 +181,9 @@ textarea {
     border-radius: 4px;
 }
 
-.email-container button {
-    padding: 10px 15px;
-    background-color: #4CAF50;
-    color: white;
-    font-size: 14px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.email-container button:hover {
-    background-color: #45a049;
+input[disabled] {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
 }
 
 .terms-content {
