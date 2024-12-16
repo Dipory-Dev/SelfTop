@@ -36,6 +36,36 @@ document.addEventListener('DOMContentLoaded',()=>{
 	     this.style.height = `${this.scrollHeight}px`; // 입력 내용에 따라 높이 조정
 	   });
 	 });
+	 
+	 // 각 form의 submit 버튼 클릭 시 AJAX 요청 처리
+	    forms.forEach(form => {
+	        form.addEventListener('submit', (event) => {
+	            event.preventDefault(); // 기본 form 제출 방지
+
+	            // FormData 객체 생성
+	            const formData = new FormData(form);
+
+	            // AJAX 요청
+	            fetch(form.action, {
+	                method: 'POST',
+	                body: formData
+	            })
+	                .then(response => response.json())
+	                .then(data => {
+	                    if (data.success) {
+	                        alert('제품이 성공적으로 추가되었습니다.');
+	                        window.location.href = '/admin/main'; // 성공 시 리다이렉션
+	                    } else {
+	                        alert('제품 추가에 실패했습니다: ' + data.message);
+	                    }
+	                })
+	                .catch(error => {
+	                    console.error('Error:', error);
+	                    alert('서버와의 연결 중 문제가 발생했습니다.');
+	                });
+	        });
+	    });
+	 
 });
 
         
