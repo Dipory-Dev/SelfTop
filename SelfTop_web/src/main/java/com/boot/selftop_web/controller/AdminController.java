@@ -69,9 +69,27 @@ public class AdminController {
         System.out.println("Controller : " + category);
         System.out.println("Controller : " + dto);
         int res = 0;
-        res = coolerBiz.insert(dto);
-        System.out.println("Controller : " + res);
+        
+        if (category.equals("CPU")) {
+            
+        } else if (category.equals("RAM")) {
+            
+        } else if (category.equals("메인보드")) {
 
+        } else if (category.equals("케이스")) {
+
+        } else if (category.equals("그래픽카드")) {
+
+        } else if (category.equals("파워")) {
+
+        } else if (category.equals("SSD")) {
+
+        } else if (category.equals("HDD")) {
+
+        } else if (category.equals("쿨러")) {
+            res = coolerBiz.insert(dto);
+            System.out.println("Controller : " + res);
+        }
         return "redirect:/admin/main";
     }
 }

@@ -1,7 +1,7 @@
 package com.boot.selftop_web.seller.model.biz.product;
 
 import com.boot.selftop_web.seller.model.dto.product.CoolerDto;
-import com.boot.selftop_web.seller.model.mapper.CoolerMapper;
+import com.boot.selftop_web.seller.model.mapper.product.CoolerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
