@@ -11,11 +11,11 @@ import com.boot.selftop_web.seller.model.dto.SellerDto;
 @Mapper
 public interface SellerBoardMapper {
 	
-	@Select(" SELECT * FROM ORDER_BOARD")
+	@Select(" SELECT * FROM sellermain")
 	List<SellerDto> selectList();
 
 	@Select("<script>" +
-	        "SELECT * FROM ORDER_BOARD " +
+	        "SELECT * FROM sellermain " +
 	        "WHERE 1=1 " +  
 	        "<if test='startdate != null and !startdate.isEmpty()'>" +
 	        "   AND order_date &gt;= #{startdate} " +
@@ -24,7 +24,7 @@ public interface SellerBoardMapper {
 	        "   AND order_date &lt;= #{enddate} " +
 	        "</if>" +
 	        "<if test='keyword != null and !keyword.isEmpty()'>" +
-	        " AND p_model LIKE '%' || #{keyword} || '%' " +	
+	        " AND product_name LIKE '%' || #{keyword} || '%' " +	
 	        "</if>" +
 	        "</script>")
 	List<SellerDto> selectSearch(@Param("startdate") String startdate, @Param("enddate") String enddate,@Param("keyword")String keyword);

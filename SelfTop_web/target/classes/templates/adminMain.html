@@ -44,7 +44,7 @@
 	    <!-- CPU form -->
             <form id="cpu-form" class="part-form hidden">
                 <!-- 카테고리 추가 -->
-                <input hidden="hidden" name="category" value="cpu"/>
+                <input hidden="hidden" name="category" value="CPU"/>
                 <table class="product-table">
                     <tr>
                         <th>제품명</th>
@@ -120,7 +120,7 @@
 		<!-- Ram form -->
             <form id="ram-form" class="part-form hidden">
                 <!-- 카테고리 추가 -->
-                <input hidden="hidden" name="category" value="ram"/>
+                <input hidden="hidden" name="category" value="RAM"/>
                 <table class="product-table">
                     <tr>
                         <th>제품명</th>
@@ -193,7 +193,7 @@
         <!-- mainboard form -->
             <form id="mainboard-form" class="part-form hidden">
                 <!-- 카테고리 추가 -->
-            	<input hidden="hidden" name="category" value="mainboard"/>
+            	<input hidden="hidden" name="category" value="메인보드"/>
                 <table class="product-table">
                     <tr>
                         <th>제품명</th>
@@ -264,7 +264,7 @@
         <!-- case form -->
             <form id="case-form" class="part-form hidden">
                 <!-- 카테고리 추가 -->
-            	<input hidden="hidden" name="category" value="case"/>
+            	<input hidden="hidden" name="category" value="케이스"/>
                 <table class="product-table">
                     <tr>
                         <th>제품명</th>
@@ -326,7 +326,7 @@
         <!-- GPU form -->
             <form id="gpu-form" class="part-form hidden">
                 <!-- 카테고리 추가 -->
-            	<input hidden="hidden" name="category" value="gpu"/>
+            	<input hidden="hidden" name="category" value="그래픽카드"/>
                 <table class="product-table">
                     <tr>
                         <th>제품명</th>
@@ -374,7 +374,7 @@
     	<!-- power form -->
             <form id="power-form" class="part-form hidden">
                 <!-- 카테고리 추가 -->
-            	<input hidden="hidden" name="category" value="power"/>
+            	<input hidden="hidden" name="category" value="파워"/>
                 <table class="product-table">
                     <tr>
                         <th>제품명</th>
@@ -435,7 +435,7 @@
     	<!-- ssd form -->
             <form id="ssd-form" class="part-form hidden">
                 <!-- 카테고리 추가 -->
-            	<input hidden="hidden" name="category" value="ssd"/>
+            	<input hidden="hidden" name="category" value="SSD"/>
                 <table class="product-table">
                     <tr>
                         <th>제품명</th>
@@ -485,7 +485,7 @@
         <!-- hdd form -->
             <form id="hdd-form" class="part-form hidden">
                 <!-- 카테고리 추가 -->
-            	<input hidden="hidden" name="category" value="hdd"/>
+            	<input hidden="hidden" name="category" value="HDD"/>
                 <table class="product-table">
                     <tr>
                         <th>제품명</th>
@@ -534,9 +534,9 @@
             </form>
 
     	<!-- cooler form -->
-            <form id="cooler-form" class="part-form hidden">
+            <form id="cooler-form" class="part-form hidden" action="add" method="post">
                 <!-- 카테고리 추가 -->
-            	<input hidden="hidden" name="category" value="cooler"/>
+            	<input hidden="hidden" name="category" value="쿨러"/>
                 <table class="product-table">
                     <tr>
                         <th>제품명</th>
@@ -550,9 +550,8 @@
                         <th>쿨러종류</th>
                         <td>
                         	<select name="cooler_type" required>
-                        		<option value="">-- 종류 선택 --</option>
-                        		<option value="air">공랭식</option>
-                        		<option value="water">수랭식</option>
+                        		<option value="공랭식">공랭식</option>
+                        		<option value="수랭식">수랭식</option>
                         	</select>
                         </td>
                     </tr>
@@ -580,14 +579,19 @@
                         <th>기타</th>
                         <td><textarea name="etc" class="etc-textarea"></textarea></td>
                     </tr>
+                    <tr>
+                        <td colspan="2" align="right">
+                            <input type="submit" class="submit-btn" value="추가">
+                        </td>
+                    </tr>
                 </table>
             </form>
             
     	</div>
     
-    	<div class="submit-btn hidden" id="submit-container">
-            <button type="submit" id="submit-button">추가</button>
-        </div>
+<!--    	<div class="submit-btn hidden" id="submit-container">-->
+<!--            <button type="submit" id="submit-button">추가</button>-->
+<!--        </div>-->
     </div>
 	    
     </main>

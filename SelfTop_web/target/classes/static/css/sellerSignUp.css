@@ -92,9 +92,12 @@ input[type="text"], input[type="password"] {
     box-sizing: border-box;
 }
 
+
+
 .btn-duplicate,
 .btn-business-info,
-.btn-address {
+.btn-address,
+.btn-find-address {
     padding: 10px 30px;
     margin-left: 80px;
     background: #008ADA;
@@ -110,7 +113,8 @@ input[type="text"], input[type="password"] {
 .btn-business-info:hover,
 .btn-address:hover,
 .btn-signup:hover,
-.btn-back:hover {
+.btn-back:hover,
+.btn-find-address:hover{
     background: #006bb3;
 }
 
