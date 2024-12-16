@@ -57,23 +57,22 @@
         		<label>사업자등록번호 조회</label>
                 <div class="input-group">
        				<input type="text" id="business_license" name="business_license" placeholder="-없이 10글자 입력" required>
-                	<button type="button" id="checkBusinessInfo" class="btn-business-info" onclick="corp_chk();">정보조회</button>
+                	<button type="button" id="checkBusinessInfo" class="btn-business-info" onclick="corp_chk();">조회하기</button>
     			</div>
+    			<span id="business-error" class="error-message"></span>
             </div>
             <div class="form-group">
         		<label>물건배송주소</label>
         		<div class="input-group">
-        			<input type="text" class="form-control" id="zipNo" name="zipNo" placeholder="우편번호" >
+        			<input type="text" class="form-control" id="zipNo" name="zipNo" placeholder="우편번호" required>
        				<button type="button" class="btn-find-address" onClick="goPopup()"><i class="fa fa-search"></i>주소검색</button>
        			</div>
        			<br>
 	            <div class="input-group">
-	            	<input type="text" class="form-control" id="address1" name="address1" placeholder="도로명주소"/>&nbsp;
-	            	<input type="text" class="form-control" id="address2" name="address2" placeholder="상세주소"/>
+	            	<input type="text" class="form-control" id="address1" name="address1" placeholder="도로명주소" required/>&nbsp;
+	            	<input type="text" class="form-control" id="address2" name="address2" placeholder="상세주소" required/>
 	            </div>
 	            	
-        		
-       				
             </div>
             
             <div class="form-group">
@@ -81,13 +80,14 @@
     			<div class="email-container">
         			<input type="text" id="email-id" name="email-id" placeholder="이메일 아이디" required>
         			<span>@</span>
-        			<input type="text" id="email-domain" name="email-domain" placeholder="도메인" required>
-        			<select id="email-domain-select" name="email-domain-select" onchange="document.getElementById('email-domain').value = this.value">
-            			<option value="" selected disabled>선택</option>
+        			<input type="text" id="email-domain" name="email-domain" placeholder="도메인" required disabled>
+        			<select id="email-domain-select" name="email-domain-select" onchange="updateEmailDomain()">
+            			<option value="">선택</option>
             			<option value="gmail.com">gmail.com</option>
             			<option value="naver.com">naver.com</option>
             			<option value="kakao.com">kakao.com</option>
             			<option value="daum.net">daum.net</option>
+            			<option value="direct">직접 입력</option>
         			</select>
     			</div>
     		</div>
