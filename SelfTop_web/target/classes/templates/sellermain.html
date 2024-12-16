@@ -32,7 +32,7 @@ function Reset(){
 	
 	 Search();
 	}
-	
+
 function logout() {
     sessionStorage.removeItem("loggedIn");
     location.href = '/login/logout';
@@ -92,7 +92,7 @@ document.addEventListener('click', function (event) {
                     <th>상태</th>
                     <th>구매자정보</th>
                 </tr>
-                
+
 
                 <tbody id="product_view" th:fragment="tbody">
 	              <tr th:each="dto : ${seller}">
