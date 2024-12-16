@@ -18,7 +18,7 @@
 
     <main id="signup-form">
         <h2>판매자 회원가입</h2>
-        <form action="/sellerSignUp" method="POST">
+        <form action="/sellerSignUp" method="post">
         	<div class="form-group">
         		<label>ID입력</label>
                 <div class="input-group">
@@ -61,12 +61,21 @@
     			</div>
             </div>
             <div class="form-group">
-        		<label>물건배송주소 입력</label>
-                <div class="input-group">
-       				<textarea id="address" name="address" required placeholder="주소를 입력해주세요." rows="5"></textarea>
-        			<button type="button" id="checkAddress" class="btn-address">주소조회</button>
-    			</div>
+        		<label>물건배송주소</label>
+        		<div class="input-group">
+        			<input type="text" class="form-control" id="zipNo" name="zipNo" placeholder="우편번호" >
+       				<button type="button" class="btn-find-address" onClick="goPopup()"><i class="fa fa-search"></i>주소검색</button>
+       			</div>
+       			<br>
+	            <div class="input-group">
+	            	<input type="text" class="form-control" id="address1" name="address1" placeholder="도로명주소"/>&nbsp;
+	            	<input type="text" class="form-control" id="address2" name="address2" placeholder="상세주소"/>
+	            </div>
+	            	
+        		
+       				
             </div>
+            
             <div class="form-group">
    				<label>이메일 주소</label>
     			<div class="email-container">

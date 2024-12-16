@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="popup.css" />
+    
+    <title>구매자 정보 확인</title>
+</head>
+<body>
+    <!-- 버튼 -->
+    <button id="openModalBtn" class="btn">구매자 정보 확인</button>
+
+    <!-- 모달 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">구매자 정보 확인</div>
+            <div class="modal-body">
+                <table class="table">
+                    <tr>
+                        <th>주문번호</th>
+                        <td>123456</td>
+                    </tr>
+                    <tr>
+                        <th>이름</th>
+                        <td>홍길동</td>
+                    </tr>
+                    <tr>
+                        <th>주소</th>
+                        <td>서울특별시 강남구 역삼동</td>
+                    </tr>
+                    <tr>
+                        <th>전화번호</th>
+                        <td>010-1234-5678</td>
+                    </tr>
+                    <tr>
+                        <th>요청사항</th>
+                        <td>빠른 배송 부탁드립니다.</td>
+                    </tr>
+                    <tr>
+                        <th>취소요청사유</th>
+                        <td>잘못된 주문</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-reject">거절</button>
+                <button class="btn btn-approve">승인</button>
+                <button id="closeModalBtn" class="btn btn-close">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+    
+</body>
+</html>
