@@ -30,6 +30,14 @@ public class SellerController {
 	public String showSignUpForm() {
 		return "sellerSignUp";
 	}
+	
+	@GetMapping("/sellerMyPage")
+	public String showSellerMyPage() {
+		
+		return "sellerMyPage";
+		
+	}
+	
 	@GetMapping("/main")
 	public String sellermain(Model model) {
 		List<SellerDto> res = sellerbiz.selectList();
@@ -136,6 +144,8 @@ public class SellerController {
 
 		return mav;
 	}
+	
+	
 	
 	
 	
