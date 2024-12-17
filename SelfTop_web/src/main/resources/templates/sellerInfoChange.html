@@ -6,7 +6,7 @@
     <title>Seller_InfoChange</title>
     <link rel="stylesheet" href="/css/sellerInfoChange.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="/js/sellerSignUp.js"></script>
+    <script type="text/javascript" src="/js/sellerInfoChange.js"></script>
 </head>
 <body>
     <header>
@@ -14,102 +14,97 @@
             <img src="/img/logo.png">
            	<p>
            		<span>이창진님</span>&nbsp|
-           		<img src="/img/human-icon.png">
-           		<img src="/img/lock-icon.png">
+           		<a href="sellerMyPage">
+           			<img src="/img/human-icon.png" class="human-icon">
+           		</a>
+           		<a href="sellerSignUp">
+           			<img src="/img/lock-icon.png" class="lock-icon">
+           		</a>
            	</p>
         </div>
     </header>
-
-    <main id="infochange-form">
-    	<h3>마이페이지</h3>
-        <form action="/sellerInfoChange" method="post">
-        	<h2>계정 정보 변경</h2>
-        	<div class="form-group">
-        		<label>대표자명<span>*</span></label>
-                <div class="input-group">
-       				<p id="ceo_name">${ceo_name}</p>
-    			</div>
-            </div>
-            <div class="form-group">
-        		<label>업체명<span>*</span></label>
-                <div class="input-group">
-       				<p id="company_name">${company_name}</p>
-    			</div>
-            </div>
-            <div class="form-group">
-                <label>연락처<span>*</span></label>
-                <div class="input-group">
-                	<input type="text" id="company_name" name="company_name" required>
-                </div>
+	<main>
+		<div id="title"><h3>마이 페이지</h3></div>
+    	<div id="infochange-form">
+        	<form action="/sellerInfoChange" method="post">
+        		<h2>계정 정보 변경</h2>
+        		<div class="form-group">
+        			<label>대표자명<span>*</span></label>
+                	<div class="input-group">
+       					<p id="ceo_name">이창진</p>
+    				</div>
+            	</div>
+            	<div class="form-group">
+        			<label>업체명<span>*</span></label>
+                	<div class="input-group">
+       					<p id="company_name">멀티캠퍼스</p>
+    				</div>
+       	    	</div>
+      	      	<div class="form-group">
+                	<label>연락처<span>*</span></label>
+                	<div class="input-group">
+                		<input type="text" id="phone" name="phone" placeholder="02-1234-1234">
+                	</div>
             </div>
             <div class="form-group">
         		<label>주소<span>*</span></label>
         		<div class="input-group">
-        			<input type="text" class="form-control" id="zipNo" name="zipNo" placeholder="우편번호" required>
+        			<input type="text" class="form-control" id="zipNo" name="zipNo" placeholder="우편번호">
        				<button type="button" class="btn-find-address" onClick="goPopup()"><i class="fa fa-search"></i>주소 검색</button>
        			</div>
        			<br>
 	            <div class="input-group">
-	            	<input type="text" class="form-control" id="address1" name="address1" placeholder="도로명주소" required/>&nbsp;
-	            	<input type="text" class="form-control" id="address2" name="address2" placeholder="상세주소" required/>
+	            	<input type="text" class="form-control" id="address1" name="address1" placeholder="도로명주소"/>&nbsp;
+	            	<input type="text" class="form-control" id="address2" name="address2" placeholder="상세주소"/>
 	            </div>	
             </div>
             <div class="form-group">
-    			<button type="submit" class="btn-signup">변경하기</button>
+    			<button type="submit" class="btn-change-account">변경하기</button>
 			</div>
 			<h2>비밀번호 변경</h2>
             <div class="form-group">
     			<label>기존 비밀번호<span>*</span></label>
     			<div class="input-container">
-        			<input type="password" id="pw" name="pw" required oninput="validatePassword()">
+        			<input type="password" id="pw" name="pw" oninput="checkCurrentPassword()">
     			</div>
     			<span id="pw-error" class="error-message"></span>
 			</div>
 			<div class="form-group">
     			<label>새 비밀번호<span>*</span></label>
     			<div class="input-container">
-        			<input type="password" id="pw" name="pw" required oninput="validatePassword()">
+        			<input type="password" id="new_pw" name="new_pw" oninput="validatePassword()">
     			</div>
-    			<span id="pw-error" class="error-message"></span>
+    			<span id="new_pw-error" class="error-message"></span>
 			</div>
             <div class="form-group">
                 <label>새 비밀번호 확인<span>*</span></label>
                 <div class="input-container">
-                	<input type="password" id="confirmPassword" name="confirmPassword" required oninput="validateConfirmPassword()">
+                	<input type="password" id="confirmPassword" name="confirmPassword" oninput="validateConfirmPassword()">
                 </div>
                 <span id="confirm-error" class="error-message"></span>
             </div>
             <div class="form-group">
-    			<button type="submit" class="btn-signup">변경하기</button>
+    			<button type="submit" class="btn-change-pw">변경하기</button>
 			</div>
 			<h2>회원탈퇴</h2>
             <div class="form-group">
-   				<label>이메일 주소<span>*</span></label>
+   				<label>이메일<span>*</span></label>
     			<div class="email-container">
-        			<input type="text" id="email-id" name="email-id" placeholder="이메일 아이디" required>
-        			<span>@</span>
-        			<input type="text" id="email-domain" name="email-domain" placeholder="도메인" required disabled>
-        			<select id="email-domain-select" name="email-domain-select" onchange="updateEmailDomain()">
-            			<option value="">선택</option>
-            			<option value="gmail.com">gmail.com</option>
-            			<option value="naver.com">naver.com</option>
-            			<option value="kakao.com">kakao.com</option>
-            			<option value="daum.net">daum.net</option>
-            			<option value="direct">직접 입력</option>
-        			</select>
+        			<input type="text" id="email" name="email" placeholder="이메일을 입력해주세요!">
     			</div>
     		</div>
     		<div class="form-group">
     			<label>비밀번호<span>*</span></label>
     			<div class="input-container">
-        			<input type="password" id="pw" name="pw" required oninput="validatePassword()">
+        			<input type="password" id="pw" name="pw" placeholder="기존 비밀번호를 입력해주세요!" oninput="checkCurrentPassword()">
     			</div>
     			<span id="pw-error" class="error-message"></span>
 			</div>
 			<div class="form-group">
-    			<button type="submit" class="btn-signup">탈퇴하기</button>
+    			<button type="submit" class="btn-delete">탈퇴하기</button>
 			</div>
-        </form>
+        	</form>
+        </div>
     </main>
 
     <footer>
