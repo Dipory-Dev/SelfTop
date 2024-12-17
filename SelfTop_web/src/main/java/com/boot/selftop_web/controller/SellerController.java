@@ -34,11 +34,7 @@ public class SellerController {
 	public String showSignUpForm() {
 		return "sellerSignUp";
 	}
-<<<<<<< HEAD
-	
-=======
 
->>>>>>> 0c6f1f45c257aa53136bacbc9a1998d3a9d99ab2
 
 	@GetMapping("/sellerMyPage")
 	public String showSellerMyPage() {
@@ -50,11 +46,8 @@ public class SellerController {
 	@GetMapping("/main")
 	public String sellermain(HttpSession session,Model model) {
 		if(session.getAttribute("memberno") == null) {
-<<<<<<< HEAD
-			return "redirect:/login/loginform";		
-=======
 			return "redirect:/login/loginform";
->>>>>>> 0c6f1f45c257aa53136bacbc9a1998d3a9d99ab2
+
 		}
 		int membernum=(int) session.getAttribute("memberno");
 		List<SellerDto> res = sellerbiz.selectList(membernum);

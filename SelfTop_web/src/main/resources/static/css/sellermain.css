@@ -28,6 +28,12 @@ header {
 .header-user {
 	display: flex; 
 	justify-content: flex-end;
+	align-items: center;
+}
+
+.header-user p{
+	display: inline;
+	margin-left: 15px;
 }
 
 html, body {
