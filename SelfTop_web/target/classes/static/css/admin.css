@@ -116,7 +116,7 @@ caption{
 
 .product-table{
 	width: 800px;
-	margin: 0 auto;
+	margin: 0 auto 10% auto;
     border-collapse: collapse;
     background-color: #fff;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -141,12 +141,12 @@ caption{
     text-align: center;
 }
 
-#submit-button{
+.submit-button{
 	width: 150px;
 	height: 45px;
 	font-size: 1.2em;
 	margin-top: 25px;
-	margin-bottom: 10%;
+	margin-bottom: 5%;
     border-radius: 5px;
     border-color: #008ada;
     color: #fff;
@@ -154,7 +154,7 @@ caption{
     float: right;
 }
 
-#submit-button:hover {
+.submit-button:hover {
   background: #006bb3;
 }
 

@@ -4,7 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-public class CPUDto {
+public class CPUDto implements ProductDto {
     private int product_code;
     private String category;
     private String product_name;

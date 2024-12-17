@@ -1,12 +1,21 @@
 package com.boot.selftop_web.seller.model.biz.product;
 
 import com.boot.selftop_web.seller.model.dto.product.CPUDto;
+import com.boot.selftop_web.seller.model.mapper.product.CPUMapper;
+import com.boot.selftop_web.seller.model.mapper.product.ProductMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
-public class CPUBizImpl implements CPUBiz{
+@Service("CPU")
+public class CPUBizImpl implements ProductBiz<CPUDto> {
+    @Autowired
+    private ProductMapper productMapper;
+    @Autowired
+    private CPUMapper cpuMapper;
+
     @Override
     public List<CPUDto> selectAll() {
         return null;
@@ -18,7 +27,21 @@ public class CPUBizImpl implements CPUBiz{
     }
 
     @Override
-    public int insert(CPUDto cpu) {
-        return 0;
+    @Transactional
+    public int insert(CPUDto dto) {
+        System.out.println("Biz : " + dto);
+        int result = 0;
+        try {
+            result = productMapper.insertProduct(dto);
+            System.out.println("Biz : " + result);
+            int productCode = productMapper.getCurrentProductCode();
+            dto.setProduct_code(productCode);
+            result += cpuMapper.insertCPU(dto);
+            System.out.println("Biz : " + result);
+        } catch (Exception e) {
+            System.err.println("Error during insert: " + e.getMessage());
+            throw e;
+        }
+        return result;
     }
 }
