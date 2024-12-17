@@ -58,8 +58,11 @@ document.addEventListener('click', function (event) {
  <header>
         <div class="header-content">
             <img src="/img/logo.png">
+            <div class="header-user">
+            <p>테스트님</p>
             <p th:unless="${seller != null && seller.size() > 0}">로그인</p>
            	<p th:if="${seller != null && seller.size() > 0}" onclick="logout()">로그아웃</p>
+           	</div>
            	
         </div>
     </header>
