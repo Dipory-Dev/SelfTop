@@ -1,7 +1,10 @@
 package com.boot.selftop_web.controller;
 
 import com.boot.selftop_web.seller.model.biz.AdminBiz;
+import com.boot.selftop_web.seller.model.biz.product.CoolerBiz;
+import com.boot.selftop_web.seller.model.biz.product.CoolerBizImpl;
 import com.boot.selftop_web.seller.model.dto.AdminDto;
+import com.boot.selftop_web.seller.model.dto.product.CoolerDto;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +20,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AdminController {
     @Autowired
     private AdminBiz adminBiz;
+    @Autowired
+    CoolerBiz coolerBiz = new CoolerBizImpl();
 
     @GetMapping("/")
     public String redirectToLogin(HttpSession session) {
@@ -57,5 +62,34 @@ public class AdminController {
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/admin/login";
+    }
+
+    @PostMapping("/add")
+    public String addProduct(@RequestParam("category") String category, CoolerDto dto) {
+        System.out.println("Controller : " + category);
+        System.out.println("Controller : " + dto);
+        int res = 0;
+        
+        if (category.equals("CPU")) {
+            
+        } else if (category.equals("RAM")) {
+            
+        } else if (category.equals("메인보드")) {
+
+        } else if (category.equals("케이스")) {
+
+        } else if (category.equals("그래픽카드")) {
+
+        } else if (category.equals("파워")) {
+
+        } else if (category.equals("SSD")) {
+
+        } else if (category.equals("HDD")) {
+
+        } else if (category.equals("쿨러")) {
+            res = coolerBiz.insert(dto);
+            System.out.println("Controller : " + res);
+        }
+        return "redirect:/admin/main";
     }
 }
