@@ -43,7 +43,7 @@ header {
     width: 30px;
     height: 30px;
     margin-left: 5px;
-    transition: transform 0.3s ease, filter 0.3s ease; /* 애니메이션 효과 추가 */
+    transition: transform 0.3s ease;
 }
 
 .header-content p span:hover {
@@ -51,28 +51,47 @@ header {
 }
 
 .header-content p img:hover {
-    transform: scale(1.2);
-    filter: brightness(1.5);
+    transform: scale(1.5);
 }
 
 body {
     padding-top: 90px;
 }
 
+main{
+    flex: 1;
+    align-items: center;
+    width: 1300px;
+    margin: 0 auto;
+    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+}
+
+#title {
+	width: 1300px;
+	height: 75px;
+	display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #000;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#title h3 {
+	margin-left: 5%;
+}
+
 #infochange-form {
     max-width: 600px;
-    margin: 50px auto;
     padding: 20px;
+    margin: auto;
     font-size: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-left: 2px solid #ccc; /* 왼쪽 테두리 */
-    border-right: 2px solid #ccc;
-    
 }
 
 #infochange-form h2 {
+	margin-left: 30px;
+	margin-top: 20px;
     margin-bottom: 20px;
     font-size: 32px;
 }
@@ -83,19 +102,23 @@ form {
 }
 
 .form-group {
-	margin: 0 10px;
+	margin: 0 30px;
     margin-bottom: 15px;
 }
 
 .form-group p {
     font-size: 14px;
     color: #555;
-    margin-bottom: 15px;
+    margin: 10px 0;
 }
 
 label {
     margin-bottom: 5px;
     display: block;
+}
+
+label span {
+	color: red;
 }
 
 input[type="text"], input[type="password"] {
@@ -121,12 +144,10 @@ input[type="text"], input[type="password"] {
     box-sizing: border-box;
 }
 
-.btn-duplicate,
-.btn-business-info,
-.btn-address,
 .btn-find-address {
+	width: auto;
     padding: 10px 30px;
-    margin-left: 80px;
+    margin-left: 12%;
     background: #008ADA;
     color: #fff;
     border: none;
@@ -136,11 +157,8 @@ input[type="text"], input[type="password"] {
     transition: background-color 0.3s ease;
 }
 
-.btn-duplicate:hover,
-.btn-business-info:hover,
-.btn-address:hover,
-.btn-signup:hover,
-.btn-back:hover,
+.btn-change-account:hover
+.btn-change-pw:hover,
 .btn-find-address:hover{
     background: #006bb3;
 }
@@ -189,81 +207,15 @@ textarea {
     border-radius: 4px;
 }
 
-.email-container span {
-    margin: 0 5px;
-}
-
-.email-container select {
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
 input[disabled] {
     background-color: #f0f0f0;
     cursor: not-allowed;
 }
 
-.terms-content {
-    max-height: 200px;
-    overflow-y: auto;
-    border: 1px solid #ddd;
-    padding: 10px;
-    background-color: #f9f9f9;
-    margin-bottom: 10px;
-    border-radius: 5px;
-}
-
-.terms-content h4 {
-    margin: 10px 0 5px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-}
-
-.terms-content p {
-    font-size: 14px;
-    line-height: 1.6;
-    margin: 5px 0;
-
-}
-
-.checkbox-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.checkbox-group label {
-    cursor: pointer;
-    font-size: 14px;
-    font-size: 14px;
-    line-height: 1;
-    margin: 0;
-}
-
-.checkbox-group label:hover {
-    text-decoration: underline;
-}
-
-.checkbox-group input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-    vertical-align: middle;
-}
-
-.terms-message {
-    color: red;
-    font-size: 14px;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-.btn-signup {
-	margin-left: 10%;
-    padding: 10px 60px;
+.btn-change-account,
+.btn-change-pw {
+	margin-left: 70%;
+    padding: 10px 40px;
     background: #008ADA;
     color: white;
     border: none;
@@ -273,16 +225,20 @@ input[disabled] {
     transition: background-color 0.3s ease;
 }
 
-.btn-back {
-    padding: 10px 60px;
-    margin-left: 50px;
-    background: #008ADA;
+.btn-delete {
+    margin-left: 70%;
+    padding: 10px 40px;
+    background: red;
     color: white;
     border: none;
     border-radius: 4px;
     font-size: 20px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+}
+
+.btn-delete:hover {
+	background: #8B0000;
 }
 
 footer {

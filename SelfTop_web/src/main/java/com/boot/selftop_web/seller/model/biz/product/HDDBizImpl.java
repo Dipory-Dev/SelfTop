@@ -1,12 +1,21 @@
 package com.boot.selftop_web.seller.model.biz.product;
 
 import com.boot.selftop_web.seller.model.dto.product.HDDDto;
+import com.boot.selftop_web.seller.model.mapper.product.HDDMapper;
+import com.boot.selftop_web.seller.model.mapper.product.ProductMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
-public class HDDBizImpl implements HDDBiz{
+@Service("HDD")
+public class HDDBizImpl implements ProductBiz<HDDDto> {
+    @Autowired
+    private ProductMapper productMapper;
+    @Autowired
+    private HDDMapper hddMapper;
+
     @Override
     public List<HDDDto> selectAll() {
         return null;
@@ -18,7 +27,21 @@ public class HDDBizImpl implements HDDBiz{
     }
 
     @Override
+    @Transactional
     public int insert(HDDDto dto) {
-        return 0;
+        System.out.println("Biz : " + dto);
+        int result = 0;
+        try {
+            result = productMapper.insertProduct(dto);
+            System.out.println("Biz : " + result);
+            int productCode = productMapper.getCurrentProductCode();
+            dto.setProduct_code(productCode);
+            result += hddMapper.insertHDD(dto);
+            System.out.println("Biz : " + result);
+        } catch (Exception e) {
+            System.err.println("Error during insert: " + e.getMessage());
+            throw e;
+        }
+        return result;
     }
 }
