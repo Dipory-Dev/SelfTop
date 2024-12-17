@@ -5,6 +5,7 @@ import com.boot.selftop_web.seller.model.biz.SellerBizImpl;
 import com.boot.selftop_web.seller.model.dto.SellerDto;
 import com.boot.selftop_web.seller.model.dto.SellerOrderDto;
 
+import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -25,7 +26,7 @@ import java.util.Map;
 public class SellerController {
 	@Autowired
 	private SellerBizImpl sellerbiz;
-	
+
 	@Autowired
 	private SellerBiz sellerBiz;
 
@@ -40,14 +41,15 @@ public class SellerController {
 		if(session.getAttribute("member_no") == null) {
 			return "redirect:/login/loginform";
 		}
-		
+
 		Integer member_no = (Integer) session.getAttribute("member_no");
-		
+
 		SellerDto sellerInfo = sellerBiz.getSellerInfoByMemberNo(member_no);
 	    model.addAttribute("sellerInfo", sellerInfo);
-		
+
 		return "sellerMyPage";
 	}
+
 
 	@GetMapping("/main")
 	public String sellermain(HttpSession session,Model model) {
@@ -94,36 +96,13 @@ public class SellerController {
 			@RequestParam("terms") boolean terms,
 			Model model) {
 
-		// 필수 항목 확인
-		if (id == null || id.isEmpty()) {
-			model.addAttribute("error", "아이디를 입력해주세요.");
-			return "sellerSignUp";
-		}
-		if (pw == null || pw.isEmpty()) {
-			model.addAttribute("error", "비밀번호를 입력해주세요.");
-			return "sellerSignUp";
-		}
-		if (confirmPassword == null || confirmPassword.isEmpty()) {
-			model.addAttribute("error", "비밀번호 확인을 입력해주세요.");
-			return "sellerSignUp";
-		}
-		if (email == null || email.isEmpty()) {
-			model.addAttribute("error", "이메일을 입력해주세요.");
-			return "sellerSignUp";
-		}
-
 		// 비밀번호 확인
 		if (!pw.equals(confirmPassword)) {
 			model.addAttribute("error", "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
 			return "sellerSignUp";
 		}
 
-		// 이메일 형식 확인
-		if (!email.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")) {
-			model.addAttribute("error", "유효한 이메일 주소를 입력해주세요.");
-			return "sellerSignUp";
-		}
-
+		
 		// 약관 동의 확인
 		if (!terms) {
 			model.addAttribute("error", "서비스 약관과 개인정보 처리방침에 동의하셔야 합니다.");
@@ -131,10 +110,10 @@ public class SellerController {
 		}
 
 		model.addAttribute("message", "회원가입이 완료되었습니다.");
-		return "redirect:/main";
+		return "sellerMain";
 	}
-
-
+	
+	
 	@RequestMapping(value="/addressPopup")
 	public ModelAndView addressPopup(HttpServletRequest request, @RequestParam HashMap<String, String> p, Locale locale) {
 
@@ -148,14 +127,14 @@ public class SellerController {
 		String addrDetail = request.getParameter("addrDetail");
 		String jibunAddr = request.getParameter("jibunAddr");
 
-
+		
 		mav.addObject("inputYn", inputYn);
 		mav.addObject("zipNo", zipNo);
 		mav.addObject("roadAddrPart1", roadAddrPart1);
 		mav.addObject("roadAddrPart2", roadAddrPart2);
 		mav.addObject("jibunAddr", jibunAddr);
 		mav.addObject("addrDetail", addrDetail);
-
+		
 
 		return mav;
 	}

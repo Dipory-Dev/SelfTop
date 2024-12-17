@@ -33,12 +33,18 @@ function Reset(){
 	 Search();
 	}
 
+function logout() {
+    sessionStorage.removeItem("loggedIn");
+    location.href = '/login/logout';
+}
+
 document.addEventListener('click', function (event) {
 	  if (event.target.classList.contains('info-button')) {
 	    const info = event.target.getAttribute('data-info');
 	    CustomerPopup(info);
 	  }
 	});
+
 
 	function CustomerPopup(info) {
 	  alert("구매자 정보: " + info);
@@ -53,7 +59,9 @@ document.addEventListener('click', function (event) {
  <header>
         <div class="header-content">
             <img src="/img/logo.png">
-           	<p>로그인</p>
+            <p th:unless="${seller != null && seller.size() > 0}">로그인</p>
+           	<p th:if="${seller != null && seller.size() > 0}" onclick="logout()">로그아웃</p>
+
         </div>
     </header>
     <main>
