@@ -13,6 +13,7 @@ header {
     width: 150px;
     margin-left: 10%;
     height: 70px;
+    cursor:pointer;
 }
 
 .header-content p {
@@ -31,9 +32,10 @@ header {
 	align-items: center;
 }
 
-.header-user p{
-	display: inline;
-	margin-left: 15px;
+.header-user p {
+    margin-left: 15px;
+    display: inline-block; /* 이 속성을 추가하여 p 태그를 수평으로 정렬 */
+    white-space: nowrap;
 }
 
 html, body {

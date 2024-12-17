@@ -51,6 +51,7 @@ public class SellerController {
 		int membernum=(int) session.getAttribute("memberno");
 		List<SellerDto> res = sellerbiz.selectList(membernum);
 		model.addAttribute("seller",res);
+		model.addAttribute("membername",session.getAttribute("name"));
 		return "sellermain";
 	}
 
