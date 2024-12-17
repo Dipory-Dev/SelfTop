@@ -5,63 +5,18 @@
 <title>Seller</title>
 <link rel="stylesheet" href="/css/sellermain.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript">
-function Search(){
-	var startdate = $("#start-date").val(); 
-	var enddate = $("#end-date").val();
-	var keyword = $("#keyword").val();
-	$.ajax({
-		url: "/seller/datesearch",
-		type: "GET",
-		data: {
-			startdate: startdate,  
-			enddate: enddate,
-			keyword:keyword
-			}
-	}).done(function (fragment) {
-		$("#product_view").replaceWith(fragment);
-		        }).fail(function(xhr, status, error) {
-		        	console.error("오류:", error);
-		        	alert("검색 오류");
-		        	});
-	}
-function Reset(){
-	 $("#start-date").val('');
-	 $("#end-date").val('');
-	 $("#keyword").val('');
-	
-	 Search();
-	}
-	
-function logout() {
-    sessionStorage.removeItem("loggedIn");
-    location.href = '/login/logout';
-}	
-document.addEventListener('click', function (event) {
-	  if (event.target.classList.contains('info-button')) {
-	    const info = event.target.getAttribute('data-info');
-	    CustomerPopup(info); 
-	  }
-	});
+<script type="text/javascript" src="/js/sellermain.js"></script>
 
-
-	function CustomerPopup(info) {
-	  alert("구매자 정보: " + info); 
-	}	
-	
-
-
-</script>
 
 </head>
 <body>
  <header>
         <div class="header-content">
-            <img src="/img/logo.png">
+            <img src="/img/logo.png" onclick="movemain()">
             <div class="header-user">
-            <p>테스트님</p>
-            <p th:unless="${seller != null && seller.size() > 0}">로그인</p>
-           	<p th:if="${seller != null && seller.size() > 0}" onclick="logout()">로그아웃</p>
+          	  <p th:text="${membername} + 님" ></p>
+              <p th:unless="${seller != null && seller.size() > 0}">로그인</p>
+           	  <p th:if="${seller != null && seller.size() > 0}" onclick="logout()">로그아웃</p>
            	</div>
            	
         </div>
@@ -80,10 +35,10 @@ document.addEventListener('click', function (event) {
         </div>
         <div class="searchbox">
             <input type="text" placeholder="검색할 제품 입력" id="keyword">
-            <button class="searchbutton" onclick=Search()>검색</button> 
-            <button class="searchbutton" onclick=Reset()>초가화</button>
+            <button class="searchbutton" onclick=Search()>검색</button>
+            <button class="searchbutton" onclick=Reset()>초기화</button>
         </div>
-       
+
         </div>
         <table class ="product_table">
             <tr>
@@ -102,7 +57,7 @@ document.addEventListener('click', function (event) {
 	                    <td th:text="${#dates.format(dto.order_Date, 'MM/dd')}"></td>
 	                    <td th:text="${dto.category}"></td>
 	                    <td><img th:src="${dto.thumbnail}" width="50" height="50" /></td>
-	                   <td th:text="${dto.product_name}"></td>
+	                    <td th:text="${dto.product_name}"></td>
 	                    <td th:text="${dto.amount}"></td>
 	                    <td th:text="${dto.price}+ 원 "></td>
 	                    <td th:text="${dto.order_status}"></td>

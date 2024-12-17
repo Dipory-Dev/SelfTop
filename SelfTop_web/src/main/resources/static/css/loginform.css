@@ -1,0 +1,235 @@
+* {
+	margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    color: #666666;
+}
+
+header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1000;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-content img {
+    width: 150px;
+    margin-left: 10%;
+    height: 70px;
+}
+
+.header-content p {
+    margin-right: 10%;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.header-content p:hover {
+    text-decoration: underline;
+}
+
+main{
+	margin-top: 90px;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+}
+h1{
+	text-align:center;
+}
+
+.loginbox {
+    margin: 120px 10%;
+ /*   border: 1px solid #666;*/
+    width: 480px;
+    height: auto;
+    justify-self: center;
+    text-align:center;
+}
+
+.inputsection{
+	display:flex;
+	align-items:center;
+	margin-bottom: 20px;
+}
+.inputsection label {
+    width: 80px; /* 라벨의 고정 너비 */
+    font-size: 16px;
+    font-weight: bold;
+}
+input::placeholder {
+	font-size: 1.2em;
+	font-weight: bold;
+    text-align: center;
+}
+
+.regist{
+	display:flex;
+	justify-content:flex-end;
+	gap:20px;
+	flex-wrap: wrap;
+}
+.regist h3 {
+    margin: 0; 
+    cursor: pointer; 
+    
+}
+.sellerh3 {
+    flex-basis: 100%; 
+    text-align:right; 
+    margin-top: 10px; 
+    padding-right: 20px;
+}
+
+
+.login_btn {
+	margin-top: 10%;
+    border-radius: 5px;
+    border-color: #008ada;
+    color: #fff;
+    background-color: #008ada;
+    height:50px;
+    width:100%;
+    margin-bottom:20px;
+}
+
+.SNS_btn{
+	margin-top: 10%;
+    border-radius: 5px;
+    border-color: #008ada;
+    color: #fff;
+    background-color:#FAE100 ;
+    height:50px;
+    width:100%;
+}
+
+.logo_img {
+    width: 100px;
+    height: auto;
+    display: block;
+}
+
+.log_info {
+    float: left;
+}
+
+.log_txt {
+    display: flex;
+    justify-content: space-between;
+}
+
+.parts_select{
+	width: 1000px;
+	height: auto;
+	margin-bottom: 20px;
+	
+}
+
+caption{
+	font-size: 25px;
+	font-weight: bold;
+	text-align: left;
+	margin: 20px 10%;
+}
+
+#parts{
+	width: 200px;
+	height: 30px;
+	font-size: 1.2em;
+	margin:0px 10%;
+}
+
+#form-container {
+    justify-self: center;
+}
+
+.product-table{
+	width: 800px;
+	margin: 0 auto 10% auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.product-table th,
+.product-table td {
+    border: 1px solid #ddd;
+    padding: 15px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.product-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    text-align: center;
+    width: 25%;
+}
+
+.product-table td {
+    text-align: center;
+}
+
+.submit-button{
+	width: 150px;
+	height: 45px;
+	font-size: 1.2em;
+	margin-top: 25px;
+	margin-bottom: 5%;
+    border-radius: 5px;
+    border-color: #008ada;
+    color: #fff;
+    background-color: #008ada;
+    float: right;
+}
+
+.submit-button:hover {
+  background: #006bb3;
+}
+
+input {
+  width: 400px;
+  height: 35px;
+  font-size: 15px;
+  border: 0;
+  outline: none;
+  padding-left: 10px;
+  background-color: rgb(233, 233, 233);
+}
+
+textarea {
+  width: 400px;
+  height: 35px;
+  font-size: 15px;
+  padding: 10px;
+  resize: none;
+  border: 0;
+  outline: none;
+  padding-left: 10px;
+  background-color: rgb(233, 233, 233);
+}
+
+
+
+.hidden {
+	display: none;
+}
+
+a {
+    color: #666;
+}
+
+p {
+    color: #666;
+}
