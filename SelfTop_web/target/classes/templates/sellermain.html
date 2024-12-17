@@ -43,7 +43,7 @@ document.addEventListener('click', function (event) {
 	function CustomerPopup(info) {
 	  alert("구매자 정보: " + info); 
 	}	
-	
+
 </script>
 
 </head>
@@ -85,23 +85,23 @@ document.addEventListener('click', function (event) {
                     <th>구매자정보</th>
                 </tr>
                 
-                
+
                 <tbody id="product_view" th:fragment="tbody">
 	              <tr th:each="dto : ${seller}">
 	                    <td th:text="${#dates.format(dto.order_Date, 'MM/dd')}"></td>
-                    <td th:text="${dto.cartegory}"></td>
-                    <td><img th:src="${dto.p_Image}" width="50" height="50" /></td>
-                    <td th:text="${dto.p_model}"></td>
+	                    <td th:text="${dto.category}"></td>
+	                   <td><img th:src="${dto.thumbnail}" width="50" height="50" /></td>
+	                   <td th:text="${dto.product_name}"></td>
 	                    <td th:text="${dto.amount}"></td>
 	                    <td th:text="${dto.price}+ 원 "></td>
-                    <td th:text="${dto.status}"></td>
-                    <td><button class="info-button" th:data-info="${dto.c_Inform}">구매자 정보</button></td>
+	                    <td th:text="${dto.order_status}"></td>
+	                   <td><button class="info-button" th:data-info="${dto.customer_no}">구매자 정보</button></td>
 	                </tr>
 	          	</tbody>
-                
-                
-                
-                 
+
+
+
+
         </table>
         </main>
     <footer>
