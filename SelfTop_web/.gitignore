@@ -212,4 +212,4 @@ replay_pid*
 # End of https://www.toptal.com/developers/gitignore/api/intellij,eclipse,java
 
 *.properties
-./target/*
+./target
