@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>LoginForm</title>
-    <link rel="stylesheet" type="text/css" href="/css/loginform.css">
+    <link rel="stylesheet" type="text/css" href="/css/admin.css">
 </head>
 <body>
 <header>
@@ -12,27 +12,25 @@
     </div>
 </header>
     <main>
-    <H1>로그인</H1>
         <form action="loginchk" method="post">
             <div class="loginbox">
-            	<div class="inputsection">
-            		<label for="id">ID</label>
-            		<input name="id" type="text" placeholder="아이디를 입력해주세요" size="50" style="height:30px">
-            	</div>
-				<div class="inputsection">  
-            		<label for="pw">PW</label>
-            		<input name="pw" type="password" placeholder="비밀번호를 입력해주세요" size="50" style="height:30px">
-            	</div>  
-            	<input class="login_btn" type="submit" value="로그인"> 
-            	<div class="regist">
-            		<h3>ID찾기 </h3>
-            		<h3>PW찾기 </h3>
-            		<h3>회원가입 </h3><br>
-            		<h3 class="sellerh3">판매자 회원가입</h3>
-            	</div>
-            	
-            	
-            	<input class="SNS_btn" type="submit" value="SNS로그인">     
+                <table class="login_section">
+                    <tr>
+                        <th align="left"><h4>아이디</h4></th>
+                    </tr>
+                    <tr>
+                        <td><input name="id" type="text" placeholder="아이디를 입력해주세요" size="50" style="height:30px"></td>
+                    </tr>
+                    <tr>
+                        <th align="left"><h4>비밀번호</h4></th>
+                    </tr>
+                    <tr>
+                        <td><input name="pw" type="password" placeholder="비밀번호를 입력해주세요" size="50" style="height:30px"></td>
+                    </tr>
+                    <tr>
+                        <td align="right" colspan="2"><input class="login_btn" type="submit" value="로그인"></td>
+                    </tr>
+                </table>
             </div>
         </form>
     </main>

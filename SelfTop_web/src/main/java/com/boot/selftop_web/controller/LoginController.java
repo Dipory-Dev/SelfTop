@@ -35,13 +35,11 @@ public class LoginController {
 		if((member !=null) && member.getRole() == 'S' ) {
 			System.out.println("This is seller!");
 			 session.setAttribute("memberno", member.getNumber());
-			 session.setAttribute("member_no", member.getNumber());
 			 session.setAttribute("name",member.getName());
-			return "redirect:/seller/main";
+			return "redirect:/intropage.html";
 		}else if((member !=null) && member.getRole() == 'C') {
-			session.setAttribute("member_no", member.getNumber());
 			System.out.println("Customer");
-			return "redirect:/main";
+			return "redirect:/seller/main";
 		}else {
             return "loginform";
         }
