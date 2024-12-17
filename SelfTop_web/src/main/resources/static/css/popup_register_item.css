@@ -1,0 +1,175 @@
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    
+}
+#openModalBtn{
+    background-color: #008ADA;
+    color:#fff;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 600px;
+    height:600px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    background-color: #008ADA;
+    color: white;
+    padding: 20px;
+    margin-top: -20px;
+    margin-left: -20px;
+    margin-right:-20px;
+    text-align: center;
+    font-size: 18px;
+    font-weight:bolder;
+}
+
+.modal-body {
+    padding: 20px;
+    height:430px;
+    margin-top:15px;
+}
+
+.modal-footer {
+    text-align: right;
+    margin-top: 33px;
+}
+
+.table {
+    width: 100%;
+    height:450px;
+    border-collapse: collapse;
+    font-size:13px;
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.table th {
+    background-color: #f2f2f2;
+    text-align: center;
+}
+
+.table td{
+
+    padding-left: 20px;
+}
+
+
+select::-ms-expand { 
+	display: none;
+}
+
+select {
+    -o-appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 200px;
+    height: 30px;
+    padding: 5px 30px 5px 10px;
+    border-radius: 4px;
+    outline: 0 none;
+}
+
+select option{
+    background: #f2f2f2;
+    color: #666;
+    padding: 3px 0;
+}
+
+select:hover{
+    transition: 0.6s;
+    background-color: #e5e5e5;
+}
+
+.quantity .price{
+    width: 100px;
+    height: 40px;
+    padding: 5px 30px 5px 10px;
+    border-radius: 4px;
+    outline: 0 none;
+
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input {
+    width:100px;
+
+}
+
+.detail{
+    resize:none;
+    width:360px;
+    height:100px;
+    border-radius: 4px;
+}
+
+.detail:hover{
+    transition: 0.6s;
+    background-color: #e5e5e5;
+}
+
+.btn {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+   
+    
+}
+
+.btn-register:hover{
+    transition: 0.6s;
+    background-color:#006bb3;
+}
+
+.btn-register {
+    background-color: #008ADA;
+    color: white;
+}
+
+.btn-reject:hover{
+    transition: 0.6s;
+    background-color: #d43c32 ;
+}
+
+.btn-reject {
+    background-color: #f44c41;
+    color: white;
+    
+}
+
+.btn-close:hover{
+    transition: 0.6s;
+    background-color: #7a7a7a;
+
+}
+
+.btn-close {
+    background-color: #999;
+    color: white;
+}

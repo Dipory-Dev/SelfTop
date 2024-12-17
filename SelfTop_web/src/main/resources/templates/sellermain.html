@@ -7,14 +7,14 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
 function Search(){
-	var startdate = $("#start-date").val();
+	var startdate = $("#start-date").val(); 
 	var enddate = $("#end-date").val();
 	var keyword = $("#keyword").val();
 	$.ajax({
 		url: "/seller/datesearch",
 		type: "GET",
 		data: {
-			startdate: startdate,
+			startdate: startdate,  
 			enddate: enddate,
 			keyword:keyword
 			}
@@ -29,22 +29,20 @@ function Reset(){
 	 $("#start-date").val('');
 	 $("#end-date").val('');
 	 $("#keyword").val('');
-
+	
 	 Search();
 	}
-
+	
 document.addEventListener('click', function (event) {
 	  if (event.target.classList.contains('info-button')) {
 	    const info = event.target.getAttribute('data-info');
-	    CustomerPopup(info);
+	    CustomerPopup(info); 
 	  }
 	});
 
 	function CustomerPopup(info) {
-	  alert("구매자 정보: " + info);
-	}
-
-
+	  alert("구매자 정보: " + info); 
+	}	
 
 </script>
 
@@ -73,7 +71,7 @@ document.addEventListener('click', function (event) {
             <button class="searchbutton" onclick=Search()>검색</button> 
             <button class="searchbutton" onclick=Reset()>초기화</button>
         </div>
-
+       
         </div>
         <table class ="product_table">
                 <tr>
@@ -86,7 +84,7 @@ document.addEventListener('click', function (event) {
                     <th>상태</th>
                     <th>구매자정보</th>
                 </tr>
-
+                
 
                 <tbody id="product_view" th:fragment="tbody">
 	              <tr th:each="dto : ${seller}">
