@@ -2,15 +2,18 @@ package com.boot.selftop_web.seller.model.biz.product;
 
 import com.boot.selftop_web.seller.model.dto.product.CoolerDto;
 import com.boot.selftop_web.seller.model.mapper.product.CoolerMapper;
+import com.boot.selftop_web.seller.model.mapper.product.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
-public class CoolerBizImpl implements CoolerBiz{
+@Service("쿨러")
+public class CoolerBizImpl implements ProductBiz<CoolerDto>{
 
+    @Autowired
+    private ProductMapper productMapper;
     @Autowired
     private CoolerMapper coolerMapper;
 
@@ -30,9 +33,9 @@ public class CoolerBizImpl implements CoolerBiz{
         System.out.println("Biz : " + dto);
         int result = 0;
         try {
-            result = coolerMapper.insertProduct(dto);
+            result = productMapper.insertProduct(dto);
             System.out.println("Biz : " + result);
-            int productCode = coolerMapper.getCurrentProductCode();
+            int productCode = productMapper.getCurrentProductCode();
             dto.setProduct_code(productCode);
             result += coolerMapper.insertCooler(dto);
             System.out.println("Biz : " + result);

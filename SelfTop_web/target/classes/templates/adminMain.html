@@ -42,7 +42,7 @@
 	    <div id="form-container">
 	    
 	    <!-- CPU form -->
-            <form id="cpu-form" class="part-form hidden">
+            <form id="cpu-form" class="part-form hidden" action="add" method="post">
                 <!-- 카테고리 추가 -->
                 <input hidden="hidden" name="category" value="CPU"/>
                 <table class="product-table">
@@ -63,8 +63,12 @@
                         <td><input type="text" name="company" required></td>
                     </tr>
                     <tr>
-                        <th>세대구분</th>
+                        <th>세대구분(렙터레이크, 라파엘 등)</th>
                         <td><input type="text" name="generation" required></td>
+                    </tr>
+                    <tr>
+                        <th>스펙(i7, 라이젠5 등)</th>
+                        <td><input type="text" name="spec" required></td>
                     </tr>
                     <tr>
                         <th>내장 그래픽 유뮤</th>
@@ -123,7 +127,7 @@
             </form>
 
 		<!-- Ram form -->
-            <form id="ram-form" class="part-form hidden">
+            <form id="ram-form" class="part-form hidden" action="add" method="post">
                 <!-- 카테고리 추가 -->
                 <input hidden="hidden" name="category" value="RAM"/>
                 <table class="product-table">
@@ -201,7 +205,7 @@
             </form>
 
         <!-- mainboard form -->
-            <form id="mainboard-form" class="part-form hidden">
+            <form id="mainboard-form" class="part-form hidden" action="add" method="post">
                 <!-- 카테고리 추가 -->
             	<input hidden="hidden" name="category" value="메인보드"/>
                 <table class="product-table">
@@ -277,7 +281,7 @@
             </form>
 
         <!-- case form -->
-            <form id="case-form" class="part-form hidden">
+            <form id="case-form" class="part-form hidden" action="add" method="post">
                 <!-- 카테고리 추가 -->
             	<input hidden="hidden" name="category" value="케이스"/>
                 <table class="product-table">
@@ -317,7 +321,7 @@
                     </tr>
                     <tr>
                         <th>VGA 장착 길이</th>
-                        <td><input type="text" name="VGA_length" required></td>
+                        <td><input type="text" name="vga_length" required></td>
                     </tr>
                     <tr>
                         <th>제품 출시일</th>
@@ -344,7 +348,7 @@
             </form>
 
         <!-- GPU form -->
-            <form id="gpu-form" class="part-form hidden">
+            <form id="gpu-form" class="part-form hidden" action="add" method="post">
                 <!-- 카테고리 추가 -->
             	<input hidden="hidden" name="category" value="그래픽카드"/>
                 <table class="product-table">
@@ -397,7 +401,7 @@
             </form>
 
     	<!-- power form -->
-            <form id="power-form" class="part-form hidden">
+            <form id="power-form" class="part-form hidden" action="add" method="post">
                 <!-- 카테고리 추가 -->
             	<input hidden="hidden" name="category" value="파워"/>
                 <table class="product-table">
@@ -463,7 +467,7 @@
             </form>
 
     	<!-- ssd form -->
-            <form id="ssd-form" class="part-form hidden">
+            <form id="ssd-form" class="part-form hidden" action="add" method="post">
                 <!-- 카테고리 추가 -->
             	<input hidden="hidden" name="category" value="SSD"/>
                 <table class="product-table">
@@ -518,7 +522,7 @@
             </form>
 
         <!-- hdd form -->
-            <form id="hdd-form" class="part-form hidden">
+            <form id="hdd-form" class="part-form hidden" action="add" method="post">
                 <!-- 카테고리 추가 -->
             	<input hidden="hidden" name="category" value="HDD"/>
                 <table class="product-table">

@@ -1,4 +1,4 @@
-package com.boot.selftop_web.seller.model.biz.product;
+package com.boot.selftop_web.seller.model.biz.product.biz_backup;
 
 import com.boot.selftop_web.seller.model.dto.product.CoolerDto;
 

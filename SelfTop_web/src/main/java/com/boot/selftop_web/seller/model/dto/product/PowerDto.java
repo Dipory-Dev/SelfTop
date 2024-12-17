@@ -4,7 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-public class PowerDto {
+public class PowerDto implements ProductDto {
     private int product_code;
     private String category;
     private String product_name;
@@ -17,11 +17,11 @@ public class PowerDto {
 
     private int supply;
     private String plus80;
-    private String fromfactor;
+    private String formfactor;
 
     public PowerDto() {}
 
-    public PowerDto(int product_code, String category, String product_name, String company, Date upload_date, String thumbnail, String content_img, String etc, int supply, String plus80, String fromfactor) {
+    public PowerDto(int product_code, String category, String product_name, String company, Date upload_date, String thumbnail, String content_img, String etc, int supply, String plus80, String formfactor) {
         this.product_code = product_code;
         this.category = category;
         this.product_name = product_name;
@@ -32,7 +32,7 @@ public class PowerDto {
         this.etc = etc;
         this.supply = supply;
         this.plus80 = plus80;
-        this.fromfactor = fromfactor;
+        this.formfactor = formfactor;
     }
 
     public int getProduct_code() {
@@ -115,12 +115,12 @@ public class PowerDto {
         this.plus80 = plus80;
     }
 
-    public String getFromfactor() {
-        return fromfactor;
+    public String getFormfactor() {
+        return formfactor;
     }
 
-    public void setFromfactor(String fromfactor) {
-        this.fromfactor = fromfactor;
+    public void setFormfactor(String formfactor) {
+        this.formfactor = formfactor;
     }
 
     @Override
@@ -136,7 +136,7 @@ public class PowerDto {
                 ", etc='" + etc + '\'' +
                 ", supply=" + supply +
                 ", plus80='" + plus80 + '\'' +
-                ", fromfactor='" + fromfactor + '\'' +
+                ", formfactor='" + formfactor + '\'' +
                 '}';
     }
 }
