@@ -25,6 +25,11 @@ header {
     text-decoration: underline;
 }
 
+.header-user {
+	display: flex; 
+	justify-content: flex-end;
+}
+
 html, body {
   height: 100%;
   margin: 0;
