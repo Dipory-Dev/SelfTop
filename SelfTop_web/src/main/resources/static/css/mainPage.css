@@ -1,12 +1,234 @@
 @charset "UTF-8";
-body {
-    text-align: center;
+* {
+	margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    color: #666666;
 }
 
-.logo {
-    margin-bottom: 20px;
+header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1000;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.slogan {
+.header-content img {
+    width: 150px;
+    margin-left: 10%;
+    height: 70px;
+}
+
+.header-content p {
+    margin-right: 10%;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.header-content p:hover {
+    text-decoration: underline;
+}
+
+main{
+	flex: 1;
+	padding-bottom:120px;
+	align-items: center;
+	width:1300px;
+	margin-top: 90px;
+	margin-left:auto;
+	margin-right:auto;
+	display: flex;
+	justify-content: center;
+	position: relative;
+}
+
+p{
+	color: #666;
+}
+
+#search{
+	margin-top: 15px;
+}
+
+.search-box::placeholder {
+    color: #999;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    border: 2px solid #008ADA;
+    border-radius: 25px;
+    overflow: hidden;
+    background-color: #fff;
+    width: 1000px;
+}
+
+.search-box {
+    flex: 1;
+    border: none;
+    padding: 10px 15px;
+    outline: none;
     font-size: 16px;
+    color: #333;
+}
+
+.search-button {
+    background-image: url('/img/search-icon.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    background-color: #fff;
+    margin-right: 10px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    outline: none;
+}
+
+.side-panel {
+    position: fixed;
+    right: 0px;
+    width: 500px;
+    height: 550px;
+    background-color: #fff;
+    border-left: 1px solid #ccc;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease;
+}
+
+.side-panel.active {
+    right: -500px;
+}
+
+.panel-header{
+	display: flex;
+    align-items: center;
+    margin: 20px 20px 20px 5px;
+   	padding: 10px;
+    border: 2px solid #008ADA;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.panel-header select,
+.panel-header input {
+    width: 49%;
+    padding: 10px;
+    margin-right: 2%;
+    border: 1px solid #ccc;
+}
+
+.saved-qutoe{
+	width: 40px;
+	height: 50px;
+	margin: 5px 10px 10px 2px;
+
+}
+
+.components {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.component {
+	width: 200px;
+	height: 45px;
+	background-color: #A8B6FF;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.component.active {
+    background-color: #BFE7FF;
+    color: black;
+}
+
+.assembly-options label {
+    margin: 10px;
+    display: block;
+}
+
+.selected-part {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 300px;
+}
+
+.total-price {
+    margin: 5px 10px 10px 0;
+    font-size: 18px;
+    justify-content: space-between;
+}
+
+.actions button {
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.toggle-button {
+    position: fixed;
+    right: 500px;
+    width: 50px;
+    height: 100px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px 0 0 5px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 10;
+}
+
+.side-panel.active + .toggle-button {
+    transform: translateX(500px);
+}
+
+footer {
+    background-color: #E8E8E8;
+    font-size: 14px;
+    height: 120px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.footer-content img {
+    max-height: 50px;
+    margin-left: 10%;
+}
+
+.footer-text {
+    text-align: right;
+    margin-right: 10%;
+}
+
+.footer-text p, .footer-text span {
+    margin: 5px 0;
 }
