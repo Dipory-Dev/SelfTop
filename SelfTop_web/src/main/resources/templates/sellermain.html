@@ -7,14 +7,14 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
 function Search(){
-	var startdate = $("#start-date").val(); 
+	var startdate = $("#start-date").val();
 	var enddate = $("#end-date").val();
 	var keyword = $("#keyword").val();
 	$.ajax({
 		url: "/seller/datesearch",
 		type: "GET",
 		data: {
-			startdate: startdate,  
+			startdate: startdate,
 			enddate: enddate,
 			keyword:keyword
 			}
@@ -29,26 +29,28 @@ function Reset(){
 	 $("#start-date").val('');
 	 $("#end-date").val('');
 	 $("#keyword").val('');
-	
+
 	 Search();
 	}
+
 	
 function logout() {
     sessionStorage.removeItem("loggedIn");
     location.href = '/login/logout';
 }	
+
 document.addEventListener('click', function (event) {
 	  if (event.target.classList.contains('info-button')) {
 	    const info = event.target.getAttribute('data-info');
-	    CustomerPopup(info); 
+	    CustomerPopup(info);
 	  }
 	});
 
 
 	function CustomerPopup(info) {
-	  alert("구매자 정보: " + info); 
-	}	
-	
+	  alert("구매자 정보: " + info);
+	}
+
 
 
 </script>
@@ -66,7 +68,7 @@ document.addEventListener('click', function (event) {
     <main>
         <div id="choosecontent">
             <button class="menuselect">판매내역 조회</button>
-            <button>제품재고 관리</button>
+            <button class="menuselect">제품재고 관리</button>
         </div>
         <div class="search">
         <div class =" datesearch">
@@ -78,11 +80,12 @@ document.addEventListener('click', function (event) {
         <div class="searchbox">
             <input type="text" placeholder="검색할 제품 입력" id="keyword">
             <button class="searchbutton" onclick=Search()>검색</button> 
-            <button class="searchbutton" onclick=Reset()>초가화</button>
+            <button class="searchbutton" onclick=Reset()>초기화</button>
         </div>
-       
+
         </div>
         <table class ="product_table">
+
             <tr>
                 <th>등록날짜</th>
                 <th>분류</th>
@@ -99,13 +102,14 @@ document.addEventListener('click', function (event) {
 	                    <td th:text="${#dates.format(dto.order_Date, 'MM/dd')}"></td>
 	                    <td th:text="${dto.category}"></td>
 	                    <td><img th:src="${dto.thumbnail}" width="50" height="50" /></td>
-	                   <td th:text="${dto.product_name}"></td>
+	                    <td th:text="${dto.product_name}"></td>
 	                    <td th:text="${dto.amount}"></td>
 	                    <td th:text="${dto.price}+ 원 "></td>
 	                    <td th:text="${dto.order_status}"></td>
 	                   <td><button class="info-button" th:data-info="${dto.customer_no}">구매자 정보</button></td>
 	                </tr>
 	          </tbody>
+
         </table>
         </main>
     <footer>

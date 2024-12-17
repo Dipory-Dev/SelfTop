@@ -73,7 +73,8 @@ function validateConfirmPassword() {
 // 사업자등록번호 정보 조회 함수
 function corp_chk() {
 	var reg_num = document.getElementById("business_license").value;
-
+	const confirmError = document.getElementById("business-error");
+	
 	if (!reg_num) {
 		alert("사업자등록번호를 입력해주세요.");
 		return false;
@@ -93,9 +94,11 @@ function corp_chk() {
 		success: function(result) {
 			console.log(result); // 응답 결과 확인
 			if (result.match_cnt == "1") {
-				alert("사업자등록번호가 유효합니다.");
+				confirmError.textContent = "사업자등록번호가 유효합니다.";
+				confirmError.style.color = "green";
 			} else {
-				alert("유효하지 않은 사업자등록번호입니다.");
+				confirmError.textContent = "유효하지 않은 사업자등록번호입니다";
+				confirmError.style.color = "red";
 			}
 		},
 		error: function(result) {
@@ -124,6 +127,26 @@ function jusoCallBack(zipNo, roadAddrPart1, addrDetail) {
 	
 	
 }
+
+// 이메일 도메인 선택 시 자동으로 입력되도록 하는 함수
+function updateEmailDomain() {
+    var domainSelect = document.getElementById('email-domain-select');
+    var domainInput = document.getElementById('email-domain');
+    
+    // 선택한 도메인이 '직접 입력'일 경우
+    if (domainSelect.value === 'direct') {
+        domainInput.disabled = false;
+        domainInput.value = '';
+    } else {
+        domainInput.disabled = true;
+        domainInput.value = domainSelect.value;
+    }
+}
+
+// 페이지 로드 시, 기본적으로 이메일 도메인 입력란을 비활성화 상태로 설정
+window.onload = function() {
+    document.getElementById('email-domain').disabled = true;
+};
 
 
 // 이벤트 리스너 추가
