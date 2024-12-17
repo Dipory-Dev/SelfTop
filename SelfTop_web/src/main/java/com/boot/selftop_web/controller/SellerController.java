@@ -1,5 +1,6 @@
 package com.boot.selftop_web.controller;
 
+import com.boot.selftop_web.member.model.dto.MemberDto;
 import com.boot.selftop_web.seller.model.biz.SellerBiz;
 import com.boot.selftop_web.seller.model.biz.SellerBizImpl;
 import com.boot.selftop_web.seller.model.dto.SellerDto;
@@ -48,6 +49,7 @@ public class SellerController {
 	    model.addAttribute("sellerInfo", sellerInfo);
 
 		return "sellerMyPage";
+
 	}
 
 
@@ -55,6 +57,7 @@ public class SellerController {
 	public String sellermain(HttpSession session,Model model) {
 		if(session.getAttribute("memberno") == null) {
 			return "redirect:/login/loginform";
+
 		}
 		int membernum=(int) session.getAttribute("memberno");
 		List<SellerOrderDto> res = sellerbiz.selectList(membernum);
@@ -102,7 +105,7 @@ public class SellerController {
 			return "sellerSignUp";
 		}
 
-		
+
 		// 약관 동의 확인
 		if (!terms) {
 			model.addAttribute("error", "서비스 약관과 개인정보 처리방침에 동의하셔야 합니다.");
@@ -112,8 +115,8 @@ public class SellerController {
 		model.addAttribute("message", "회원가입이 완료되었습니다.");
 		return "sellerMain";
 	}
-	
-	
+
+
 	@RequestMapping(value="/addressPopup")
 	public ModelAndView addressPopup(HttpServletRequest request, @RequestParam HashMap<String, String> p, Locale locale) {
 
@@ -127,14 +130,14 @@ public class SellerController {
 		String addrDetail = request.getParameter("addrDetail");
 		String jibunAddr = request.getParameter("jibunAddr");
 
-		
+
 		mav.addObject("inputYn", inputYn);
 		mav.addObject("zipNo", zipNo);
 		mav.addObject("roadAddrPart1", roadAddrPart1);
 		mav.addObject("roadAddrPart2", roadAddrPart2);
 		mav.addObject("jibunAddr", jibunAddr);
 		mav.addObject("addrDetail", addrDetail);
-		
+
 
 		return mav;
 	}
