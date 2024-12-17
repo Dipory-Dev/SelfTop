@@ -33,12 +33,17 @@ function Reset(){
 	 Search();
 	}
 	
+function logout() {
+    sessionStorage.removeItem("loggedIn");
+    location.href = '/login/logout';
+}	
 document.addEventListener('click', function (event) {
 	  if (event.target.classList.contains('info-button')) {
 	    const info = event.target.getAttribute('data-info');
 	    CustomerPopup(info); 
 	  }
 	});
+
 
 	function CustomerPopup(info) {
 	  alert("구매자 정보: " + info); 
@@ -53,7 +58,9 @@ document.addEventListener('click', function (event) {
  <header>
         <div class="header-content">
             <img src="/img/logo.png">
-           	<p>로그인</p>
+            <p th:unless="${seller != null && seller.size() > 0}">로그인</p>
+           	<p th:if="${seller != null && seller.size() > 0}" onclick="logout()">로그아웃</p>
+           	
         </div>
     </header>
     <main>
@@ -87,18 +94,18 @@ document.addEventListener('click', function (event) {
                 <th>구매자정보</th>
             </tr>
                 
-<!--           <tbody id="product_view" th:fragment="tbody">-->
-<!--                <tr th:each="dto : ${seller}">-->
-<!--                    <td th:text="${#dates.format(dto.order_Date, 'MM/dd')}"></td>-->
-<!--                    <td th:text="${dto.category}"></td>-->
-<!--                    <td><img th:src="${dto.thumbnail}" width="50" height="50" /></td>-->
-<!--                    <td th:text="${dto.product_name}"></td>-->
-<!--                    <td th:text="${dto.amount}"></td>-->
-<!--                    <td th:text="${dto.price}+ 원 "></td>-->
-<!--                    <td th:text="${dto.order_status}"></td>-->
-<!--                    <td><button class="info-button" th:data-info="${dto.customer_no}">구매자 정보</button></td>-->
-<!--                </tr>-->
-<!--           </tbody>-->
+	           <tbody id="product_view" th:fragment="tbody">
+	              <tr th:each="dto : ${seller}">
+	                    <td th:text="${#dates.format(dto.order_Date, 'MM/dd')}"></td>
+	                    <td th:text="${dto.category}"></td>
+	                    <td><img th:src="${dto.thumbnail}" width="50" height="50" /></td>
+	                   <td th:text="${dto.product_name}"></td>
+	                    <td th:text="${dto.amount}"></td>
+	                    <td th:text="${dto.price}+ 원 "></td>
+	                    <td th:text="${dto.order_status}"></td>
+	                   <td><button class="info-button" th:data-info="${dto.customer_no}">구매자 정보</button></td>
+	                </tr>
+	          </tbody>
         </table>
         </main>
     <footer>

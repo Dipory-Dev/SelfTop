@@ -1,10 +1,13 @@
 package com.boot.selftop_web.controller;
 
+import com.boot.selftop_web.member.model.dto.MemberDto;
 import com.boot.selftop_web.seller.model.biz.SellerBiz;
 import com.boot.selftop_web.seller.model.biz.SellerBizImpl;
 import com.boot.selftop_web.seller.model.dto.SellerDto;
 
+import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+
 @Controller
 @RequestMapping("/seller")
 public class SellerController {
@@ -30,9 +34,14 @@ public class SellerController {
 	public String showSignUpForm() {
 		return "sellerSignUp";
 	}
+	
 	@GetMapping("/main")
-	public String sellermain(Model model) {
-		List<SellerDto> res = sellerbiz.selectList();
+	public String sellermain(HttpSession session,Model model) {
+		if(session.getAttribute("memberno") == null) {
+			return "redirect:/login/loginform";		
+		}
+		int membernum=(int) session.getAttribute("memberno");
+		List<SellerDto> res = sellerbiz.selectList(membernum);
 		model.addAttribute("seller",res);
 		return "sellermain";
 	}

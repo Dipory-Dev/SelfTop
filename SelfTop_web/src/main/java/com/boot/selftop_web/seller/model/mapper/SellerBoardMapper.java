@@ -11,8 +11,8 @@ import com.boot.selftop_web.seller.model.dto.SellerDto;
 @Mapper
 public interface SellerBoardMapper {
 	
-	@Select(" SELECT * FROM sellermain")
-	List<SellerDto> selectList();
+	@Select("SELECT * FROM sellermain WHERE customer_no= #{memberno} ")
+	List<SellerDto> selectList(@Param("memberno") int memberno);
 
 	@Select("<script>" +
 	        "SELECT * FROM sellermain " +
