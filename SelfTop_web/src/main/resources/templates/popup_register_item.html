@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/popup_register_item.css" />
+    
+    <title>팝업_제품 등록하기</title>
+</head>
+<body>
+    <!-- 임시버튼 -->
+    <button id="openModalBtn" class="btn">제품 등록하기</button>
+
+    <!-- 모달 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">수량 및 가격 수정</div>
+            <div class="modal-body">
+                <table class="table">
+                    <tr>
+                        <!--db에서 가져와 select 생성할 예정-->
+                        <th>카테고리</th>
+                        <td>
+                            <select onchange="modelChange(this)"  name="category" id="category" size="1" required autofocus>
+                                <option value="none">선택</option>
+                                <option value="cpu">CPU</option>
+                                <option value="ram">RAM</option>
+                                <option value="mainboard">메인보드</option>
+                                <option value="case">케이스</option>
+                                <option value="gpu">GPU</option>
+                                <option value="power">파워</option>
+                                <option value="ssd">SSD</option>
+                                <option value="hdd">HDD</option>
+                                <option value="cooler">쿨러</option>
+
+                            </select>
+                        </td>
+                    </tr>
+                    <!--db에서 가져와 select 생성할 예정-->
+                    <tr>
+                        <th>모델명</th>
+                        <td>
+                            <select name="model-name" id="model-name" aria-readonly="true">
+                                <option>카테고리를 선택해주세요.</option>
+                            </select>
+                            
+                        </td>
+                        
+                    </tr>
+                    <!--db에서 가져와 정보 표시 예정-->
+                    <tr>
+                        <th>제품 설명</th>
+                        <td>
+                            <h5>제품에 대한 설명입니다.</h5>
+                            <div class="detail">
+                                ${detail}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        
+                        <th>입고 수량</th>
+                        <td>
+                            <h5>입고 하실 수량을 입력해주세요.</h5>
+                            <h5 class="text-quantity"><input type="number" id="quantity" name="quantity" min="1" required>  개</h5>
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <th>판매 가격</th>
+                        <td>
+                            <h5>판매하실 가격을 입력해주세요.</h5>
+                            <h5 class="text-price"><input type="number"  id="price" name="price" min="1" required>  원</h5>
+                        </td>
+                    </tr>
+                    
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button id="registerModalBtn" class="btn btn-register">등록</button>
+                <button id="closeModalBtn" class="btn btn-close">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../static/js/popup_register_item.js"></script>
+    
+</body>
+</html>
