@@ -15,8 +15,8 @@ public class SellerBizImpl implements SellerBiz {
 	private SellerBoardMapper mapper;
 
 	@Override
-	public List<SellerDto> selectList() {
-		return mapper.selectList();
+	public List<SellerDto> selectList(int memberno) {
+		return mapper.selectList(memberno);
 	}
 
 	@Override

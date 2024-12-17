@@ -1,10 +1,13 @@
 package com.boot.selftop_web.controller;
 
+import com.boot.selftop_web.member.model.dto.MemberDto;
 import com.boot.selftop_web.seller.model.biz.SellerBiz;
 import com.boot.selftop_web.seller.model.biz.SellerBizImpl;
 import com.boot.selftop_web.seller.model.dto.SellerDto;
 
+import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+
 @Controller
 @RequestMapping("/seller")
 public class SellerController {
@@ -30,17 +34,22 @@ public class SellerController {
 	public String showSignUpForm() {
 		return "sellerSignUp";
 	}
-	
+
+
 	@GetMapping("/sellerMyPage")
 	public String showSellerMyPage() {
-		
+
 		return "sellerMyPage";
-		
+
 	}
-	
+
 	@GetMapping("/main")
-	public String sellermain(Model model) {
-		List<SellerDto> res = sellerbiz.selectList();
+	public String sellermain(HttpSession session,Model model) {
+		if(session.getAttribute("memberno") == null) {
+			return "redirect:/login/loginform";
+		}
+		int membernum=(int) session.getAttribute("memberno");
+		List<SellerDto> res = sellerbiz.selectList(membernum);
 		model.addAttribute("seller",res);
 		return "sellermain";
 	}
@@ -102,7 +111,7 @@ public class SellerController {
 	        model.addAttribute("error", "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
 	        return "sellerSignUp";
 	    }
-	    
+
 	    // 이메일 형식 확인
 	    if (!email.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")) {
 	        model.addAttribute("error", "유효한 이메일 주소를 입력해주세요.");
@@ -144,8 +153,6 @@ public class SellerController {
 
 		return mav;
 	}
-	
-	
 	
 	
 	
