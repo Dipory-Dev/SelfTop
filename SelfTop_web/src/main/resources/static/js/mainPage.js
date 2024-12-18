@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const savedQuoteSelect = document.querySelector('.saved-quote');
 
     let currentCart = {};
-
+	
     toggleButton.addEventListener("click", () => {
         sidePanel.classList.toggle("active");
     });
