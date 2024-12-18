@@ -12,4 +12,19 @@ public class CustomerController {
 	public String SelfTopMain() {
 		return "mainPage";
 	}
+	
+	@GetMapping("/signup")
+	public String showSignUpForm() {
+		return "customerSignUp";
+	}
+
+	@GetMapping("/mypage")
+	public String showCustomerMyPage() {
+		return "customerMyPage";
+	}
+	
+	@GetMapping("/infochange")
+	public String showInfoChangeForm() {
+		return "customerInfoChange";
+	}
 }
