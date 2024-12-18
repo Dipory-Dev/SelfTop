@@ -22,12 +22,12 @@ function checkDuplicateID() {
 	fetch(`idchk?id=${id}`)
 		.then(response => response.json())
 		.then(data => {
-			if (data.isDuplicate) {
-				idError.textContent = "이미 사용 중인 ID입니다.";
-				idError.style.color = "red";
-			} else {
+			if (data === true) {
 				idError.textContent = "사용 가능한 ID입니다.";
 				idError.style.color = "green";
+			} else {
+				idError.textContent = "이미 사용 중인 ID입니다.";
+				idError.style.color = "red";
 			}
 		})
 		.catch(error => {
