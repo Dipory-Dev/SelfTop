@@ -97,15 +97,71 @@ p{
     outline: none;
 }
 
+.top-boxes {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.top-box {
+    width: 49%;
+    height: 100px;
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+}
+
+.tab {
+    cursor: pointer;
+    padding: 10px 20px;
+    margin: 0px 2px;
+    background-color: brown;
+    color: white;
+    display: inline-block;
+    border-radius: 3px 3px 0px 0px;
+}
+
+.panels{
+    background-color: white;
+    min-height: 200px;
+    width: 286px;
+    max-width: 500px;
+    border-radius: 3px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.panel{
+    display: none;
+}
+
+.panel-title{
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.radio-group {
+    display: flex;        
+    flex-direction: column;
+    align-items: left;
+}
+
+.radio{
+     display: none;
+}
+
 .side-panel {
     position: fixed;
+    top: 50%;
     right: 0px;
+    transform: translateY(-50%);
     width: 500px;
-    height: 550px;
+    height: 100hv;
     background-color: #fff;
     border-left: 1px solid #ccc;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
     transition: right 0.3s ease;
+    z-index: 2000;
 }
 
 .side-panel.active {
@@ -115,7 +171,7 @@ p{
 .panel-header{
 	display: flex;
     align-items: center;
-    margin: 20px 20px 20px 5px;
+    margin: 20px 20px 0px 20px;
    	padding: 10px;
     border: 2px solid #008ADA;
     border-radius: 10px;
@@ -125,15 +181,37 @@ p{
 
 .panel-header select,
 .panel-header input {
-    width: 49%;
+    width: 100%;
     padding: 10px;
     margin-right: 2%;
     border: 1px solid #ccc;
 }
 
+.toggle-button {
+    position: fixed;
+    top:50%;
+    right: 500px;
+    transform:  translateY(-50%);
+    width: 50px;
+    height: 100px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px 0 0 5px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease, right 0.3s ease;
+    z-index: 2001;
+}
+
+.side-panel.active + .toggle-button {
+	right: -500px;
+    transform: translateX(-500px) translateY(-50%);
+}
+
 .saved-qutoe{
 	width: 40px;
-	height: 50px;
+	height: 30px;
 	margin: 5px 10px 10px 2px;
 
 }
@@ -187,24 +265,7 @@ p{
     cursor: pointer;
 }
 
-.toggle-button {
-    position: fixed;
-    right: 500px;
-    width: 50px;
-    height: 100px;
-    background-color: #007BFF;
-    color: #fff;
-    border: none;
-    border-radius: 5px 0 0 5px;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    z-index: 10;
-}
 
-.side-panel.active + .toggle-button {
-    transform: translateX(500px);
-}
 
 footer {
     background-color: #E8E8E8;
