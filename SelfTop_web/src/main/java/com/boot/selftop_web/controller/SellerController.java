@@ -86,6 +86,17 @@ public class SellerController {
 
 		return "sellermain :: tbody";
 	}
+	
+	@GetMapping("/stockmenu")
+	public String changesellerorderpage(HttpSession session, Model model) {
+		if(session.getAttribute("memberno") == null) {
+			return "redirect:/login/loginform";
+		}
+		int membernum=(int) session.getAttribute("memberno");
+		List<SellerDto> res = sellerbiz.selectList(membernum);
+		model.addAttribute("seller",res);
+		return "sellerstock :: body";
+	}
 	@GetMapping("/sellerInfoChange")
 	public String showInfoChangeForm() {
 		return "sellerInfoChange";

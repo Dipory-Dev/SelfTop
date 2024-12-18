@@ -24,7 +24,7 @@
     <main>
         <div id="choosecontent">
             <button class="menuselect">판매내역 조회</button>
-            <button>제품재고 관리</button>
+            <button id="stockmenu" onclick=movestock()>제품재고 관리</button>
         </div>
         <div class="search">
         <div class =" datesearch">
@@ -40,6 +40,7 @@
         </div>
 
         </div>
+        <div id ="order-table" th:replace="sellerstock :: table">
         <table class ="product_table">
             <tr>
                 <th>등록날짜</th>
@@ -65,6 +66,7 @@
 	                </tr>
 	          </tbody>
         </table>
+        </div>
         </main>
     <footer>
     	<div class="footer-content">
