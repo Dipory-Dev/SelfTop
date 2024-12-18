@@ -15,9 +15,8 @@ public interface SellerBiz {
 	public boolean idchk(String id);
 	// 판매자 회원가입
 	public int insertSeller(SellerDto dto);
-	
+
 	public List<SellerStockDto> selectStock(int memberno);
 	public SellerDto getSellerInfoByMemberNo(int member_no);
 
-	
 }

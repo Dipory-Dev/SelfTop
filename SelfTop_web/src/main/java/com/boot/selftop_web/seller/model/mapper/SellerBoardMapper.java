@@ -2,6 +2,7 @@ package com.boot.selftop_web.seller.model.mapper;
 
 import java.util.List;
 
+import com.boot.selftop_web.seller.model.dto.SellerDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.data.repository.query.Param;
@@ -55,5 +56,5 @@ public interface SellerBoardMapper {
             "JOIN CUSTOMER c ON s.MEMBER_NO = c.MEMBER_NO " +
             "WHERE s.MEMBER_NO = #{member_no}")
     SellerDto getSellerInfoByMemberNo(@Param("member_no") int member_no);
-	
+
 }

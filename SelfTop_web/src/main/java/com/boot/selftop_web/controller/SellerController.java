@@ -27,7 +27,7 @@ import java.util.Locale;
 public class SellerController {
 	@Autowired
 	private SellerBizImpl sellerbiz;
-	
+
 	@Autowired
 	private SellerBiz sellerBiz;
 
@@ -42,12 +42,12 @@ public class SellerController {
 		if(session.getAttribute("member_no") == null) {
 			return "redirect:/login/loginform";
 		}
-		
+
 		Integer member_no = (Integer) session.getAttribute("member_no");
-		
+
 		SellerDto sellerInfo = sellerBiz.getSellerInfoByMemberNo(member_no);
 	    model.addAttribute("sellerInfo", sellerInfo);
-		
+
 		return "sellerMyPage";
 	}
 
@@ -89,7 +89,7 @@ public class SellerController {
 			return "sellerstock :: tbody";
 		}
 	}
-	
+
 	@GetMapping("/stockmenu")
 	public String changesellerorderpage(HttpSession session, Model model) {
 		if(session.getAttribute("memberno") == null) {
