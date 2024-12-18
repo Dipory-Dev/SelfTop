@@ -6,13 +6,13 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.data.repository.query.Param;
 
-import com.boot.selftop_web.seller.model.dto.SellerDto;
+import com.boot.selftop_web.seller.model.dto.SellerOrderDto;
 
 @Mapper
 public interface SellerBoardMapper {
 	
 	@Select("SELECT * FROM sellermain WHERE customer_no= #{memberno} ")
-	List<SellerDto> selectList(@Param("memberno") int memberno);
+	List<SellerOrderDto> selectList(@Param("memberno") int memberno);
 
 	@Select("<script>" +
 	        "SELECT * FROM sellermain " +
@@ -27,6 +27,10 @@ public interface SellerBoardMapper {
 	        " AND product_name LIKE '%' || #{keyword} || '%' " +	
 	        "</if>" +
 	        "</script>")
-	List<SellerDto> selectSearch(@Param("startdate") String startdate, @Param("enddate") String enddate,@Param("keyword")String keyword);
+	List<SellerOrderDto> selectSearch(@Param("startdate") String startdate, @Param("enddate") String enddate, @Param("keyword")String keyword);
+
+
+	@Select("SELECT * from customer where id = #{id}")
+	SellerOrderDto idchk(@Param("id") String id);
 
 }

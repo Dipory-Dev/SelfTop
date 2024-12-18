@@ -1,10 +1,8 @@
 package com.boot.selftop_web.seller.model.dto;
 
-
 import java.util.Date;
 
-
-public class SellerDto {
+public class SellerOrderDto {
     private Date order_Date;
     private String category;
     private String thumbnail;
@@ -12,12 +10,12 @@ public class SellerDto {
     private int amount;
     private int price;
     private String order_status;
-    private String customer_no;
+    private int customer_no;
 
-    public SellerDto() {
+    public SellerOrderDto() {
     }
 
-    public SellerDto(Date order_Date, String category, String thumbnail, String product_name, int amount, int price, String order_status, String customer_no) {
+    public SellerOrderDto(Date order_Date, String category, String thumbnail, String product_name, int amount, int price, String order_status, int customer_no) {
         this.order_Date = order_Date;
         this.category = category;
         this.thumbnail = thumbnail;
@@ -84,11 +82,11 @@ public class SellerDto {
         this.order_status = order_status;
     }
 
-    public String getCustomer_no() {
+    public int getCustomer_no() {
         return customer_no;
     }
 
-    public void setCustomer_no(String customer_no) {
+    public void setCustomer_no(int customer_no) {
         this.customer_no = customer_no;
     }
 
