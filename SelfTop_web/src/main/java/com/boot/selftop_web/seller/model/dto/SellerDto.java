@@ -1,106 +1,120 @@
 package com.boot.selftop_web.seller.model.dto;
 
-import java.util.Date;
-
 public class SellerDto {
-    private Date order_Date;
-    private String category;
-    private String thumbnail;
-    private String product_name;
-    private int amount;
-    private int price;
-    private String order_status;
-    private String customer_no;
+    private int member_no;
+    private String id;
+    private String pw;
+    private String name;
+    private String email;
+    private String phone;
+    private String role;
 
-    public SellerDto() {
+    private String company_name;
+    private String ceo_name;
+    private String business_license;
+    private String address;
+
+    public SellerDto() {}
+
+    public SellerDto(int member_no, String id, String pw, String name, String email, String phone, String role, String company_name, String ceo_name, String business_license, String address) {
+        this.member_no = member_no;
+        this.id = id;
+        this.pw = pw;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.role = role;
+        this.company_name = company_name;
+        this.ceo_name = ceo_name;
+        this.business_license = business_license;
+        this.address = address;
     }
 
-    public SellerDto(Date order_Date, String category, String thumbnail, String product_name, int amount, int price, String order_status, String customer_no) {
-        this.order_Date = order_Date;
-        this.category = category;
-        this.thumbnail = thumbnail;
-        this.product_name = product_name;
-        this.amount = amount;
-        this.price = price;
-        this.order_status = order_status;
-        this.customer_no = customer_no;
+    public int getMember_no() {
+        return member_no;
     }
 
-    public Date getOrder_Date() {
-        return order_Date;
+    public void setMember_no(int member_no) {
+        this.member_no = member_no;
     }
 
-    public void setOrder_Date(Date order_Date) {
-        this.order_Date = order_Date;
+    public String getId() {
+        return id;
     }
 
-    public String getCategory() {
-        return category;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public String getPw() {
+        return pw;
     }
 
-    public String getThumbnail() {
-        return thumbnail;
+    public void setPw(String pw) {
+        this.pw = pw;
     }
 
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
+    public String getName() {
+        return name;
     }
 
-    public String getProduct_name() {
-        return product_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setProduct_name(String product_name) {
-        this.product_name = product_name;
+    public String getEmail() {
+        return email;
     }
 
-    public int getAmount() {
-        return amount;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public String getPhone() {
+        return phone;
     }
 
-    public int getPrice() {
-        return price;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public String getRole() {
+        return role;
     }
 
-    public String getOrder_status() {
-        return order_status;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public void setOrder_status(String order_status) {
-        this.order_status = order_status;
+    public String getCompany_name() {
+        return company_name;
     }
 
-    public String getCustomer_no() {
-        return customer_no;
+    public void setCompany_name(String company_name) {
+        this.company_name = company_name;
     }
 
-    public void setCustomer_no(String customer_no) {
-        this.customer_no = customer_no;
+    public String getCeo_name() {
+        return ceo_name;
     }
 
-    @Override
-    public String toString() {
-        return "SellerDto{" +
-                "order_Date=" + order_Date +
-                ", category='" + category + '\'' +
-                ", thumbnail='" + thumbnail + '\'' +
-                ", product_name='" + product_name + '\'' +
-                ", amount=" + amount +
-                ", price=" + price +
-                ", order_status='" + order_status + '\'' +
-                ", customer_no='" + customer_no + '\'' +
-                '}';
+    public void setCeo_name(String ceo_name) {
+        this.ceo_name = ceo_name;
+    }
+
+    public String getBusiness_license() {
+        return business_license;
+    }
+
+    public void setBusiness_license(String business_license) {
+        this.business_license = business_license;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

@@ -1,13 +1,10 @@
 package com.boot.selftop_web.member.model.dto.mapper;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import com.boot.selftop_web.member.model.dto.MemberDto;
-import com.boot.selftop_web.seller.model.dto.SellerDto;
 
 @Mapper
 public interface MemberMapper {

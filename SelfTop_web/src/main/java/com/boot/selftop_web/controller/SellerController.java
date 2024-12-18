@@ -1,27 +1,21 @@
 package com.boot.selftop_web.controller;
 
-import com.boot.selftop_web.member.model.dto.MemberDto;
-import com.boot.selftop_web.seller.model.biz.SellerBiz;
 import com.boot.selftop_web.seller.model.biz.SellerBizImpl;
-import com.boot.selftop_web.seller.model.dto.SellerDto;
+import com.boot.selftop_web.seller.model.dto.SellerOrderDto;
 
-import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 
 @Controller
@@ -49,7 +43,7 @@ public class SellerController {
 			return "redirect:/login/loginform";
 		}
 		int membernum=(int) session.getAttribute("memberno");
-		List<SellerDto> res = sellerbiz.selectList(membernum);
+		List<SellerOrderDto> res = sellerbiz.selectList(membernum);
 		model.addAttribute("seller",res);
 		return "sellermain";
 	}
@@ -69,7 +63,7 @@ public class SellerController {
 
 		System.out.println(keyword);
 
-		List<SellerDto> res = sellerbiz.selectSearch(startdate,enddate,keyword);
+		List<SellerOrderDto> res = sellerbiz.selectSearch(startdate,enddate,keyword);
 		model.addAttribute("seller", res);
 
 		return "sellermain :: tbody";
@@ -154,11 +148,11 @@ public class SellerController {
 		return mav;
 	}
 
-
-
-
-
-
+	@ResponseBody // JSON 응답을 반환
+	@GetMapping("/idchk")
+	public boolean idchk(@RequestParam("id") String id) {
+		return sellerbiz.idchk(id); // boolean 값을 직접 반환
+	}
 
 
 }
