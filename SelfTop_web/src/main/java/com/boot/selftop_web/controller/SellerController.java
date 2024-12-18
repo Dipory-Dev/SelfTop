@@ -1,5 +1,6 @@
 package com.boot.selftop_web.controller;
 
+import com.boot.selftop_web.seller.model.biz.SellerBiz;
 import com.boot.selftop_web.seller.model.biz.SellerBizImpl;
 import com.boot.selftop_web.seller.model.dto.SellerDto;
 import com.boot.selftop_web.seller.model.dto.SellerOrderDto;
@@ -24,6 +25,9 @@ import java.util.Map;
 public class SellerController {
 	@Autowired
 	private SellerBizImpl sellerbiz;
+	
+	@Autowired
+	private SellerBiz sellerBiz;
 
 	@GetMapping("/sellerSignUp")
 	public String showSignUpForm() {
@@ -33,12 +37,15 @@ public class SellerController {
 
 	@GetMapping("/sellerMyPage")
 	public String showSellerMyPage(HttpSession session,Model model) {
-		if(session.getAttribute("memberno") == null) {
+		if(session.getAttribute("member_no") == null) {
 			return "redirect:/login/loginform";
 		}
-		int membernum=(int) session.getAttribute("memberno");
-		List<SellerDto> res = sellerbiz.selectList(membernum);
-		model.addAttribute("seller",res);
+		
+		Integer member_no = (Integer) session.getAttribute("member_no");
+		
+		SellerDto sellerInfo = sellerBiz.getSellerInfoByMemberNo(member_no);
+	    model.addAttribute("sellerInfo", sellerInfo);
+		
 		return "sellerMyPage";
 	}
 
