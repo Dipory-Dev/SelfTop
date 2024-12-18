@@ -36,10 +36,14 @@ public class SellerController {
 
 
 	@GetMapping("/sellerMyPage")
-	public String showSellerMyPage() {
-
+	public String showSellerMyPage(HttpSession session,Model model) {
+		if(session.getAttribute("memberno") == null) {
+			return "redirect:/login/loginform";
+		}
+		int membernum=(int) session.getAttribute("memberno");
+		List<SellerDto> res = sellerbiz.selectList(membernum);
+		model.addAttribute("seller",res);
 		return "sellerMyPage";
-
 	}
 
 	@GetMapping("/main")
