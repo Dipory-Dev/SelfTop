@@ -1,27 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Seller</title>
-<link rel="stylesheet" href="/css/sellermain.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" src="/js/sellermain.js"></script>
-
-
-</head>
-<body>
- <header>
-        <div class="header-content">
-            <img src="/img/logo.png" onclick="movemain()">
-            <div class="header-user">
-          	  <p th:text="${membername} + 님" ></p>
-              <p th:unless="${seller != null && seller.size() > 0}">로그인</p>
-           	  <p th:if="${seller != null && seller.size() > 0}" onclick="logout()">로그아웃</p>
-           	</div>
-           	
-        </div>
-    </header>
-    <main id ="tablesection" th:fragment="changetable">
+<th:block th:fragment="changetable">
         <div id="choosecontent">
             <button class="menuselect" onclick=moveorder()>판매내역 조회</button>
             <button id="stockmenu" onclick=movestock()>제품재고 관리</button>
@@ -40,7 +17,7 @@
         </div>
 
         </div>
-        <div >
+        <div>
         <table class ="product_table" >
 
 
@@ -70,18 +47,4 @@
 
         </table>
         </div>
-        </main>
-    <footer>
-    	<div class="footer-content">
-        	<img src="/img/logo-footer.png" alt="로고">
-        	<div class="footer-text">
-            	<p>&copy; 2024 Copyright: SelfTop All rights reserved.</p>
-            	<p>팀원: 김지성, 오원석, 권장현, 양다연, 임성규</p>
-        	  	<p>문의: 02-1234-5678</p>
-           	 	<p>메일: SelfTop@selftop.com</p>
-       	 	</div>
-   		</div>
-	</footer>
-
-</body>
-</html>
+ </th:block>

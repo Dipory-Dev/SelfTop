@@ -21,9 +21,9 @@
            	
         </div>
     </header>
-    <main>
+    <main id ="tablesection" th:fragment="changetable">
         <div id="choosecontent">
-            <button class="menuselect">판매내역 조회</button>
+            <button class="menuselect" onclick=moveorder()>판매내역 조회</button>
             <button id="stockmenu" onclick=movestock()>제품재고 관리</button>
         </div>
         <div class="search">
@@ -40,8 +40,8 @@
         </div>
 
         </div>
-        <div id ="order-table" th:replace="sellerstock :: table">
-        <table class ="product_table">
+        <div >
+        <table class ="product_table" >
 
 
             <tr>

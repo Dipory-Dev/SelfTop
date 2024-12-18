@@ -2,9 +2,11 @@ package com.boot.selftop_web.controller;
 
 import com.boot.selftop_web.seller.model.biz.SellerBizImpl;
 import com.boot.selftop_web.seller.model.dto.SellerOrderDto;
+import com.boot.selftop_web.seller.model.dto.SellerStockDto;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.websocket.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,12 +52,13 @@ public class SellerController {
 		List<SellerOrderDto> res = sellerbiz.selectList(membernum);
 		model.addAttribute("seller",res);
 		model.addAttribute("membername",session.getAttribute("name"));
+		session.setAttribute("table", "order");
 		return "sellermain";
 	}
 
 	@GetMapping("/datesearch")
 	public String searchByDate(@RequestParam(required = false) String startdate, @RequestParam(required = false) String enddate,
-							   @RequestParam(required = false) String keyword,  Model model) {
+							   @RequestParam(required = false) String keyword,  Model model,HttpSession session) {
 		if (startdate == null || startdate.isEmpty()) {
 			startdate = null;
 		}
@@ -65,12 +69,17 @@ public class SellerController {
 			keyword = null;
 		}
 
-		System.out.println(keyword);
-
-		List<SellerOrderDto> res = sellerbiz.selectSearch(startdate,enddate,keyword);
-		model.addAttribute("seller", res);
-
-		return "sellermain :: tbody";
+		int membernum=(int) session.getAttribute("memberno");
+		
+		if((String) session.getAttribute("table") == "order") {
+			List<SellerOrderDto> res = sellerbiz.selectSearch(startdate,enddate,keyword,membernum);
+			model.addAttribute("seller", res);
+			return "sellermain :: tbody";
+		}else {
+			List<SellerStockDto> res = sellerbiz.selectStocksearch(keyword,membernum);
+			model.addAttribute("stocktable", res);
+			return "sellerstock :: tbody";
+		}
 	}
 	
 	@GetMapping("/stockmenu")
@@ -79,10 +88,28 @@ public class SellerController {
 			return "redirect:/login/loginform";
 		}
 		int membernum=(int) session.getAttribute("memberno");
-		List<SellerOrderDto> res = sellerbiz.selectList(membernum);
-		model.addAttribute("seller",res);
-		return "sellerstock :: body";
+		List<SellerStockDto> res = sellerbiz.selectStock(membernum);
+		model.addAttribute("stocktable",res);
+		model.addAttribute("membername",session.getAttribute("name"));
+		session.setAttribute("table", "stock");
+		return "sellerstock :: changetable";
 	}
+	
+	@GetMapping("/ordermenu")
+	public String loadOrder(HttpSession session, Model model) {
+	    if (session.getAttribute("memberno") == null) {
+	        return "redirect:/login/loginform";
+	    }
+	    int membernum = (int) session.getAttribute("memberno");
+	    List<SellerOrderDto> res = sellerbiz.selectList(membernum);
+	    model.addAttribute("seller", res);
+	    model.addAttribute("membername",session.getAttribute("name"));
+	    session.setAttribute("table", "order");
+	    return "sellerordertable :: changetable"; // 주문내역 테이블 프래그먼트 반환
+	}
+	
+	
+	
 	@GetMapping("/sellerInfoChange")
 	public String showInfoChangeForm() {
 		return "sellerInfoChange";
