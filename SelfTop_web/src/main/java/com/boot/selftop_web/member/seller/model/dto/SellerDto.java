@@ -1,6 +1,7 @@
 package com.boot.selftop_web.member.seller.model.dto;
 
 public class SellerDto {
+<<<<<<< HEAD
     private int member_no;
     private String id;
     private String pw;
@@ -28,6 +29,18 @@ public class SellerDto {
         this.ceo_name = ceo_name;
         this.business_license = business_license;
         this.address = address;
+=======
+    private Date order_Date;
+    private String category;
+    private String thumbnail;
+    private String product_name;
+    private int amount;
+    private int price;
+    private String order_status;
+    private String customer_no;
+    
+    public SellerDto() {
+>>>>>>> d879f07 ([MainPage, sellerMyPage 수정])
     }
 
     public int getMember_no() {
