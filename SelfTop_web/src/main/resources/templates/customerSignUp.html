@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer_SignUp</title>
+    <link rel="stylesheet" href="/css/customerSignUp.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="/js/customerSignUp.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="/img/logo.png">
+           	<p>로그인</p>
+        </div>
+    </header>
+
+    <main id="signup-form">
+        <h2>회원가입</h2>
+        <form action="/signup" method="post">
+        	<div class="form-group">
+                <label>이름</label>
+                <div class="input-group">
+                	<input type="text" id="company_name" name="company_name" required>
+                </div>
+            </div>
+        	<div class="form-group">
+        		<label>ID입력</label>
+                <div class="input-group">
+       				<input type="text" id="id" name="id" required>
+        			<button type="button" id="checkDuplicate" class="btn-duplicate" onclick="checkDuplicateID()">중복확인</button>
+    			</div>
+    			<span id="id-error" class="error-message"></span>
+            </div>
+            <div class="form-group">
+    			<label>PW입력</label>
+    			<div class="input-container">
+        			<input type="password" id="pw" name="pw" required oninput="validatePassword()">
+    			</div>
+    			<span id="pw-error" class="error-message"></span>
+			</div>
+            <div class="form-group">
+                <label>PW입력 재확인</label>
+                <div class="input-container">
+                	<input type="password" id="confirmPassword" name="confirmPassword" required oninput="validateConfirmPassword()">
+                </div>
+                <span id="confirm-error" class="error-message"></span>
+            </div>
+            <div class="form-group">
+                <label>전화번호</label>
+                <div class="input-group">
+                	<input type="text" id="phone" name="phone" required>
+                </div>
+            </div>     
+            <div class="form-group">
+   				<label>이메일 주소</label>
+    			<div class="email-container">
+        			<input type="text" id="email-id" name="email-id" placeholder="이메일 아이디" required>
+        			<span>@</span>
+        			<input type="text" id="email-domain" name="email-domain" placeholder="도메인" required disabled>
+        			<select id="email-domain-select" name="email-domain-select" onchange="updateEmailDomain()">
+            			<option value="">선택</option>
+            			<option value="gmail.com">gmail.com</option>
+            			<option value="naver.com">naver.com</option>
+            			<option value="kakao.com">kakao.com</option>
+            			<option value="daum.net">daum.net</option>
+            			<option value="direct">직접 입력</option>
+        			</select>
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<label>약관 동의</label>
+    			<p>회원가입을 위해 아래 약관에 동의해주세요.</p>
+    			<div class="terms-content">
+       	 			<h4>이용약관</h4>
+        			<p>1. 회원은 본 서비스 이용 시 법령을 준수해야 합니다.</p>
+        			<p>2. 본 서비스는 개인적인 목적 외의 사용을 금지합니다.</p>
+        			<p>3. 서비스 이용 시 발생하는 모든 책임은 회원 본인에게 있습니다.</p>
+        			<h4>개인정보처리방침</h4>
+        			<p>1. 수집된 개인정보는 서비스 제공을 위한 목적으로만 사용됩니다.</p>
+        			<p>2. 회원의 개인정보는 회원의 동의 없이 제3자에게 제공되지 않습니다.</p>
+        			<p>3. 기타 개인정보 처리방침은 관련 법령에 따릅니다.</p>
+    			</div>
+    			<div class="checkbox-group">
+        			<input type="checkbox" id="terms" name="terms" required>
+        			<label for="terms">이용약관 및 개인정보처리방침에 동의합니다.</label>
+    			</div>
+    			<span class="terms-message">* 약관에 동의하셔야 회원가입이 가능합니다.</span>
+			</div>
+			<div class="form-group">
+    			<button type="submit" class="btn-signup">회원가입</button>
+    			<button type="button" class="btn-back" onclick="window.history.back()">돌아가기</button>
+			</div>
+        </form>
+    </main>
+
+    <footer>
+    	<div class="footer-content">
+        	<img src="/img/logo-footer.png" alt="로고">
+        	<div class="footer-text">
+            	<p>&copy; 2024 Copyright: SelfTop All rights reserved.</p>
+            	<p>팀원: 김지성, 오원석, 권장현, 양다연, 임성규</p>
+        	  	<p>문의: 02-1234-5678</p>
+           	 	<p>메일: SelfTop@selftop.com</p>
+       	 	</div>
+   		</div>
+	</footer>
+</body>
+</html>
