@@ -19,7 +19,7 @@ function checkDuplicateID() {
 	}
 
 	// 서버에 중복 확인 요청
-	fetch(`/check-duplicate-id?id=${id}`)
+	fetch(`idchk?id=${id}`)
 		.then(response => response.json())
 		.then(data => {
 			if (data.isDuplicate) {
