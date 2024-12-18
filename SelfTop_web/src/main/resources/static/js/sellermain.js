@@ -24,8 +24,35 @@ function Reset(){
 
 	 Search();
 	}
-
 	
+function movestock(){
+	 $.ajax({
+	        url: "/seller/stockmenu", 
+	        type: "GET",
+	        success: function(response) {
+	            $("#tablesection").html(response);
+	        },
+	        error: function(xhr, status, error) {
+	 
+	            alert("오류 발생: " + error);
+	        }
+	    });
+	}
+
+function moveorder(){
+		 $.ajax({
+		        url: "/seller/ordermenu", 
+		        type: "GET",
+		        success: function(response) {
+		            $("#tablesection").html(response);
+		        },
+		        error: function(xhr, status, error) {
+		 
+		            alert("오류 발생: " + error);
+		        }
+		    });
+		}	
+		
 function logout() {
     sessionStorage.removeItem("loggedIn");
     location.href = '/login/logout';
