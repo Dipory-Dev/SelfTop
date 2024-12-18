@@ -21,9 +21,9 @@
            	
         </div>
     </header>
-    <main>
+    <main id ="tablesection" th:fragment="changetable">
         <div id="choosecontent">
-            <button class="menuselect">판매내역 조회</button>
+            <button class="menuselect" onclick=moveorder()>판매내역 조회</button>
             <button id="stockmenu" onclick=movestock()>제품재고 관리</button>
         </div>
         <div class="search">
@@ -51,18 +51,20 @@
                     <th>상태</th>
                     <th>구매자정보</th>
                 </tr>
-               <tbody id="product_view" th:fragment="tbody">
-                  <tr th:each="dto : ${seller}">
-                        <td th:text="${#dates.format(dto.order_Date, 'MM/dd')}"></td>
-                        <td th:text="${dto.category}"></td>
-                        <td><img th:src="${dto.thumbnail}" width="50" height="50" /></td>
-                        <td th:text="${dto.product_name}"></td>
-                        <td th:text="${dto.amount}"></td>
-                        <td th:text="${dto.price}+ 원 "></td>
-                        <td th:text="${dto.order_status}"></td>
-                       <td><button class="info-button" th:data-info="${dto.customer_no}">구매자 정보</button></td>
-                    </tr>
-              </tbody>
+
+                   <tbody id="product_view" th:fragment="tbody">
+                      <tr th:each="dto : ${seller}">
+                            <td th:text="${#dates.format(dto.order_Date, 'MM/dd')}"></td>
+                            <td th:text="${dto.category}"></td>
+                            <td><img th:src="${dto.thumbnail}" width="50" height="50" /></td>
+                            <td th:text="${dto.product_name}"></td>
+                            <td th:text="${dto.amount}"></td>
+                            <td th:text="${dto.price}+ 원 "></td>
+                            <td th:text="${dto.order_status}"></td>
+                           <td><button class="info-button" th:data-info="${dto.customer_no}">구매자 정보</button></td>
+                        </tr>
+                  </tbody>
+
             </table>
         </div>
     </main>
