@@ -34,9 +34,10 @@ public interface SellerBoardMapper {
 	@Select("SELECT * from customer where id = #{id}")
 	SellerDto idchk(@Param("id") String id);
 
-	@Select("SELECT ID, CEO_NAME, NAME, COMPANY_NAME, PHONE, BUSINESS_LICENSE " +
-            "FROM sellers " +
-            "WHERE MEMBER_NO = #{memberNo}")
-    SellerDto getSellerInfoByMemberNo(@Param("memberNo") int memberno);
+	@Select("SELECT s.MEMBER_NO, c.ID, s.CEO_NAME, c.NAME, s.COMPANY_NAME, c.PHONE, s.BUSINESS_LICENSE " +
+            "FROM SELLER s " +
+            "JOIN CUSTOMER c ON s.MEMBER_NO = c.MEMBER_NO " +
+            "WHERE s.MEMBER_NO = #{member_no}")
+    SellerDto getSellerInfoByMemberNo(@Param("member_no") int member_no);
 	
 }
