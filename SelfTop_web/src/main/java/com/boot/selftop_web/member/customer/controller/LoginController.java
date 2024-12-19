@@ -1,5 +1,6 @@
 package com.boot.selftop_web.member.customer.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.boot.selftop_web.member.customer.biz.MemberBiz;
+import com.boot.selftop_web.member.customer.biz.CustomerBiz;
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
 
 import jakarta.servlet.http.HttpSession;
@@ -18,7 +19,8 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/")
 public class LoginController {	
 	@Autowired
-	private MemberBiz memberbiz;
+	private CustomerBiz customerBiz;
+
 	@GetMapping("/loginform")
     public String LoginSection(HttpSession session) {
 		if(session.getAttribute("memberno") != null) {
@@ -29,7 +31,7 @@ public class LoginController {
 
 	@PostMapping("/loginchk")
 	public String loginChk(@RequestParam String id, @RequestParam String pw, HttpSession session, Model model) {
-		CustomerDto member = memberbiz.memberlogin(id, pw);
+		CustomerDto member = customerBiz.memberlogin(id, pw);
 		
 		if((member !=null) && member.getRole() == 'S' ) {
 			System.out.println("This is seller!");
@@ -63,6 +65,19 @@ public class LoginController {
 	public String getMemberNo(HttpSession session) {
 	    Object memberNo = session.getAttribute("memberno");
 	    return memberNo != null ? memberNo.toString() : ""; // 회원 번호 반환, 없으면 빈 문자열
+	}
+
+	@PostMapping("/delUser")
+	public String delUser(@RequestParam("email") String email, @RequestParam("pw") String pw) {
+		System.out.println(email);
+		System.out.println(pw);
+		int res = customerBiz.delUser(email, pw);
+		if (res > 0) {
+			return "/loginform";
+		}
+		else {
+			return "redirect:/intropage.html";
+		}
 	}
 
 }

@@ -108,7 +108,7 @@ function savestockchange() {
 
 function logout() {
     sessionStorage.removeItem("loggedIn");
-    location.href = '/login/logout';
+    location.href = '/logout';
 }
 
 function movemain(){

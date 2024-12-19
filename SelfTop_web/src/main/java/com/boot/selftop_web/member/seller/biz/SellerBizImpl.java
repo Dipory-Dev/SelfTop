@@ -3,6 +3,7 @@ package com.boot.selftop_web.member.seller.biz;
 import java.util.List;
 
 
+import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
 import com.boot.selftop_web.member.seller.biz.mapper.SellerBoardMapper;
 import com.boot.selftop_web.member.customer.biz.mapper.CustomerMapper;
 import com.boot.selftop_web.member.seller.biz.mapper.SellerMapper;
@@ -37,9 +38,8 @@ public class SellerBizImpl implements SellerBiz {
 
 	@Override
 	public boolean idchk(String id) {
-		System.out.println("biz : " + id);
-		SellerOrderDto res = mapper.idchk(id);
-		System.out.println("biz :" + res);
+		SellerDto res = mapper.idchk(id);
+		System.out.println("biz : " + res);
 		if (res == null){
 			return true;
 		} else {
@@ -53,10 +53,10 @@ public class SellerBizImpl implements SellerBiz {
     }
 
 	@Override
-	public int insertSeller(SellerDto dto) {
+	public int insertSeller(CustomerDto customer, SellerDto dto) {
 		System.out.println("biz : " + dto);
 		int res = 0;
-		res += customerMapper.insertCustomer(dto);
+		res += customerMapper.insertCustomer(customer);
 		System.out.println("biz : " + res);
 		dto.setMember_no(customerMapper.getCurrentMemberNo());
 		res += sellerMapper.insertSeller(dto);

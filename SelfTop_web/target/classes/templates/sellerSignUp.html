@@ -18,7 +18,7 @@
 
     <main id="signup-form">
         <h2>판매자 회원가입</h2>
-        <form action="sellerReg" method="post">
+        <form action="regist" method="post">
         	<div class="form-group">
         		<label>ID입력</label>
                 <div class="input-group">
@@ -76,12 +76,12 @@
             <div class="form-group">
         		<label>물건배송주소</label>
         		<div class="input-group">
-        			<input type="text" class="form-control" id="zipNo" name="zipNo" placeholder="우편번호" required>
+        			<input readonly="readonly" type="text" class="form-control" id="zipNo" name="zipNo" placeholder="우편번호" required>
        				<button type="button" class="btn-find-address" onClick="goPopup()"><i class="fa fa-search"></i>주소검색</button>
        			</div>
        			<br>
 	            <div class="input-group">
-	            	<input type="text" class="form-control" id="address1" name="address1" placeholder="도로명주소" required/>&nbsp;
+	            	<input type="text" readonly="readonly" class="form-control" id="address1" name="address1" placeholder="도로명주소" required/>&nbsp;
 	            	<input type="text" class="form-control" id="address2" name="address2" placeholder="상세주소" required/>
 	            </div>
 	            	

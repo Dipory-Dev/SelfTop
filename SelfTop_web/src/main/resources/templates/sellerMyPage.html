@@ -12,7 +12,7 @@
            	<p id="userName" th:text="${sellerInfo.name}"></p> 
             <div class="icon-section">
                 <a href="/seller/myPage" target="_self" ><img class="mypage-icon" src="/img/human-icon.png"></a>
-                <a href="/login/logout"><img class="login-icon" src="/img/lock-icon.png"></a>
+                <a href="/logout"><img class="login-icon" src="/img/lock-icon.png"></a>
             </div>
         </div>
     </header>
@@ -47,7 +47,7 @@
         </div>
 
         <div class="button-area">
-            <a href="#" target="_blank"><input type="button" class="btn-modify" value="정보수정"></a>
+            <button onclick="location.href='infoChange'" class="btn-modify">정보수정</button>
         </div>
     </main>
 
