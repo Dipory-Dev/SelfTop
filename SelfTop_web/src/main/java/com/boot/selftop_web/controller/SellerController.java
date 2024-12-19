@@ -55,6 +55,7 @@ public class SellerController {
 	public String sellermain(HttpSession session,Model model) {
 		if(session.getAttribute("memberno") == null) {
 			return "redirect:/login/loginform";
+
 		}
 		int membernum=(int) session.getAttribute("memberno");
 		List<SellerOrderDto> res = sellerbiz.selectList(membernum);

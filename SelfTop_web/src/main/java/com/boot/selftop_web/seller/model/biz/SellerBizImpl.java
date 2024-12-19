@@ -2,6 +2,7 @@ package com.boot.selftop_web.seller.model.biz;
 
 import java.util.List;
 
+
 import com.boot.selftop_web.seller.model.mapper.CustomerMapper;
 import com.boot.selftop_web.seller.model.mapper.SellerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class SellerBizImpl implements SellerBiz {
 	@Override
 	public boolean idchk(String id) {
 		System.out.println("biz : " + id);
-		SellerDto res = mapper.idchk(id);
+		SellerOrderDto res = mapper.idchk(id);
 		System.out.println("biz :" + res);
 		if (res == null){
 			return true;

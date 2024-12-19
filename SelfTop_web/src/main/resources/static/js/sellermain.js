@@ -25,6 +25,7 @@ function Reset(){
 	 Search();
 	}
 
+
 function movestock(){
 	 $.ajax({
 	        url: "/seller/stockmenu",
@@ -33,6 +34,7 @@ function movestock(){
 	            $("#tablesection").html(response);
 	        },
 	        error: function(xhr, status, error) {
+
 
 	            alert("오류 발생: " + error);
 	        }
@@ -52,6 +54,7 @@ function moveorder(){
 		        }
 		    });
 		}
+
 
 function logout() {
     sessionStorage.removeItem("loggedIn");
