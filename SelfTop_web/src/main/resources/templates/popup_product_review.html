@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/popup_product_review.css" />
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <title>팝업_제품 후기 등록</title>
+</head>
+<body>
+    <!-- 임시버튼 -->
+    <button id="openModalBtn" class="btn">제품 후기 등록</button>
+    
+    
+
+     <!-- 모달 -->
+     <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">후기 등록</div>
+            <div class="modal-body">
+                <div class="form-body">
+                    <div class="body-top">
+                        <div class="form-user-name">
+                            ${user.name} <!--주문내역 페이지 완성 후 가져올 예정-->
+                        </div>
+                        <form class="form-rate" name="reviewForm" method="post" >
+                            <div class ="star_rating">
+                                ​<span class="star on" value="1"> </span>
+                                ​​<span class="star" value="2"> </span>
+                                ​​<span class="star" value="3"> </span>
+                                ​​<span class="star" value="4"> </span>
+                                ​​<span class="star" value="5"> </span>
+                            </div>
+    
+                            <!--별점 정보 전달-->
+                            <input type="hidden" name="score" value="5">
+                        </form>
+                    </div>
+                    
+                    <div class="form-write-review">
+                        
+                        <textarea placeholder=" 후기를 작성해주세요 ! " required></textarea>
+                        
+                    </div>
+                    
+                </div>
+                <div class ="form-file-upload">
+                    <input type="file" id="imageInput" accept="image/jpeg,.txt,png,gif">
+                    
+                <p class="foot-message"> *10MB 이하 jpg, jpeg, png, gif 파일 1장만 첨부 가능</p>
+            </div>
+            <div class="modal-footer">
+                <button id="closeModalBtn" class="btn btn-close">닫기</button>
+                <button id="submitModalBtn" class="btn btn-submit">저장</button>
+                
+            </div>
+        </div>
+    </div>
+
+    
+
+    <script src="../static/js/popup_product_review.js"></script>
+    
+</body>
+</html>

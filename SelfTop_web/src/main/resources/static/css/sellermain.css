@@ -104,8 +104,8 @@ main{
 
 .search{
   display: flex;
-  align-items: center;  /* 수직 중앙 정렬 */
-  gap: 10px;  /* 항목 간 간격 설정 */
+  align-items: center;
+  gap: 10px;
   border:none;
   border-top:1px solid #ccc;
   border-bottom:1px solid#ccc;

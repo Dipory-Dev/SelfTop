@@ -9,10 +9,10 @@
     <header>
         <div class="header-content">
             <img class="logo" src="/img/logo.png">
-           	<p id="userName"> 이창진 |</p> 
+           	<p id="userName" th:text="${sellerInfo.name}"></p> 
             <div class="icon-section">
-                <a href="#" target="_blank" ><img class="mypage-icon" src="/img/human-icon.png"></a>
-                <a href="#" target="_blank" ><img class="login-icon" src="/img/lock-icon.png"></a>
+                <a href="/seller/sellerMyPage" target="_self" ><img class="mypage-icon" src="/img/human-icon.png"></a>
+                <a href="/login/logout"><img class="login-icon" src="/img/lock-icon.png"></a>
             </div>
         </div>
     </header>
@@ -24,24 +24,24 @@
             <table>
                 <tr>
                     <td class="title">아이디</td>
-                    <td class="seller-id">이창진</td>
+                    <td class="seller-id" th:text="${sellerInfo.id}"></td>
                 </tr>
                 <tr>
                     <td class="title">대표자명</td>
-                    <td class="seller-name">이창진</td>
+                    <td class="seller-name" th:text="${sellerInfo.ceo_name}"></td>
                     
                 </tr>
                 <tr>
                     <td class="title">업체명</td>
-                    <td class="company-name">이창진</td>
+                    <td class="company-name" th:text="${sellerInfo.company_name}"></td>
                 </tr>
                 <tr>
                     <td class="title">연락처</td>
-                    <td class="contact">이창진</td>
+                    <td class="contact" th:text="${sellerInfo.phone}"></td>
                 </tr>
                 <tr>
                     <td class="title">사업자등록번호</td>
-                    <td class="bussiness-num">이창진</td>
+                    <td class="bussiness-num" th:text="${sellerInfo.business_license}"></td>
                 </tr>
             </table>
         </div>

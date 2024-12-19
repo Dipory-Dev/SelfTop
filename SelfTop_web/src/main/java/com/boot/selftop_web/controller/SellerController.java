@@ -1,6 +1,8 @@
 package com.boot.selftop_web.controller;
 
+import com.boot.selftop_web.seller.model.biz.SellerBiz;
 import com.boot.selftop_web.seller.model.biz.SellerBizImpl;
+import com.boot.selftop_web.seller.model.dto.SellerDto;
 import com.boot.selftop_web.seller.model.dto.SellerOrderDto;
 import com.boot.selftop_web.seller.model.dto.SellerStockDto;
 
@@ -18,7 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 
 @Controller
@@ -26,6 +27,9 @@ import java.util.Map;
 public class SellerController {
 	@Autowired
 	private SellerBizImpl sellerbiz;
+	
+	@Autowired
+	private SellerBiz sellerBiz;
 
 	@GetMapping("/sellerSignUp")
 	public String showSignUpForm() {
@@ -34,10 +38,17 @@ public class SellerController {
 
 
 	@GetMapping("/sellerMyPage")
-	public String showSellerMyPage() {
-
+	public String showSellerMyPage(HttpSession session,Model model) {
+		if(session.getAttribute("member_no") == null) {
+			return "redirect:/login/loginform";
+		}
+		
+		Integer member_no = (Integer) session.getAttribute("member_no");
+		
+		SellerDto sellerInfo = sellerBiz.getSellerInfoByMemberNo(member_no);
+	    model.addAttribute("sellerInfo", sellerInfo);
+		
 		return "sellerMyPage";
-
 	}
 
 	@GetMapping("/main")
@@ -68,7 +79,7 @@ public class SellerController {
 		}
 
 		int membernum=(int) session.getAttribute("memberno");
-		
+
 		if((String) session.getAttribute("table") == "order") {
 			List<SellerOrderDto> res = sellerbiz.selectSearch(startdate,enddate,keyword,membernum);
 			model.addAttribute("seller", res);
@@ -92,7 +103,7 @@ public class SellerController {
 		session.setAttribute("table", "stock");
 		return "sellerstock :: changetable";
 	}
-	
+
 	@GetMapping("/ordermenu")
 	public String loadOrder(HttpSession session, Model model) {
 	    if (session.getAttribute("memberno") == null) {
@@ -105,9 +116,7 @@ public class SellerController {
 	    session.setAttribute("table", "order");
 	    return "sellerordertable :: changetable"; // 주문내역 테이블 프래그먼트 반환
 	}
-	
-	
-	
+
 	@GetMapping("/sellerInfoChange")
 	public String showInfoChangeForm() {
 		return "sellerInfoChange";
@@ -122,35 +131,12 @@ public class SellerController {
 			@RequestParam("terms") boolean terms,
 			Model model) {
 
-		// 필수 항목 확인
-		if (id == null || id.isEmpty()) {
-			model.addAttribute("error", "아이디를 입력해주세요.");
-			return "sellerSignUp";
-		}
-		if (pw == null || pw.isEmpty()) {
-			model.addAttribute("error", "비밀번호를 입력해주세요.");
-			return "sellerSignUp";
-		}
-		if (confirmPassword == null || confirmPassword.isEmpty()) {
-			model.addAttribute("error", "비밀번호 확인을 입력해주세요.");
-			return "sellerSignUp";
-		}
-		if (email == null || email.isEmpty()) {
-			model.addAttribute("error", "이메일을 입력해주세요.");
-			return "sellerSignUp";
-		}
-
 		// 비밀번호 확인
 		if (!pw.equals(confirmPassword)) {
 			model.addAttribute("error", "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
 			return "sellerSignUp";
 		}
 
-		// 이메일 형식 확인
-		if (!email.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")) {
-			model.addAttribute("error", "유효한 이메일 주소를 입력해주세요.");
-			return "sellerSignUp";
-		}
 
 		// 약관 동의 확인
 		if (!terms) {
@@ -159,7 +145,7 @@ public class SellerController {
 		}
 
 		model.addAttribute("message", "회원가입이 완료되었습니다.");
-		return "redirect:/main";
+		return "sellerMain";
 	}
 
 
@@ -189,10 +175,31 @@ public class SellerController {
 	}
 
 	@ResponseBody // JSON 응답을 반환
-	@GetMapping("/idchk")
+	@GetMapping("/idchk") //ID 중복체크
 	public boolean idchk(@RequestParam("id") String id) {
 		return sellerbiz.idchk(id); // boolean 값을 직접 반환
 	}
 
+	@PostMapping("/sellerReg")
+	public String sellerReg(HttpServletRequest request) {
+		SellerDto dto = new SellerDto();
+		dto.setId(request.getParameter("id"));
+		dto.setPw(request.getParameter("pw"));
+		dto.setName(request.getParameter("name"));
+		dto.setEmail(request.getParameter("email-id") + "@" + request.getParameter("email-domain"));
+		dto.setPhone(request.getParameter("phone"));
+		dto.setCompany_name(request.getParameter("company_name"));
+		dto.setCeo_name(request.getParameter("ceo_name"));
+		dto.setBusiness_license(request.getParameter("business_license"));
+		dto.setAddress(request.getParameter("address1") + " " + request.getParameter("address2"));
+		System.out.println("controller: " + dto);
+		int res = sellerbiz.insertSeller(dto);
+		if (res > 0) {
+			return "redirect:/login/loginform";
+		} else {
+			return "redirect:sellerSignUp";
+		}
+
+	}
 
 }

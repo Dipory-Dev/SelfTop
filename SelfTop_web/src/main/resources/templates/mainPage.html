@@ -26,21 +26,62 @@
 	    <br>
 	    <div>
 	    	<p>${categoty}: n개</p>
-	    	
+	    	<div class="top-boxes">
+            	<div class="top-box small"></div>
+            	<div class="top-box large"></div>
+        	</div>
 	    </div>
-	    <div>
+	    <div class="content">
+	    
+	    <div class="category_list">
+		<ul>
+					<li class="first"><a href="" onclick="estimateMainProduct.sort('PRODUCT_POPULAR_DESC'); return false;" onmousedown="gtagSend('PC견적메인','상품리스트','정렬탭_인기상품순');">인기상품순</a></li>
+					<li class=""><a href="" onclick="estimateMainProduct.sort('PRODUCT_INPUT_DATE_DESC'); return false;" onmousedown="gtagSend('PC견적메인','상품리스트','정렬탭_신상품순');">신상품순</a></li>
+					<li class=""><a href="" onclick="estimateMainProduct.sort('GOODSINFO_CASH_PRICE_ASC'); return false;" onmousedown="gtagSend('PC견적메인','상품리스트','정렬탭_낮은 가격순');">낮은 가격순</a></li>
+					<li class="select"><a href="" onclick="estimateMainProduct.sort('GOODSINFO_CASH_PRICE_DESC'); return false;" onmousedown="gtagSend('PC견적메인','상품리스트','정렬탭_높은 가격순');">높은 가격순</a></li>
+					<li class=""><a href="" onclick="estimateMainProduct.sort('PRODUCT_NAME_ASC'); return false;" onmousedown="gtagSend('PC견적메인','상품리스트','정렬탭_상품명순');">상품명순</a></li>
+		</ul>
+	    
+	    	<div class="radio-group">
+	    		<input class ="radio" type="radio" name="group" id="popular" checked>
+        		<input class ="radio" type="radio" name="group" id="cheap">
+        		<input class ="radio" type="radio" name="group" id="expensive">
+        		<input class ="radio" type="radio" name="group" id="new">
+        		
+        		<div class="tabs">
+            		<label class = "tab" id= "popular-tab" for="popular">인기순</label>
+            		<label class = "tab" id= "cheap-tab" for="cheap">가격 낮은 순</label>
+            		<label class = "tab" id= "expensive-tab" for="expensive">가격 높은 순</label>
+            		<label class = "tab" id= "bew-tab" for="new">가격 높은 순</label>
+        		</div>
+        		
+        		<div class="panels">
+		            <div class="panel" id = "one-panel">
+		                <div class="panel-title">첫번째</div>
+		                <p>첫번째 탭 입니다.</p>
+		            </div>
+		
+		            <div class="panel" id = "two-panel">
+		                <div class="panel-title">두번째</div>
+		                <p>두번째 탭 입니다.</p>
+		            </div>
+		
+		            <div class="panel" id = "three-panel">
+		                <div class="panel-title">세번째</div>
+		                <p>세번째 탭 입니다.</p>
+		            </div>
+		        </div>
+		    </div>
+		  
 	    	<div class="side-panel">
-	    	
             	<div class="panel-header">
             		<div>
 	            		<select class="saved-qutoe">
 	                		<option value="">선택한 견적 이름</option>
 	                		<option value="">${quote_name}</option>
 	            		</select>
-	            		<div>
 	            			<button id="current-cart">현재 견적 카트</button>
             				<input type="text" placeholder="견적 이름을 작성해주세요" />
-            			</div>
             		</div>
         		</div>
         		<div class="components">
