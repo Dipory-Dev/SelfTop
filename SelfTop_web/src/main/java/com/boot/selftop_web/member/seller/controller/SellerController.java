@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 
 @Controller
@@ -38,7 +39,7 @@ public class SellerController {
 	@GetMapping("/myPage")
 	public String showSellerMyPage(HttpSession session,Model model) {
 		if(session.getAttribute("member_no") == null) {
-			return "redirect:/login/loginform";
+			return "redirect:/loginform";
 		}
 
 		Integer member_no = (Integer) session.getAttribute("member_no");
@@ -46,7 +47,7 @@ public class SellerController {
 		SellerDto sellerInfo = sellerBiz.getSellerInfoByMemberNo(member_no);
 	    model.addAttribute("sellerInfo", sellerInfo);
 
-		return "myPage";
+		return "sellerMyPage";
 	}
 
 	@GetMapping("/main")
@@ -118,6 +119,22 @@ public class SellerController {
 	@GetMapping("/sellerInfoChange")
 	public String showInfoChangeForm() {
 		return "sellerInfoChange";
+	}
+	
+	@PostMapping("/updatestock")
+	public String updatestock(@RequestBody List<Map<String, String>> stockdata) {
+		System.out.println("-----------------------------------------------------------업데이트 영역진입");
+		for(Map<String,String> data:stockdata) {
+			int productcode=Integer.parseInt(data.get("productcode"));
+			int price = Integer.parseInt(data.get("price"));
+			int amount = Integer.parseInt(data.get("amount"));
+			System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + productcode + "," + price + "," + amount);
+			sellerbiz.updatestock(productcode,price,amount);
+					
+		}
+		
+		 return "sellerordertable :: changetable";
+		
 	}
 
 	@PostMapping("/signUp")

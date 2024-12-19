@@ -41,6 +41,10 @@ public class LoginController {
 			session.setAttribute("member_no", member.getMember_no());
 			System.out.println("Customer");
 			return "redirect:/seller/main";
+		}else if((member !=null) && member.getRole() == 'D') {
+			session.setAttribute("member_no", member.getMember_no());
+			System.out.println("Customer");
+			return "redirect:/seller/main";
 		}else {
             return "loginform";
         }

@@ -5,6 +5,7 @@ import java.util.List;
 import com.boot.selftop_web.member.seller.model.dto.SellerDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.data.repository.query.Param;
 
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
@@ -48,6 +49,10 @@ public interface SellerBoardMapper {
 		        "</if>" +
 		        "</script>")
 	List<SellerStockDto> selectstocksearch(@Param("keyword")String keyword  ,@Param("memberno") int memberno);
+	
+//스톡업데이트
+	@Update("UPDATE product_status SET price = #{price}, stock= #{amount} WHERE product_code = #{productcode}")
+	int updatestock(@Param("productcode") int productcode, @Param("price") int price, @Param("amount") int amount);
 
 
 	@Select("SELECT * from customer where id = #{id}")
