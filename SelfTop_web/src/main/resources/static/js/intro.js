@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-	fetch('/login/memberno') // 서버에서 세션 값 체크
+	fetch('/memberno') // 서버에서 세션 값 체크
 	       .then(response => response.text())
 	       .then(memberNo => {
 	           if (memberNo) {
@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function movelogin(){
-	location.href='/login/loginform'
+	location.href='/loginform'
 }
 
 function movemypage(){
@@ -23,7 +23,7 @@ function movemypage(){
 }
 function logout() {
     sessionStorage.removeItem("loggedIn");
-    location.href = '/login/logout';
+    location.href = '/logout';
 }
 function divselect(){
 	const isLoggedIn = sessionStorage.getItem("loggedIn") === "true";
