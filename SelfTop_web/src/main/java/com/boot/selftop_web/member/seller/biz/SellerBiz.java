@@ -2,6 +2,7 @@ package com.boot.selftop_web.member.seller.biz;
 
 import java.util.List;
 
+import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
@@ -19,7 +20,7 @@ public interface SellerBiz {
 	// ID 중복체크
 	public boolean idchk(String id);
 	// 판매자 회원가입
-	public int insertSeller(SellerDto dto);
+	public int insertSeller(CustomerDto customerDto, SellerDto dto);
 	public SellerDto getSellerInfoByMemberNo(int member_no);
 
 }

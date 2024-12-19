@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MemberBizImpl implements MemberBiz {
+public class CustomerBizImpl implements CustomerBiz {
 
 	@Autowired
 	public CustomerMapper mapper;
@@ -17,5 +17,10 @@ public class MemberBizImpl implements MemberBiz {
 		return mapper.memberlogin(id, pw);
 	}
 
-	
+	@Override
+	public int delUser(String email, String pw) {
+		return mapper.delUser(email, pw);
+	}
+
+
 }
