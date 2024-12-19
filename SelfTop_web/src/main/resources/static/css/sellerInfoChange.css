@@ -207,7 +207,7 @@ textarea {
     border-radius: 4px;
 }
 
-input[disabled] {
+input[readonly] {
     background-color: #f0f0f0;
     cursor: not-allowed;
 }

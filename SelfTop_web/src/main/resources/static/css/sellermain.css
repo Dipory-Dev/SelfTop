@@ -13,6 +13,7 @@ header {
     width: 150px;
     margin-left: 10%;
     height: 70px;
+    cursor:pointer;
 }
 
 .header-content p {
@@ -23,6 +24,18 @@ header {
 
 .header-content p:hover {
     text-decoration: underline;
+}
+
+.header-user {
+	display: flex; 
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.header-user p {
+    margin-left: 15px;
+    display: inline-block; /* 이 속성을 추가하여 p 태그를 수평으로 정렬 */
+    white-space: nowrap;
 }
 
 html, body {
@@ -91,8 +104,8 @@ main{
 
 .search{
   display: flex;
-  align-items: center;  /* 수직 중앙 정렬 */
-  gap: 10px;  /* 항목 간 간격 설정 */
+  align-items: center;
+  gap: 10px;
   border:none;
   border-top:1px solid #ccc;
   border-bottom:1px solid#ccc;
