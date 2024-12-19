@@ -15,6 +15,7 @@ public interface SellerBiz {
 //	재고 확인
 	public List<SellerStockDto> selectStock(int memberno);
 	public List<SellerStockDto> selectStocksearch(String keywrod,int memberno);
+	public int updatestock(int productcode,int price,int amount);
 
 
 	// ID 중복체크
@@ -22,5 +23,6 @@ public interface SellerBiz {
 	// 판매자 회원가입
 	public int insertSeller(CustomerDto customerDto, SellerDto dto);
 	public SellerDto getSellerInfoByMemberNo(int member_no);
+	
 
 }
