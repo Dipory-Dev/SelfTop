@@ -2,6 +2,7 @@ package com.boot.selftop_web.seller.model.biz;
 
 import java.util.List;
 
+import com.boot.selftop_web.seller.model.dto.SellerDto;
 import com.boot.selftop_web.seller.model.dto.SellerOrderDto;
 
 public interface SellerBiz {
@@ -11,4 +12,5 @@ public interface SellerBiz {
 
 	public boolean idchk(String id);
 
+	public int insertSeller(SellerDto dto);
 }

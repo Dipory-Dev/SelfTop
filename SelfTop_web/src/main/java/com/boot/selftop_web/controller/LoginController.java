@@ -36,10 +36,10 @@ public class LoginController {
 			System.out.println("This is seller!");
 			 session.setAttribute("memberno", member.getNumber());
 			 session.setAttribute("name",member.getName());
-			return "redirect:/intropage.html";
+			return "redirect:/seller/main";
 		}else if((member !=null) && member.getRole() == 'C') {
 			System.out.println("Customer");
-			return "redirect:/seller/main";
+			return "redirect:/main";
 		}else {
             return "loginform";
         }

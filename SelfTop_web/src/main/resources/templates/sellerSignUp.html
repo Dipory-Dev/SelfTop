@@ -18,7 +18,7 @@
 
     <main id="signup-form">
         <h2>판매자 회원가입</h2>
-        <form action="/sellerSignUp" method="post">
+        <form action="sellerReg" method="post">
         	<div class="form-group">
         		<label>ID입력</label>
                 <div class="input-group">
@@ -44,7 +44,13 @@
 			<div class="form-group">
 				<label>회원명</label>
 				<div class="input-group">
-					<input type="text" id="name" name="company_name" required>
+					<input type="text" id="name" name="name" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>전화번호</label>
+				<div class="input-group">
+					<input placeholder="-없이 입력" type="text" id="phone" name="phone" required>
 				</div>
 			</div>
             <div class="form-group">
@@ -86,7 +92,7 @@
     			<div class="email-container">
         			<input type="text" id="email-id" name="email-id" placeholder="이메일 아이디" required>
         			<span>@</span>
-        			<input type="text" id="email-domain" name="email-domain" placeholder="도메인" required disabled>
+        			<input type="text" id="email-domain" name="email-domain" placeholder="도메인" required readonly>
         			<select id="email-domain-select" name="email-domain-select" onchange="updateEmailDomain()">
             			<option value="">선택</option>
             			<option value="gmail.com">gmail.com</option>
@@ -117,7 +123,7 @@
     			<span class="terms-message">* 약관에 동의하셔야 회원가입이 가능합니다.</span>
 			</div>
 			<div class="form-group">
-    			<button type="submit" class="btn-signup">회원가입</button>
+    			<input type="submit" value="회원가입" class="btn-signup">
     			<button type="button" class="btn-back" onclick="window.history.back()">돌아가기</button>
 			</div>
         </form>
