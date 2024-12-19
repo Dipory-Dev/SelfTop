@@ -12,8 +12,6 @@ public class AdminBizImpl implements AdminBiz {
 
     @Override
     public AdminDto login(String id, String password) {
-        System.out.println("biz : " + id);
-        System.out.println("biz : " + password);
         return adminMapper.selectAdmin(id, password);
     }
 }

@@ -14,7 +14,7 @@
         <div class="header-content">
             <img src="/img/logo.png" onclick="movemain()">
             <div class="header-user">
-          	  <p th:text="${membername} + 님" ></p>
+          	  <a href="myPage"><p th:text="${membername} + 님" ></p></a>
               <p th:unless="${seller != null && seller.size() > 0}">로그인</p>
            	  <p th:if="${seller != null && seller.size() > 0}" onclick="logout()">로그아웃</p>
            	</div>

@@ -26,7 +26,7 @@
 	<main>
 		<div id="title"><h3>마이 페이지</h3></div>
     	<div id="infochange-form">
-        	<form action="/sellerInfoChange" method="post">
+        	<form action="/infoChange" method="post">
         		<h2>계정 정보 변경</h2>
         		<div class="form-group">
         			<label>대표자명<span>*</span></label>
@@ -56,7 +56,7 @@
 	            <div class="input-group">
 	            	<input type="text" class="form-control" id="address1" name="address1" placeholder="도로명주소"/>&nbsp;
 	            	<input type="text" class="form-control" id="address2" name="address2" placeholder="상세주소"/>
-	            </div>	
+	            </div>
             </div>
             <div class="form-group">
     			<button type="submit" class="btn-change-account">변경하기</button>
@@ -86,24 +86,26 @@
             <div class="form-group">
     			<button type="submit" class="btn-change-pw">변경하기</button>
 			</div>
-			<h2>회원탈퇴</h2>
-            <div class="form-group">
-   				<label>이메일<span>*</span></label>
-    			<div class="email-container">
-        			<input type="text" id="email" name="email" placeholder="이메일을 입력해주세요!">
-    			</div>
-    		</div>
-    		<div class="form-group">
-    			<label>비밀번호<span>*</span></label>
-    			<div class="input-container">
-        			<input type="password" id="pw" name="pw" placeholder="기존 비밀번호를 입력해주세요!" oninput="checkCurrentPassword()">
-    			</div>
-    			<span id="pw-error" class="error-message"></span>
-			</div>
-			<div class="form-group">
-    			<button type="submit" class="btn-delete">탈퇴하기</button>
-			</div>
-        	</form>
+			</form>
+			<form action="/delUser" method="post">
+				<h2>회원탈퇴</h2>
+				<div class="form-group">
+					<label>이메일<span>*</span></label>
+					<div class="email-container">
+						<input type="text" id="email" name="email" placeholder="이메일을 입력해주세요!">
+					</div>
+				</div>
+				<div class="form-group">
+					<label>비밀번호<span>*</span></label>
+					<div class="input-container">
+						<input type="password" id="pw" name="pw" placeholder="기존 비밀번호를 입력해주세요!" oninput="checkCurrentPassword()">
+					</div>
+					<span id="pw-error" class="error-message"></span>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn-delete">탈퇴하기</button>
+				</div>
+			</form>
         </div>
     </main>
 
