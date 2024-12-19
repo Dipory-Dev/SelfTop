@@ -35,6 +35,20 @@ public class SellerController {
 		return "sellerSignUp";
 	}
 
+	@GetMapping("/myPage")
+	public String showSellerMyPage(HttpSession session,Model model) {
+		if(session.getAttribute("member_no") == null) {
+			return "redirect:/loginform";
+		}
+
+		Integer member_no = (Integer) session.getAttribute("member_no");
+
+		SellerDto sellerInfo = sellerBiz.getSellerInfoByMemberNo(member_no);
+	    model.addAttribute("sellerInfo", sellerInfo);
+
+		return "sellerMyPage";
+	}
+
 	@GetMapping("/main")
 	public String sellermain(HttpSession session,Model model) {
 		if(session.getAttribute("memberno") == null) {
@@ -101,22 +115,9 @@ public class SellerController {
 	    return "sellerordertable :: changetable"; // 주문내역 테이블 프래그먼트 반환
 	}
 
-	@GetMapping("/myPage")
-	public String showSellerMyPage(HttpSession session,Model model) {
-		if(session.getAttribute("member_no") == null) {
-			return "redirect:/loginform";
-		}
-
-		Integer member_no = (Integer) session.getAttribute("member_no");
-
-		SellerDto sellerInfo = sellerBiz.getSellerInfoByMemberNo(member_no);
-		model.addAttribute("sellerInfo", sellerInfo);
-
-		return "sellerMyPage";
-	}
-
 	@GetMapping("/infoChange")
 	public String showInfoChangeForm() {
+
 		return "sellerInfoChange";
 	}
 

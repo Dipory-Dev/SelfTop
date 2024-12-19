@@ -1,32 +1,29 @@
 function checkCurrentPassword() {
-    const currentPassword = document.querySelector('#pw').value;
-
-    // 비밀번호가 비어있는 경우, 오류 메시지를 지운다
+    const currentPassword = document.querySelector('#pw').value; // 사용자가 입력한 비밀번호
+	
+    // 비밀번호가 비어있는 경우
     if (!currentPassword) {
-        document.querySelector('#pw-error').textContent = '';
+        document.querySelector('#pw-error').textContent = '비밀번호를 입력해주세요.';
         return;
     }
 
-    // 서버로 기존 비밀번호 검증 요청
-    $.ajax({
-        url: '/verifyPassword',  // 서버에 비밀번호 검증을 위한 엔드포인트
-        method: 'POST',
-        data: {
-            currentPassword: currentPassword
-        },
-        success: function(response) {
-            if (response.isValid) {
-                // 비밀번호가 일치하면 오류 메시지 제거
-                document.querySelector('#pw-error').textContent = '';
-            } else {
-                // 비밀번호가 일치하지 않으면 오류 메시지 표시
-                document.querySelector('#pw-error').textContent = '기존 비밀번호가 일치하지 않습니다.';
-            }
-        },
-        error: function() {
-            document.querySelector('#pw-error').textContent = '서버 오류가 발생했습니다. 다시 시도해주세요.';
-        }
-    });
+    // 비밀번호 검증 요청
+	fetch(`idchk?id=${id}`)
+			.then(response => response.json())
+			.then(data => {
+				if (data === true) {
+					idError.textContent = "사용 가능한 ID입니다.";
+					idError.style.color = "green";
+				} else {
+					idError.textContent = "이미 사용 중인 ID입니다.";
+					idError.style.color = "red";
+				}
+			})
+			.catch(error => {
+				idError.textContent = "중복 확인 중 문제가 발생했습니다.";
+				idError.style.color = "red";
+				console.error(error);
+			});
 }
 
 // 변경할 비밀번호 조건 검사
