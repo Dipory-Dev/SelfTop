@@ -11,8 +11,13 @@ public interface SellerBiz {
 	public List<SellerOrderDto> selectList(int memberno);
 	public List<SellerOrderDto> selectSearch(String startdate, String enddate, String keyword, int memberno);
 
+	// ID 중복체크
 	public boolean idchk(String id);
+	// 판매자 회원가입
+	public int insertSeller(SellerDto dto);
+	
 	public List<SellerStockDto> selectStock(int memberno);
 	public SellerDto getSellerInfoByMemberNo(int member_no);
 
+	
 }

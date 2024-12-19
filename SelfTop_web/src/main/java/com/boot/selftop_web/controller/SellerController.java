@@ -13,10 +13,7 @@ import jakarta.websocket.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -176,12 +173,32 @@ public class SellerController {
 		return mav;
 	}
 
-	@GetMapping("/idchk")
-	public void idchk (@RequestParam("id") String id) {
-		System.out.println(id);
-		System.out.println("controller: " + sellerbiz.idchk(id));
-		sellerbiz.idchk(id);
+	@ResponseBody // JSON 응답을 반환
+	@GetMapping("/idchk") //ID 중복체크
+	public boolean idchk(@RequestParam("id") String id) {
+		return sellerbiz.idchk(id); // boolean 값을 직접 반환
 	}
 
+	@PostMapping("/sellerReg")
+	public String sellerReg(HttpServletRequest request) {
+		SellerDto dto = new SellerDto();
+		dto.setId(request.getParameter("id"));
+		dto.setPw(request.getParameter("pw"));
+		dto.setName(request.getParameter("name"));
+		dto.setEmail(request.getParameter("email-id") + "@" + request.getParameter("email-domain"));
+		dto.setPhone(request.getParameter("phone"));
+		dto.setCompany_name(request.getParameter("company_name"));
+		dto.setCeo_name(request.getParameter("ceo_name"));
+		dto.setBusiness_license(request.getParameter("business_license"));
+		dto.setAddress(request.getParameter("address1") + " " + request.getParameter("address2"));
+		System.out.println("controller: " + dto);
+		int res = sellerbiz.insertSeller(dto);
+		if (res > 0) {
+			return "redirect:/login/loginform";
+		} else {
+			return "redirect:sellerSignUp";
+		}
+
+	}
 
 }
