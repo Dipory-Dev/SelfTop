@@ -42,15 +42,15 @@
         	<form action="/infoChange" method="post">
         		<h2>계정 정보 변경</h2>
         		<div class="form-group">
-        			<label>대표자명<span>*</span></label>
+        			<label>대표자명</label>
                 	<div class="input-group">
-       					<p id="ceo_name">이창진</p>
+       					<p id="ceo_name" th:text="${sellerInfo.ceo_name}" />
     				</div>
             	</div>
             	<div class="form-group">
-        			<label>업체명<span>*</span></label>
+        			<label>업체명</label>
                 	<div class="input-group">
-       					<p id="company_name">멀티캠퍼스</p>
+       					<p id="company_name" th:text="${sellerInfo.company_name}" />
     				</div>
        	    	</div>
       	      	<div class="form-group">
@@ -78,9 +78,9 @@
             <div class="form-group">
     			<label>기존 비밀번호<span>*</span></label>
     			<div class="input-container">
-        			<input type="password" id="pw" name="pw" oninput="checkCurrentPassword()">
+        			<input type="password" id="pw_a" name="pw_a" oninput="checkCurrentPassword()">
     			</div>
-    			<span id="pw-error" class="error-message"></span>
+    			<span id="pw_a-error" class="error-message"></span>
 			</div>
 			<div class="form-group">
     			<label>새 비밀번호<span>*</span></label>
