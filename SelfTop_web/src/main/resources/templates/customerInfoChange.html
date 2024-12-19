@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer_InfoChange</title>
+    <link rel="stylesheet" href="/css/customerInfoChange.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="/js/customerInfoChange.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="/img/logo.png">
+           	<p>
+           		<span>구매자님</span>&nbsp|
+           		<a href="mypage">
+           			<img src="/img/human-icon.png" class="human-icon">
+           		</a>
+           		<a href="cart">
+           			<img src="/img/cart-icon.png" class="cart-icon">
+           		</a>
+           		<a href="signup">
+           			<img src="/img/lock-icon.png" class="lock-icon">
+           		</a>
+           	</p>
+        </div>
+    </header>
+	<main>
+		<div id="title">
+			<a href="mypage">
+				<span id="mypage-tab" class="selected">마이 페이지</span>
+			</a>|
+			<a href="order">
+				<span id="order-tab">주문 내역</span>
+			</a>
+		</div>
+    	<div id="infochange-form">
+        	<form action="/infochange" method="post">
+        		<h2>계정 정보 변경</h2>
+        		<div class="form-group">
+        			<label>이름<span>*</span></label>
+                	<div class="input-group">
+       					<p id="name">구매자</p>
+    				</div>
+            	</div>
+            	<div class="form-group">
+        			<label>이메일<span>*</span></label>
+        			<div class="input-group">
+                		<input type="text" id="email-id" name="email-id" placeholder="이메일 아이디">
+        				<span>@</span>
+        				<input type="text" id="email-domain" name="email-domain" placeholder="도메인" disabled>
+        				<select id="email-domain-select" name="email-domain-select" onchange="updateEmailDomain()">
+            				<option value="">선택</option>
+            				<option value="gmail.com">gmail.com</option>
+            				<option value="naver.com">naver.com</option>
+            				<option value="kakao.com">kakao.com</option>
+            				<option value="daum.net">daum.net</option>
+            				<option value="direct">직접 입력</option>
+        			</select>
+       	    		</div>
+       	    	</div>
+      	      	<div class="form-group">
+                	<label>전화번호<span>*</span></label>
+                	<div class="input-group">
+                		<input type="text" id="phone" name="phone" placeholder="010-1234-5678">
+                	</div>
+            	</div>
+            	<div class="form-group">
+    				<button type="submit" class="btn-change-account">변경하기</button>
+				</div>
+				<h2>비밀번호 변경</h2>
+            	<div class="form-group">
+    				<label>기존 비밀번호<span>*</span></label>
+    				<div class="input-container">
+        				<input type="password" id="pw" name="pw" oninput="checkCurrentPassword()">
+    				</div>
+    				<span id="pw-error" class="error-message"></span>
+				</div>
+				<div class="form-group">
+    				<label>새 비밀번호<span>*</span></label>
+    				<div class="input-container">
+        				<input type="password" id="new_pw" name="new_pw" oninput="validatePassword()">
+    				</div>
+    				<span id="new_pw-error" class="error-message"></span>
+				</div>
+            	<div class="form-group">
+                	<label>새 비밀번호 확인<span>*</span></label>
+                	<div class="input-container">
+                		<input type="password" id="confirmPassword" name="confirmPassword" oninput="validateConfirmPassword()">
+                	</div>
+                	<span id="confirm-error" class="error-message"></span>
+            	</div>
+            	<div class="form-group">
+    				<button type="submit" class="btn-change-pw">변경하기</button>
+				</div>
+				<h2>회원탈퇴</h2>
+            	<div class="form-group">
+   					<label>이메일<span>*</span></label>
+    				<div class="email-container">
+        				<input type="text" id="email" name="email" placeholder="이메일을 입력해주세요!">
+    				</div>
+    			</div>
+    			<div class="form-group">
+    				<label>비밀번호<span>*</span></label>
+    				<div class="input-container">
+        				<input type="password" id="pw" name="pw" placeholder="기존 비밀번호를 입력해주세요!" oninput="checkCurrentPassword()">
+    				</div>
+    				<span id="pw-error" class="error-message"></span>
+				</div>
+				<div class="form-group">
+    				<button type="submit" class="btn-delete">탈퇴하기</button>
+				</div>
+        	</form>
+        </div>
+    </main>
+
+    <footer>
+    	<div class="footer-content">
+        	<img src="/img/logo-footer.png" alt="로고">
+        	<div class="footer-text">
+            	<p>&copy; 2024 Copyright: SelfTop All rights reserved.</p>
+            	<p>팀원: 김지성, 오원석, 권장현, 양다연, 임성규</p>
+        	  	<p>문의: 02-1234-5678</p>
+           	 	<p>메일: SelfTop@selftop.com</p>
+       	 	</div>
+   		</div>
+	</footer>
+</body>
+</html>
