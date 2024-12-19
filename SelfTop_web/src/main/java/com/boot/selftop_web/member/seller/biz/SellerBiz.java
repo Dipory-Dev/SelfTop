@@ -24,7 +24,7 @@ public interface SellerBiz {
 	// 판매자 회원가입
 	public int insertSeller(CustomerDto customerDto, SellerDto dto);
 	public SellerDto getSellerInfoByMemberNo(int member_no);
-	
+
 	// 판매자 제품 등록
     int registerProductStatus(ProductStatusDto productStatus);
 }

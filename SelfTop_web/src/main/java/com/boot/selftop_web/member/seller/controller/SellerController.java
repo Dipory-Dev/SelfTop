@@ -136,6 +136,22 @@ public class SellerController {
 
 		return "sellerInfoChange";
 	}
+	
+	@PostMapping("/updatestock")
+	public String updatestock(@RequestBody List<Map<String, String>> stockdata) {
+		System.out.println("-----------------------------------------------------------업데이트 영역진입");
+		for(Map<String,String> data:stockdata) {
+			int productcode=Integer.parseInt(data.get("productcode"));
+			int price = Integer.parseInt(data.get("price"));
+			int amount = Integer.parseInt(data.get("amount"));
+			System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + productcode + "," + price + "," + amount);
+			sellerbiz.updatestock(productcode,price,amount);
+					
+		}
+		
+		 return "sellerordertable :: changetable";
+		
+	}
 
 //	@PostMapping("/signUp")
 //	public String registerSeller(

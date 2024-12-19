@@ -68,7 +68,7 @@ public class LoginController {
 	    Object memberNo = session.getAttribute("memberno");
 	    return memberNo != null ? memberNo.toString() : ""; // 회원 번호 반환, 없으면 빈 문자열
 	}
-	
+
 	@GetMapping("/verifyPW") //기존 비밀번호 확인
 	@ResponseBody
 	public boolean verfiyPW(@RequestParam("pw") String pw) {

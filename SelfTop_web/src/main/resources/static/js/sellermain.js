@@ -121,6 +121,12 @@ function stockinsertpopup(){
 	
 	
 }
+function stockinsertpopup(){
+
+	window.open="/seller/stockPopup";
+	
+	
+}
 
 document.addEventListener('click', function (event) {
 	  if (event.target.classList.contains('info-button')) {
