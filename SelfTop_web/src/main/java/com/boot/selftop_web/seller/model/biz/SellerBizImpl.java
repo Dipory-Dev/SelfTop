@@ -45,6 +45,11 @@ public class SellerBizImpl implements SellerBiz {
 			return false;
 		}
 	}
+	
+	@Override
+    public SellerDto getSellerInfoByMemberNo(int member_no) {
+        return mapper.getSellerInfoByMemberNo(member_no);
+    }
 
 	@Override
 	public int insertSeller(SellerDto dto) {
@@ -60,11 +65,6 @@ public class SellerBizImpl implements SellerBiz {
 		return res;
 	}
 	
-	@Override
-    public SellerDto getSellerInfoByMemberNo(int member_no) {
-        return mapper.getSellerInfoByMemberNo(member_no);
-    }
-
 	@Override
 	public List<SellerStockDto> selectStock(int memberno) {
 
