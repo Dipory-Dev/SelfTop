@@ -18,7 +18,6 @@ public interface SellerBoardMapper {
 
 	@Select("SELECT * FROM sellerstock WHERE seller_no= #{memberno} ")
 	List<SellerStockDto> selectstock(@Param("memberno") int memberno);
-	List<SellerDto> selectList(@Param("memberno") int memberno);
 
 	@Select("<script>" +
 	        "SELECT * FROM sellermain " +

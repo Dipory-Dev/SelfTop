@@ -22,7 +22,7 @@ public class SellerBizImpl implements SellerBiz {
 	}
 
 	@Override
-	public List<SellerOrderDto> selectSearch(String startdate, String enddate, String keyword,int memberno) {
+	public List<SellerOrderDto> selectSearch(String startdate, String enddate, String keyword, int memberno) {
 		// TODO Auto-generated method stub
 		return mapper.selectSearch(startdate, enddate,keyword,memberno);
 	}
