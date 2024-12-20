@@ -179,6 +179,22 @@ main{
 	cursor:pointer;
 }
 
+ #stocksavebutton{
+        text-align: right; /* 오른쪽 정렬 */
+        width: 90%; /* 테이블과 같은 너비로 설정 */
+        margin: 0 auto; /* 가운데 정렬 */
+        margin-top: 10px; /* 테이블과 버튼 사이 간격 */
+    }
+
+.stocksave{
+	background-color:#008ADA;
+	color:#FFFFFF;
+	border-radius:3px;
+	border:none;
+	height:25px;
+	cursor:pointer;
+}
+
 
 footer {
     background-color: #E8E8E8;
@@ -375,3 +391,23 @@ select:hover{
     background-color: #999;
     color: white;
 }
+
+
+/* 구매자 정보 css */
+.infomodal-table {
+            width: 100%;
+            height:450px;
+            border-collapse: collapse;
+            text-align: center;
+            font-size:13px;
+        }
+
+.infomodal-table th, .infomodal-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+.infomodal-table th {
+            background-color: #f2f2f2;
+            text-align: center;
+        }

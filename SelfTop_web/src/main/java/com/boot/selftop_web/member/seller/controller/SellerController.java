@@ -8,6 +8,8 @@ import com.boot.selftop_web.member.seller.model.dto.ProductStatusDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
+import com.boot.selftop_web.order.biz.OrderBoardBiz;
+import com.boot.selftop_web.order.model.dto.OrderBoardDto;
 import com.boot.selftop_web.product.biz.mapper.ProductMapper;
 import com.boot.selftop_web.product.model.dto.CPUDto;
 import com.boot.selftop_web.product.model.dto.RAMDto;
@@ -36,6 +38,9 @@ public class SellerController {
 	@Autowired
 	private SellerBiz sellerBiz;
 
+	@Autowired
+	private OrderBoardBiz orderboardbiz;
+	
 	@GetMapping("/signUp")
 	public String showSignUpForm() {
 		return "sellerSignUp";
@@ -138,19 +143,26 @@ public class SellerController {
 	}
 	
 	@PostMapping("/updatestock")
-	public String updatestock(@RequestBody List<Map<String, String>> stockdata) {
-		System.out.println("-----------------------------------------------------------업데이트 영역진입");
+	public String updatestock(@RequestBody List<Map<String, String>> stockdata,HttpSession session) {
+		int membernum = (int) session.getAttribute("memberno");
 		for(Map<String,String> data:stockdata) {
 			int productcode=Integer.parseInt(data.get("productcode"));
 			int price = Integer.parseInt(data.get("price"));
 			int amount = Integer.parseInt(data.get("amount"));
-			System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + productcode + "," + price + "," + amount);
-			sellerbiz.updatestock(productcode,price,amount);
+			sellerbiz.updatestock(productcode,price,amount,membernum);
 					
 		}
 		
 		 return "sellerordertable :: changetable";
 		
+	}
+	
+	@PostMapping("/informorder")
+	public ResponseEntity<List<OrderBoardDto>> informorder(@RequestBody int info) {
+		int ordernum = info;
+		List<OrderBoardDto> res = orderboardbiz.vieworderboard(ordernum);
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+res);
+		return ResponseEntity.ok(res);
 	}
 
 //	@PostMapping("/signUp")
