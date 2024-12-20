@@ -5,8 +5,142 @@
         </div>
         <div class="search">
         <div class =" datesearch">
-            <button class="searchbutton" onclick=Search()>제품등록하기</button> <!-- 버튼검색 영역 -->
+            <button id="openModalBtn" class="btn">제품 등록하기</button>
         </div>
+        <!-- 모달 -->
+	    <div id="modal" class="modal">
+	        <div class="modal-content">
+	            <div class="modal-header">수량 및 가격 수정</div>
+	            <div class="modal-body">
+	                <table class="modal_table">
+	                    <tr>
+	                        <!--db에서 가져와 select 생성할 예정-->
+	                        <th>카테고리</th>
+	                        <td>
+	                            <select onchange="modelChange(this)"  name="category" id="category" size="1" required autofocus>
+	                                <option value="none">선택</option>
+	                                <option value="cpu">CPU</option>
+	                                <option value="ram">RAM</option>
+	                                <option value="mainboard">메인보드</option>
+	                                <option value="case">케이스</option>
+	                                <option value="gpu">GPU</option>
+	                                <option value="power">파워</option>
+	                                <option value="ssd">SSD</option>
+	                                <option value="hdd">HDD</option>
+	                                <option value="cooler">쿨러</option>
+	
+	                            </select>
+	                        </td>
+	                    </tr>
+	                    <!--db에서 가져와 select 생성할 예정-->
+	                    <tr>
+	                        <th>모델명</th>
+	                        <td>
+	                            <select name="model-name" id="model-name" aria-readonly="true">
+	                                <option>카테고리를 선택해주세요.</option>
+	                            </select>
+	                            
+	                        </td>
+	                        
+	                    </tr>
+	                    <!--db에서 가져와 정보 표시 예정-->
+	                    <tr>
+	                        <th>제품 설명</th>
+	                        <td>
+	                            <div class="detail">
+	                                제품에 대한 설명입니다.
+	                            </div>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        
+	                        <th>입고 수량</th>
+	                        <td>
+	                            <h5>입고 하실 수량을 입력해주세요.</h5>
+	                            <h5 class="text-quantity"><input class="modal_input" type="number" id="quantity" name="quantity" min="1" required>  개</h5>
+	                        </td>
+	                        
+	                    </tr>
+	                    <tr>
+	                        <th>판매 가격</th>
+	                        <td>
+	                            <h5>판매하실 가격을 입력해주세요.</h5>
+	                            <h5 class="text-price"><input class="modal_input" type="number"  id="price" name="price" min="1" required>  원</h5>
+	                        </td>
+	                    </tr>
+	                    
+	                </table>
+	            </div>
+	            <div class="modal-footer">
+	                <button id="registerModalBtn" class="btn btn-register">등록</button>
+	                <button id="closeModalBtn" class="btn btn-close">닫기</button>
+	            </div>
+	        </div>
+    	</div>
+        <script>
+		     // 모달 제어 스크립트
+		   	 const modal = document.getElementById('modal');
+		   	 const openModalBtn = document.getElementById('openModalBtn');
+		   	 const closeModalBtn = document.getElementById('closeModalBtn');
+		   	 
+		   	 openModalBtn.addEventListener('click', () => {
+		   	     modal.style.display = 'block';
+		   	 });
+		   	 
+		   	 closeModalBtn.addEventListener('click', () => {
+		   	     modal.style.display = 'none';
+		   	 });
+		   	 
+		   	 // 모달 외부 클릭 시 닫기
+		   	 window.addEventListener('click', (event) => {
+		   	     if (event.target === modal) {
+		   	         modal.style.display = 'none';
+		   	     }
+		   	 });
+		   	 
+		   	 
+		   	 // 카테고리 선택 별 제품명 선택
+		   	const categorySelect = document.getElementById('category');
+		   	const modelNameSelect = document.getElementById('model-name');
+		
+		   	categorySelect.addEventListener('change', function() {
+		        if (this.value === "cpu") {
+		            fetch('/seller/cpuProducts')
+		                .then(response => response.json())
+		                .then(data => {
+	                    data.sort((a, b) => a.product_name.localeCompare(b.product_name));  // 이름 기준으로 정렬
+	                    updateModelNames(data);
+	                })
+		                .catch(error => console.error('Error fetching CPU products:', error));
+		        }
+		    });
+
+		   	function updateModelNames(products) {
+		        modelNameSelect.innerHTML = '';  // 초기화
+		        if (products.length === 0) {
+		            modelNameSelect.appendChild(new Option("해당 카테고리의 제품이 없습니다.", ""));
+		        } else {
+		            products.forEach(product => {
+		                const option = new Option(product.product_name, product.product_code);
+		                option.dataset.etc = product.etc;  // ETC 데이터를 option의 data attribute에 저장
+		                modelNameSelect.appendChild(option);
+		            });
+		        }
+		    }
+		    
+		    //제품 모델명 선택시 설명 노출
+    		const detailDiv = document.querySelector('.detail');// 상세 정보를 표시할 div
+    		
+    		modelNameSelect.addEventListener('change', function() {
+    	        const selectedOption = modelNameSelect.options[modelNameSelect.selectedIndex];
+    	        if (selectedOption.dataset.etc) {
+    	            detailDiv.innerHTML = `<p>${selectedOption.dataset.etc}</p>`;  // ETC 정보 표시
+    	        } else {
+    	            detailDiv.innerHTML = `<p>상세 정보가 없습니다.</p>`;  // ETC 정보가 없는 경우
+    	        }
+    	    });
+    		
+        </script>
         <div class="searchbox">
             <input type="text" placeholder="검색할 제품 입력" id="keyword">
             <button class="searchbutton" onclick=Search()>검색</button>

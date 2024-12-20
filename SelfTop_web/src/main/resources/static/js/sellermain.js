@@ -71,10 +71,10 @@ document.addEventListener('click', function (event) {
 	    const info = event.target.getAttribute('data-info');
 	    CustomerPopup(info);
 	  }
-	});
+});
 
 
-	function CustomerPopup(info) {
-	  alert("구매자 정보: " + info);
-	}
+function CustomerPopup(info) {
+	alert("구매자 정보: " + info);
+}
 
