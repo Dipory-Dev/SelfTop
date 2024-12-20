@@ -82,5 +82,10 @@ public class SellerBizImpl implements SellerBiz {
 		
 		return mapper.updatestock(productcode, price,amount);
 	}
+	
+	@Override
+	public int changeaccount(String phone, String address) {
+		return mapper.changeaccount(phone, address);
+	}
 
 }

@@ -63,5 +63,8 @@ public interface SellerBoardMapper {
             "JOIN CUSTOMER c ON s.MEMBER_NO = c.MEMBER_NO " +
             "WHERE s.MEMBER_NO = #{member_no}")
     SellerDto getSellerInfoByMemberNo(@Param("member_no") int member_no);
+	
+	@Select("SELECT * FROM customer where phone = #{phone} and address = #{address}")
+	int changeaccount(@Param("phone") String phone, @Param("address") String address);
 
 }

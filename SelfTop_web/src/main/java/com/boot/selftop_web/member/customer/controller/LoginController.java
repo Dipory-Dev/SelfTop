@@ -67,10 +67,16 @@ public class LoginController {
 	    return memberNo != null ? memberNo.toString() : ""; // 회원 번호 반환, 없으면 빈 문자열
 	}
 	
-	@GetMapping("/verifyPW") //기존 비밀번호 확인
-	@ResponseBody
-	public boolean verfiyPW(@RequestParam("pw") String pw) {
-		return customerBiz.verifyPW(pw); // boolean 값을 직접 반환
+	@PostMapping("/changepw")
+	public String changepw(@RequestParam("pw") String pw) {
+		System.out.println(pw);
+		int res = customerBiz.changepw(pw);
+		if (res > 0) {
+			return "/loginform";
+		}
+		else {
+			return "redirect:/intropage.html";
+		}
 	}
 
 	@PostMapping("/delUser")

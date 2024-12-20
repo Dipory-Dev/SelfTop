@@ -121,9 +121,30 @@ public class SellerController {
 	}
 
 	@GetMapping("/infoChange")
-	public String showInfoChangeForm() {
+	public String showInfoChangeForm(HttpSession session,Model model) {
+		if(session.getAttribute("member_no") == null) {
+			return "redirect:/loginform";
+		}
+
+		Integer member_no = (Integer) session.getAttribute("member_no");
+
+		SellerDto sellerInfo = sellerBiz.getSellerInfoByMemberNo(member_no);
+	    model.addAttribute("sellerInfo", sellerInfo);
 
 		return "sellerInfoChange";
+	}
+	
+	@PostMapping("/changeaccount")
+	public String changeaccount(@RequestParam("phone") String phone, @RequestParam("address") String address) {
+		System.out.println(phone);
+		System.out.println(address);
+		int res = sellerBiz.changeaccount(phone, address);
+		if (res > 0) {
+			return "/loginform";
+		}
+		else {
+			return "redirect:/intropage.html";
+		}
 	}
 
 //	@PostMapping("/signUp")
