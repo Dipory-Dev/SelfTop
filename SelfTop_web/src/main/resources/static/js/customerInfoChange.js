@@ -206,7 +206,7 @@ document.querySelector('.btn-delete').addEventListener('click', function(event) 
         //   }).catch(error => {
         //       console.error('Error:', error);
         //   });
-		location.href = '/intropage.html';
+		location.href = '/';
     } else {
         // 사용자가 '취소'를 클릭한 경우
         alert('회원 탈퇴가 취소되었습니다.');

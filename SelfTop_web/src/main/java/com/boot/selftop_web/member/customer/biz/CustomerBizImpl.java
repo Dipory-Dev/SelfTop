@@ -19,8 +19,8 @@ public class CustomerBizImpl implements CustomerBiz {
 	}
 
 	@Override
-	public int delUser(String email, String pw) {
-		return mapper.delUser(email, pw);
+	public int delUser(String id, String email, String pw) {
+		return mapper.delUser(id, email, pw);
 	}
 
 	@Override

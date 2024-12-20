@@ -8,18 +8,22 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="/js/sellerInfoChange.js"></script>
 	<script type="text/javascript">
-		function delchk() {
+		function delchk(event) {
+			event.preventDefault(); // 기본 동작 방지
 			const chk = confirm("정말 탈퇴하시겠습니까?");
-			console.log(chk);
-			if(chk === true) {
-				alert(chk);
-				location.href='/delUser'
-			} else {
-				location.href='infoChange'
+			if (chk) {
+				document.querySelector("form[action='/delUser']").submit(); // 폼 강제 제출
 			}
-			return false;
 		}
+		document.addEventListener("DOMContentLoaded", function () {
+			const message = "[[${message}]]"; // Thymeleaf에서 Flash Attribute를 읽음
+			console.log(message);
+			if (message && message.trim().length > 0) {
+				alert(message);
+			}
+		});
 	</script>
+
 </head>
 <body>
     <header>
@@ -102,6 +106,10 @@
 			</form>
 			<form action="/delUser" method="post">
 				<h2>회원탈퇴</h2>
+				<input type="hidden" name="id" th:value="${sellerInfo.id}" readonly="readonly">
+				<input type="hidden" name="emailOrigin" th:value="${sellerInfo.email}">
+				<input type="hidden" name="pwOrigin" th:value="${sellerInfo.pw}">
+				<input type="hidden" name="role" th:value="${sellerInfo.role}">
 				<div class="form-group">
 					<label>이메일<span>*</span></label>
 					<div class="email-container">
@@ -116,7 +124,7 @@
 					<span id="pw-error" class="error-message"></span>
 				</div>
 				<div class="form-group">
-					<button onclick="delchk()" class="btn-delete">탈퇴하기</button>
+					<button type="button" onclick="delchk(event)" class="btn-delete">탈퇴하기</button>
 				</div>
 			</form>
         </div>

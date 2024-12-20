@@ -14,6 +14,9 @@ import com.boot.selftop_web.member.customer.biz.CustomerBiz;
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/")
@@ -24,13 +27,13 @@ public class LoginController {
 	@GetMapping("/loginform")
     public String LoginSection(HttpSession session) {
 		if(session.getAttribute("memberno") != null) {
-			return "redirect:/intropage.html";		
+			return "redirect:/";
 		}
         return "loginform";
     }
 
 	@PostMapping("/loginchk")
-	public String loginChk(@RequestParam String id, @RequestParam String pw, HttpSession session, Model model) {
+	public String loginChk(@RequestParam String id, @RequestParam String pw, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
 		CustomerDto member = customerBiz.memberlogin(id, pw);
 		
 		if((member !=null) && member.getRole() == 'S' ) {
@@ -38,15 +41,14 @@ public class LoginController {
 			 session.setAttribute("memberno", member.getMember_no());
 			 session.setAttribute("member_no", member.getMember_no());
 			 session.setAttribute("name",member.getName());
-			return "redirect:/intropage.html";
+			return "redirect:/";
 		}else if((member !=null) && member.getRole() == 'C') {
 			session.setAttribute("member_no", member.getMember_no());
 			System.out.println("Customer");
 			return "redirect:/seller/main";
 		}else if((member !=null) && member.getRole() == 'D') {
-			session.setAttribute("member_no", member.getMember_no());
-			System.out.println("Customer");
-			return "redirect:/seller/main";
+			redirectAttributes.addFlashAttribute("message", "탈퇴된 계정입니다.");
+			return "redirect:/loginform";
 		}else {
             return "loginform";
         }
@@ -57,7 +59,7 @@ public class LoginController {
 	@GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/intropage.html";
+        return "redirect:/";
     }
 	
 	@GetMapping("/memberno")
@@ -74,15 +76,24 @@ public class LoginController {
 	}
 
 	@PostMapping("/delUser")
-	public String delUser(@RequestParam("email") String email, @RequestParam("pw") String pw) {
-		System.out.println(email);
-		System.out.println(pw);
-		int res = customerBiz.delUser(email, pw);
-		if (res > 0) {
-			return "/loginform";
-		}
-		else {
-			return "redirect:/intropage.html";
+	public String delUser(HttpSession session, @RequestParam("role") String role, @RequestParam("pwOrigin") String pwOrigin, @RequestParam("emailOrigin") String emailOrigin, @RequestParam("id") String id, @RequestParam("email") String email, @RequestParam("pw") String pw, RedirectAttributes redirectAttributes) {
+		if (pw.equals(pwOrigin) && email.equals(emailOrigin)) {
+			int res = customerBiz.delUser(id, email, pw);
+			if (res > 0) {
+				redirectAttributes.addAttribute("message", "탈퇴되었습니다.");
+				session.invalidate();
+				return "redirect:/";
+			} else {
+				redirectAttributes.addFlashAttribute("message", "오류가 발생하였습니다.");
+				return "redirect:/loginform";
+			}
+		}else {
+			redirectAttributes.addFlashAttribute("message", "암호 또는 이메일이 일치하지 않습니다.");
+			if (role.equals("S")) {
+				return "redirect:/seller/infoChange";
+			} else {
+				return "redirect:/myPage";
+			}
 		}
 	}
 

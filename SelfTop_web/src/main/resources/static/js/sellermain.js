@@ -112,7 +112,7 @@ function logout() {
 }
 
 function movemain(){
-	location.href='/intropage.html'
+	location.href='/'
 	
 }
 function stockinsertpopup(){
