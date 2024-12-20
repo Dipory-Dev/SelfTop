@@ -82,10 +82,16 @@ public class SellerBizImpl implements SellerBiz {
 		
 		return mapper.updatestock(productcode, price,amount);
 	}
-	
+
 	@Override
-	public int changeaccount(String phone, String address) {
-		return mapper.changeaccount(phone, address);
+	public int updatephone(SellerDto dto, String phone) {
+		return sellerMapper.updatePhone(dto, phone);
+	}
+
+	@Override
+	public int updateaddr(SellerDto dto, String address) {
+		// TODO Auto-generated method stub
+		return sellerMapper.updateAddress(dto, address);
 	}
 
 }

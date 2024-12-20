@@ -24,7 +24,6 @@ public interface SellerBiz {
 	public int insertSeller(CustomerDto customerDto, SellerDto dto);
 	public SellerDto getSellerInfoByMemberNo(int member_no);
 	
-	// 판매자 계정 정보 변경
-	public int changeaccount(String phone, String address);
-
+	public int updatephone(SellerDto dto, String phone);
+	public int updateaddr(SellerDto dto, String address);
 }

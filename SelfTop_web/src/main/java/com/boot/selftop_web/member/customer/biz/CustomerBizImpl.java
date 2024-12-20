@@ -19,8 +19,13 @@ public class CustomerBizImpl implements CustomerBiz {
 	}
 	
 	@Override
-	public int changepw(String pw) {
-		return mapper.changepw(pw);
+	public String checkpw(CustomerDto dto) {
+		return mapper.checkpw(dto);
+	}
+	
+	@Override
+	public int changepw(CustomerDto dto, String pw) {
+		return mapper.changepw(dto, pw);
 	}
 
 	@Override

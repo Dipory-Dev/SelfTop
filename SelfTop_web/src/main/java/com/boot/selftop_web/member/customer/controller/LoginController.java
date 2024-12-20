@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.boot.selftop_web.member.customer.biz.CustomerBiz;
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
@@ -68,14 +69,32 @@ public class LoginController {
 	}
 	
 	@PostMapping("/changepw")
-	public String changepw(@RequestParam("pw") String pw) {
-		System.out.println(pw);
-		int res = customerBiz.changepw(pw);
-		if (res > 0) {
-			return "/loginform";
+	public String changepw(@RequestParam("cur_pw") String cur_pw,
+            			   @RequestParam("new_pw") String new_pw,
+            			   HttpSession session,
+            			   Model model,
+            			   RedirectAttributes redirectAttributes) {
+		
+		// 세션에서 로그인한 사용자 정보 가져오기
+	    Integer member_no = (Integer) session.getAttribute("member_no");
+	    
+		// 비밀번호 변경 처리
+	    CustomerDto customerDto = new CustomerDto();
+	    customerDto.setMember_no(member_no);  // 세션에서 가져온 member_no 설정
+
+	    String curpw = customerBiz.checkpw(customerDto);
+	    if (!curpw.equals(cur_pw)) {
+	        model.addAttribute("errorMessage", "기존 비밀번호가 일치하지 않습니다."); // 에러 메시지 전달
+	        return "redirect:infoChange"; // 비밀번호 변경 페이지로 돌아가면서 에러 메시지를 표시
+	    }
+		int resnewpw = customerBiz.changepw(customerDto, new_pw);
+		if (resnewpw > 0) {
+			redirectAttributes.addAttribute("message", "비밀번호가 변경되었습니다. 다시 로그인 해주세요.");
+			session.invalidate();
+			return "redirect:/";
 		}
 		else {
-			return "redirect:/intropage.html";
+			return "redirect:infoChange";
 		}
 	}
 

@@ -26,7 +26,7 @@
         <div class="header-content">
             <img src="/img/logo.png">
            	<p>
-           		<span>이창진님</span>&nbsp|
+           		<span th:text="${sellerInfo.name}+님"></span>&nbsp|
            		<a href="myPage">
            			<img src="/img/human-icon.png" class="human-icon">
            		</a>
@@ -39,7 +39,7 @@
 	<main>
 		<div id="title"><h3>마이 페이지</h3></div>
     	<div id="infochange-form">
-        	<form action="/changeaccount" method="post">
+        	<form action="/seller/changeaccount" method="post">
         		<h2>계정 정보 변경</h2>
         		<div class="form-group">
         			<label>대표자명</label>
@@ -62,12 +62,12 @@
 	            <div class="form-group">
 	        		<label>주소<span>*</span></label>
 	        		<div class="input-group">
-	        			<input type="text" class="form-control" id="zipNo" name="zipNo" placeholder="우편번호">
+	        			<input type="text" class="form-control" id="zipNo" name="zipNo" placeholder="우편번호" readonly>
 	       				<button type="button" class="btn-find-address" onClick="goPopup()"><i class="fa fa-search"></i>주소 검색</button>
 	       			</div>
 	       			<br>
 		            <div class="input-group">
-		            	<input type="text" class="form-control" id="address1" name="address1" placeholder="도로명주소"/>&nbsp;
+		            	<input type="text" class="form-control" id="address1" name="address1" placeholder="도로명주소" readonly/>&nbsp;
 		            	<input type="text" class="form-control" id="address2" name="address2" placeholder="상세주소"/>
 		            </div>
 	            </div>
@@ -80,9 +80,9 @@
 	            <div class="form-group">
 	    			<label>기존 비밀번호<span>*</span></label>
 	    			<div class="input-container">
-	        			<input type="password" id="pw_a" name="pw_a" oninput="checkCurrentPassword()">
+	        			<input type="password" id="cur_pw" name="cur_pw" oninput="checkCurrentPassword()">
 	    			</div>
-	    			<span id="pw_a-error" class="error-message"></span>
+	    			<span id="cur_pw-error" class="error-message"></span>
 				</div>
 				<div class="form-group">
 	    			<label>새 비밀번호<span>*</span></label>
