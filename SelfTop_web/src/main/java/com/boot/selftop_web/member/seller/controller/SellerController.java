@@ -3,12 +3,14 @@ package com.boot.selftop_web.member.seller.controller;
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
 import com.boot.selftop_web.member.seller.biz.SellerBiz;
 import com.boot.selftop_web.member.seller.biz.SellerBizImpl;
+import com.boot.selftop_web.member.seller.biz.mapper.ProductStatusMapper;
+import com.boot.selftop_web.member.seller.model.dto.ProductStatusDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
 import com.boot.selftop_web.product.biz.mapper.ProductMapper;
 import com.boot.selftop_web.product.model.dto.CPUDto;
-import com.boot.selftop_web.product.model.dto.ProductDto;
+import com.boot.selftop_web.product.model.dto.RAMDto;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -21,9 +23,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 
 @Controller
@@ -121,7 +125,15 @@ public class SellerController {
 	}
 
 	@GetMapping("/infoChange")
-	public String showInfoChangeForm() {
+	public String showInfoChangeForm(HttpSession session,Model model) {
+		if(session.getAttribute("member_no") == null) {
+			return "redirect:/loginform";
+		}
+
+		Integer member_no = (Integer) session.getAttribute("member_no");
+
+		SellerDto sellerInfo = sellerBiz.getSellerInfoByMemberNo(member_no);
+	    model.addAttribute("sellerInfo", sellerInfo);
 
 		return "sellerInfoChange";
 	}
@@ -213,6 +225,38 @@ public class SellerController {
 
 	}
 	
+	//판매자가 제품을 등록(수량, 가격, 날짜)
+	@Autowired
+	private ProductStatusMapper productStatusMapper;
+	
+	@PostMapping("/registerProductStatus")
+	@ResponseBody
+	public ResponseEntity<?> registerProductStatus(@RequestBody ProductStatusDto productStatus, HttpSession session) {
+	    try {
+	        Integer sellerNo = (Integer) session.getAttribute("member_no");
+	        if (sellerNo == null) {
+	            return ResponseEntity.badRequest().body(Map.of("message", "판매자 번호가 세션에 존재하지 않습니다."));
+	        }
+	        productStatus.setSeller_no(sellerNo);
+	        productStatus.setReg_date(new Date());
+
+	        boolean isValidProductCode = productMapper.isValidProductCode(productStatus.getProduct_code());
+	        if (!isValidProductCode) {
+	            return ResponseEntity.badRequest().body(Map.of("message", "유효하지 않은 제품 코드입니다."));
+	        }
+
+	        int result = productStatusMapper.insertProductStatus(productStatus);
+	        if (result > 0) {
+	            return ResponseEntity.ok(Map.of("message", "제품 등록이 성공적으로 완료되었습니다."));
+	        } else {
+	            return ResponseEntity.badRequest().body(Map.of("message", "제품 등록에 실패했습니다."));
+	        }
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "서버 내부 오류가 발생했습니다: " + e.getMessage()));
+	    }
+	}
+
+	
 	//제품 등록할때 CPU선택하면 모든 CPU의 코드, 이름, 설명 가져오기
 	@Autowired
     private ProductMapper productMapper;
@@ -222,6 +266,16 @@ public class SellerController {
 	    try {
 	        List<CPUDto> cpuProducts = productMapper.findAllCpuProducts();
 	        return ResponseEntity.ok(cpuProducts);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+	
+	@GetMapping("/ramProducts")
+	public ResponseEntity<List<RAMDto>> fetchRamProducts() {
+	    try {
+	        List<RAMDto> ramProducts = productMapper.findAllRamProducts();
+	        return ResponseEntity.ok(ramProducts);
 	    } catch (Exception e) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }

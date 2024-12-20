@@ -4,12 +4,14 @@ import java.util.List;
 
 
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
+import com.boot.selftop_web.member.seller.biz.mapper.ProductStatusMapper;
 import com.boot.selftop_web.member.seller.biz.mapper.SellerBoardMapper;
 import com.boot.selftop_web.member.customer.biz.mapper.CustomerMapper;
 import com.boot.selftop_web.member.seller.biz.mapper.SellerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.boot.selftop_web.member.seller.model.dto.ProductStatusDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
@@ -22,8 +24,12 @@ public class SellerBizImpl implements SellerBiz {
 
 	@Autowired
 	private SellerMapper sellerMapper;
+	
 	@Autowired
 	private CustomerMapper customerMapper;
+	
+	@Autowired
+    private ProductStatusMapper productStatusMapper;
 
 	@Override
 	public List<SellerOrderDto> selectList(int memberno) {
@@ -83,5 +89,9 @@ public class SellerBizImpl implements SellerBiz {
 		return mapper.updatestock(productcode, price,amount);
 	}
 
+	@Override
+    public int registerProductStatus(ProductStatusDto productStatus) {
+        return productStatusMapper.insertProductStatus(productStatus); // ProductStatusMapper를 사용하여 데이터베이스에 저장
+    }
 
 }
