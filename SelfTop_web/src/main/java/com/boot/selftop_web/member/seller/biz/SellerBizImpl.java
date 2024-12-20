@@ -77,5 +77,10 @@ public class SellerBizImpl implements SellerBiz {
 		return mapper.selectstocksearch(keyword, memberno);
 	}
 
+	@Override
+	public int updatestock(int productcode, int price, int amount) {
+		
+		return mapper.updatestock(productcode, price,amount);
+	}
 
 }
