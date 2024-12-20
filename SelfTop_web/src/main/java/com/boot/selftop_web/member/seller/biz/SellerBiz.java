@@ -15,7 +15,7 @@ public interface SellerBiz {
 //	재고 확인
 	public List<SellerStockDto> selectStock(int memberno);
 	public List<SellerStockDto> selectStocksearch(String keywrod,int memberno);
-	public int updatestock(int productcode,int price,int amount);
+	public int updatestock(int productcode,int price,int amount,int membernum);
 
 
 	// ID 중복체크

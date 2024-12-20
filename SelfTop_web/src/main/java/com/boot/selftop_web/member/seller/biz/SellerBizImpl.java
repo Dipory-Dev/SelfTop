@@ -4,7 +4,7 @@ import java.util.List;
 
 
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
-import com.boot.selftop_web.member.seller.biz.mapper.SellerBoardMapper;
+import com.boot.selftop_web.member.seller.biz.mapper.SellerProductMapper;
 import com.boot.selftop_web.member.customer.biz.mapper.CustomerMapper;
 import com.boot.selftop_web.member.seller.biz.mapper.SellerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
 public class SellerBizImpl implements SellerBiz {
 	
 	@Autowired
-	private SellerBoardMapper mapper;
+	private SellerProductMapper mapper;
 
 	@Autowired
 	private SellerMapper sellerMapper;
@@ -78,9 +78,9 @@ public class SellerBizImpl implements SellerBiz {
 	}
 
 	@Override
-	public int updatestock(int productcode, int price, int amount) {
+	public int updatestock(int productcode, int price, int amount,int membernum) {
 		
-		return mapper.updatestock(productcode, price,amount);
+		return mapper.updatestock(productcode, price,amount,membernum);
 	}
 
 

@@ -32,6 +32,8 @@ function movestock(){
 	        type: "GET",
 	        success: function(response) {
 	            $("#tablesection").html(response);
+				document.getElementsByClassName("menuselect")[0].style.fontWeight = "normal";
+				document.getElementById("stockmenu").style.fontWeight = "bold";
 	        },
 	        error: function(xhr, status, error) {
 
@@ -75,7 +77,6 @@ function stockselect() {
 
 
 function updatestock(data){
-	console.log(data);
 	fetch("/seller/updatestock",{
 		method:"POST",
 		headers:{
@@ -125,12 +126,65 @@ function stockinsertpopup(){
 document.addEventListener('click', function (event) {
 	  if (event.target.classList.contains('info-button')) {
 	    const info = event.target.getAttribute('data-info');
-	    CustomerPopup(info);
+		// 모달 제어 스크립트
+	    const modal = document.getElementById('modal');
+		
+		fetch("/seller/informorder",{
+				method:"POST",
+				headers:{
+					"Content-Type":"application/json"
+				},
+				body:JSON.stringify(info)
+			})
+			.then(response => {
+				if (response.ok) {
+					return response.json();
+					
+				} else {
+					alert("에러가 발생하였습니다.")
+				}
+			})
+			.then(data => {
+				
+				console.log();
+				console.log(document.getElementById('ordernum'));
+				console.log(document.querySelector('#ordernum'));
+				document.getElementById('ordernum').textContent = data[0].order_no;
+				document.getElementById('name').textContent = data[0].name;
+				document.getElementById('address').textContent = data[0].address;
+			    document.getElementById('phone').textContent = data[0].phone;
+			    document.getElementById('request').textContent = data[0].request;
+				document.getElementById('reason').textContent = data[0].reason;
+				modal.style.display = 'block';
+			})
+			.catch(error => {
+				console.error("Error:", error);
+				alert("오류가 발생했습니다.");
+				});
+		
+		
+	 /*  closeModalBtn.addEventListener('click', () => {
+				console.log("닫기버튼");
+		   	     modal.style.display = 'none';
+		   	 });*/
 	  }
 });
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('modal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
 
+    // 닫기 버튼 클릭 이벤트
+    closeModalBtn.addEventListener('click', () => {
+        console.log("닫기 버튼 클릭");
+        modal.style.display = 'none';
+    });
 
-function CustomerPopup(info) {
-	alert("구매자 정보: " + info);
-}
+    // 모달 외부 클릭 이벤트
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+});
+
 
