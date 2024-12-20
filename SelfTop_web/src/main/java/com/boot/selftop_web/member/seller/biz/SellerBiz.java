@@ -3,6 +3,7 @@ package com.boot.selftop_web.member.seller.biz;
 import java.util.List;
 
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
+import com.boot.selftop_web.member.seller.model.dto.ProductStatusDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
@@ -24,5 +25,6 @@ public interface SellerBiz {
 	public int insertSeller(CustomerDto customerDto, SellerDto dto);
 	public SellerDto getSellerInfoByMemberNo(int member_no);
 	
-
+	// 판매자 제품 등록
+    int registerProductStatus(ProductStatusDto productStatus);
 }
