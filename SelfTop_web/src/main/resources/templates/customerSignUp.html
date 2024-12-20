@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seller_SignUp</title>
-    <link rel="stylesheet" href="/css/sellerSignUp.css">
+    <title>Customer_SignUp</title>
+    <link rel="stylesheet" href="/css/customerSignUp.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+    <script type="text/javascript" src="/js/customerSignUp.js"></script>
 </head>
 <body>
     <header>
@@ -17,8 +17,14 @@
     </header>
 
     <main id="signup-form">
-        <h2>판매자 회원가입</h2>
-        <form action="regist" method="post">
+        <h2>회원가입</h2>
+        <form action="/signup" method="post">
+        	<div class="form-group">
+                <label>이름</label>
+                <div class="input-group">
+                	<input type="text" id="company_name" name="company_name" required>
+                </div>
+            </div>
         	<div class="form-group">
         		<label>ID입력</label>
                 <div class="input-group">
@@ -41,58 +47,18 @@
                 </div>
                 <span id="confirm-error" class="error-message"></span>
             </div>
-			<div class="form-group">
-				<label>회원명</label>
-				<div class="input-group">
-					<input type="text" id="name" name="name" required>
-				</div>
-			</div>
-			<div class="form-group">
-				<label>전화번호</label>
-				<div class="input-group">
-					<input placeholder="-없이 입력" type="text" id="phone" name="phone" required>
-				</div>
-			</div>
             <div class="form-group">
-                <label>회사명</label>
+                <label>전화번호</label>
                 <div class="input-group">
-                	<input type="text" id="company_name" name="company_name" required>
+                	<input type="text" id="phone" name="phone" required>
                 </div>
-            </div>
-            <div class="form-group">
-                <label>사업자대표명</label>
-                <div class="input-group">
-                	<input type="text" id="ceo_name" name="ceo_name" required>
-                </div>
-            </div>
-            <div class="form-group">
-        		<label>사업자등록번호 조회</label>
-                <div class="input-group">
-       				<input type="text" id="business_license" name="business_license" placeholder="-없이 10글자 입력" required>
-                	<button type="button" id="checkBusinessInfo" class="btn-business-info" onclick="corp_chk();">조회하기</button>
-    			</div>
-    			<span id="business-error" class="error-message"></span>
-            </div>
-            <div class="form-group">
-        		<label>물건배송주소</label>
-        		<div class="input-group">
-        			<input readonly="readonly" type="text" class="form-control" id="zipNo" name="zipNo" placeholder="우편번호" required>
-       				<button type="button" class="btn-find-address" onClick="goPopup()"><i class="fa fa-search"></i>주소검색</button>
-       			</div>
-       			<br>
-	            <div class="input-group">
-	            	<input type="text" readonly="readonly" class="form-control" id="address1" name="address1" placeholder="도로명주소" required/>&nbsp;
-	            	<input type="text" class="form-control" id="address2" name="address2" placeholder="상세주소" required/>
-	            </div>
-	            	
-            </div>
-            
+            </div>     
             <div class="form-group">
    				<label>이메일 주소</label>
     			<div class="email-container">
         			<input type="text" id="email-id" name="email-id" placeholder="이메일 아이디" required>
         			<span>@</span>
-        			<input type="text" id="email-domain" name="email-domain" placeholder="도메인" required disabled readonly>
+        			<input type="text" id="email-domain" name="email-domain" placeholder="도메인" required disabled>
         			<select id="email-domain-select" name="email-domain-select" onchange="updateEmailDomain()">
             			<option value="">선택</option>
             			<option value="gmail.com">gmail.com</option>
@@ -123,7 +89,7 @@
     			<span class="terms-message">* 약관에 동의하셔야 회원가입이 가능합니다.</span>
 			</div>
 			<div class="form-group">
-    			<button type="submit" class="btn-signup" id="btn-signup">회원가입</button>
+    			<button type="submit" class="btn-signup">회원가입</button>
     			<button type="button" class="btn-back" onclick="window.history.back()">돌아가기</button>
 			</div>
         </form>
@@ -140,7 +106,5 @@
        	 	</div>
    		</div>
 	</footer>
-	
-	<script type="text/javascript" src="/js/sellerSignUp.js"></script>
 </body>
 </html>

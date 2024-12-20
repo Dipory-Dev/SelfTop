@@ -3,6 +3,12 @@ package com.boot.selftop_web.member.customer.biz.mapper;
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerDto;
 import org.apache.ibatis.annotations.*;
+import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
+
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface CustomerMapper {
@@ -17,4 +23,7 @@ public interface CustomerMapper {
 
     @Update("update customer set role = 'D' where email = #{email} and pw = #{pw}")
     int delUser(@Param("email") String eamil, @Param("pw") String pw);
+    
+    @Select("SELECT * FROM customer where pw = #{pw}")
+	CustomerDto verifyPW(@Param("pw") String pw);
 }

@@ -1,29 +1,52 @@
+// 이메일 도메인 선택 시 자동으로 입력되도록 하는 함수
+function updateEmailDomain() {
+    var domainSelect = document.getElementById('email-domain-select');
+    var domainInput = document.getElementById('email-domain');
+    
+    // 선택한 도메인이 '직접 입력'일 경우
+    if (domainSelect.value === 'direct') {
+        domainInput.disabled = false;
+        domainInput.value = '';
+    } else {
+        domainInput.disabled = true;
+        domainInput.value = domainSelect.value;
+    }
+}
+
+// 페이지 로드 시, 기본적으로 이메일 도메인 입력란을 비활성화 상태로 설정
+window.onload = function() {
+    document.getElementById('email-domain').disabled = true;
+};
+
 function checkCurrentPassword() {
-    const currentPassword = document.querySelector('#pw').value; // 사용자가 입력한 비밀번호
-	
-    // 비밀번호가 비어있는 경우
+    const currentPassword = document.querySelector('#pw').value;
+
+    // 비밀번호가 비어있는 경우, 오류 메시지를 지운다
     if (!currentPassword) {
-        document.querySelector('#pw-error').textContent = '비밀번호를 입력해주세요.';
+        document.querySelector('#pw-error').textContent = '';
         return;
     }
 
-    // 비밀번호 검증 요청
-	fetch(`idchk?id=${id}`)
-			.then(response => response.json())
-			.then(data => {
-				if (data === true) {
-					idError.textContent = "사용 가능한 ID입니다.";
-					idError.style.color = "green";
-				} else {
-					idError.textContent = "이미 사용 중인 ID입니다.";
-					idError.style.color = "red";
-				}
-			})
-			.catch(error => {
-				idError.textContent = "중복 확인 중 문제가 발생했습니다.";
-				idError.style.color = "red";
-				console.error(error);
-			});
+    // 서버로 기존 비밀번호 검증 요청
+    $.ajax({
+        url: '/verifyPassword',  // 서버에 비밀번호 검증을 위한 엔드포인트
+        method: 'POST',
+        data: {
+            currentPassword: currentPassword
+        },
+        success: function(response) {
+            if (response.isValid) {
+                // 비밀번호가 일치하면 오류 메시지 제거
+                document.querySelector('#pw-error').textContent = '';
+            } else {
+                // 비밀번호가 일치하지 않으면 오류 메시지 표시
+                document.querySelector('#pw-error').textContent = '기존 비밀번호가 일치하지 않습니다.';
+            }
+        },
+        error: function() {
+            document.querySelector('#pw-error').textContent = '서버 오류가 발생했습니다. 다시 시도해주세요.';
+        }
+    });
 }
 
 // 변경할 비밀번호 조건 검사
@@ -57,41 +80,23 @@ function validateConfirmPassword() {
 	}
 }
 
-// 주소검색 팝업창 
-function goPopup() {
-	const popupUrl = '/seller/addressPopup';
-
-	window.open(popupUrl, 'pop', "width=570,height=420, scrollbars=yes, resizable=yes");
-}
-
-
-function jusoCallBack(zipNo, roadAddrPart1, addrDetail) {
-	document.getElementById("zipNo").value = zipNo;
-	document.getElementById("address1").value = roadAddrPart1;
-	document.getElementById("address2").value = addrDetail;
-}
-
 // 계정 정보 변경 함수
 document.querySelector('.btn-change-account').addEventListener('click', function(event) {
     // 폼 제출을 막고
     event.preventDefault();
 
     // 계정 정보 변경 데이터를 준비
-    const ceoName = document.getElementById('ceo_name').textContent;
-    const companyName = document.getElementById('company_name').textContent;
+    const name = document.getElementById('name').textContent;
+	const emailId = document.getElementById('email-id').textContent;
+    const emailDomain = document.getElementById('email-domain').textContent;
     const phone = document.getElementById('phone').value;
-    const zipNo = document.getElementById('zipNo').value;
-    const address1 = document.getElementById('address1').value;
-    const address2 = document.getElementById('address2').value;
 
     // 계정 정보 데이터
     const accountData = {
-        ceoName,
-        companyName,
-        phone,
-        zipNo,
-        address1,
-        address2
+        name,
+		emailId,
+		emailDomain,
+		phone
     };
 
     // 서버로 데이터 전송 (AJAX 또는 fetch 사용)
@@ -114,7 +119,7 @@ document.querySelector('.btn-change-account').addEventListener('click', function
     //   }).catch(error => {
     //       console.error('Error:', error);
     //   });
-	window.location.href = 'seller/sellerSignUp.html';
+	location.href = '/mypage';
 });
 
 // 비밀번호 변경 함수
@@ -159,7 +164,7 @@ document.querySelector('.btn-change-pw').addEventListener('click', function(even
     //   }).catch(error => {
     //       console.error('Error:', error);
     //   });
-	window.location.href = 'seller/sellerSignUp.html';
+	location.href = '/login/loginform';
 });
 
 // 탈퇴하기 버튼 클릭 시 확인 창 띄우기
@@ -201,7 +206,7 @@ document.querySelector('.btn-delete').addEventListener('click', function(event) 
         //   }).catch(error => {
         //       console.error('Error:', error);
         //   });
-		window.location.href = 'seller/sellerSignUp.html';
+		location.href = '/intropage.html';
     } else {
         // 사용자가 '취소'를 클릭한 경우
         alert('회원 탈퇴가 취소되었습니다.');

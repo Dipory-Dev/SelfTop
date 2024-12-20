@@ -6,11 +6,16 @@ import com.boot.selftop_web.member.seller.biz.SellerBizImpl;
 import com.boot.selftop_web.member.seller.model.dto.SellerDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
+import com.boot.selftop_web.product.biz.mapper.ProductMapper;
+import com.boot.selftop_web.product.model.dto.CPUDto;
+import com.boot.selftop_web.product.model.dto.ProductDto;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +39,20 @@ public class SellerController {
 	@GetMapping("/signUp")
 	public String showSignUpForm() {
 		return "sellerSignUp";
+	}
+
+	@GetMapping("/myPage")
+	public String showSellerMyPage(HttpSession session,Model model) {
+		if(session.getAttribute("member_no") == null) {
+			return "redirect:/loginform";
+		}
+
+		Integer member_no = (Integer) session.getAttribute("member_no");
+
+		SellerDto sellerInfo = sellerBiz.getSellerInfoByMemberNo(member_no);
+	    model.addAttribute("sellerInfo", sellerInfo);
+
+		return "sellerMyPage";
 	}
 
 	@GetMapping("/main")
@@ -102,22 +121,9 @@ public class SellerController {
 	    return "sellerordertable :: changetable"; // 주문내역 테이블 프래그먼트 반환
 	}
 
-	@GetMapping("/myPage")
-	public String showSellerMyPage(HttpSession session,Model model) {
-		if(session.getAttribute("member_no") == null) {
-			return "redirect:/loginform";
-		}
-
-		Integer member_no = (Integer) session.getAttribute("member_no");
-
-		SellerDto sellerInfo = sellerBiz.getSellerInfoByMemberNo(member_no);
-		model.addAttribute("sellerInfo", sellerInfo);
-
-		return "sellerMyPage";
-	}
-
 	@GetMapping("/infoChange")
 	public String showInfoChangeForm() {
+
 		return "sellerInfoChange";
 	}
 	
@@ -222,6 +228,20 @@ public class SellerController {
 			return "redirect:signUp";
 		}
 
+	}
+	
+	//제품 등록할때 CPU선택하면 모든 CPU의 코드, 이름, 설명 가져오기
+	@Autowired
+    private ProductMapper productMapper;
+
+	@GetMapping("/cpuProducts")
+	public ResponseEntity<List<CPUDto>> fetchCpuProducts() {
+	    try {
+	        List<CPUDto> cpuProducts = productMapper.findAllCpuProducts();
+	        return ResponseEntity.ok(cpuProducts);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
 	}
 
 }

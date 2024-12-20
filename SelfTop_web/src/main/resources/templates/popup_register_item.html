@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/css/popup_register_item.css" />
-    
+    <script src="../static/js/popup_register_item.js"></script>
     <title>팝업_제품 등록하기</title>
 </head>
 <body>
@@ -16,7 +16,7 @@
         <div class="modal-content">
             <div class="modal-header">수량 및 가격 수정</div>
             <div class="modal-body">
-                <table class="table">
+                <table class="modal_table">
                     <tr>
                         <!--db에서 가져와 select 생성할 예정-->
                         <th>카테고리</th>
@@ -62,7 +62,7 @@
                         <th>입고 수량</th>
                         <td>
                             <h5>입고 하실 수량을 입력해주세요.</h5>
-                            <h5 class="text-quantity"><input type="number" id="quantity" name="quantity" min="1" required>  개</h5>
+                            <h5 class="text-quantity"><input class="modal_input" type="number" id="quantity" name="quantity" min="1" required>  개</h5>
                         </td>
                         
                     </tr>
@@ -70,7 +70,7 @@
                         <th>판매 가격</th>
                         <td>
                             <h5>판매하실 가격을 입력해주세요.</h5>
-                            <h5 class="text-price"><input type="number"  id="price" name="price" min="1" required>  원</h5>
+                            <h5 class="text-price"><input class="modal_input" type="number"  id="price" name="price" min="1" required>  원</h5>
                         </td>
                     </tr>
                     
@@ -82,8 +82,7 @@
             </div>
         </div>
     </div>
-
-    <script src="../static/js/popup_register_item.js"></script>
     
+      
 </body>
 </html>
