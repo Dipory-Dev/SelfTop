@@ -10,4 +10,10 @@ public interface CustomerBiz {
 	
 	//기존 비밀번호 확인
 	public boolean verifyPW(String pw);
+
+	//기존 비밀번호 가져오기
+	public String checkpw(CustomerDto dto);
+
+	//비밀번호 변경
+	public int changepw(CustomerDto dto, String pw);
 }

@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
 import com.boot.selftop_web.member.seller.biz.mapper.ProductStatusMapper;
-import com.boot.selftop_web.member.seller.biz.mapper.SellerBoardMapper;
 import com.boot.selftop_web.member.customer.biz.mapper.CustomerMapper;
 import com.boot.selftop_web.member.seller.biz.mapper.SellerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +17,13 @@ import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
 
 @Service
 public class SellerBizImpl implements SellerBiz {
-	
-	@Autowired
-	private SellerBoardMapper mapper;
 
 	@Autowired
 	private SellerMapper sellerMapper;
-	
+
 	@Autowired
 	private CustomerMapper customerMapper;
-	
+
 	@Autowired
     private ProductStatusMapper productStatusMapper;
 
@@ -93,5 +89,15 @@ public class SellerBizImpl implements SellerBiz {
     public int registerProductStatus(ProductStatusDto productStatus) {
         return productStatusMapper.insertProductStatus(productStatus); // ProductStatusMapper를 사용하여 데이터베이스에 저장
     }
+	@Override
+	public int updatephone(SellerDto dto, String phone) {
+		return sellerMapper.updatePhone(dto, phone);
+	}
+
+	@Override
+	public int updateaddr(SellerDto dto, String address) {
+		// TODO Auto-generated method stub
+		return sellerMapper.updateAddress(dto, address);
+	}
 
 }

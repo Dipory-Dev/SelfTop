@@ -40,11 +40,10 @@ public class SellerController {
 
 	@Autowired
 	private OrderBoardBiz orderboardbiz;
-	
+
 	@GetMapping("/signUp")
 	public String showSignUpForm() {
 		return "sellerSignUp";
-
 	}
 
 	@GetMapping("/myPage")
@@ -57,7 +56,6 @@ public class SellerController {
 
 		SellerDto sellerInfo = sellerBiz.getSellerInfoByMemberNo(member_no);
 	    model.addAttribute("sellerInfo", sellerInfo);
-		System.out.println(sellerInfo);
 
 		return "sellerMyPage";
 	}
@@ -141,7 +139,7 @@ public class SellerController {
 
 		return "sellerInfoChange";
 	}
-	
+
 	@PostMapping("/updatestock")
 	public String updatestock(@RequestBody List<Map<String, String>> stockdata,HttpSession session) {
 		int membernum = (int) session.getAttribute("memberno");
@@ -150,19 +148,46 @@ public class SellerController {
 			int price = Integer.parseInt(data.get("price"));
 			int amount = Integer.parseInt(data.get("amount"));
 			sellerbiz.updatestock(productcode,price,amount,membernum);
-					
+
 		}
-		
+
 		 return "sellerordertable :: changetable";
-		
+
 	}
-	
+
 	@PostMapping("/informorder")
 	public ResponseEntity<List<OrderBoardDto>> informorder(@RequestBody int info) {
 		int ordernum = info;
 		List<OrderBoardDto> res = orderboardbiz.vieworderboard(ordernum);
 		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+res);
 		return ResponseEntity.ok(res);
+	}
+
+	@PostMapping("/changeaccount")
+	public String changeaccount(@RequestParam("phone") String phone,
+							    @RequestParam("address1") String address1,
+							    @RequestParam("address2") String address2,
+							    HttpSession session) {
+
+		// 세션에서 로그인한 사용자 정보 가져오기
+	    Integer member_no = (Integer) session.getAttribute("member_no");
+
+	    // 연락처, 주소 변경 처리
+	    SellerDto dto = new SellerDto();
+	    dto.setMember_no(member_no);  // 세션에서 가져온 member_no 설정
+
+	    String address = address1 + " " + address2;
+	    System.out.println(phone);
+		System.out.println(address);
+
+	    int resphone = sellerBiz.updatephone(dto, phone);
+	    int resaddr = sellerBiz.updateaddr(dto, address);
+
+	    if (resphone > 0 && resaddr > 0) {
+	        return "redirect:myPage";
+	    } else {
+	        return "redirect:infoChange";
+	    }
 	}
 
 //	@PostMapping("/signUp")

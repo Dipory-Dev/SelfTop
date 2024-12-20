@@ -68,11 +68,35 @@ public class LoginController {
 	    Object memberNo = session.getAttribute("memberno");
 	    return memberNo != null ? memberNo.toString() : ""; // 회원 번호 반환, 없으면 빈 문자열
 	}
+	
+	@PostMapping("/changepw")
+	public String changepw(@RequestParam("cur_pw") String cur_pw,
+            			   @RequestParam("new_pw") String new_pw,
+            			   HttpSession session,
+            			   Model model,
+            			   RedirectAttributes redirectAttributes) {
 
-	@GetMapping("/verifyPW") //기존 비밀번호 확인
-	@ResponseBody
-	public boolean verfiyPW(@RequestParam("pw") String pw) {
-		return customerBiz.verifyPW(pw); // boolean 값을 직접 반환
+		// 세션에서 로그인한 사용자 정보 가져오기
+	    Integer member_no = (Integer) session.getAttribute("member_no");
+
+		// 비밀번호 변경 처리
+	    CustomerDto customerDto = new CustomerDto();
+	    customerDto.setMember_no(member_no);  // 세션에서 가져온 member_no 설정
+
+	    String curpw = customerBiz.checkpw(customerDto);
+	    if (!curpw.equals(cur_pw)) {
+	        model.addAttribute("errorMessage", "기존 비밀번호가 일치하지 않습니다."); // 에러 메시지 전달
+	        return "redirect:infoChange"; // 비밀번호 변경 페이지로 돌아가면서 에러 메시지를 표시
+	    }
+		int resnewpw = customerBiz.changepw(customerDto, new_pw);
+		if (resnewpw > 0) {
+			redirectAttributes.addAttribute("message", "비밀번호가 변경되었습니다. 다시 로그인 해주세요.");
+			session.invalidate();
+			return "redirect:/";
+		}
+		else {
+			return "redirect:infoChange";
+		}
 	}
 
 	@PostMapping("/delUser")

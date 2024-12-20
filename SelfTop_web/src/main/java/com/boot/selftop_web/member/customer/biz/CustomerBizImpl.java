@@ -17,20 +17,20 @@ public class CustomerBizImpl implements CustomerBiz {
 		
 		return mapper.memberlogin(id, pw);
 	}
+	
+	@Override
+	public String checkpw(CustomerDto dto) {
+		return mapper.checkpw(dto);
+	}
+	
+	@Override
+	public int changepw(CustomerDto dto, String pw) {
+		return mapper.changepw(dto, pw);
+	}
 
 	@Override
 	public int delUser(String id, String email, String pw) {
 		return mapper.delUser(id, email, pw);
 	}
 
-	@Override
-	public boolean verifyPW(String pw) {
-		CustomerDto res = mapper.verifyPW(pw);
-		System.out.println("biz :" + res);
-		if (res == null){
-			return true;
-		} else {
-			return false;
-		}
-	}
 }
