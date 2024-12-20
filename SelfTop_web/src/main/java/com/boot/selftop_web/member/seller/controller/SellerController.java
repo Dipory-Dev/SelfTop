@@ -147,7 +147,7 @@ public class SellerController {
 			int productcode=Integer.parseInt(data.get("productcode"));
 			int price = Integer.parseInt(data.get("price"));
 			int amount = Integer.parseInt(data.get("amount"));
-			sellerbiz.updatestock(productcode,price,amount,membernum);
+			sellerBiz.updatestock(productcode,price,amount,membernum);
 
 		}
 
