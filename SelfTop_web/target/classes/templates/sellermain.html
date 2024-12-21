@@ -8,21 +8,26 @@
 <script type="text/javascript" src="/js/sellermain.js"></script>
 </head>
 <body>
- <header>
+    <header>
         <div class="header-content">
-            <img src="/img/logo.png" onclick="location.href='/'">
-            <div class="header-user">
-          	  <a href="myPage"><p th:text="${membername} + 님" ></p></a>
-              <p th:unless="${seller != null && seller.size() > 0}">로그인</p>
-           	  <p th:if="${seller != null && seller.size() > 0}" onclick="logout()">로그아웃</p>
-           	</div>
-           	
+            <img class="logo" src="/img/logo.png" onclick="location.href='main'">
+           	<p>
+           		<span th:text="${membername}+님"></span>&nbsp|
+           		<a href="myPage">
+           			<img src="/img/human-icon.png" class="human-icon">
+           		</a>
+           		<a href="/logout">
+           			<img src="/img/lock-icon.png" class="lock-icon">
+           		</a>
+           	</p>
         </div>
     </header>
+
+
     <main id ="tablesection" th:fragment="changetable">
         <div id="choosecontent">
-            <button class="menuselect" onclick=moveorder()>판매내역 조회</button>
-            <button id="stockmenu" onclick=movestock()>제품재고 관리</button>
+            <button class="menuselect" onclick="moveorder();">판매내역 조회</button>
+            <button id="stockmenu" onclick="movestock();">제품재고 관리</button>
         </div>
         <div class="search">
             <div class =" datesearch">
