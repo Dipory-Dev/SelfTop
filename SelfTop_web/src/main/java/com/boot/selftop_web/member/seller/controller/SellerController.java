@@ -1,5 +1,6 @@
 package com.boot.selftop_web.member.seller.controller;
 
+import com.boot.selftop_web.member.customer.biz.CustomerBiz;
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
 import com.boot.selftop_web.member.seller.biz.SellerBiz;
 import com.boot.selftop_web.member.seller.biz.SellerBizImpl;
@@ -12,7 +13,14 @@ import com.boot.selftop_web.order.biz.OrderBoardBiz;
 import com.boot.selftop_web.order.model.dto.OrderBoardDto;
 import com.boot.selftop_web.product.biz.mapper.ProductMapper;
 import com.boot.selftop_web.product.model.dto.CPUDto;
+import com.boot.selftop_web.product.model.dto.CaseDto;
+import com.boot.selftop_web.product.model.dto.CoolerDto;
+import com.boot.selftop_web.product.model.dto.GPUDto;
+import com.boot.selftop_web.product.model.dto.HDDDto;
+import com.boot.selftop_web.product.model.dto.MainBoardDto;
+import com.boot.selftop_web.product.model.dto.PowerDto;
 import com.boot.selftop_web.product.model.dto.RAMDto;
+import com.boot.selftop_web.product.model.dto.SSDDto;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -39,6 +47,9 @@ public class SellerController {
 	private SellerBiz sellerBiz;
 
 	@Autowired
+	private CustomerBiz customerBiz;
+
+	@Autowired
 	private OrderBoardBiz orderboardbiz;
 
 	@GetMapping("/signUp")
@@ -62,11 +73,11 @@ public class SellerController {
 
 	@GetMapping("/main")
 	public String sellermain(HttpSession session,Model model) {
-		if(session.getAttribute("memberno") == null) {
+		if(session.getAttribute("member_no") == null) {
 			return "redirect:/loginform";
 
 		}
-		int membernum=(int) session.getAttribute("memberno");
+		int membernum=(int) session.getAttribute("member_no");
 		List<SellerOrderDto> res = sellerBiz.selectList(membernum);
 		model.addAttribute("seller",res);
 		model.addAttribute("membername",session.getAttribute("name"));
@@ -87,7 +98,7 @@ public class SellerController {
 			keyword = null;
 		}
 
-		int membernum=(int) session.getAttribute("memberno");
+		int membernum=(int) session.getAttribute("member_no");
 
 		if((String) session.getAttribute("table") == "order") {
 			List<SellerOrderDto> res = sellerBiz.selectSearch(startdate,enddate,keyword,membernum);
@@ -102,10 +113,10 @@ public class SellerController {
 
 	@GetMapping("/stockmenu")
 	public String changesellerorderpage(HttpSession session, Model model) {
-		if(session.getAttribute("memberno") == null) {
+		if(session.getAttribute("member_no") == null) {
 			return "redirect:/loginform";
 		}
-		int membernum=(int) session.getAttribute("memberno");
+		int membernum=(int) session.getAttribute("member_no");
 		List<SellerStockDto> res = sellerBiz.selectStock(membernum);
 		model.addAttribute("stocktable",res);
 		model.addAttribute("membername",session.getAttribute("name"));
@@ -115,10 +126,10 @@ public class SellerController {
 
 	@GetMapping("/ordermenu")
 	public String loadOrder(HttpSession session, Model model) {
-	    if (session.getAttribute("memberno") == null) {
+	    if (session.getAttribute("member_no") == null) {
 	        return "redirect:/loginform";
 	    }
-	    int membernum = (int) session.getAttribute("memberno");
+	    int membernum = (int) session.getAttribute("member_no");
 	    List<SellerOrderDto> res = sellerBiz.selectList(membernum);
 	    model.addAttribute("seller", res);
 	    model.addAttribute("membername",session.getAttribute("name"));
@@ -142,7 +153,7 @@ public class SellerController {
 
 	@PostMapping("/updatestock")
 	public String updatestock(@RequestBody List<Map<String, String>> stockdata,HttpSession session) {
-		int membernum = (int) session.getAttribute("memberno");
+		int membernum = (int) session.getAttribute("member_no");
 		for(Map<String,String> data:stockdata) {
 			int productcode=Integer.parseInt(data.get("productcode"));
 			int price = Integer.parseInt(data.get("price"));
@@ -245,8 +256,7 @@ public class SellerController {
 	@ResponseBody // JSON 응답을 반환
 	@GetMapping("/idchk") //ID 중복체크
 	public boolean idchk(@RequestParam("id") String id) {
-		System.out.println("controller : " + id);
-		return sellerBiz.idchk(id); // boolean 값을 직접 반환
+		return customerBiz.idchk(id); // boolean 값을 직접 반환
 	}
 
 	@PostMapping("/regist")
@@ -329,6 +339,76 @@ public class SellerController {
 	    try {
 	        List<RAMDto> ramProducts = productMapper.findAllRamProducts();
 	        return ResponseEntity.ok(ramProducts);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+
+	@GetMapping("/mainboardProducts")
+	public ResponseEntity<List<MainBoardDto>> fetchMainBoardProducts() {
+	    try {
+	        List<MainBoardDto> mainboardProducts = productMapper.findAllMainBoardProducts();
+	        return ResponseEntity.ok(mainboardProducts);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+	
+	@GetMapping("/caseProducts")
+	public ResponseEntity<List<CaseDto>> fetchCaseProducts() {
+	    try {
+	        List<CaseDto> caseProducts = productMapper.findAllCaseProducts();
+	        return ResponseEntity.ok(caseProducts);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+	
+	@GetMapping("/gpuProducts")
+	public ResponseEntity<List<GPUDto>> fetchGpuProducts() {
+	    try {
+	        List<GPUDto> gpuProducts = productMapper.findAllGpuProducts();
+	        return ResponseEntity.ok(gpuProducts);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+	
+	@GetMapping("/powerProducts")
+	public ResponseEntity<List<PowerDto>> fetchPowerProducts() {
+	    try {
+	        List<PowerDto> powerProducts = productMapper.findAllPowerProducts();
+	        return ResponseEntity.ok(powerProducts);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+	
+	@GetMapping("/ssdProducts")
+	public ResponseEntity<List<SSDDto>> fetchSsdProducts() {
+	    try {
+	        List<SSDDto> ssdProducts = productMapper.findAllSsdProducts();
+	        return ResponseEntity.ok(ssdProducts);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+	
+	@GetMapping("/hddProducts")
+	public ResponseEntity<List<HDDDto>> fetchHddProducts() {
+	    try {
+	        List<HDDDto> hddProducts = productMapper.findAllHddProducts();
+	        return ResponseEntity.ok(hddProducts);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+	
+	@GetMapping("/coolerProducts")
+	public ResponseEntity<List<CoolerDto>> fetchCoolerProducts() {
+	    try {
+	        List<CoolerDto> coolerProducts = productMapper.findAllCoolerProducts();
+	        return ResponseEntity.ok(coolerProducts);
 	    } catch (Exception e) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }

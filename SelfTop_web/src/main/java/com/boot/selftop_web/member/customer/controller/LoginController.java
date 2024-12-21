@@ -26,7 +26,7 @@ public class LoginController {
 
 	@GetMapping("/loginform")
     public String LoginSection(HttpSession session) {
-		if(session.getAttribute("memberno") != null) {
+		if(session.getAttribute("member_no") != null) {
 			return "redirect:/";
 		}
         return "loginform";
@@ -35,26 +35,27 @@ public class LoginController {
 	@PostMapping("/loginchk")
 	public String loginChk(@RequestParam String id, @RequestParam String pw, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
 		CustomerDto member = customerBiz.memberlogin(id, pw);
-		
-		if((member !=null) && member.getRole() == 'S' ) {
-			System.out.println("This is seller!");
-			 session.setAttribute("memberno", member.getMember_no());
-			 session.setAttribute("member_no", member.getMember_no());
-			 session.setAttribute("name",member.getName());
-			return "redirect:/";
-		}else if((member !=null) && member.getRole() == 'C') {
+		if(member != null) {
+			session.setAttribute("role", member.getRole());
 			session.setAttribute("member_no", member.getMember_no());
-			System.out.println("Customer");
-			return "redirect:/seller/main";
-		}else if((member !=null) && member.getRole() == 'D') {
-			redirectAttributes.addFlashAttribute("message", "탈퇴된 계정입니다.");
+			session.setAttribute("name", member.getName());
+
+			if (member.getRole() == 'S') {
+				return "redirect:/seller/main";
+			} else if (member.getRole() == 'C') {
+				return "redirect:/";
+			} else if (member.getRole() == 'D') {
+				redirectAttributes.addFlashAttribute("message", "탈퇴된 계정입니다.");
+				return "redirect:/loginform";
+			} else {
+				redirectAttributes.addFlashAttribute("message", "계정 정보를 확인해주세요.");
+				return "redirect:/loginform";
+			}
+		} else {
+			redirectAttributes.addFlashAttribute("message", "계정 정보를 확인해주세요.");
 			return "redirect:/loginform";
-		}else {
-            return "loginform";
-        }
-			
-	
-	}
+		}
+    }
 	
 	@GetMapping("/logout")
     public String logout(HttpSession session) {
@@ -62,10 +63,10 @@ public class LoginController {
         return "redirect:/";
     }
 	
-	@GetMapping("/memberno")
+	@GetMapping("/member_no")
 	@ResponseBody
 	public String getMemberNo(HttpSession session) {
-	    Object memberNo = session.getAttribute("memberno");
+	    Object memberNo = session.getAttribute("member_no");
 	    return memberNo != null ? memberNo.toString() : ""; // 회원 번호 반환, 없으면 빈 문자열
 	}
 	
