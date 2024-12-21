@@ -326,7 +326,7 @@ public class SellerController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
 	}
-	
+
 	@GetMapping("/caseProducts")
 	public ResponseEntity<List<CaseDto>> fetchCaseProducts() {
 	    try {
@@ -336,7 +336,7 @@ public class SellerController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
 	}
-	
+
 	@GetMapping("/gpuProducts")
 	public ResponseEntity<List<GPUDto>> fetchGpuProducts() {
 	    try {
@@ -346,7 +346,7 @@ public class SellerController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
 	}
-	
+
 	@GetMapping("/powerProducts")
 	public ResponseEntity<List<PowerDto>> fetchPowerProducts() {
 	    try {
@@ -356,7 +356,7 @@ public class SellerController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
 	}
-	
+
 	@GetMapping("/ssdProducts")
 	public ResponseEntity<List<SSDDto>> fetchSsdProducts() {
 	    try {
@@ -366,7 +366,7 @@ public class SellerController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
 	}
-	
+
 	@GetMapping("/hddProducts")
 	public ResponseEntity<List<HDDDto>> fetchHddProducts() {
 	    try {
@@ -376,7 +376,7 @@ public class SellerController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
 	}
-	
+
 	@GetMapping("/coolerProducts")
 	public ResponseEntity<List<CoolerDto>> fetchCoolerProducts() {
 	    try {
@@ -386,7 +386,7 @@ public class SellerController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
 	}
-	
+
 	@PostMapping("/changeproduct")
 	public String changeproduct(@RequestParam("title") String action,
 	        					@RequestParam("price") int price,
@@ -434,5 +434,5 @@ public class SellerController {
 
 	    return ResponseEntity.badRequest().body(Map.of("message", "지원하지 않는 작업입니다."));
 	}
-	
+
 }
