@@ -10,6 +10,15 @@
     <div class="header-content">
         <img src="/img/logo.png">
     </div>
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			const message = "[[${message}]]"; // Thymeleaf에서 Flash Attribute를 읽음
+			console.log(message);
+			if (message && message.trim().length > 0) {
+				alert(message);
+			}
+		});
+	</script>
 </header>
     <main>
     <H1>로그인</H1>

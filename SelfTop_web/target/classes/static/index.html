@@ -1,12 +1,58 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>index</title>
-</head>
-<body>
-    <h1>Index</h1>
-    
-    <h1><a href="/loginform">seller page</a></h1>
-</body>
+<html>
+    <head lang="ko">
+        <link rel="stylesheet" href="/css/intropage.css">
+        <meta charset="UTF-8">
+        <script type="text/javascript" src="/js/intro.js"></script>
+        <title>main page</title>
+    </head>
+    <body>
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", function () {
+                const params = new URLSearchParams(window.location.search);
+                const message = params.get("message");
+                if (message) {
+                    alert(message);
+                }
+            });
+        </script>
+        <div class="intro">
+            <img src="/img/logo.png">
+            <h2>당신만의 컴퓨터, 여기서 시작하세요</h2>
+        </div>
+        <div class="searchsection">
+            <input type="text" placeholder="상품 검색" class="search">
+            <button type="submit" class="searchbutton" onclick="search()"><img src="img/search-icon.png" class="searchicon" ></button>
+        </div>
+
+        <div  id ="not_member">
+            <div onclick="movemain()" class="buttondiv">
+                <img src="img/monitor-icom.png"  class="buttonicon">
+                <p>모의 pc 조립</p>
+            </div>
+            <div onclick="movelogin()" class="buttondiv">
+                <img src="img/human-icon.png" class="buttonicon">
+                <p>로그인</p>
+            </div>
+        </div>
+
+        <div  id="member">
+            <div onclick="movemain()" class="buttondiv">
+                <img src="img/monitor-icom.png"  class="buttonicon">
+                <p>모의 pc 조립</p>
+            </div>
+            <div onclick="movecart()" class="buttondiv">
+                <img src="img/cart-icon.png" class="buttonicon">
+                <p>장바구니</p>
+            </div>
+            <div onclick="movemypage()" class="buttondiv">
+                <img src="img/human-icon.png" class="buttonicon">
+                <p>마이페이지</p>
+            </div>
+            <div onclick ="logout()" class="buttondiv">
+                <img src="img/lock-icon.png" class="buttonicon">
+                <p>로그아웃</p>
+            </div>
+        </div>
+    </body>
 </html>

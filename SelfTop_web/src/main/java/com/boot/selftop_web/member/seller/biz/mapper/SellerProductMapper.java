@@ -13,9 +13,9 @@ import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
 
 
 @Mapper
-public interface SellerBoardMapper {
+public interface SellerProductMapper {
 	
-	@Select("SELECT * FROM sellermain WHERE customer_no= #{memberno} ")
+	@Select("SELECT * FROM viewsellerorder WHERE seller_no= #{memberno} ")
 	List<SellerOrderDto> selectList(@Param("memberno") int memberno);
 	
 	@Select("SELECT * FROM sellerstock WHERE seller_no= #{memberno} ")
@@ -24,7 +24,7 @@ public interface SellerBoardMapper {
 	
 
 	@Select("<script>" +
-	        "SELECT * FROM sellermain " +
+	        "SELECT * FROM viewsellerorder " +
 	        "WHERE customer_no= #{memberno} " +
 	        "<if test='startdate != null and !startdate.isEmpty()'>" +
 	        "   AND order_date &gt;= #{startdate} " +
@@ -51,14 +51,14 @@ public interface SellerBoardMapper {
 	List<SellerStockDto> selectstocksearch(@Param("keyword")String keyword  ,@Param("memberno") int memberno);
 	
 //스톡업데이트
-	@Update("UPDATE product_status SET price = #{price}, stock= #{amount} WHERE product_code = #{productcode}")
-	int updatestock(@Param("productcode") int productcode, @Param("price") int price, @Param("amount") int amount);
+	@Update("UPDATE product_status SET price = #{price}, stock= #{amount} WHERE product_code = #{productcode} AND seller_no =#{memberno}")
+	int updatestock(@Param("productcode") int productcode, @Param("price") int price, @Param("amount") int amount,@Param("memberno") int memberno);
 
 
 	@Select("SELECT * from customer where id = #{id}")
 	SellerDto idchk(@Param("id") String id);
 
-	@Select("SELECT s.MEMBER_NO, c.ID, s.CEO_NAME, c.NAME, s.COMPANY_NAME, c.PHONE, s.BUSINESS_LICENSE " +
+	@Select("SELECT c.role, c.pw, c.email, s.MEMBER_NO, c.ID, s.CEO_NAME, c.NAME, s.COMPANY_NAME, c.PHONE, s.BUSINESS_LICENSE " +
             "FROM SELLER s " +
             "JOIN CUSTOMER c ON s.MEMBER_NO = c.MEMBER_NO " +
             "WHERE s.MEMBER_NO = #{member_no}")

@@ -5,9 +5,9 @@ import java.util.List;
 
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
 import com.boot.selftop_web.member.seller.biz.mapper.ProductStatusMapper;
-import com.boot.selftop_web.member.seller.biz.mapper.SellerBoardMapper;
 import com.boot.selftop_web.member.customer.biz.mapper.CustomerMapper;
 import com.boot.selftop_web.member.seller.biz.mapper.SellerMapper;
+import com.boot.selftop_web.member.seller.biz.mapper.SellerProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,18 +18,18 @@ import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
 
 @Service
 public class SellerBizImpl implements SellerBiz {
-	
-	@Autowired
-	private SellerBoardMapper mapper;
 
 	@Autowired
 	private SellerMapper sellerMapper;
-	
+
 	@Autowired
 	private CustomerMapper customerMapper;
-	
+
 	@Autowired
     private ProductStatusMapper productStatusMapper;
+
+	@Autowired
+	private SellerProductMapper mapper;
 
 	@Override
 	public List<SellerOrderDto> selectList(int memberno) {
@@ -84,14 +84,24 @@ public class SellerBizImpl implements SellerBiz {
 	}
 
 	@Override
-	public int updatestock(int productcode, int price, int amount) {
+	public int updatestock(int productcode, int price, int amount, int membernum) {
 		
-		return mapper.updatestock(productcode, price,amount);
+		return mapper.updatestock(productcode, price, amount, membernum);
 	}
 
 	@Override
     public int registerProductStatus(ProductStatusDto productStatus) {
         return productStatusMapper.insertProductStatus(productStatus); // ProductStatusMapper를 사용하여 데이터베이스에 저장
     }
+	@Override
+	public int updatephone(SellerDto dto, String phone) {
+		return sellerMapper.updatePhone(dto, phone);
+	}
+
+	@Override
+	public int updateaddr(SellerDto dto, String address) {
+		// TODO Auto-generated method stub
+		return sellerMapper.updateAddress(dto, address);
+	}
 
 }

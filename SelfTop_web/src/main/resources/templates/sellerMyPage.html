@@ -16,6 +16,15 @@
             </div>
         </div>
     </header>
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            const message = "[[${message}]]"; // Thymeleaf에서 Flash Attribute를 읽음
+            console.log(message);
+            if (message && message.trim().length > 0) {
+                alert(message);
+            }
+        });
+    </script>
     <main>
         <div class="page-info">
             <p>마이페이지</p>

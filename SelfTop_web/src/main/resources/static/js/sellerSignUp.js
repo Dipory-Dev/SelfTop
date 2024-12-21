@@ -230,7 +230,7 @@ function updateEmailDomain() {
 
 // 페이지 로드 시, 기본적으로 이메일 도메인 입력란을 비활성화 상태로 설정
 window.onload = function() {
-    document.getElementById('email-domain').disabled = true;
+    document.getElementById('email-domain').readOnly = true;
 	
 };
 
