@@ -56,6 +56,8 @@ function moveorder(){
 		        }
 		    });
 		}
+
+
 function stockselect() {
 	const selectcheckbox = document.querySelectorAll(".stockitemcheck:checked"); 
 	const stock = []; 
