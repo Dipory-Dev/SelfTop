@@ -5,17 +5,17 @@ function updateEmailDomain() {
     
     // 선택한 도메인이 '직접 입력'일 경우
     if (domainSelect.value === 'direct') {
-        domainInput.disabled = false;
+        domainInput.readOnly = false;
         domainInput.value = '';
     } else {
-        domainInput.disabled = true;
+        domainInput.readOnly = true;
         domainInput.value = domainSelect.value;
     }
 }
 
 // 페이지 로드 시, 기본적으로 이메일 도메인 입력란을 비활성화 상태로 설정
 window.onload = function() {
-    document.getElementById('email-domain').disabled = true;
+    document.getElementById('email-domain').readOnly = true;
 };
 
 function checkCurrentPassword() {

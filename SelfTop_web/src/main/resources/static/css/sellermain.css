@@ -170,6 +170,16 @@ main{
   text-align:center;
 }
 
+.stockprice,
+.stockamount {
+	text-align : right;
+}
+
+input[readonly] {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
+
 .info-button{
 	background-color:#008ADA;
 	color:#FFFFFF;
@@ -179,22 +189,26 @@ main{
 	cursor:pointer;
 }
 
- #stocksavebutton{
-        text-align: right; /* 오른쪽 정렬 */
-        width: 90%; /* 테이블과 같은 너비로 설정 */
-        margin: 0 auto; /* 가운데 정렬 */
-        margin-top: 10px; /* 테이블과 버튼 사이 간격 */
-    }
-
-.stocksave{
-	background-color:#008ADA;
-	color:#FFFFFF;
-	border-radius:3px;
-	border:none;
-	height:25px;
-	cursor:pointer;
+.btn-update,
+.btn-save,
+.btn-delete {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px; /* 아이콘 크기 */
+    color: #555; /* 기본 색상 */
+    padding: 5px;
+    transition: transform 0.2s ease, color 0.2s ease;
 }
 
+.btn-update:hover {
+    transform: scale(1.3); /* 호버 시 아이콘 크기 확장 */
+}
+
+.btn-delete:hover {
+    color: #dc3545; /* 삭제 버튼 호버 시 색상 */
+    transform: scale(1.3);
+}
 
 footer {
     background-color: #E8E8E8;
@@ -239,6 +253,7 @@ footer {
     
 }
 #openModalBtn{
+	height: 30px;
     background-color: #008ADA;
     color:#fff;
 }
@@ -337,14 +352,16 @@ select:hover{
 
 .modal_input {
     width:100px;
-
+	height: 20px;
 }
 
 .detail{
     resize:none;
-    width:360px;
-    height:100px;
+    width:420px;
+    height:150px;
     border-radius: 4px;
+    max-height: 150px;
+    overflow-y: auto;
 }
 
 .detail:hover{
@@ -366,6 +383,7 @@ select:hover{
 }
 
 .btn-register {
+	height: 30px;
     background-color: #008ADA;
     color: white;
 }
@@ -388,6 +406,7 @@ select:hover{
 }
 
 .btn-close {
+	height: 30px;
     background-color: #999;
     color: white;
 }

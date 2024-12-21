@@ -30,4 +30,7 @@ public interface CustomerMapper {
     @Update("update customer set role = 'D' where id = #{id} and email = #{email} and pw = #{pw}")
     int delUser(@Param("id") String id, @Param("email") String eamil, @Param("pw") String pw);
 
+    @Select("SELECT * from customer where id = #{id}")
+    SellerDto idchk(@org.springframework.data.repository.query.Param("id") String id);
+
 }
