@@ -35,27 +35,27 @@ public class LoginController {
 	@PostMapping("/loginchk")
 	public String loginChk(@RequestParam String id, @RequestParam String pw, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
 		CustomerDto member = customerBiz.memberlogin(id, pw);
-		
-		if((member !=null) && member.getRole() == 'S' ) {
-			System.out.println("This is seller!");
-			 // 로그인 + 회원정보 조회
-			 session.setAttribute("member_no", member.getMember_no());
-			 session.setAttribute("name",member.getName());
-			return "redirect:/";
-		}else if((member !=null) && member.getRole() == 'C') {
-			// 로그인 + 회원정보 조회
+		if(member != null) {
+			session.setAttribute("role", member.getRole());
 			session.setAttribute("member_no", member.getMember_no());
-			System.out.println(member);
-			return "redirect:/";
-		}else if((member !=null) && member.getRole() == 'D') {
-			redirectAttributes.addFlashAttribute("message", "탈퇴된 계정입니다.");
+			session.setAttribute("name", member.getName());
+
+			if (member.getRole() == 'S') {
+				return "redirect:/seller/main";
+			} else if (member.getRole() == 'C') {
+				return "redirect:/";
+			} else if (member.getRole() == 'D') {
+				redirectAttributes.addFlashAttribute("message", "탈퇴된 계정입니다.");
+				return "redirect:/loginform";
+			} else {
+				redirectAttributes.addFlashAttribute("message", "계정 정보를 확인해주세요.");
+				return "redirect:/loginform";
+			}
+		} else {
+			redirectAttributes.addFlashAttribute("message", "계정 정보를 확인해주세요.");
 			return "redirect:/loginform";
-		}else {
-            return "loginform";
-        }
-			
-	
-	}
+		}
+    }
 	
 	@GetMapping("/logout")
     public String logout(HttpSession session) {

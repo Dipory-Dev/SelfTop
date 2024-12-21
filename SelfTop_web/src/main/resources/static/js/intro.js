@@ -18,7 +18,7 @@ function movelogin(){
 }
 
 function movemypage(){
-	location.href='/seller/main'
+	location.href='/mypage'
 	
 }
 function logout() {
