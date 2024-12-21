@@ -13,4 +13,8 @@ public interface CustomerBiz {
 
 	//비밀번호 변경
 	public int changepw(CustomerDto dto, String pw);
+
+	public boolean idchk(String id);
+
+	public int insertCustomer(CustomerDto dto);
 }

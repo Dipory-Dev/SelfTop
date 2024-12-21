@@ -7,6 +7,8 @@ function checkDuplicateID() {
 	if (id === "") {
 		idError.textContent = "ID를 입력해주세요.";
 		idError.style.color = "red";
+		hasCheckedDuplicateID = false; // 중복 체크 상태 초기화
+		alert("ID를 입력해주세요."); // Alert 추가
 		return;
 	}
 
@@ -15,7 +17,13 @@ function checkDuplicateID() {
 	if (!idPattern.test(id)) {
 		idError.textContent = "영문 소문자와 숫자만 가능합니다.";
 		idError.style.color = "red";
+		isIdValid = false;
+		hasCheckedDuplicateID = false; // 중복 체크 상태 초기화
 		return;
+	}
+	else{
+		isIdValid = true;
+		hasCheckedDuplicateID = false;
 	}
 
 	// 서버에 중복 확인 요청
@@ -25,15 +33,21 @@ function checkDuplicateID() {
 			if (data === true) {
 				idError.textContent = "사용 가능한 ID입니다.";
 				idError.style.color = "green";
+				isIdValid1 = true;
+				hasCheckedDuplicateID = true;
 			} else {
 				idError.textContent = "이미 사용 중인 ID입니다.";
 				idError.style.color = "red";
+				isIdValid1=false;
+				hasCheckedDuplicateID = true;
 			}
 		})
 		.catch(error => {
 			idError.textContent = "중복 확인 중 문제가 발생했습니다.";
 			idError.style.color = "red";
 			console.error(error);
+			isIdValid1 = false;
+			hasCheckedDuplicateID = true;
 		});
 }
 
@@ -75,17 +89,17 @@ function updateEmailDomain() {
     
     // 선택한 도메인이 '직접 입력'일 경우
     if (domainSelect.value === 'direct') {
-        domainInput.disabled = false;
+        domainInput.readOnly = false;
         domainInput.value = '';
     } else {
-        domainInput.disabled = true;
+        domainInput.readOnly = true;
         domainInput.value = domainSelect.value;
     }
 }
 
 // 페이지 로드 시, 기본적으로 이메일 도메인 입력란을 비활성화 상태로 설정
 window.onload = function() {
-    document.getElementById('email-domain').disabled = true;
+    document.getElementById('email-domain').readOnly = true;
 };
 
 

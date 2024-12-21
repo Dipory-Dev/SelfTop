@@ -32,25 +32,14 @@ public class SellerBizImpl implements SellerBiz {
 	private SellerProductMapper mapper;
 
 	@Override
-	public List<SellerOrderDto> selectList(int memberno) {
-		return mapper.selectList(memberno);
+	public List<SellerOrderDto> selectList(int member_no) {
+		return mapper.selectList(member_no);
 	}
 
 	@Override
-	public List<SellerOrderDto> selectSearch(String startdate, String enddate, String keyword, int memberno) {
+	public List<SellerOrderDto> selectSearch(String startdate, String enddate, String keyword, int member_no) {
 		// TODO Auto-generated method stub
-		return mapper.selectSearch(startdate, enddate,keyword,memberno);
-	}
-
-	@Override
-	public boolean idchk(String id) {
-		SellerDto res = mapper.idchk(id);
-		System.out.println("biz : " + res);
-		if (res == null){
-			return true;
-		} else {
-			return false;
-		}
+		return mapper.selectSearch(startdate, enddate,keyword,member_no);
 	}
 	
 	@Override
@@ -73,14 +62,14 @@ public class SellerBizImpl implements SellerBiz {
 	}
 	
 	@Override
-	public List<SellerStockDto> selectStock(int memberno) {
+	public List<SellerStockDto> selectStock(int member_no) {
 
-		return mapper.selectstock(memberno);
+		return mapper.selectstock(member_no);
 	}
 
-	public List<SellerStockDto> selectStocksearch(String keyword, int memberno) {
+	public List<SellerStockDto> selectStocksearch(String keyword, int member_no) {
 		// TODO Auto-generated method stub
-		return mapper.selectstocksearch(keyword, memberno);
+		return mapper.selectstocksearch(keyword, member_no);
 	}
 
 	@Override
