@@ -17,4 +17,8 @@ public interface CustomerBiz {
 	public boolean idchk(String id);
 
 	public int insertCustomer(CustomerDto dto);
+
+	public CustomerDto selectCustomer(int member_no);
+
+	public int changeInfo(String email, String phone, int member_no);
 }

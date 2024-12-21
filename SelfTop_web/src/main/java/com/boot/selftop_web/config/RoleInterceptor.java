@@ -28,15 +28,15 @@ public class RoleInterceptor implements HandlerInterceptor {
         // 로그인 상태 처리
         char role = (char) roleObj;
 
-        // S 계정은 /seller/main으로 리다이렉트, 다른 URI 접근 차단
-        if (role == 'S' && !requestURI.startsWith("/seller")) {
-            response.sendRedirect("/seller/main");
-            return false; // 기존 요청 차단
+        // delUser와 changepw는 모두 허용, 루트 페이지로 리다이렉트
+        if (requestURI.equals("/delUser") || requestURI.equals("/changepw")) {
+            return true; // 요청 계속 진행
         }
 
-        // C 계정은 요청 계속 진행
-        if (role == 'C') {
-            return true; // 요청 계속 진행
+        // 기본적인 권한 로직만 처리
+        if (role == 'S' && !request.getRequestURI().startsWith("/seller")) {
+            response.sendRedirect("/seller/main");
+            return false;
         }
 
         // 기본적으로 모든 요청 허용
