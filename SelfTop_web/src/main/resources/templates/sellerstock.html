@@ -99,7 +99,7 @@
 		   	 // 카테고리 선택 별 제품명 선택
 		   	const categorySelect = document.getElementById('category');
 		    const modelNameInput = document.getElementById('model-name-input');
-		    
+
 		    categorySelect.addEventListener('change', function() {
 		        fetch('/seller/' + this.value + 'Products')
 		            .then(response => response.json())
@@ -109,7 +109,7 @@
 		            })
 		            .catch(error => console.error('Error fetching ' + this.value + ' products:', error));
 		    });
-		    
+
 		    function updateModelNames(products) {
 		        const modelNameDatalist = document.getElementById('model-names');
 		        modelNameDatalist.innerHTML = '';  // 초기화
@@ -132,7 +132,7 @@
 		        const etcInfo = selectedOption ? selectedOption.getAttribute('data-etc') : '상세 정보가 없습니다.';
 		        document.querySelector('.detail').innerHTML = `<p>${etcInfo}</p>`;  // ETC 정보 출력
 		    });
-		    
+
 		    //제품 모델명 선택시 설명 노출
     		document.getElementById('model-name-input').addEventListener('input', function() {
 			    const inputVal = this.value;
@@ -140,7 +140,7 @@
 			    const selectedOption = Array.from(options).find(option => option.value === inputVal);
 			    const productCode = selectedOption ? selectedOption.getAttribute('data-product-code') : null;
 			    const etcInfo = selectedOption ? selectedOption.getAttribute('data-etc') : '상세 정보가 없습니다.';
-			
+
 			    if (productCode) {
 			        document.getElementById('hidden-product-code').value = productCode;  // 제품 코드를 숨겨진 필드에 설정
 			        document.querySelector('.detail').innerHTML = `<p>${etcInfo}</p>`;  // ETC 정보 출력
@@ -151,7 +151,7 @@
     		 document.getElementById('registerModalBtn').addEventListener('click', function() {
 		        const selectedOption = Array.from(document.getElementById('model-names').options).find(option => option.value === modelNameInput.value);
 		        const productCode = selectedOption ? selectedOption.getAttribute('data-product-code') : null;
-		        
+
 		        if (!productCode) {
 		            alert('제품 모델을 선택해주세요.');
 		            return;
@@ -166,14 +166,14 @@
 		            alert('유효한 가격을 입력해주세요.');
 		            return;
 		        }
-		        
+
 		        const data = {
 		            product_code: productCode,
 		            stock: quantity,
 		            price: price,
 		            reg_date: new Date().toISOString()
 		        };
-		        
+
 		        fetch('/seller/registerProductStatus', {
 		            method: 'POST',
 		            headers: {
