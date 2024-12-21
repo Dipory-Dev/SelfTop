@@ -12,7 +12,14 @@ import com.boot.selftop_web.order.biz.OrderBoardBiz;
 import com.boot.selftop_web.order.model.dto.OrderBoardDto;
 import com.boot.selftop_web.product.biz.mapper.ProductMapper;
 import com.boot.selftop_web.product.model.dto.CPUDto;
+import com.boot.selftop_web.product.model.dto.CaseDto;
+import com.boot.selftop_web.product.model.dto.CoolerDto;
+import com.boot.selftop_web.product.model.dto.GPUDto;
+import com.boot.selftop_web.product.model.dto.HDDDto;
+import com.boot.selftop_web.product.model.dto.MainBoardDto;
+import com.boot.selftop_web.product.model.dto.PowerDto;
 import com.boot.selftop_web.product.model.dto.RAMDto;
+import com.boot.selftop_web.product.model.dto.SSDDto;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -329,6 +336,76 @@ public class SellerController {
 	    try {
 	        List<RAMDto> ramProducts = productMapper.findAllRamProducts();
 	        return ResponseEntity.ok(ramProducts);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+
+	@GetMapping("/mainboardProducts")
+	public ResponseEntity<List<MainBoardDto>> fetchMainBoardProducts() {
+	    try {
+	        List<MainBoardDto> mainboardProducts = productMapper.findAllMainBoardProducts();
+	        return ResponseEntity.ok(mainboardProducts);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+	
+	@GetMapping("/caseProducts")
+	public ResponseEntity<List<CaseDto>> fetchCaseProducts() {
+	    try {
+	        List<CaseDto> caseProducts = productMapper.findAllCaseProducts();
+	        return ResponseEntity.ok(caseProducts);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+	
+	@GetMapping("/gpuProducts")
+	public ResponseEntity<List<GPUDto>> fetchGpuProducts() {
+	    try {
+	        List<GPUDto> gpuProducts = productMapper.findAllGpuProducts();
+	        return ResponseEntity.ok(gpuProducts);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+	
+	@GetMapping("/powerProducts")
+	public ResponseEntity<List<PowerDto>> fetchPowerProducts() {
+	    try {
+	        List<PowerDto> powerProducts = productMapper.findAllPowerProducts();
+	        return ResponseEntity.ok(powerProducts);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+	
+	@GetMapping("/ssdProducts")
+	public ResponseEntity<List<SSDDto>> fetchSsdProducts() {
+	    try {
+	        List<SSDDto> ssdProducts = productMapper.findAllSsdProducts();
+	        return ResponseEntity.ok(ssdProducts);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+	
+	@GetMapping("/hddProducts")
+	public ResponseEntity<List<HDDDto>> fetchHddProducts() {
+	    try {
+	        List<HDDDto> hddProducts = productMapper.findAllHddProducts();
+	        return ResponseEntity.ok(hddProducts);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+	
+	@GetMapping("/coolerProducts")
+	public ResponseEntity<List<CoolerDto>> fetchCoolerProducts() {
+	    try {
+	        List<CoolerDto> coolerProducts = productMapper.findAllCoolerProducts();
+	        return ResponseEntity.ok(coolerProducts);
 	    } catch (Exception e) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
