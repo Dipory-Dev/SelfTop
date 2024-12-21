@@ -26,7 +26,7 @@ public class LoginController {
 
 	@GetMapping("/loginform")
     public String LoginSection(HttpSession session) {
-		if(session.getAttribute("memberno") != null) {
+		if(session.getAttribute("member_no") != null) {
 			return "redirect:/";
 		}
         return "loginform";
@@ -38,14 +38,15 @@ public class LoginController {
 		
 		if((member !=null) && member.getRole() == 'S' ) {
 			System.out.println("This is seller!");
-			 session.setAttribute("memberno", member.getMember_no());
+			 // 로그인 + 회원정보 조회
 			 session.setAttribute("member_no", member.getMember_no());
 			 session.setAttribute("name",member.getName());
 			return "redirect:/";
 		}else if((member !=null) && member.getRole() == 'C') {
+			// 로그인 + 회원정보 조회
 			session.setAttribute("member_no", member.getMember_no());
-			System.out.println("Customer");
-			return "redirect:/seller/main";
+			System.out.println(member);
+			return "redirect:/";
 		}else if((member !=null) && member.getRole() == 'D') {
 			redirectAttributes.addFlashAttribute("message", "탈퇴된 계정입니다.");
 			return "redirect:/loginform";
@@ -62,10 +63,10 @@ public class LoginController {
         return "redirect:/";
     }
 	
-	@GetMapping("/memberno")
+	@GetMapping("/member_no")
 	@ResponseBody
 	public String getMemberNo(HttpSession session) {
-	    Object memberNo = session.getAttribute("memberno");
+	    Object memberNo = session.getAttribute("member_no");
 	    return memberNo != null ? memberNo.toString() : ""; // 회원 번호 반환, 없으면 빈 문자열
 	}
 	

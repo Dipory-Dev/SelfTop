@@ -1,5 +1,6 @@
 package com.boot.selftop_web.member.seller.controller;
 
+import com.boot.selftop_web.member.customer.biz.CustomerBiz;
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
 import com.boot.selftop_web.member.seller.biz.SellerBiz;
 import com.boot.selftop_web.member.seller.biz.SellerBizImpl;
@@ -39,6 +40,9 @@ public class SellerController {
 	private SellerBiz sellerBiz;
 
 	@Autowired
+	private CustomerBiz customerBiz;
+
+	@Autowired
 	private OrderBoardBiz orderboardbiz;
 
 	@GetMapping("/signUp")
@@ -62,11 +66,11 @@ public class SellerController {
 
 	@GetMapping("/main")
 	public String sellermain(HttpSession session,Model model) {
-		if(session.getAttribute("memberno") == null) {
+		if(session.getAttribute("member_no") == null) {
 			return "redirect:/loginform";
 
 		}
-		int membernum=(int) session.getAttribute("memberno");
+		int membernum=(int) session.getAttribute("member_no");
 		List<SellerOrderDto> res = sellerBiz.selectList(membernum);
 		model.addAttribute("seller",res);
 		model.addAttribute("membername",session.getAttribute("name"));
@@ -87,7 +91,7 @@ public class SellerController {
 			keyword = null;
 		}
 
-		int membernum=(int) session.getAttribute("memberno");
+		int membernum=(int) session.getAttribute("member_no");
 
 		if((String) session.getAttribute("table") == "order") {
 			List<SellerOrderDto> res = sellerBiz.selectSearch(startdate,enddate,keyword,membernum);
@@ -102,10 +106,10 @@ public class SellerController {
 
 	@GetMapping("/stockmenu")
 	public String changesellerorderpage(HttpSession session, Model model) {
-		if(session.getAttribute("memberno") == null) {
+		if(session.getAttribute("member_no") == null) {
 			return "redirect:/loginform";
 		}
-		int membernum=(int) session.getAttribute("memberno");
+		int membernum=(int) session.getAttribute("member_no");
 		List<SellerStockDto> res = sellerBiz.selectStock(membernum);
 		model.addAttribute("stocktable",res);
 		model.addAttribute("membername",session.getAttribute("name"));
@@ -115,10 +119,10 @@ public class SellerController {
 
 	@GetMapping("/ordermenu")
 	public String loadOrder(HttpSession session, Model model) {
-	    if (session.getAttribute("memberno") == null) {
+	    if (session.getAttribute("member_no") == null) {
 	        return "redirect:/loginform";
 	    }
-	    int membernum = (int) session.getAttribute("memberno");
+	    int membernum = (int) session.getAttribute("member_no");
 	    List<SellerOrderDto> res = sellerBiz.selectList(membernum);
 	    model.addAttribute("seller", res);
 	    model.addAttribute("membername",session.getAttribute("name"));
@@ -142,7 +146,7 @@ public class SellerController {
 
 	@PostMapping("/updatestock")
 	public String updatestock(@RequestBody List<Map<String, String>> stockdata,HttpSession session) {
-		int membernum = (int) session.getAttribute("memberno");
+		int membernum = (int) session.getAttribute("member_no");
 		for(Map<String,String> data:stockdata) {
 			int productcode=Integer.parseInt(data.get("productcode"));
 			int price = Integer.parseInt(data.get("price"));
@@ -245,8 +249,7 @@ public class SellerController {
 	@ResponseBody // JSON 응답을 반환
 	@GetMapping("/idchk") //ID 중복체크
 	public boolean idchk(@RequestParam("id") String id) {
-		System.out.println("controller : " + id);
-		return sellerBiz.idchk(id); // boolean 값을 직접 반환
+		return customerBiz.idchk(id); // boolean 값을 직접 반환
 	}
 
 	@PostMapping("/regist")

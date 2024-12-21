@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-	fetch('/memberno') // 서버에서 세션 값 체크
+	fetch('/member_no') // 서버에서 세션 값 체크
 	       .then(response => response.text())
 	       .then(memberNo => {
 	           if (memberNo) {
