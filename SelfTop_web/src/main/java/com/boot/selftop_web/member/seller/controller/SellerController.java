@@ -413,5 +413,29 @@ public class SellerController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
 	}
+	
+	@PostMapping("/changeproduct")
+	public String changeproduct(@RequestParam("title") String action,
+	        					@RequestParam("price") int price,
+	        					@RequestParam("stock") int stock,
+							    HttpSession session) {
+
+		// 세션에서 로그인한 사용자 정보 가져오기
+	    Integer product_code = (Integer) session.getAttribute("product_code");
+
+	    // 가격, 재고 변경 처리
+	    ProductStatusDto dto = new ProductStatusDto();
+	    dto.setProduct_code(product_code);  // 세션에서 가져온 product_code 설정
+
+	    System.out.println(price);
+		System.out.println(stock);
+
+	    if (price > 0 && stock > 0) {
+	        return "redirect:myPage";
+	    } else {
+	        return "redirect:/logout";
+	    }
+	}
+
 
 }
