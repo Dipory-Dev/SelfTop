@@ -52,6 +52,20 @@ public class SellerController {
 	@Autowired
 	private OrderBoardBiz orderboardbiz;
 
+	@GetMapping("/main")
+	public String sellermain(HttpSession session,Model model) {
+		if(session.getAttribute("member_no") == null) {
+			return "redirect:/loginform";
+
+		}
+		int membernum=(int) session.getAttribute("member_no");
+		List<SellerOrderDto> res = sellerBiz.selectList(membernum);
+		model.addAttribute("seller",res);
+		model.addAttribute("membername",session.getAttribute("name"));
+		session.setAttribute("table", "order");
+		return "sellermain";
+	}
+
 	@GetMapping("/signUp")
 	public String showSignUpForm() {
 		return "sellerSignUp";
@@ -69,20 +83,6 @@ public class SellerController {
 	    model.addAttribute("sellerInfo", sellerInfo);
 
 		return "sellerMyPage";
-	}
-
-	@GetMapping("/main")
-	public String sellermain(HttpSession session,Model model) {
-		if(session.getAttribute("member_no") == null) {
-			return "redirect:/loginform";
-
-		}
-		int membernum=(int) session.getAttribute("member_no");
-		List<SellerOrderDto> res = sellerBiz.selectList(membernum);
-		model.addAttribute("seller",res);
-		model.addAttribute("membername",session.getAttribute("name"));
-		session.setAttribute("table", "order");
-		return "sellermain";
 	}
 
 	@GetMapping("/datesearch")
