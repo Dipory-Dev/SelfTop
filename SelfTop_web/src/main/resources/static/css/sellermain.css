@@ -253,6 +253,7 @@ footer {
     
 }
 #openModalBtn{
+	height: 30px;
     background-color: #008ADA;
     color:#fff;
 }
@@ -351,14 +352,16 @@ select:hover{
 
 .modal_input {
     width:100px;
-
+	height: 20px;
 }
 
 .detail{
     resize:none;
-    width:360px;
-    height:100px;
+    width:420px;
+    height:150px;
     border-radius: 4px;
+    max-height: 150px;
+    overflow-y: auto;
 }
 
 .detail:hover{
@@ -380,6 +383,7 @@ select:hover{
 }
 
 .btn-register {
+	height: 30px;
     background-color: #008ADA;
     color: white;
 }
@@ -402,6 +406,7 @@ select:hover{
 }
 
 .btn-close {
+	height: 30px;
     background-color: #999;
     color: white;
 }

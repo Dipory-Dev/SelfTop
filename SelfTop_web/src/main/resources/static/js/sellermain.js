@@ -377,3 +377,5 @@ document.querySelectorAll('.btn-save').forEach(button => {
         updateButton.style.display = 'inline-block';  // 수정 버튼 표시
     });
 });
+
+
