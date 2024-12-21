@@ -28,7 +28,6 @@
 	                                <option value="ssd">SSD</option>
 	                                <option value="hdd">HDD</option>
 	                                <option value="cooler">쿨러</option>
-	
 	                            </select>
 	                        </td>
 	                    </tr>
@@ -36,7 +35,7 @@
 	                    <tr>
 	                        <th>모델명</th>
 	                        <td>
-		                        <input list="model-names" name="model-name" id="model-name-input" placeholder="모델을 선택하거나 검색하세요" autocomplete="off" class="modal_input">
+		                        <input style="width: 90%;" list="model-names" name="model-name" id="model-name-input" placeholder="모델을 선택하거나 검색하세요" autocomplete="off" class="modal_input">
 		                        <datalist id="model-names"></datalist>
 		                    </td>
 	                    </tr>
@@ -53,16 +52,16 @@
 	                        
 	                        <th>입고 수량</th>
 	                        <td>
-	                            <h5>입고 하실 수량을 입력해주세요.</h5>
-	                            <h5 class="text-quantity"><input class="modal_input" type="number" id="quantity" name="quantity" min="1" required>  개</h5>
+	                            <h4>입고 하실 수량을 입력해주세요.</h4>
+	                            <h4 class="text-quantity"><input class="modal_input" type="number" id="quantity" name="quantity" min="1" required>  개</h4>
 	                        </td>
 	                        
 	                    </tr>
 	                    <tr>
 	                        <th>판매 가격</th>
 	                        <td>
-	                            <h5>판매하실 가격을 입력해주세요.</h5>
-	                            <h5 class="text-price"><input class="modal_input" type="number"  id="price" name="price" min="1" required>  원</h5>
+	                            <h4>판매하실 가격을 입력해주세요.</h4>
+	                            <h4 class="text-price"><input class="modal_input" type="number"  id="price" name="price" min="1" required>  원</h4>
 	                        </td>
 	                    </tr>
 	                    
@@ -207,32 +206,60 @@
 
         </div>
         <div>
-<form id="stockupdate" th:action="@{/stockupdate}" th:method="post">        
-        <table class ="product_table" >	
-        <tr>
-            <th>분류</th>
-            <th>상품이미지</th>
-            <th>제품명</th>
-            <th>변경 후 가격</th>
-            <th>재고 수량</th>
-            <th>수정</th>
-            <th>삭제</th>
-        </tr>
-        <tbody id="product_view">
-            <tr th:each="dto : ${stocktable}" th:value=${dto.product_code}>
-                <td th:text="${dto.category}"></td>
-                <td><img th:src="${dto.thumbnail}" width="50" height="50" /></td>
-                <td th:text="${dto.product_name}"></td>
-				<td><input type="text" class="stockprice" th:value=${dto.price}  th:attr="data-id=${dto.product_code}" readonly>원</td>
-				<td><input type="text" class="stockamount" th:value=${dto.stock} th:attr="data-id=${dto.product_code}" readonly>개</td>
-            	<td>
-            		<button class="btn-update" th:attr="data-id=${dto.product_code}" title="수정">✏️</button>
-            		<button class="btn-save" th:attr="data-id=${dto.product_code}" title="저장" style="display: none;">💾</button>
-            	</td>
-    			<td><button class="btn-delete" th:attr="data-id=${dto.product_code}" title="삭제">🗑️</button></td>
-            </tr>
-        </tbody>
-    </table>
+	<form action="/seller/changeproduct" method="post">        
+	        <table class ="product_table" >	
+	        <tr>
+	            <th>분류</th>
+	            <th>상품이미지</th>
+	            <th>제품명</th>
+	            <th>변경 후 가격</th>
+	            <th>재고 수량</th>
+	            <th>수정</th>
+	            <th>삭제</th>
+	        </tr>
+	        <tbody id="product_view">
+		        <tr th:each="dto : ${stocktable}" th:value=${dto.product_code}>
+		        	<td th:text="${dto.category}"></td>
+		            <td><img th:src="${dto.thumbnail}" width="50" height="50" /></td>
+		            <td th:text="${dto.product_name}"></td>
+					<td><input type="text" class="stockprice" th:value=${dto.price}  th:attr="data-id=${dto.product_code}" readonly>원</td>
+					<td><input type="text" class="stockamount" th:value=${dto.stock} th:attr="data-id=${dto.product_code}" readonly>개</td>
+		        	<td>
+		            	<button type="submit" class="btn-update" th:attr="data-id=${dto.product_code}" title="update">✏️</button>
+		            	<button type="submit" class="btn-save" th:attr="data-id=${dto.product_code}" title="save" style="display: none;">💾</button>
+		            </td>
+	    			<td>
+				        <button type="button" class="btn-delete" th:data-product-code="${dto.product_code}" title="삭제">🗑️</button>
+				    </td>
+	            </tr>
+	        </tbody>
+    	</table>
     </form>
+    <script>
+  		//판매자가 아이템을 삭제 했을때 동작하는 스크립트
+	    document.querySelectorAll('.btn-delete').forEach(button => {
+		    button.addEventListener('click', function(event) {
+		        event.preventDefault(); // 기본 이벤트 방지
+		        const productCode = this.getAttribute('data-product-code'); // 버튼의 데이터 속성에서 productCode 가져오기
+		
+		        if (confirm('정말 삭제하시겠습니까?')) {
+		            fetch(`/seller/changeproduct?productCode=${productCode}&action=delete`, {
+		                method: 'POST'
+		            }).then(response => {
+		                if (response.ok) {
+		                    return response.json();
+		                } else {
+		                    return response.text().then(text => { throw new Error(text || 'Failed to delete product'); });
+		                }
+		            }).then(result => {
+		                alert(result.message); // 서버에서 반환된 메시지를 표시
+		                location.reload(); // 페이지 새로고침
+		            }).catch(error => {
+		                alert(error.message);
+		            });
+		        }
+		    });
+		});
+    </script>
     </div>
 </th:block>
