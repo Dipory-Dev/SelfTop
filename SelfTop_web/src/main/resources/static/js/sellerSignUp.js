@@ -1,5 +1,5 @@
 const signupButton = document.getElementById('btn-signup');
-signupButton.disabled = true;
+const form = document.getElementById('post-form');
 
 let isIdValid = false;
 let isIdValid1 = false;
@@ -8,16 +8,32 @@ let isPwValid1 =false;
 let isCrpValid = false;
 
 let hasCheckedDuplicateID = false; // ID 중복 확인 버튼 클릭 여부
+let hasCrpValidChk = false; //사업자등록번호 확인 버튼 클릭 여부
 
 function updateSignupButtonState(){
-	if(isIdValid && isIdValid1 && isPwValid && isPwValid1 && isCrpValid){
-		signupButton.disabled = false;
-	}
-	else{
-		signupButton.disabled = true;
-	}
-	  
 
+	validatePassword();
+	validateConfirmPassword();
+	updateEmailDomain();
+
+
+	// ID 중복 확인 여부 확인
+	if (!hasCheckedDuplicateID) {
+		alert("중복확인하세요.");
+		return false; // 중복 확인하지 않았으면 진행 중단
+	}
+	// 사업자등록번호 확인 여부 확인 (필요 시 추가)
+	else if (!hasCrpValidChk) {
+		alert("사업자등록번호를 확인하세요.");
+		return false; // 확인하지 않았으면 진행 중단
+	}
+	else {
+		// 모든 조건 충족 시 회원가입 진행
+		alert("회원가입이 완료되었습니다.");
+		return true;
+	}
+
+	return false;
 }
 
 // ID 중복 확인 (버튼 클릭 시만 유효성 검사)
@@ -25,13 +41,13 @@ function checkDuplicateID() {
 	const id = document.getElementById("id").value;
 	const idError = document.getElementById("id-error");
 
-	
+
 	// 빈 입력 처리
 	if (id === "") {
 		idError.textContent = "ID를 입력해주세요.";
 		idError.style.color = "red";
 		hasCheckedDuplicateID = false; // 중복 체크 상태 초기화
-		
+		alert("ID를 입력해주세요."); // Alert 추가
 		return;
 	}
 
@@ -42,16 +58,12 @@ function checkDuplicateID() {
 		idError.style.color = "red";
 		isIdValid = false;
 		hasCheckedDuplicateID = false; // 중복 체크 상태 초기화
-		updateSignupButtonState();
 		return;
 	}
 	else{
 		isIdValid = true;
-		updateSignupButtonState();
-		
+		hasCheckedDuplicateID = false; 
 	}
-
-	
 
 	// 서버에 중복 확인 요청
 	fetch(`idchk?id=${id}`)
@@ -61,22 +73,20 @@ function checkDuplicateID() {
 				idError.textContent = "사용 가능한 ID입니다.";
 				idError.style.color = "green";
 				isIdValid1 = true;
+				hasCheckedDuplicateID = true;
 			} else {
 				idError.textContent = "이미 사용 중인 ID입니다.";
 				idError.style.color = "red";
 				isIdValid1=false;
+				hasCheckedDuplicateID = true;
 			}
-			hasCheckedDuplicateID = true; // 중복 확인 버튼을 눌렀음을 표시
-			updateSignupButtonState();
-
 		})
 		.catch(error => {
 			idError.textContent = "중복 확인 중 문제가 발생했습니다.";
 			idError.style.color = "red";
 			console.error(error);
 			isIdValid1 = false;
-			hasCheckedDuplicateID = true; // 버튼은 눌렸음
-            updateSignupButtonState();
+			hasCheckedDuplicateID = true; 
 		});
 
 		
@@ -87,8 +97,6 @@ document.getElementById("id").addEventListener("input", function () {
     isIdValid = false; // ID 형식이 바뀌었으므로 유효성 초기화
     isIdValid1 = false; // 중복 확인 상태 초기화
     hasCheckedDuplicateID = false; // 중복 확인 버튼 상태 초기화
-    updateSignupButtonState();
-	
 });
 
 // 비밀번호 조건 검사
@@ -106,10 +114,8 @@ function validatePassword() {
 		passwordError.style.color = "green";
 		isPwValid=true;
 	}
-
 	
 	validateConfirmPassword();
-	updateSignupButtonState();
 }
 
 // 비밀번호 확인 검증
@@ -128,11 +134,7 @@ function validateConfirmPassword() {
 		confirmError.style.color = "green";
 		isPwValid1 =true;
 	}
-	
-	updateSignupButtonState();
 }
-
-
 
 // 사업자등록번호 정보 조회 함수
 function corp_chk() {
@@ -143,8 +145,6 @@ function corp_chk() {
 		alert("사업자등록번호를 입력해주세요.");
 		return false;
 	}
-
-	
 
 	var data = { "b_no": [reg_num] };
 
@@ -162,23 +162,21 @@ function corp_chk() {
 			if (result.match_cnt == "1") {
 				confirmError.textContent = "사업자등록번호가 유효합니다.";
 				confirmError.style.color = "green";
+				hasCrpValidChk = true;
 				isCrpValid =true;
 			} else {
 				confirmError.textContent = "유효하지 않은 사업자등록번호입니다";
 				confirmError.style.color = "red";
+				hasCrpValidChk= true;
 				isCrpValid = false;
 			}
-			updateSignupButtonState();
 		},
 		error: function(result) {
 			console.log("error");
 			console.log(result.responseText); //responseText의 에러메세지 확인
 			isCrpValid = false;
-			updateSignupButtonState();
 		}
 	});
-
-
 
 }
 
@@ -192,9 +190,8 @@ document.getElementById("business_license").addEventListener("input", function (
     isCrpValid = false; // 유효성 초기화
     const confirmError = document.getElementById("business-error");
     confirmError.textContent = ""; // 오류 메시지 초기화
-    updateSignupButtonState(); // 상태 갱신
+	hasCrpValidChk = false;
 });
-
 
 // 주소검색 팝업창 
 function goPopup() {
@@ -202,7 +199,6 @@ function goPopup() {
 
 	window.open(popupUrl, 'pop', "width=570,height=420, scrollbars=yes, resizable=yes");
 }
-
 
 function jusoCallBack(zipNo, roadAddrPart1, addrDetail) {
 
@@ -226,14 +222,11 @@ function updateEmailDomain() {
     }
 }
 
-
-
 // 페이지 로드 시, 기본적으로 이메일 도메인 입력란을 비활성화 상태로 설정
 window.onload = function() {
-    document.getElementById('email-domain').disabled = true;
+    document.getElementById('email-domain').readOnly = true;
 	
 };
-
 
 // 이벤트 리스너 추가
 document.getElementById("checkDuplicate").addEventListener("click", checkDuplicateID);
@@ -245,3 +238,10 @@ document.getElementById("business_license").addEventListener("input", function(e
 	// 숫자 이외의 문자 제거
 	e.target.value = value.replace(/[^0-9]/g, "");
 });
+
+form.addEventListener("submit", (event) => {
+	// 동작(이벤트)을 실행하지 못하게 막는 메서드입니다.
+	if(false == updateSignupButtonState()) {
+		event.preventDefault();
+	}
+  });

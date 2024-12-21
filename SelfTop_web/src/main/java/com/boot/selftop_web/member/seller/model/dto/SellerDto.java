@@ -117,4 +117,21 @@ public class SellerDto {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    @Override
+    public String toString() {
+        return "SellerDto{" +
+                "member_no=" + member_no +
+                ", id='" + id + '\'' +
+                ", pw='" + pw + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", role='" + role + '\'' +
+                ", company_name='" + company_name + '\'' +
+                ", ceo_name='" + ceo_name + '\'' +
+                ", business_license='" + business_license + '\'' +
+                ", address='" + address + '\'' +
+                '}';
+    }
 }

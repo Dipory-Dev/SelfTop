@@ -8,14 +8,37 @@
 <body>
     <header>
         <div class="header-content">
-            <img class="logo" src="/img/logo.png">
-           	<p id="userName" th:text="${sellerInfo.name}"></p> 
+            <img class="logo" src="/img/logo.png" onclick="location.href='main'">
+           	<p id="userName" th:text="${sellerInfo.name}"></p>
             <div class="icon-section">
                 <a href="/seller/myPage" target="_self" ><img class="mypage-icon" src="/img/human-icon.png"></a>
                 <a href="/logout"><img class="login-icon" src="/img/lock-icon.png"></a>
             </div>
         </div>
     </header>
+<!--    <header>-->
+<!--        <div class="header-content">-->
+<!--            <img class="logo" src="/img/logo.png" onclick="location.href='main'">-->
+<!--            <p>-->
+<!--                <span th:text="${sellerInfo.name}+님"></span>&nbsp|-->
+<!--                <a href="myPage">-->
+<!--                    <img src="/img/human-icon.png" class="human-icon">-->
+<!--                </a>-->
+<!--                <a href="/logout">-->
+<!--                    <img src="/img/lock-icon.png" class="lock-icon">-->
+<!--                </a>-->
+<!--            </p>-->
+<!--        </div>-->
+<!--    </header>-->
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            const message = "[[${message}]]"; // Thymeleaf에서 Flash Attribute를 읽음
+            console.log(message);
+            if (message && message.trim().length > 0) {
+                alert(message);
+            }
+        });
+    </script>
     <main>
         <div class="page-info">
             <p>마이페이지</p>

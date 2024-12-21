@@ -113,7 +113,13 @@ function logout() {
 }
 
 function movemain(){
-	location.href='/intropage.html'
+	location.href='/'
+	
+}
+function stockinsertpopup(){
+
+	window.open="/seller/stockPopup";
+	
 	
 }
 function stockinsertpopup(){
@@ -162,29 +168,17 @@ document.addEventListener('click', function (event) {
 				alert("오류가 발생했습니다.");
 				});
 		
-		
-	 /*  closeModalBtn.addEventListener('click', () => {
+		closeModalBtn.addEventListener('click', () => {
 				console.log("닫기버튼");
 		   	     modal.style.display = 'none';
-		   	 });*/
+		   	 });
 	  }
 });
-document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('modal');
-    const closeModalBtn = document.getElementById('closeModalBtn');
 
-    // 닫기 버튼 클릭 이벤트
-    closeModalBtn.addEventListener('click', () => {
-        console.log("닫기 버튼 클릭");
-        modal.style.display = 'none';
-    });
 
-    // 모달 외부 클릭 이벤트
-    window.addEventListener('click', (event) => {
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
+// 모달 외부 클릭 이벤트
+window.addEventListener('click', (event) => {
+	if (event.target === modal) {
+		modal.style.display = 'none';
+	}
 });
-
-

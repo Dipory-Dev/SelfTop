@@ -21,9 +21,13 @@ public interface CustomerMapper {
     @Select("<script>" + "SELECT * FROM customer " + "WHERE ID = #{id} " + "AND PW = #{pw}" + "</script>")
     CustomerDto memberlogin(@Param("id") String id, @Param("pw") String pw);
 
-    @Update("update customer set role = 'D' where email = #{email} and pw = #{pw}")
-    int delUser(@Param("email") String eamil, @Param("pw") String pw);
-    
-    @Select("SELECT * FROM customer where pw = #{pw}")
-	CustomerDto verifyPW(@Param("pw") String pw);
+    @Select("SELECT pw FROM customer WHERE member_no = #{dto.member_no}")
+    String checkpw(@Param("dto") CustomerDto dto);
+
+    @Update("UPDATE customer SET pw = #{new_pw} WHERE member_no = #{dto.member_no}")
+    int changepw(@Param("dto") CustomerDto dto, @Param("new_pw") String new_pw);
+
+    @Update("update customer set role = 'D' where id = #{id} and email = #{email} and pw = #{pw}")
+    int delUser(@Param("id") String id, @Param("email") String eamil, @Param("pw") String pw);
+
 }

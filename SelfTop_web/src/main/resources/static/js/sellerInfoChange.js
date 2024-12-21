@@ -1,5 +1,5 @@
 function checkCurrentPassword() {
-    const currentPassword = document.querySelector('#pw').value; // 사용자가 입력한 비밀번호
+    const currentPassword = document.querySelector('#pw_a').value; // 사용자가 입력한 비밀번호
 	
     // 비밀번호가 비어있는 경우
     if (!currentPassword) {

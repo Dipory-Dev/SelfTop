@@ -76,4 +76,17 @@ public class CustomerDto {
 	public void setRole(char role) {
 		this.role = role;
 	}
+
+	@Override
+	public String toString() {
+		return "CustomerDto{" +
+				"member_no=" + member_no +
+				", id='" + id + '\'' +
+				", pw='" + pw + '\'' +
+				", name='" + name + '\'' +
+				", email='" + email + '\'' +
+				", phone='" + phone + '\'' +
+				", role=" + role +
+				'}';
+	}
 }

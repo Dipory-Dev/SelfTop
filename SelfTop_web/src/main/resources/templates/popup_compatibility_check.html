@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/popup_compatibility_check.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <title>팝업_호환성체크</title>
+</head>
+<body>
+    <!--임시버튼-->
+    <button id="openModalBtn" class="btn">호환성체크</button>
+
+    <!--모달-->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">PC견적 호환성 체크</div>
+            <div class="modal-body">
+                <div class="body-top">
+                    <li>호환성 체크는 CPU, 메인보드, 메모리, 케이스, 그래픽카드, 파워를 대상으로 합니다.</li>
+                    <li>본 서비스는 제조사의 상품정보를 기반으로 제공되며, 일부 상품은 호환성 체크 대상에서 제외됩니다.</li>
+                    <li>호환 성공 여부는 단순 참고용이며, 자세한 내용은 판매점 또는 제조사에 재확인이 필요할 수 있습니다.</li>
+                    <li>카테고리별로 상품을 1개씩 담을 때만 호환성 체크가 가능합니다.</li>
+                    <li>출시일이 오래된 상품 또는 특수 상품의 경우 호환성 체크 대상에서 제외될 수 있습니다.</li>
+                    <li>CPU(소켓),메인보드(CPU소켓), RAM(제품분류), 케이스(크기), 메인보드(폼펙터), 파워(제품분류), 그래픽카드(가로길이) 체크</li>
+                </div>
+                <div class="body-mid">
+                    
+                </div>
+                <div class="body-bottom"></div>
+
+            </div>
+                
+                    
+            <div class="modal-footer">
+                <button id="closeModalBtn" class="btn btn-close">닫기</button>
+                <button id="submitModalBtn" class="btn btn-submit">저장</button>
+            </div>
+        </p>
+    </div>
+
+    <script src="../static/js/popup_compatibility_check.js"></script>
+</body>
+</html>
