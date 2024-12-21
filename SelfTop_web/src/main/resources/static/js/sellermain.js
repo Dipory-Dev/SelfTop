@@ -56,8 +56,6 @@ function moveorder(){
 		        }
 		    });
 		}
-
-
 function stockselect() {
 	const selectcheckbox = document.querySelectorAll(".stockitemcheck:checked"); 
 	const stock = []; 
@@ -381,3 +379,50 @@ document.querySelectorAll('.btn-save').forEach(button => {
 });
 
 
+
+
+document.querySelectorAll('.btn-update').forEach(button => {
+    button.addEventListener('click', function() {
+        // 수정하려는 제품의 ID 가져오기
+        const productCode = this.getAttribute('data-id');
+
+        // 해당 제품의 가격 및 재고 입력 필드를 찾아 readonly 속성 제거
+        const priceInput = document.querySelector(`input[data-id="${productCode}"].stockprice`);
+        const stockInput = document.querySelector(`input[data-id="${productCode}"].stockamount`);
+
+        // readonly 속성 제거하여 수정 가능하게 만듦
+        priceInput.removeAttribute('readonly');
+        stockInput.removeAttribute('readonly');
+
+        // 수정 버튼 숨기고 저장 버튼 표시
+        this.style.display = 'none';  // 수정 버튼 숨기기
+        const saveButton = document.querySelector(`button[data-id="${productCode}"].btn-save`);
+        saveButton.style.display = 'inline-block';  // 저장 버튼 표시
+    });
+});
+
+document.querySelectorAll('.btn-save').forEach(button => {
+    button.addEventListener('click', function() {
+        // 저장하려는 제품의 ID 가져오기
+        const productCode = this.getAttribute('data-id');
+
+        // 해당 제품의 가격 및 재고 입력 필드에서 값 가져오기
+        const priceInput = document.querySelector(`input[data-id="${productCode}"].stockprice`);
+        const stockInput = document.querySelector(`input[data-id="${productCode}"].stockamount`);
+
+        const updatedPrice = priceInput.value;
+        const updatedStock = stockInput.value;
+
+        // 값 저장 로직 (예: 서버에 AJAX로 요청 보내기)
+        console.log(`저장된 값 - 가격: ${updatedPrice}, 재고: ${updatedStock}`);
+
+        // 저장 후 수정 버튼과 저장 버튼 상태 복원
+        priceInput.setAttribute('readonly', 'true');
+        stockInput.setAttribute('readonly', 'true');
+
+        // 저장 버튼 숨기고 수정 버튼 표시
+        this.style.display = 'none';  // 저장 버튼 숨기기
+        const updateButton = document.querySelector(`button[data-id="${productCode}"].btn-update`);
+        updateButton.style.display = 'inline-block';  // 수정 버튼 표시
+    });
+});
