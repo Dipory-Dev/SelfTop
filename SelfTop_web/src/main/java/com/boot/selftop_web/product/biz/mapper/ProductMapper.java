@@ -1,8 +1,15 @@
 package com.boot.selftop_web.product.biz.mapper;
 
 import com.boot.selftop_web.product.model.dto.CPUDto;
+import com.boot.selftop_web.product.model.dto.CaseDto;
+import com.boot.selftop_web.product.model.dto.CoolerDto;
+import com.boot.selftop_web.product.model.dto.GPUDto;
+import com.boot.selftop_web.product.model.dto.HDDDto;
+import com.boot.selftop_web.product.model.dto.MainBoardDto;
+import com.boot.selftop_web.product.model.dto.PowerDto;
 import com.boot.selftop_web.product.model.dto.ProductDto;
 import com.boot.selftop_web.product.model.dto.RAMDto;
+import com.boot.selftop_web.product.model.dto.SSDDto;
 
 import java.util.List;
 
@@ -25,6 +32,27 @@ public interface ProductMapper {
     
     @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC FROM PRODUCT p JOIN Ram r ON p.PRODUCT_CODE = r.PRODUCT_CODE")
     List<RAMDto> findAllRamProducts();
+    
+    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC FROM PRODUCT p JOIN MAINBOARD mb ON p.PRODUCT_CODE = mb.PRODUCT_CODE")
+    List<MainBoardDto> findAllMainBoardProducts();
+    
+    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC FROM PRODUCT p JOIN CASE_BOARD cb ON p.PRODUCT_CODE = cb.PRODUCT_CODE")
+    List<CaseDto> findAllCaseProducts();
+    
+    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC FROM PRODUCT p JOIN GPU g ON p.PRODUCT_CODE = g.PRODUCT_CODE")
+    List<GPUDto> findAllGpuProducts();
+    
+    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC FROM PRODUCT p JOIN POWER pw ON p.PRODUCT_CODE = pw.PRODUCT_CODE")
+    List<PowerDto> findAllPowerProducts();
+    
+    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC FROM PRODUCT p JOIN SSD s ON p.PRODUCT_CODE = s.PRODUCT_CODE")
+    List<SSDDto> findAllSsdProducts();
+    
+    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC FROM PRODUCT p JOIN HDD h ON p.PRODUCT_CODE = h.PRODUCT_CODE")
+    List<HDDDto> findAllHddProducts();
+    
+    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC FROM PRODUCT p JOIN COOLER cl ON p.PRODUCT_CODE = cl.PRODUCT_CODE")
+    List<CoolerDto> findAllCoolerProducts();
     
     @Select("SELECT COUNT(*) FROM PRODUCT WHERE PRODUCT_CODE = #{productCode}")
     int countByProductCode(@Param("productCode") int productCode);
