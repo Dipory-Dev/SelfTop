@@ -85,6 +85,20 @@ public class SellerController {
 		return "sellerMyPage";
 	}
 
+	@GetMapping("/main")
+	public String sellermain(HttpSession session,Model model) {
+		if(session.getAttribute("member_no") == null) {
+			return "redirect:/loginform";
+
+		}
+		int membernum=(int) session.getAttribute("member_no");
+		List<SellerOrderDto> res = sellerBiz.selectList(membernum);
+		model.addAttribute("seller",res);
+		model.addAttribute("membername",session.getAttribute("name"));
+		session.setAttribute("table", "order");
+		return "sellermain";
+	}
+
 	@GetMapping("/datesearch")
 	public String searchByDate(@RequestParam(required = false) String startdate, @RequestParam(required = false) String enddate,
 							   @RequestParam(required = false) String keyword,  Model model,HttpSession session) {
