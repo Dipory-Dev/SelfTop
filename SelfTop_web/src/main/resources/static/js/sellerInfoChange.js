@@ -1,31 +1,3 @@
-function checkCurrentPassword() {
-    const currentPassword = document.querySelector('#pw_a').value; // 사용자가 입력한 비밀번호
-	
-    // 비밀번호가 비어있는 경우
-    if (!currentPassword) {
-        document.querySelector('#pw-error').textContent = '비밀번호를 입력해주세요.';
-        return;
-    }
-
-    // 비밀번호 검증 요청
-	fetch(`idchk?id=${id}`)
-			.then(response => response.json())
-			.then(data => {
-				if (data === true) {
-					idError.textContent = "사용 가능한 ID입니다.";
-					idError.style.color = "green";
-				} else {
-					idError.textContent = "이미 사용 중인 ID입니다.";
-					idError.style.color = "red";
-				}
-			})
-			.catch(error => {
-				idError.textContent = "중복 확인 중 문제가 발생했습니다.";
-				idError.style.color = "red";
-				console.error(error);
-			});
-}
-
 // 변경할 비밀번호 조건 검사
 function validatePassword() {
 	const password = document.getElementById("new_pw").value;

@@ -411,12 +411,31 @@ public class SellerController {
 	}
 
 
-	//판매자가 올린 아이템을 삭제하는 기능(Product_Status table에서 삭제)
+	//판매자가 올린 아이템을 수정, 삭제하는 기능(Product_Status table에서 수정, 삭제)
 	@PostMapping("/changeproduct")
-	public ResponseEntity<?> changeProductStatus(HttpSession session, @RequestParam("productCode") int productCode, @RequestParam("action") String action) {
+	public ResponseEntity<?> changeProductStatus(HttpSession session, @RequestBody(required=false) Map<String, Object> payload, 
+												 @RequestParam("productCode") int productCode, @RequestParam("action") String action) {
 	    Integer sellerNo = (Integer) session.getAttribute("member_no");
 	    if (sellerNo == null) {
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "로그인이 필요합니다."));
+	    }
+	    
+	    // 수정 기능 처리
+	    if ("update".equals(action)) {
+	        // 수정할 값이 모두 제공되었는지 확인
+	    	Integer price = (Integer) payload.get("price");
+	        Integer stock = (Integer) payload.get("stock");
+
+	        try {
+	            int result = productStatusMapper.updateProductStatus(price, stock, productCode, sellerNo);
+	            if (result > 0) {
+	                return ResponseEntity.ok(Map.of("message", "제품 재고가 성공적으로 수정되었습니다."));
+	            } else {
+	                return ResponseEntity.badRequest().body(Map.of("message", "해당 제품 재고를 수정할 수 없습니다."));
+	            }
+	        } catch (Exception e) {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "서버 오류가 발생했습니다: " + e.getMessage()));
+	        }
 	    }
 
 	    if ("delete".equals(action)) {
