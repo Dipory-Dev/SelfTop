@@ -386,7 +386,7 @@ public class SellerController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
 	}
-	
+
 	@PostMapping("/changeproduct")
 	public String changeproduct(@RequestParam("title") String action,
 	        					@RequestParam("price") int price,
