@@ -51,4 +51,15 @@ public class CustomerBizImpl implements CustomerBiz {
 		return mapper.insertCustomer(dto);
 	}
 
+	@Override
+	public CustomerDto selectCustomer(int member_no) {
+		CustomerDto res = mapper.selectCustomer(member_no);
+		return res;
+	}
+
+	@Override
+	public int changeInfo(String email, String phone, int member_no)
+	{
+		return mapper.changeInfo(email, phone, member_no);
+	}
 }
