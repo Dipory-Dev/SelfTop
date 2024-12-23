@@ -36,9 +36,12 @@
 	                    <tr>
 	                        <th>모델명</th>
 	                        <td>
-		                        <input list="model-names" name="model-name" id="model-name-input" placeholder="모델을 선택하거나 검색하세요" autocomplete="off" class="modal_input">
-		                        <datalist id="model-names"></datalist>
-		                    </td>
+	                            <select name="model-name" id="model-name" aria-readonly="true">
+	                                <option>카테고리를 선택해주세요.</option>
+	                            </select>
+	                            
+	                        </td>
+	                        
 	                    </tr>
 	                    <!--db에서 가져와 정보 표시 예정-->
 	                    <tr>
@@ -74,131 +77,131 @@
 	            </div>
 	        </div>
     	</div>
-        <script>
-		     // 모달 제어 스크립트
-		   	 const modal = document.getElementById('modal');
-		   	 const openModalBtn = document.getElementById('openModalBtn');
-		   	 const closeModalBtn = document.getElementById('closeModalBtn');
-		   	 
-		   	 openModalBtn.addEventListener('click', () => {
-		   	     modal.style.display = 'block';
-		   	 });
-		   	 
-		   	 closeModalBtn.addEventListener('click', () => {
-		   	     modal.style.display = 'none';
-		   	 });
-		   	 
-		   	 // 모달 외부 클릭 시 닫기
-		   	 window.addEventListener('click', (event) => {
-		   	     if (event.target === modal) {
-		   	         modal.style.display = 'none';
-		   	     }
-		   	 });
-		   	 
-		   	 
-		   	 // 카테고리 선택 별 제품명 선택
-		   	const categorySelect = document.getElementById('category');
-		    const modelNameInput = document.getElementById('model-name-input');
+         <script>
+      // 모달 제어 스크립트
+	   	 const modal = document.getElementById('modal');
+	   	 const openModalBtn = document.getElementById('openModalBtn');
+	   	 const closeModalBtn = document.getElementById('closeModalBtn');
+	   	 
+	   	 openModalBtn.addEventListener('click', () => {
+	   	     modal.style.display = 'block';
+	   	 });
+	   	 
+	   	 closeModalBtn.addEventListener('click', () => {
+	   	     modal.style.display = 'none';
+	   	 });
+	   	 
+	   	 // 모달 외부 클릭 시 닫기
+	   	 window.addEventListener('click', (event) => {
+	   	     if (event.target === modal) {
+	   	         modal.style.display = 'none';
+	   	     }
+	   	 });
+	   	 
+	   	 
+	   	 // 카테고리 선택 별 제품명 선택
+	   	const categorySelect = document.getElementById('category');
+	    const modelNameInput = document.getElementById('model-name-input');
 
-		    categorySelect.addEventListener('change', function() {
-		        fetch('/seller/' + this.value + 'Products')
-		            .then(response => response.json())
-		            .then(data => {
-		                data.sort((a, b) => a.product_name.localeCompare(b.product_name));  // 이름 기준으로 정렬
-		                updateModelNames(data);
-		            })
-		            .catch(error => console.error('Error fetching ' + this.value + ' products:', error));
-		    });
+	    categorySelect.addEventListener('change', function() {
+	        fetch('/seller/' + this.value + 'Products')
+	            .then(response => response.json())
+	            .then(data => {
+	                data.sort((a, b) => a.product_name.localeCompare(b.product_name));  // 이름 기준으로 정렬
+	                updateModelNames(data);
+	            })
+	            .catch(error => console.error('Error fetching ' + this.value + ' products:', error));
+	    });
 
-		    function updateModelNames(products) {
-		        const modelNameDatalist = document.getElementById('model-names');
-		        modelNameDatalist.innerHTML = '';  // 초기화
-		        if (products.length === 0) {
-		            modelNameDatalist.innerHTML = '<option>해당 카테고리의 제품이 없습니다.</option>';
-		        } else {
-		            products.forEach(product => {
-		                const option = document.createElement('option');
-		                option.value = product.product_name;  // 사용자에게 보여지는 이름
-		                option.setAttribute('data-product-code', product.product_code);  // 실제 제품 코드는 데이터 속성에 저장
-		                option.setAttribute('data-etc', product.etc);  // ETC 정보도 저장
-		                modelNameDatalist.appendChild(option);
-		            });
-		        }
-		    }
+	    function updateModelNames(products) {
+	        const modelNameDatalist = document.getElementById('model-names');
+	        modelNameDatalist.innerHTML = '';  // 초기화
+	        if (products.length === 0) {
+	            modelNameDatalist.innerHTML = '<option>해당 카테고리의 제품이 없습니다.</option>';
+	        } else {
+	            products.forEach(product => {
+	                const option = document.createElement('option');
+	                option.value = product.product_name;  // 사용자에게 보여지는 이름
+	                option.setAttribute('data-product-code', product.product_code);  // 실제 제품 코드는 데이터 속성에 저장
+	                option.setAttribute('data-etc', product.etc);  // ETC 정보도 저장
+	                modelNameDatalist.appendChild(option);
+	            });
+	        }
+	    }
 
-		 	// 제품 모델명 선택시 설명 노출
-		    modelNameInput.addEventListener('input', function() {
-		        const selectedOption = Array.from(document.getElementById('model-names').options).find(option => option.value === this.value);
-		        const etcInfo = selectedOption ? selectedOption.getAttribute('data-etc') : '상세 정보가 없습니다.';
+	 	// 제품 모델명 선택시 설명 노출
+	    modelNameInput.addEventListener('input', function() {
+	        const selectedOption = Array.from(document.getElementById('model-names').options).find(option => option.value === this.value);
+	        const etcInfo = selectedOption ? selectedOption.getAttribute('data-etc') : '상세 정보가 없습니다.';
+	        document.querySelector('.detail').innerHTML = `<p>${etcInfo}</p>`;  // ETC 정보 출력
+	    });
+
+	    //제품 모델명 선택시 설명 노출
+		document.getElementById('model-name-input').addEventListener('input', function() {
+		    const inputVal = this.value;
+		    const options = document.querySelectorAll('#model-names option');
+		    const selectedOption = Array.from(options).find(option => option.value === inputVal);
+		    const productCode = selectedOption ? selectedOption.getAttribute('data-product-code') : null;
+		    const etcInfo = selectedOption ? selectedOption.getAttribute('data-etc') : '상세 정보가 없습니다.';
+
+		    if (productCode) {
+		        document.getElementById('hidden-product-code').value = productCode;  // 제품 코드를 숨겨진 필드에 설정
 		        document.querySelector('.detail').innerHTML = `<p>${etcInfo}</p>`;  // ETC 정보 출력
-		    });
+		    }
+		});
+		
+		//등록 버튼을 누르면 PRODUCT_STATUS 테이블에 PRODUCT_CODE, SELLER_NO, STOCK, PRICE, REG_DATE를 등록
+		 document.getElementById('registerModalBtn').addEventListener('click', function() {
+	        const selectedOption = Array.from(document.getElementById('model-names').options).find(option => option.value === modelNameInput.value);
+	        const productCode = selectedOption ? selectedOption.getAttribute('data-product-code') : null;
 
-		    //제품 모델명 선택시 설명 노출
-    		document.getElementById('model-name-input').addEventListener('input', function() {
-			    const inputVal = this.value;
-			    const options = document.querySelectorAll('#model-names option');
-			    const selectedOption = Array.from(options).find(option => option.value === inputVal);
-			    const productCode = selectedOption ? selectedOption.getAttribute('data-product-code') : null;
-			    const etcInfo = selectedOption ? selectedOption.getAttribute('data-etc') : '상세 정보가 없습니다.';
+	        if (!productCode) {
+	            alert('제품 모델을 선택해주세요.');
+	            return;
+	        }
+	        const quantity = document.getElementById('quantity').value;
+	        if (quantity <= 0) {
+	            alert('유효한 수량을 입력해주세요.');
+	            return;
+	        }
+	        const price = document.getElementById('price').value;
+	        if (price <= 0) {
+	            alert('유효한 가격을 입력해주세요.');
+	            return;
+	        }
 
-			    if (productCode) {
-			        document.getElementById('hidden-product-code').value = productCode;  // 제품 코드를 숨겨진 필드에 설정
-			        document.querySelector('.detail').innerHTML = `<p>${etcInfo}</p>`;  // ETC 정보 출력
-			    }
-			});
-    		
-    		//등록 버튼을 누르면 PRODUCT_STATUS 테이블에 PRODUCT_CODE, SELLER_NO, STOCK, PRICE, REG_DATE를 등록
-    		 document.getElementById('registerModalBtn').addEventListener('click', function() {
-		        const selectedOption = Array.from(document.getElementById('model-names').options).find(option => option.value === modelNameInput.value);
-		        const productCode = selectedOption ? selectedOption.getAttribute('data-product-code') : null;
+	        const data = {
+	            product_code: productCode,
+	            stock: quantity,
+	            price: price,
+	            reg_date: new Date().toISOString()
+	        };
 
-		        if (!productCode) {
-		            alert('제품 모델을 선택해주세요.');
-		            return;
-		        }
-		        const quantity = document.getElementById('quantity').value;
-		        if (quantity <= 0) {
-		            alert('유효한 수량을 입력해주세요.');
-		            return;
-		        }
-		        const price = document.getElementById('price').value;
-		        if (price <= 0) {
-		            alert('유효한 가격을 입력해주세요.');
-		            return;
-		        }
-
-		        const data = {
-		            product_code: productCode,
-		            stock: quantity,
-		            price: price,
-		            reg_date: new Date().toISOString()
-		        };
-
-		        fetch('/seller/registerProductStatus', {
-		            method: 'POST',
-		            headers: {
-		                'Content-Type': 'application/json',
-		            },
-		            body: JSON.stringify(data)
-		        })
-		        .then(response => {
-		            if (response.ok) {
-		                return response.json();
-		            } else {
-		                return response.text().then(text => { throw new Error(text || '제품 등록에 실패했습니다.'); });
-		            }
-		        })
-		        .then(result => {
-		            alert('제품 등록이 성공적으로 완료되었습니다.');
-		            modal.style.display = 'none'; // 성공 시 모달 창 닫기
-		            location.reload(); // 페이지 새로고침
-		        })
-		        .catch(error => {
-		            console.error('Error:', error);
-		            alert(error.message);
-		        });
-		    });
-        </script>
+	        fetch('/seller/registerProductStatus', {
+	            method: 'POST',
+	            headers: {
+	                'Content-Type': 'application/json',
+	            },
+	            body: JSON.stringify(data)
+	        })
+	        .then(response => {
+	            if (response.ok) {
+	                return response.json();
+	            } else {
+	                return response.text().then(text => { throw new Error(text || '제품 등록에 실패했습니다.'); });
+	            }
+	        })
+	        .then(result => {
+	            alert('제품 등록이 성공적으로 완료되었습니다.');
+	            modal.style.display = 'none'; // 성공 시 모달 창 닫기
+	            location.reload(); // 페이지 새로고침
+	        })
+	        .catch(error => {
+	            console.error('Error:', error);
+	            alert(error.message);
+	        });
+	    });
+        </script>  
         <div class="searchbox">
             <input type="text" placeholder="검색할 제품 입력" id="keyword">
             <button class="searchbutton" onclick=Search()>검색</button>
@@ -207,32 +210,30 @@
 
         </div>
         <div>
-<form id="stockupdate" th:action="@{/stockupdate}" th:method="post">        
-        <table class ="product_table" >	
-        <tr>
-            <th>분류</th>
-            <th>상품이미지</th>
-            <th>제품명</th>
-            <th>변경 후 가격</th>
-            <th>재고 수량</th>
-            <th>수정</th>
-            <th>삭제</th>
-        </tr>
-        <tbody id="product_view">
-            <tr th:each="dto : ${stocktable}" th:value=${dto.product_code}>
-                <td th:text="${dto.category}"></td>
-                <td><img th:src="${dto.thumbnail}" width="50" height="50" /></td>
-                <td th:text="${dto.product_name}"></td>
-				<td><input type="text" class="stockprice" th:value=${dto.price}  th:attr="data-id=${dto.product_code}" readonly>원</td>
-				<td><input type="text" class="stockamount" th:value=${dto.stock} th:attr="data-id=${dto.product_code}" readonly>개</td>
-            	<td>
-            		<button class="btn-update" th:attr="data-id=${dto.product_code}" title="수정">✏️</button>
-            		<button class="btn-save" th:attr="data-id=${dto.product_code}" title="저장" style="display: none;">💾</button>
-            	</td>
-    			<td><button class="btn-delete" th:attr="data-id=${dto.product_code}" title="삭제">🗑️</button></td>
-            </tr>
-        </tbody>
-    </table>
-    </form>
-    </div>
+        <form id="stockupdate" method="post">        
+        	<table class ="product_table" >	
+		        <tr>
+			            <th>선택</th>
+			            <th>분류</th>
+			            <th>상품이미지</th>
+			            <th>제품명</th>
+			            <th>변경 후 가격</th>
+			            <th>재고 수량</th>
+		        </tr>
+		        <tbody id="product_view">
+		            <tr th:each="dto : ${stocktable}" >
+		                <td><input type="checkbox" class="stockitemcheck" th:value=${dto.product_code}></td>
+		                <td th:text="${dto.category}"></td>
+		                <td><img th:src="${dto.thumbnail}" width="50" height="50" /></td>
+		                <td th:text="${dto.product_name}"></td>
+		                <td><input type="text" class="stockprice" th:value=${dto.price}  th:attr="data-id=${dto.product_code}">원</td>
+		                <td><input type="text" class="stockamount" th:value=${dto.stock} th:attr="data-id=${dto.product_code}">개</td>
+		            </tr>
+		        </tbody>
+		    </table>
+		    <div id="stocksavebutton">
+       			 <button type="button" onclick="savestockchange()" class="stocksave">저장하기</button>
+   			 </div>
+		</form>
+		</div>
 </th:block>
