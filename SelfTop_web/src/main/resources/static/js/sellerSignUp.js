@@ -19,7 +19,7 @@ function updateSignupButtonState(){
 
 	// ID 중복 확인 여부 확인
 	if (!hasCheckedDuplicateID) {
-		alert("중복확인하세요.");
+		alert("ID 중복확인을 해주세요.");
 		return false; // 중복 확인하지 않았으면 진행 중단
 	}
 	// 사업자등록번호 확인 여부 확인 (필요 시 추가)
@@ -34,6 +34,18 @@ function updateSignupButtonState(){
 	}
 
 	return false;
+}
+
+//비밀번호 유효 체크 함수
+function pwCheck(){
+
+	if(isPwValid && isPwValid1){
+		signupButton.disabled = false;
+	}
+	else{
+		signupButton.disabled = true;
+	}
+
 }
 
 // ID 중복 확인 (버튼 클릭 시만 유효성 검사)
@@ -116,6 +128,7 @@ function validatePassword() {
 	}
 	
 	validateConfirmPassword();
+	pwCheck();
 }
 
 // 비밀번호 확인 검증
@@ -134,6 +147,8 @@ function validateConfirmPassword() {
 		confirmError.style.color = "green";
 		isPwValid1 =true;
 	}
+
+	pwCheck();
 }
 
 // 사업자등록번호 정보 조회 함수
