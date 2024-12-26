@@ -5,73 +5,76 @@
     color: #666;
 }
 
-/*header*/
 header {
+	position: fixed;
     padding: 10px 20px;
     border-bottom: 1px solid #ccc;
+    z-index: 1000;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: white;
 }
-
-.header-content {
-    display: flex;
-    align-items: center;
-}
-
-.icon-section{
-   margin-left:-150px;
-}
-
-.mypage-icon{
-    width:27px;
-    height:27px;
-    margin-top: 2px;
-    margin-bottom:-4px;
-    margin-left:-10px;
-
-} 
-
-.login-icon  {
-    width:20px;
-    height:20px;
-    margin-left:2px;
-}
-
 .logo{
-    width: 150px;
     margin-left: 10%;
     height: 70px;
     cursor: pointer;
 }
 
-.header-content #userName{
-    font-size:16px;
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+
+/*.header-content img {*/
+/*    width: 150px;*/
+/*    margin-left: 10%;*/
+/*    height: 70px;*/
+/*}*/
 
 .header-content p {
-    margin-right: 10%;
-    font-size: 16px;
-    cursor: pointer;
+    margin-right: 12%;
+    display: flex;
+    align-items: center;
 }
 
-.header-content #userName{
-    margin-left:1200px;
+.header-content p span {
+	font-size: 20px;
 }
 
-.header-content p:hover {
-    text-decoration: underline;
+
+.lock-icon{
+    width: 22px;
+    height: 22px;
+    margin-left: 5px;
+    margin-top:5px;
+    transition: transform 0.3s ease;
 }
 
+.human-icon{
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+    margin-top:5px;
+    transition: transform 0.3s ease;
+}
+
+.header-content p img:hover {
+    transform: scale(1.5);
+}
 
 /*body*/
 main{
     flex: 1;
-    padding-bottom:120px;
+    padding-bottom:100px;
     align-items: center;
-    width:1300px;
+    width:1710px;
     margin-left:auto;
     margin-right:auto;
-    border-right:1px solid #ccc ;
-    border-left:1px solid #ccc ;
-   
+    border:1px solid #ccc ;
+    margin-top:90px;
 }
 
 html, body {
@@ -85,14 +88,14 @@ body {
     flex-direction: column;
     min-height: 100%; 
     
-    
 }
 
 .page-info{
-    width:1250px;
+    width:1650px;
     font-weight: bold;
+    font-size: 25px;
     color:#333;
-    padding-left: 50px;
+    padding-left: 58px;
     padding-top:20px;
     padding-bottom:20px;
     border-bottom: #ccc solid 1px;
@@ -105,8 +108,8 @@ body {
     height:600px;
     border-radius: 10px;
     align-items: center;
-    margin-left:370px;
-    margin-top:40px;
+    margin-left:600px;
+    margin-top:100px;
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -144,7 +147,7 @@ tr:hover{
 }
 
 .button-area{
-    margin-left:650px;
+    margin-left:880px;
     padding-top:50px;
 }
 

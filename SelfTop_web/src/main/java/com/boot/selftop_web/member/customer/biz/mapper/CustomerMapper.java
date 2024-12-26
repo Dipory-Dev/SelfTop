@@ -33,4 +33,9 @@ public interface CustomerMapper {
     @Select("SELECT * from customer where id = #{id}")
     SellerDto idchk(@org.springframework.data.repository.query.Param("id") String id);
 
+    @Select("select * from customer where member_no = #{member_no}")
+    CustomerDto selectCustomer(@Param("member_no")int member_no);
+
+    @Update("update customer set email=#{email}, phone = #{phone} where member_no = #{member_no}")
+    int changeInfo(@Param("email") String email, @Param("phone") String phone, @Param("member_no") int member_no);
 }

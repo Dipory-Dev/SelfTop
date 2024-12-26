@@ -7,13 +7,29 @@
     <link rel="stylesheet" href="/css/customerInfoChange.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="/js/customerInfoChange.js"></script>
+	<script type="text/javascript">
+		function delchk(event) {
+			event.preventDefault(); // 기본 동작 방지
+			const chk = confirm("정말 탈퇴하시겠습니까?");
+			if (chk) {
+				document.querySelector("form[action='/delUser']").submit(); // 폼 강제 제출
+			}
+		}
+		document.addEventListener("DOMContentLoaded", function () {
+			const message = "[[${message}]]"; // Thymeleaf에서 Flash Attribute를 읽음
+			console.log(message);
+			if (message && message.trim().length > 0) {
+				alert(message);
+			}
+		});
+	</script>
 </head>
 <body>
     <header>
         <div class="header-content">
             <img src="/img/logo.png">
            	<p>
-           		<span>구매자님</span>&nbsp|
+				<span th:text="${customer.name} + 님"></span>&nbsp|
            		<a href="mypage">
            			<img src="/img/human-icon.png" class="human-icon">
            		</a>
@@ -36,12 +52,12 @@
 			</a>
 		</div>
     	<div id="infochange-form">
-        	<form action="/infochange" method="post">
+			<form action="/customerInfoChange" method="post">
         		<h2>계정 정보 변경</h2>
         		<div class="form-group">
         			<label>이름<span>*</span></label>
                 	<div class="input-group">
-       					<p id="name">구매자</p>
+       					<p id="name" th:text="${customer.name}"></p>
     				</div>
             	</div>
             	<div class="form-group">
@@ -63,55 +79,63 @@
       	      	<div class="form-group">
                 	<label>전화번호<span>*</span></label>
                 	<div class="input-group">
-                		<input type="text" id="phone" name="phone" placeholder="010-1234-5678">
+                		<input type="text" id="phone" name="phone">
                 	</div>
             	</div>
             	<div class="form-group">
     				<button type="submit" class="btn-change-account">변경하기</button>
 				</div>
+			</form>
+			<form action="/changepw" method="post">
 				<h2>비밀번호 변경</h2>
-            	<div class="form-group">
-    				<label>기존 비밀번호<span>*</span></label>
-    				<div class="input-container">
-        				<input type="password" id="pw" name="pw" oninput="checkCurrentPassword()">
-    				</div>
-    				<span id="pw-error" class="error-message"></span>
+				<div class="form-group">
+					<label>기존 비밀번호<span>*</span></label>
+					<div class="input-container">
+						<input type="password" id="cur_pw" name="cur_pw" oninput="checkCurrentPassword()">
+					</div>
+					<span id="cur_pw-error" class="error-message"></span>
 				</div>
 				<div class="form-group">
-    				<label>새 비밀번호<span>*</span></label>
-    				<div class="input-container">
-        				<input type="password" id="new_pw" name="new_pw" oninput="validatePassword()">
-    				</div>
-    				<span id="new_pw-error" class="error-message"></span>
+					<label>새 비밀번호<span>*</span></label>
+					<div class="input-container">
+						<input type="password" id="new_pw" name="new_pw" oninput="validatePassword()">
+					</div>
+					<span id="new_pw-error" class="error-message"></span>
 				</div>
-            	<div class="form-group">
-                	<label>새 비밀번호 확인<span>*</span></label>
-                	<div class="input-container">
-                		<input type="password" id="confirmPassword" name="confirmPassword" oninput="validateConfirmPassword()">
-                	</div>
-                	<span id="confirm-error" class="error-message"></span>
-            	</div>
-            	<div class="form-group">
-    				<button type="submit" class="btn-change-pw">변경하기</button>
+				<div class="form-group">
+					<label>새 비밀번호 확인<span>*</span></label>
+					<div class="input-container">
+						<input type="password" id="confirmPassword" name="confirmPassword" oninput="validateConfirmPassword()">
+					</div>
+					<span id="confirm-error" class="error-message"></span>
 				</div>
+				<div class="form-group">
+					<button type="submit" class="btn-change-pw">변경하기</button>
+				</div>
+			</form>
+			<form action="/delUser" method="post">
 				<h2>회원탈퇴</h2>
-            	<div class="form-group">
-   					<label>이메일<span>*</span></label>
-    				<div class="email-container">
-        				<input type="text" id="email" name="email" placeholder="이메일을 입력해주세요!">
-    				</div>
-    			</div>
-    			<div class="form-group">
-    				<label>비밀번호<span>*</span></label>
-    				<div class="input-container">
-        				<input type="password" id="pw" name="pw" placeholder="기존 비밀번호를 입력해주세요!" oninput="checkCurrentPassword()">
-    				</div>
-    				<span id="pw-error" class="error-message"></span>
+				<input type="hidden" name="id" th:value="${customer.id}" readonly="readonly">
+				<input type="hidden" name="emailOrigin" th:value="${customer.email}">
+				<input type="hidden" name="pwOrigin" th:value="${customer.pw}">
+				<input type="hidden" name="role" th:value="${customer.role}">
+				<div class="form-group">
+					<label>이메일<span>*</span></label>
+					<div class="email-container">
+						<input type="text" id="email" name="email" placeholder="이메일을 입력해주세요!">
+					</div>
 				</div>
 				<div class="form-group">
-    				<button type="submit" class="btn-delete">탈퇴하기</button>
+					<label>비밀번호<span>*</span></label>
+					<div class="input-container">
+						<input type="password" id="pw" name="pw" placeholder="기존 비밀번호를 입력해주세요!" oninput="checkCurrentPassword()">
+					</div>
+					<span id="pw-error" class="error-message"></span>
 				</div>
-        	</form>
+				<div class="form-group">
+					<button type="button" onclick="delchk(event)" class="btn-delete">탈퇴하기</button>
+				</div>
+			</form>
         </div>
     </main>
 

@@ -28,6 +28,7 @@
 	                                <option value="ssd">SSD</option>
 	                                <option value="hdd">HDD</option>
 	                                <option value="cooler">쿨러</option>
+	
 	                            </select>
 	                        </td>
 	                    </tr>
@@ -206,8 +207,8 @@
 
         </div>
         <div>
-	<form action="/seller/changeproduct" method="post">        
-	        <table class ="product_table" >	
+	<form action="/seller/changeproduct" method="post">
+	        <table class ="product_table" >
 	        <tr>
 	            <th>분류</th>
 	            <th>상품이미지</th>
@@ -241,7 +242,7 @@
 		    button.addEventListener('click', function(event) {
 		        event.preventDefault(); // 기본 이벤트 방지
 		        const productCode = this.getAttribute('data-product-code'); // 버튼의 데이터 속성에서 productCode 가져오기
-		
+
 		        if (confirm('정말 삭제하시겠습니까?')) {
 		            fetch(`/seller/changeproduct?productCode=${productCode}&action=delete`, {
 		                method: 'POST'
