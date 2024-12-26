@@ -8,7 +8,7 @@
             <button id="openModalBtn" class="btn">제품 등록하기</button>
         </div>
         <!-- 모달 -->
-	    <div id="modal" class="modal">
+	    <div id="stockmodal" class="modal">
 	        <div class="modal-content">
 	            <div class="modal-header">수량 및 가격 수정</div>
 	            <div class="modal-body">
@@ -73,9 +73,10 @@
 	            </div>
 	        </div>
     	</div>
-        <script>
-		     // 모달 제어 스크립트
-		   	 const modal = document.getElementById('modal');
+           <script>
+           const modelNameInput = document.getElementById('model-name-input');
+		   // 모달 제어 스크립트
+		   	/* const modal = document.getElementById('modal');
 		   	 const openModalBtn = document.getElementById('openModalBtn');
 		   	 const closeModalBtn = document.getElementById('closeModalBtn');
 		   	 
@@ -123,14 +124,15 @@
 		                modelNameDatalist.appendChild(option);
 		            });
 		        }
-		    }
+		    }*/
 
 		 	// 제품 모델명 선택시 설명 노출
-		    modelNameInput.addEventListener('input', function() {
+		  /*  modelNameInput.addEventListener('input', function() {
 		        const selectedOption = Array.from(document.getElementById('model-names').options).find(option => option.value === this.value);
 		        const etcInfo = selectedOption ? selectedOption.getAttribute('data-etc') : '상세 정보가 없습니다.';
 		        document.querySelector('.detail').innerHTML = `<p>${etcInfo}</p>`;  // ETC 정보 출력
-		    });
+		    })*/
+		    
 
 		    //제품 모델명 선택시 설명 노출
     		document.getElementById('model-name-input').addEventListener('input', function() {
@@ -147,7 +149,7 @@
 			});
     		
     		//등록 버튼을 누르면 PRODUCT_STATUS 테이블에 PRODUCT_CODE, SELLER_NO, STOCK, PRICE, REG_DATE를 등록
-    		 document.getElementById('registerModalBtn').addEventListener('click', function() {
+    		/* document.getElementById('registerModalBtn').addEventListener('click', function() {
 		        const selectedOption = Array.from(document.getElementById('model-names').options).find(option => option.value === modelNameInput.value);
 		        const productCode = selectedOption ? selectedOption.getAttribute('data-product-code') : null;
 
@@ -196,8 +198,8 @@
 		            console.error('Error:', error);
 		            alert(error.message);
 		        });
-		    });
-        </script>
+		    });*/
+        </script> 
         <div class="searchbox">
             <input type="text" placeholder="검색할 제품 입력" id="keyword">
             <button class="searchbutton" onclick=Search()>검색</button>
@@ -335,4 +337,4 @@
 		});
     </script>
     </div>
-</th:block>
+</th:block>	
