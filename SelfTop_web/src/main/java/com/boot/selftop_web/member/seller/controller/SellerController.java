@@ -386,7 +386,6 @@ public class SellerController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
 	}
-	
 
 	//판매자가 올린 아이템을 삭제하는 기능(Product_Status table에서 삭제)
 	@PostMapping("/changeproduct")
