@@ -22,12 +22,6 @@ header {
     align-items: center;
 }
 
-/*.header-content img {*/
-/*    width: 150px;*/
-/*    margin-left: 10%;*/
-/*    height: 70px;*/
-/*}*/
-
 .header-content p {
     margin-right: 12%;
     display: flex;
@@ -38,13 +32,21 @@ header {
 	font-size: 20px;
 }
 
-.header-content p img {
-    width: 30px;
-    height: 30px;
+.lock-icon{
+    width: 22px;
+    height: 22px;
     margin-left: 5px;
+    margin-top:5px;
     transition: transform 0.3s ease;
 }
 
+.human-icon{
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+    margin-top:5px;
+    transition: transform 0.3s ease;
+}
 
 .header-content p img:hover {
     transform: scale(1.5);

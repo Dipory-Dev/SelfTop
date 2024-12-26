@@ -26,27 +26,6 @@ function checkCurrentPassword() {
         document.querySelector('#pw-error').textContent = '';
         return;
     }
-
-    // 서버로 기존 비밀번호 검증 요청
-    $.ajax({
-        url: '/verifyPassword',  // 서버에 비밀번호 검증을 위한 엔드포인트
-        method: 'POST',
-        data: {
-            currentPassword: currentPassword
-        },
-        success: function(response) {
-            if (response.isValid) {
-                // 비밀번호가 일치하면 오류 메시지 제거
-                document.querySelector('#pw-error').textContent = '';
-            } else {
-                // 비밀번호가 일치하지 않으면 오류 메시지 표시
-                document.querySelector('#pw-error').textContent = '기존 비밀번호가 일치하지 않습니다.';
-            }
-        },
-        error: function() {
-            document.querySelector('#pw-error').textContent = '서버 오류가 발생했습니다. 다시 시도해주세요.';
-        }
-    });
 }
 
 // 변경할 비밀번호 조건 검사

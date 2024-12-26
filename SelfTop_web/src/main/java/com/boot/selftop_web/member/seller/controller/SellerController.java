@@ -52,6 +52,20 @@ public class SellerController {
 	@Autowired
 	private OrderBoardBiz orderboardbiz;
 
+	@GetMapping("/main")
+	public String sellermain(HttpSession session,Model model) {
+		if(session.getAttribute("member_no") == null) {
+			return "redirect:/loginform";
+
+		}
+		int membernum=(int) session.getAttribute("member_no");
+		List<SellerOrderDto> res = sellerBiz.selectList(membernum);
+		model.addAttribute("seller",res);
+		model.addAttribute("membername",session.getAttribute("name"));
+		session.setAttribute("table", "order");
+		return "sellermain";
+	}
+
 	@GetMapping("/signUp")
 	public String showSignUpForm() {
 		return "sellerSignUp";
@@ -69,20 +83,6 @@ public class SellerController {
 	    model.addAttribute("sellerInfo", sellerInfo);
 
 		return "sellerMyPage";
-	}
-
-	@GetMapping("/main")
-	public String sellermain(HttpSession session,Model model) {
-		if(session.getAttribute("member_no") == null) {
-			return "redirect:/loginform";
-
-		}
-		int membernum=(int) session.getAttribute("member_no");
-		List<SellerOrderDto> res = sellerBiz.selectList(membernum);
-		model.addAttribute("seller",res);
-		model.addAttribute("membername",session.getAttribute("name"));
-		session.setAttribute("table", "order");
-		return "sellermain";
 	}
 
 	@GetMapping("/datesearch")
@@ -200,33 +200,6 @@ public class SellerController {
 	        return "redirect:infoChange";
 	    }
 	}
-
-//	@PostMapping("/signUp")
-//	public String registerSeller(
-//			@RequestParam("id") String id,
-//			@RequestParam("pw") String pw,
-//			@RequestParam("confirmPassword") String confirmPassword,
-//			@RequestParam("email") String email,
-//			@RequestParam("terms") boolean terms,
-//			Model model) {
-//
-//		// 비밀번호 확인
-//		if (!pw.equals(confirmPassword)) {
-//			model.addAttribute("error", "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-//			return "sellerSignUp";
-//		}
-//
-//
-//		// 약관 동의 확인
-//		if (!terms) {
-//			model.addAttribute("error", "서비스 약관과 개인정보 처리방침에 동의하셔야 합니다.");
-//			return "sellerSignUp";
-//		}
-//
-//		model.addAttribute("message", "회원가입이 완료되었습니다.");
-//		return "sellerMain";
-//	}
-
 
 	@RequestMapping(value="/addressPopup")
 	public ModelAndView addressPopup(HttpServletRequest request, @RequestParam HashMap<String, String> p, Locale locale) {
@@ -353,7 +326,7 @@ public class SellerController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
 	}
-	
+
 	@GetMapping("/caseProducts")
 	public ResponseEntity<List<CaseDto>> fetchCaseProducts() {
 	    try {
@@ -363,7 +336,7 @@ public class SellerController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
 	}
-	
+
 	@GetMapping("/gpuProducts")
 	public ResponseEntity<List<GPUDto>> fetchGpuProducts() {
 	    try {
@@ -373,7 +346,7 @@ public class SellerController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
 	}
-	
+
 	@GetMapping("/powerProducts")
 	public ResponseEntity<List<PowerDto>> fetchPowerProducts() {
 	    try {
@@ -383,7 +356,7 @@ public class SellerController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
 	}
-	
+
 	@GetMapping("/ssdProducts")
 	public ResponseEntity<List<SSDDto>> fetchSsdProducts() {
 	    try {
@@ -393,7 +366,7 @@ public class SellerController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
 	}
-	
+
 	@GetMapping("/hddProducts")
 	public ResponseEntity<List<HDDDto>> fetchHddProducts() {
 	    try {
@@ -403,7 +376,7 @@ public class SellerController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
 	}
-	
+
 	@GetMapping("/coolerProducts")
 	public ResponseEntity<List<CoolerDto>> fetchCoolerProducts() {
 	    try {
@@ -413,29 +386,49 @@ public class SellerController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	    }
 	}
-	
+
+
+	//판매자가 올린 아이템을 수정, 삭제하는 기능(Product_Status table에서 수정, 삭제)
 	@PostMapping("/changeproduct")
-	public String changeproduct(@RequestParam("title") String action,
-	        					@RequestParam("price") int price,
-	        					@RequestParam("stock") int stock,
-							    HttpSession session) {
-
-		// 세션에서 로그인한 사용자 정보 가져오기
-	    Integer product_code = (Integer) session.getAttribute("product_code");
-
-	    // 가격, 재고 변경 처리
-	    ProductStatusDto dto = new ProductStatusDto();
-	    dto.setProduct_code(product_code);  // 세션에서 가져온 product_code 설정
-
-	    System.out.println(price);
-		System.out.println(stock);
-
-	    if (price > 0 && stock > 0) {
-	        return "redirect:myPage";
-	    } else {
-	        return "redirect:/logout";
+	public ResponseEntity<?> changeProductStatus(HttpSession session, @RequestBody(required=false) Map<String, Object> payload,
+												 @RequestParam("productCode") int productCode, @RequestParam("action") String action) {
+	    Integer sellerNo = (Integer) session.getAttribute("member_no");
+	    if (sellerNo == null) {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "로그인이 필요합니다."));
 	    }
-	}
 
+	    // 수정 기능 처리
+	    if ("update".equals(action)) {
+	        // 수정할 값이 모두 제공되었는지 확인
+	    	Integer price = (Integer) payload.get("price");
+	        Integer stock = (Integer) payload.get("stock");
+
+	        try {
+	            int result = productStatusMapper.updateProductStatus(price, stock, productCode, sellerNo);
+	            if (result > 0) {
+	                return ResponseEntity.ok(Map.of("message", "제품 재고가 성공적으로 수정되었습니다."));
+	            } else {
+	                return ResponseEntity.badRequest().body(Map.of("message", "해당 제품 재고를 수정할 수 없습니다."));
+	            }
+	        } catch (Exception e) {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "서버 오류가 발생했습니다: " + e.getMessage()));
+	        }
+	    }
+
+	    if ("delete".equals(action)) {
+	        try {
+	            int result = productStatusMapper.deleteProductStatus(productCode, sellerNo);
+	            if (result > 0) {
+	                return ResponseEntity.ok(Map.of("message", "제품 삭제가 성공적으로 완료되었습니다."));
+	            } else {
+	                return ResponseEntity.badRequest().body(Map.of("message", "해당 제품을 삭제할 수 없습니다."));
+	            }
+	        } catch (Exception e) {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "서버 오류가 발생했습니다: " + e.getMessage()));
+	        }
+	    }
+
+	    return ResponseEntity.badRequest().body(Map.of("message", "지원하지 않는 작업입니다."));
+	}
 
 }
