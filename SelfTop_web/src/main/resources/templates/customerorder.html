@@ -85,9 +85,14 @@
 					</div>
 				</div>
 				<div class="productlink">
-					<p th:text=${dto.product_name}></p>
-					<p th:if="${dto.item != 0}"
-						th:text="외 + ' '+ ${dto.item} + ' ' + 건"></p>
+					<form id="orderForm" action="/orderdetail" method="post"
+						style="display: none;">
+						<input type="hidden" name="order_num" id="order_num" />
+					</form>
+					<p th:text="${dto.product_name}" th:onclick="'sendordernum(' + ${dto.order_num} + ');'" ></p>
+						<p th:if="${dto.item != 0}" th:text="외 + ' '+ ${dto.item} + ' ' + 건" 
+						th:onclick="'sendordernum(' + ${dto.order_num} + ');'" ></p>
+					
 				</div>
 				<div class="pricestatus">
 					 <div>

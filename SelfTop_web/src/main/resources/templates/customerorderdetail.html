@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer_order_detail</title>
+<link rel="stylesheet" href="/css/customerorder.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function () {
+		const params = new URLSearchParams(window.location.search);
+		const message = params.get("message");
+		if (message) {
+			alert(message);
+		}
+	});
+</script>
+<script type="text/javascript" src="/js/customerorder.js"></script>
+</head>
+<body>
+	<header>
+		<div class="header-content">
+			<img src="/img/logo.png">
+			<p>
+				  <span th:text="${membername} + 님"></span>&nbsp| <a href="mypage">
+					<img src="/img/human-icon.png" class="human-icon">
+				</a> <a href="cart"> <img src="/img/cart-icon.png" class="cart-icon">
+				</a> <a href="signup"> <img src="/img/lock-icon.png"
+					class="lock-icon">
+				</a>
+			</p>
+		</div>
+	</header>
+	<main>
+		<div id="title">
+			<a href="mypage"> 
+				<span id="mypage-tab" >마이페이지</span> 
+			</a>| 
+			<a href="order"> 
+				<span id="order-tab" class="selected">주문 내역</span>
+			</a>
+		</div>
+		<div class="order_status">
+			<div>
+				<div>
+					<h2>주문 <br> 상세정보</h2>
+				</div>
+				<div><h2>취소요청</h2></div>
+			</div>
+			<div>
+				<h2>주문번호</h2>
+				<h2 th:text=${waitdepositcount}></h2>
+			</div>
+			<div>
+				<h2>주문날짜</h2>
+				<h2 th:text=${completepaycount}></h2>
+			</div>
+			<div>
+				<h2>상태</h2>
+				<h2 th:text=${shippingcount}></h2>
+			</div>
+		</div>
+		<div class="delivery">
+				<h2>송장번호</h2>
+		</div>
+		<div class="orderprice">
+			<div class="productprice">
+				<div><p>상품금액</p></div>
+				<div>500원</div>
+			</div>
+			<div class ="deliveryprice">
+				<div>배송비</div>
+				<div>500원</div>
+			</div>
+			<div class="totalprice">
+				<div>결제금액</div>
+				<div>1000원</div>
+			</div>
+		</div>
+
+
+
+	</main>
+
+	<footer>
+		<div class="footer-content">
+			<img src="/img/logo-footer.png" alt="로고">
+			<div class="footer-text">
+				<p>&copy; 2024 Copyright: SelfTop All rights reserved.</p>
+				<p>팀원: 김지성, 오원석, 권장현, 양다연, 임성규</p>
+				<p>문의: 02-1234-5678</p>
+				<p>메일: SelfTop@selftop.com</p>
+			</div>
+		</div>
+	</footer>
+
+</body>
+</html>
