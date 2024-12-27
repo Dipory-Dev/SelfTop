@@ -1,7 +1,11 @@
 package com.boot.selftop_web.member.customer.biz;
 
 
+import java.util.List;
+
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
+import com.boot.selftop_web.member.customer.model.dto.CustomerorderDto;
+import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,4 +32,8 @@ public interface CustomerBiz {
 	public CustomerDto findkakao(Map<String, Object> userInfo);
 
 	public int kakaoinsert(CustomerDto dto);
+
+	public List<SellerOrderDto> selectcustomerorderlist(int member_no);
+
+	public List<SellerOrderDto> searchcustomerorderlist(String startdate,String enddate,int member_no);
 }

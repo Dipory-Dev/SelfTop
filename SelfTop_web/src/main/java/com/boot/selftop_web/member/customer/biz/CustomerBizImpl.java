@@ -1,9 +1,13 @@
 package com.boot.selftop_web.member.customer.biz;
 
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
+import com.boot.selftop_web.member.customer.model.dto.CustomerorderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
 import com.boot.selftop_web.member.customer.biz.mapper.CustomerMapper;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -80,5 +84,17 @@ public class CustomerBizImpl implements CustomerBiz {
 		// 카카오 사용자 정보를 받아서 고객 등록
 		System.out.println("userinfo 비즈 " + dto);
 		return mapper.insertCustomer(dto); // 카카오 사용자 저장
+	}
+
+	@Override
+	public List<SellerOrderDto> selectcustomerorderlist(int member_no) {
+
+		return mapper.selectcustomerorderlist(member_no);
+	}
+
+	@Override
+	public List<SellerOrderDto> searchcustomerorderlist(String startdate, String enddate, int member_no) {
+		// TODO Auto-generated method stub
+		return mapper.searchcustomerorderlist(startdate,enddate,member_no);
 	}
 }
