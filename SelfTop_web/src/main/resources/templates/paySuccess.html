@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer_PaySuccess</title>
+<link rel="stylesheet" href="/css/paySuccess.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="/img/logo.png">
+           	<p>
+           		<span th:text="${customer.name} + 님"></span>&nbsp|
+           		<a href="mypage">
+           			<img src="/img/human-icon.png" class="human-icon">
+           		</a>
+           		<a href="cart">
+           			<img src="/img/cart-icon.png" class="cart-icon">
+           		</a>
+           		<a href="logout">
+           			<img src="/img/lock-icon.png" class="lock-icon">
+           		</a>
+           	</p>
+        </div>
+    </header>
+    <main>
+    	<p>감사합니다!</p>
+    	<p>결제가 완료되었습니다!</p>
+    	<button class="btn-main" onclick="window.location.href='/main'">메인으로</button>
+    </main>
+
+    <footer>
+    	<div class="footer-content">
+        	<img src="/img/logo-footer.png" alt="로고">
+        	<div class="footer-text">
+            	<p>&copy; 2024 Copyright: SelfTop All rights reserved.</p>
+            	<p>팀원: 김지성, 오원석, 권장현, 양다연, 임성규</p>
+        	  	<p>문의: 02-1234-5678</p>
+           	 	<p>메일: SelfTop@selftop.com</p>
+       	 	</div>
+   		</div>
+	</footer>
+
+</body>
+</html>
