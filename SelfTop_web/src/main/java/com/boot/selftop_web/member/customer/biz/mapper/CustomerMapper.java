@@ -38,4 +38,9 @@ public interface CustomerMapper {
 
     @Update("update customer set email=#{email}, phone = #{phone} where member_no = #{member_no}")
     int changeInfo(@Param("email") String email, @Param("phone") String phone, @Param("member_no") int member_no);
+
+
+    @Select("SELECT * FROM customer WHERE email = #{email}")
+    CustomerDto findkakao(@Param("email") String email);
+
 }

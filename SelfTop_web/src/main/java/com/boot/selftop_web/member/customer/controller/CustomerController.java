@@ -1,8 +1,8 @@
 package com.boot.selftop_web.member.customer.controller;
 
+import com.boot.selftop_web.member.customer.biz.KakaoService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,11 +17,16 @@ import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Map;
+
 @Controller
 @RequestMapping("/")
 public class CustomerController {
 	@Autowired
 	private CustomerBiz customerBiz;
+
+	@Autowired
+	private KakaoService kakaoService;
 
 	@GetMapping("/loginform")
     public String LoginSection(HttpSession session) {
@@ -203,4 +208,37 @@ public class CustomerController {
 		}
 	}
 
+	//카카오 로그인 기능이 처리되는 페이지
+	@RequestMapping(value = "/loginform/getKakaoAuthUrl")
+	public @ResponseBody String getKakaoAuthUrl(HttpServletRequest request) throws Exception {
+
+		String reqUrl =
+				"https://kauth.kakao.com/oauth/authorize?client_id=66f3a9b8a7fc33ae96bc2f1fbc513320&redirect_uri=http://localhost:8080/kakaoLogin&response_type=code";
+		return reqUrl;
+	}
+
+	@RequestMapping(value = "/kakaoLogin")
+	public String oauthKakao(@RequestParam(value = "code",required = false) String code,
+							 HttpSession session, RedirectAttributes redirectAttributes) {
+
+		String access_Token = kakaoService.getAccessToken(code);
+		CustomerDto kakaouser = kakaoService.getuserinfo(access_Token);
+
+		if (kakaouser == null) {
+			redirectAttributes.addFlashAttribute("message", "카카오 로그인에 실패했습니다.");
+			return "redirect:/loginform";
+		} else {
+			session.setAttribute("role", kakaouser.getRole());
+			session.setAttribute("member_no", kakaouser.getMember_no());
+			if (kakaouser.getRole() == 'D') {
+				redirectAttributes.addFlashAttribute("message", "탈퇴된 계정입니다.");
+				return "redirect:/loginform";
+			} else if (kakaouser.getRole() == 'C') {
+				return "redirect:/";
+			} else {
+				redirectAttributes.addFlashAttribute("message", "계정 정보를 확인해주세요.");
+				return "redirect:/loginform";
+			}
+		}
+	}
 }

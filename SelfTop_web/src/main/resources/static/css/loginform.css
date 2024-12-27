@@ -105,11 +105,10 @@ input::placeholder {
 }
 
 .SNS_btn{
-	margin-top: 10%;
+    cursor: pointer;
     border-radius: 5px;
     border-color: #008ada;
     color: #fff;
-    background-color:#FAE100 ;
     width:100%;
 }
 

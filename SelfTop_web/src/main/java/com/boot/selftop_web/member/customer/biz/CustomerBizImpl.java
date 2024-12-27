@@ -7,23 +7,26 @@ import com.boot.selftop_web.member.customer.biz.mapper.CustomerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class CustomerBizImpl implements CustomerBiz {
 
 	@Autowired
 	public CustomerMapper mapper;
-	
+
 	@Override
 	public CustomerDto memberlogin(String id, String pw) {
-		
+
 		return mapper.memberlogin(id, pw);
 	}
-	
+
 	@Override
 	public String checkpw(CustomerDto dto) {
 		return mapper.checkpw(dto);
 	}
-	
+
 	@Override
 	public int changepw(CustomerDto dto, String pw) {
 		return mapper.changepw(dto, pw);
@@ -61,5 +64,21 @@ public class CustomerBizImpl implements CustomerBiz {
 	public int changeInfo(String email, String phone, int member_no)
 	{
 		return mapper.changeInfo(email, phone, member_no);
+	}
+
+	@Override
+	public CustomerDto findkakao(Map<String, Object> userInfo) {
+		// 카카오 사용자 정보를 받아서 DTO로 변환 후 반환
+		String email = (String) userInfo.get("email");
+
+		return mapper.findkakao(email);
+		// 최초 로그인 시 null 반환으로 kakaoinsert 메서드 실행되도록 구성
+	}
+
+	@Override
+	public int kakaoinsert(CustomerDto dto) {
+		// 카카오 사용자 정보를 받아서 고객 등록
+		System.out.println("userinfo 비즈 " + dto);
+		return mapper.insertCustomer(dto); // 카카오 사용자 저장
 	}
 }

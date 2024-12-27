@@ -3,6 +3,9 @@ package com.boot.selftop_web.member.customer.biz;
 
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public interface CustomerBiz {
 	public CustomerDto memberlogin(String id, String pw);
@@ -21,4 +24,8 @@ public interface CustomerBiz {
 	public CustomerDto selectCustomer(int member_no);
 
 	public int changeInfo(String email, String phone, int member_no);
+
+	public CustomerDto findkakao(Map<String, Object> userInfo);
+
+	public int kakaoinsert(CustomerDto dto);
 }
