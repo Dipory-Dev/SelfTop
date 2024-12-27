@@ -34,5 +34,5 @@ function sendordernum(element) {
 	document.getElementById('orderdate').value = orderDate;
 	// 폼 제출
 	document.getElementById('orderForm').submit();
-	
+
 }

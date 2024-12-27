@@ -390,9 +390,9 @@ public class CustomerController {
 		Integer member_no = (Integer) session.getAttribute("member_no");
 		List<SellerOrderDto> res = customerBiz.customerpurchaselist(member_no,Integer.parseInt(orderNum));
 		List<OrderBoardDto> customerinfo = orderboardBiz.vieworderboard(Integer.parseInt(orderNum));
-		
 
-		
+
+
 
 		model.addAttribute("membername", session.getAttribute("name"));
 		model.addAttribute("orderinfo",res);
@@ -402,7 +402,7 @@ public class CustomerController {
 		model.addAttribute("orderdate",orderdate);
 		model.addAttribute("customerinfo", customerinfo.get(0));
 
-		
+
 		return "customerorderdetail";
 	}
 
