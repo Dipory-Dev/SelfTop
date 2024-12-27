@@ -21,3 +21,11 @@ function Reset(){
 
 	 Search();
 	}
+
+function sendordernum(orderNum) {
+	document.getElementById('order_num').value = orderNum;
+
+	// 폼 제출
+	document.getElementById('orderForm').submit();
+	
+}
