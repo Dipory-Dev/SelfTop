@@ -94,7 +94,6 @@ public class CustomerController {
 	public String changepw(@RequestParam("cur_pw") String cur_pw,
             			   @RequestParam("new_pw") String new_pw,
             			   HttpSession session,
-            			   Model model,
             			   RedirectAttributes redirectAttributes) {
 
 		// 세션에서 로그인한 사용자 정보 가져오기
@@ -106,7 +105,7 @@ public class CustomerController {
 
 	    String curpw = customerBiz.checkpw(customerDto);
 	    if (!curpw.equals(cur_pw)) {
-	        model.addAttribute("errorMessage", "기존 비밀번호가 일치하지 않습니다."); // 에러 메시지 전달
+	    	redirectAttributes.addAttribute("message", "기존 비밀번호와 일치하지 않습니다.");
 	        return "redirect:infoChange"; // 비밀번호 변경 페이지로 돌아가면서 에러 메시지를 표시
 	    }
 		int resnewpw = customerBiz.changepw(customerDto, new_pw);
@@ -116,6 +115,7 @@ public class CustomerController {
 			return "redirect:/";
 		}
 		else {
+			redirectAttributes.addAttribute("message", "비밀번호 변경에 실패했습니다.");
 			return "redirect:infoChange";
 		}
 	}

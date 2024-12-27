@@ -85,7 +85,7 @@ main{
   margin-right:auto;
   border:1px solid #ccc ;
   margin-top:160px;
-  
+
 }
 
 
@@ -182,7 +182,7 @@ main{
 	margin-top:20px;
 	margin-left:auto;
 	margin-right:auto;
-	width: 93%; 
+	width: 93%;
     border-collapse: collapse; 
 	
 }
@@ -279,6 +279,7 @@ footer {
     background-color: rgba(0, 0, 0, 0.5);
     
 }
+
 #openModalBtn{
 	height: 30px;
     background-color: #008ADA;
