@@ -18,7 +18,7 @@ public class PowerBizImpl implements ProductBiz<PowerDto> {
 
     @Override
     public List<PowerDto> selectAll() {
-        return null;
+    	return null;
     }
 
     @Override
@@ -44,4 +44,13 @@ public class PowerBizImpl implements ProductBiz<PowerDto> {
         }
         return result;
     }
+
+	@Override
+	public List<PowerDto> getProductsByCategory(String category) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
 }

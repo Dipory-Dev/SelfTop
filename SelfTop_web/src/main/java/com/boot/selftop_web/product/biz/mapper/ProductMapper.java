@@ -27,6 +27,7 @@ public interface ProductMapper {
     @Select("SELECT SEQ_PRODUCT.CURRVAL FROM DUAL")
     int getCurrentProductCode();
     
+    //판매자가 제품을 등록할때 필요
     @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC FROM PRODUCT p JOIN CPU c ON p.PRODUCT_CODE = c.PRODUCT_CODE")
     List<CPUDto> findAllCpuProducts();
     
@@ -61,4 +62,14 @@ public interface ProductMapper {
     default boolean isValidProductCode(int productCode) {
         return countByProductCode(productCode) > 0;
     }
+    
+    //product테이블에서 cpu만 가져오는 쿼리문
+    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
+            "MIN(ps.PRICE) AS price " +
+            "FROM PRODUCT p " +
+            "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "WHERE p.CATEGORY = 'CPU' " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL")
+    List<CPUDto> findAllDetailedCpuProducts();
+    
 }

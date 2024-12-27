@@ -25,30 +25,38 @@ public class CPUDto implements ProductDto {
     private String cooler_status;
     private int core;
     private int watt;
+    
 
     public CPUDto() {}
 
-    public CPUDto(int product_code, String category, String product_name, String company, Date upload_date, String thumbnail, String content_img, String etc, String socket, String ddr, String generation, String spec, String inner_vga, String package_type, String cooler_status, int core, int watt) {
-        this.product_code = product_code;
-        this.category = category;
-        this.product_name = product_name;
-        this.company = company;
-        this.upload_date = upload_date;
-        this.thumbnail = thumbnail;
-        this.content_img = content_img;
-        this.etc = etc;
-        this.socket = socket;
-        this.ddr = ddr;
-        this.generation = generation;
-        this.spec = spec;
-        this.inner_vga = inner_vga;
-        this.package_type = package_type;
-        this.cooler_status = cooler_status;
-        this.core = core;
-        this.watt = watt;
-    }
+    
 
-    public int getProduct_code() {
+    public CPUDto(int product_code, String category, String product_name, String company, Date upload_date,
+			String thumbnail, String content_img, String etc, String socket, String ddr, String generation, String spec,
+			String inner_vga, String package_type, String cooler_status, int core, int watt) {
+		super();
+		this.product_code = product_code;
+		this.category = category;
+		this.product_name = product_name;
+		this.company = company;
+		this.upload_date = upload_date;
+		this.thumbnail = thumbnail;
+		this.content_img = content_img;
+		this.etc = etc;
+		this.socket = socket;
+		this.ddr = ddr;
+		this.generation = generation;
+		this.spec = spec;
+		this.inner_vga = inner_vga;
+		this.package_type = package_type;
+		this.cooler_status = cooler_status;
+		this.core = core;
+		this.watt = watt;
+	}
+
+
+
+	public int getProduct_code() {
         return product_code;
     }
 
@@ -184,7 +192,8 @@ public class CPUDto implements ProductDto {
         this.watt = watt;
     }
 
-    @Override
+
+	@Override
     public String toString() {
         return "CPUDto{" +
                 "product_code=" + product_code +
