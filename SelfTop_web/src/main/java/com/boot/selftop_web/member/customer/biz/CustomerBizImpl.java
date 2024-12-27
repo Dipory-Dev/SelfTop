@@ -14,10 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.tosspayments.TossPayments;
-import com.tosspayments.model.PaymentRequest;
-import com.tosspayments.model.PaymentResponse;
-
 @Service
 public class CustomerBizImpl implements CustomerBiz {
 
@@ -111,7 +107,7 @@ public class CustomerBizImpl implements CustomerBiz {
      * @param orderName 주문 이름
      * @return 결제 요청 결과
      */
-    public String initiatePayment(int amount, String orderId, String orderName) {
+    /*public String initiatePayment(int amount, String orderId, String orderName) {
         try {
             // TossPayments 결제 API 호출
             TossPayments tossPayments = new TossPayments("test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm");  // Secret Key 설정
@@ -134,7 +130,7 @@ public class CustomerBizImpl implements CustomerBiz {
      * @param paymentResponse 결제 응답 데이터
      * @return 결제 처리 결과
      */
-    public String handlePaymentSuccess(PaymentResponse paymentResponse) {
+    /*public String handlePaymentSuccess(PaymentResponse paymentResponse) {
         // 결제 성공 시 처리 로직 (예: DB 업데이트, 사용자에게 알림 등)
         System.out.println("Payment Success: " + paymentResponse);
         return "Payment successful!";
@@ -145,9 +141,9 @@ public class CustomerBizImpl implements CustomerBiz {
      * @param errorMessage 결제 실패 메시지
      * @return 결제 실패 처리 결과
      */
-    public String handlePaymentFailure(String errorMessage) {
+    /*public String handlePaymentFailure(String errorMessage) {
         // 결제 실패 시 처리 로직
         System.out.println("Payment Failed: " + errorMessage);
         return "Payment failed: " + errorMessage;
-    }
+    }*/
 }
