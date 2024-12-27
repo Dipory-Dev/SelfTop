@@ -429,5 +429,4 @@ public class SellerController {
 
 	    return ResponseEntity.badRequest().body(Map.of("message", "지원하지 않는 작업입니다."));
 	}
-
 }
