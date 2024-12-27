@@ -1,0 +1,278 @@
+* {
+	margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    color: #666;
+}
+
+header {
+	position: fixed;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+    z-index: 1000;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: white;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-content img {
+    width: 170px;
+    margin-left: 10%;
+    height: 70px;
+}
+
+.header-content p {
+    margin-right: 12%;
+    display: flex;
+    align-items: center;
+}
+
+.header-content p span {
+	font-size: 20px;
+    cursor: pointer;
+}
+
+.header-content p img {
+    width: 30px;
+    height: 30px;
+    transition: transform 0.3s ease;
+}
+
+.header-content p .human-icon {
+	width: 40px;
+	height: 40px;
+    margin-left: 10px;
+}
+
+.header-content p .cart-icon {
+    margin-left: 10px;
+}
+
+.header-content p .lock-icon {
+    margin-left: 20px;
+}
+
+.header-content p span:hover {
+    text-decoration: underline;
+}
+
+.header-content p img:hover {
+    transform: scale(1.5);
+}
+
+body {
+    padding-top: 90px;
+    min-height: 100vh;
+}
+
+main{
+    flex: 1;
+    align-items: center;
+    width: 1300px;
+    margin: 0 auto;
+    min-height: calc(100vh - 120px);
+    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+}
+
+#title {
+	width: 1300px;
+	height: 75px;
+	display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-bottom: 2px solid #000;
+    font-size: 16px;
+}
+
+#title a {
+	text-decoration: none;
+	color: inherit;
+}
+
+#title a span {
+	margin: 0 20px;
+	cursor: pointer;
+	transition: font-size 0.3s ease;
+}
+
+#title a span:hover {
+	font-size: 24px;
+	font-weight: bold;
+}
+
+#title a span.selected {
+	font-weight: bold;
+	font-size: 24px;
+}
+
+span {
+	margin: 0 5px;
+	color: #555;
+}
+
+.btn-modify{
+    padding: 10px 30px;
+    margin-left: 72%;
+    background: #008ADA;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 20px;
+    cursor: pointer;
+    
+}
+
+.btn-modify:hover{
+    background: #006bb3;
+}
+.order_status{
+	display:flex;
+	gap: 10px;
+}
+.order_status div{
+	flex :1;
+}
+.order_status div h2 {
+  text-align: center; 
+}
+
+.order_status div:first-child{
+	margin-left:5px;
+	border-right: 1px solid #ccc;
+}
+.order_status div:last-child{
+	margin-left:10px;
+}
+.imagedate{
+	flex:1;	
+}
+.productlink{
+	flex:5;
+}
+.pricestatus{
+	display:flex;
+	flex-direction: column;
+	flex:1;
+	
+}
+
+.pricestatus>div{
+	display:flex;
+	flex:1;
+   	justify-content: center; 
+    align-items: center; 
+    text-align: center;
+    border: 1px solid #ccc; 
+	
+}
+
+.imagedate .inform {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    text-align: center;
+}
+
+.imagedate .image{
+	display: flex; 
+    justify-content: center; 
+    align-items: center; 
+}
+
+
+
+.productlink{
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    text-align: center; 
+
+}
+
+
+.pricestatus>div>p{
+	text-align: center; 
+}
+
+
+.search{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border:none;
+  border-top:1px solid #ccc;
+  border-bottom:1px solid#ccc;
+  height: 42px;
+
+}
+
+
+.searchbox{
+	margin-left: auto;
+	margin-right:4.7%;
+	padding:5px;
+	margin-right:4.7%;
+}
+
+
+
+.searchbutton{
+	background-color:#008ADA;
+	color:#FFFFFF;
+	border-radius:3px;
+	border:none;
+	height:25px;
+	cursor:pointer;
+}
+
+
+.customer-order-data div{
+	border:1px solid;
+	
+}
+.customer-order-data {
+	display:flex;
+}
+
+.info-section {
+	margin-left:50px;
+	margin-top:30px;
+	margin-bottom:30px;
+}
+footer {
+    background-color: #E8E8E8;
+    font-size: 14px;
+    color: #4f4f4f;
+    height: 120px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.footer-content img {
+	width: 170px;
+    margin-left: 10%;
+    height: 90px;
+}
+
+.footer-text {
+    text-align: right;
+    margin-right: 10%;
+}
+
+.footer-text p, .footer-text span {
+    margin: 5px 0;
+}

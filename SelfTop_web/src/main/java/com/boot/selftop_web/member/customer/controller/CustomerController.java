@@ -1,6 +1,11 @@
 package com.boot.selftop_web.member.customer.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Controller;
@@ -13,6 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.boot.selftop_web.member.customer.biz.CustomerBiz;
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
+import com.boot.selftop_web.member.customer.model.dto.CustomerorderDto;
+import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
+import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -201,6 +209,114 @@ public class CustomerController {
 		} else {
 			return "redirect:/signup";
 		}
+	}
+	
+	@GetMapping("/order")
+	public String customerorder(HttpSession session, Model model) {
+		if (session.getAttribute("member_no") == null) {
+			return "redirect:/loginform";
+		}
+
+		Integer member_no = (Integer) session.getAttribute("member_no");
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + member_no);
+		List<SellerOrderDto> res = customerBiz.selectcustomerorderlist(member_no);
+		List<CustomerorderDto> orderres = new ArrayList<>();
+		System.out.println(res.get(0).getAmount());
+		System.out.println(res.size());
+		
+		for (SellerOrderDto copyres : res) {
+			// 이미 orderres에 해당 order_no가 있는지 확인
+			CustomerorderDto exportres = orderres.stream()
+					.filter(dto -> dto.getOrder_num() == copyres.getOrder_no()).findFirst().orElse(null);
+
+			if (exportres == null) {
+				CustomerorderDto neworder = new CustomerorderDto(copyres.getThumbnail(), copyres.getOrder_Date(),
+						copyres.getProduct_name(), copyres.getPrice() * copyres.getAmount(), copyres.getOrder_no(),
+						copyres.getOrder_status(), member_no, 0
+
+				);
+				orderres.add(neworder);
+			} else {
+				System.out.println("돌앗음");
+				exportres.setItem(exportres.getItem() + 1);
+				exportres.setPrice(exportres.getPrice() + (copyres.getPrice() * copyres.getAmount()));
+			}
+		}
+		
+
+		model.addAttribute("membername", session.getAttribute("name"));
+		model.addAttribute("customerorder",orderres);
+		int waitdepositcount = 0; // 입금대기
+		int completepaycount = 0; // 결제완료
+		int shippingcount = 0; // 결제완료
+		int endshippingcount = 0; // 결제완료
+		int canclecount = 0; // 결제완료
+		
+
+		// orderres 리스트 순회하면서 주문 상태별 개수 세기
+		for (CustomerorderDto order : orderres) {
+		    String status = order.getOrder_status();
+		    
+		    // 주문 상태별로 카운트 증가
+		    if ("입금대기".equals(status.replaceAll("\\s+", ""))) {
+		    	waitdepositcount++;
+		    } else if ("결제완료".equals(status.replaceAll("\\s+", ""))) {
+		    	completepaycount++;
+		    }else if ("배송중".equals(status.replaceAll("\\s+", ""))) {
+		    	shippingcount++;
+		    }else if ("배송완료".equals(status.replaceAll("\\s+", ""))) {
+		    	endshippingcount++;
+		    }else if ("취소".equals(status.replaceAll("\\s+", ""))) {
+		    	canclecount++;
+		    }else if ("테스트중".equals(status.replaceAll("\\s+", ""))) {
+		    	canclecount++;
+		    }
+		}
+		model.addAttribute("waitdepositcount",waitdepositcount);
+		model.addAttribute("completepaycount",completepaycount);
+		model.addAttribute("shippingcount",shippingcount);
+		model.addAttribute("endshippingcount",endshippingcount);
+		model.addAttribute("canclecount",canclecount);
+		
+		return "customerorder";
+	}
+	
+	@GetMapping("/ordersearch")
+	public String searchorder(@RequestParam(required = false) String startdate, @RequestParam(required = false) String enddate,
+			Model model, HttpSession session) {
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@검색기능이 돌고있음");
+		if (startdate == null || startdate.isEmpty()) {
+			startdate = null;
+		}
+		if (enddate == null || enddate.isEmpty()) {
+			enddate = null;
+		}
+
+		Integer member_no = (Integer) session.getAttribute("member_no");
+		List<CustomerorderDto> orderres = new ArrayList<>();
+		List<SellerOrderDto> res = customerBiz.searchcustomerorderlist(startdate,enddate,member_no);
+		
+		for (SellerOrderDto copyres : res) {
+			// 이미 orderres에 해당 order_no가 있는지 확인
+			CustomerorderDto exportres = orderres.stream()
+					.filter(dto -> dto.getOrder_num() == copyres.getOrder_no()).findFirst().orElse(null);
+
+			if (exportres == null) {
+				CustomerorderDto neworder = new CustomerorderDto(copyres.getThumbnail(), copyres.getOrder_Date(),
+						copyres.getProduct_name(), copyres.getPrice() * copyres.getAmount(), copyres.getOrder_no(),
+						copyres.getOrder_status(), member_no, 0
+
+				);
+				orderres.add(neworder);
+			} else {
+				exportres.setItem(exportres.getItem() + 1);
+				exportres.setPrice(exportres.getPrice() + (copyres.getPrice() * copyres.getAmount()));
+			}
+		}
+	
+		model.addAttribute("customerorder",orderres);
+		return "customerorder :: tbody";
+
 	}
 
 }

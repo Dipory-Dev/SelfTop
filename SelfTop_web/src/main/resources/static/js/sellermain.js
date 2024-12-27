@@ -35,11 +35,6 @@ function movestock(){
 				document.getElementsByClassName("menuselect")[0].style.fontWeight = "normal";
 				document.getElementById("stockmenu").style.fontWeight = "bold";
 				const modelNameInput = document.getElementById('model-name-input');
-					if (!modelNameInput) {
-					    console.error('model-name-input 요소를 찾을 수 없습니다.');
-					} else {
-					    console.log('model-name-input 요소를 성공적으로 찾았습니다.');
-					}
 	        },
 	        error: function(xhr, status, error) {
 
