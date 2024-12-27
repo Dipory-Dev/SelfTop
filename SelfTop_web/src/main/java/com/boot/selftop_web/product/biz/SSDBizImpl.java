@@ -18,7 +18,7 @@ public class SSDBizImpl implements ProductBiz<SSDDto> {
 
     @Override
     public List<SSDDto> selectAll() {
-        return null;
+    	return null;
     }
 
     @Override
@@ -44,4 +44,12 @@ public class SSDBizImpl implements ProductBiz<SSDDto> {
         }
         return result;
     }
+
+	@Override
+	public List<SSDDto> getProductsByCategory(String category) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 }

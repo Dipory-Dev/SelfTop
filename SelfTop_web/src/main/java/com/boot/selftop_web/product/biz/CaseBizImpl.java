@@ -43,4 +43,11 @@ public class CaseBizImpl implements ProductBiz<CaseDto> {
         }
         return result;
     }
+
+	@Override
+	public List<CaseDto> getProductsByCategory(String category) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

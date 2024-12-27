@@ -1,11 +1,16 @@
 package com.boot.selftop_web.member.customer.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.relational.core.sql.In;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,7 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.boot.selftop_web.member.customer.biz.CustomerBiz;
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
-
+import com.boot.selftop_web.product.biz.ProductBiz;
+import com.boot.selftop_web.product.biz.ProductBizFactory;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -201,6 +207,28 @@ public class CustomerController {
 		} else {
 			return "redirect:/signup";
 		}
+	}
+	
+	// side-panel에서 부품을 선택하면 카테고리로 설정해 content-box안에 부품들을 리스트해서 보여줌
+	@Autowired
+	private ProductBizFactory productBizFactory;
+
+	@GetMapping("/products/{category}")
+	public ResponseEntity<?> getProductsByCategory(@PathVariable String category) {
+	    System.out.println("Fetching products for category: " + category);
+	    ProductBiz<?> productBiz = productBizFactory.getBiz(category.toLowerCase());
+	    if (productBiz == null) {
+	        System.err.println("No ProductBiz found for category: " + category);
+	        return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Invalid category: " + category));
+	    }
+
+	    List<?> products = productBiz.getProductsByCategory(category);
+	    if (products.isEmpty()) {
+	        System.out.println("No products found for category: " + category);
+	        return ResponseEntity.notFound().build();
+	    }
+
+	    return ResponseEntity.ok(products);
 	}
 
 }
