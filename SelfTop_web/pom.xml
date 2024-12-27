@@ -118,12 +118,6 @@
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
         </dependency>
-
-		<dependency>
-		    <groupId>com.tosspayments</groupId>
-		    <artifactId>toss-payments-sdk</artifactId>
-		    <version>0.0.14</version>
-		</dependency>
     </dependencies>
 
     <build>
