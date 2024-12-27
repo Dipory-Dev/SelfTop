@@ -73,9 +73,9 @@ public class CustomerBizImpl implements CustomerBiz {
 	@Override
 	public CustomerDto findkakao(Map<String, Object> userInfo) {
 		// 카카오 사용자 정보를 받아서 DTO로 변환 후 반환
-		String email = (String) userInfo.get("email");
+		String id = (String) userInfo.get("id");
 
-		return mapper.findkakao(email);
+		return mapper.findkakao(id);
 		// 최초 로그인 시 null 반환으로 kakaoinsert 메서드 실행되도록 구성
 	}
 
