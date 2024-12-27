@@ -429,29 +429,4 @@ public class SellerController {
 
 	    return ResponseEntity.badRequest().body(Map.of("message", "지원하지 않는 작업입니다."));
 	}
-
-	//판매자가 올린 아이템을 삭제하는 기능(Product_Status table에서 삭제)
-	@PostMapping("/changeproduct")
-	public ResponseEntity<?> changeProductStatus(HttpSession session, @RequestParam("productCode") int productCode, @RequestParam("action") String action) {
-	    Integer sellerNo = (Integer) session.getAttribute("member_no");
-	    if (sellerNo == null) {
-	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "로그인이 필요합니다."));
-	    }
-
-	    if ("delete".equals(action)) {
-	        try {
-	            int result = productStatusMapper.deleteProductStatus(productCode, sellerNo);
-	            if (result > 0) {
-	                return ResponseEntity.ok(Map.of("message", "제품 삭제가 성공적으로 완료되었습니다."));
-	            } else {
-	                return ResponseEntity.badRequest().body(Map.of("message", "해당 제품을 삭제할 수 없습니다."));
-	            }
-	        } catch (Exception e) {
-	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "서버 오류가 발생했습니다: " + e.getMessage()));
-	        }
-	    }
-
-	    return ResponseEntity.badRequest().body(Map.of("message", "지원하지 않는 작업입니다."));
-	}
-
 }
