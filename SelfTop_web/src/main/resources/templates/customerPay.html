@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer_Pay</title>
+    <link rel="stylesheet" href="/css/customerPay.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+	    document.addEventListener("DOMContentLoaded", () => {
+	        const mergeFixedShippingFee = () => {
+	            const rows = document.querySelectorAll("#order-table tbody tr");
+	            if (rows.length === 0) return;
+	
+	            // 첫 번째 행의 배송 금액 셀 가져오기
+	            const firstFeeCell = rows[0].querySelector(".shipping-fee");
+	            firstFeeCell.rowSpan = rows.length;
+	
+	            // 나머지 행의 배송 금액 셀 삭제
+	            rows.forEach((row, index) => {
+	                if (index > 0) {
+	                    const feeCell = row.querySelector(".shipping-fee");
+	                    if (feeCell) feeCell.remove();
+	                }
+	            });
+	        };
+	
+	        mergeFixedShippingFee();
+	    });
+    </script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="/img/logo.png">
+            <p>
+                <span th:text="${customer.name} + 님"></span>&nbsp|
+                <a href="mypage">
+                    <img src="/img/human-icon.png" class="human-icon">
+                </a>
+                <a href="cart">
+                    <img src="/img/cart-icon.png" class="cart-icon">
+                </a>
+                <a href="signup">
+                    <img src="/img/lock-icon.png" class="lock-icon">
+                </a>
+            </p>
+        </div>
+    </header>
+    <main>
+        <div id="title">
+            <h3>주문/결제</h3>
+        </div>
+        <div id="title">
+            <span>배송정보</span>
+        </div>
+        <div id="mypage-form">
+            <form action="/mypage" method="post">
+                <table>
+                    <tr>
+                        <td><label>성함</label></td>
+                        <td><input type="text" id="name" name="name"></td>
+                    </tr>
+                    <tr>
+                        <td><label>연락처</label></td>
+                        <td><input type="text" id="phone" name="phone"></td>
+                    </tr>
+                    <tr>
+                        <td><label>배송주소</label></td>
+                        <td>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="zipNo" name="zipNo" placeholder="우편번호" readonly>
+                                <button type="button" class="btn-find-address" onClick="goPopup()"><i class="fa fa-search"></i>우편번호 찾기</button>
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="address1" name="address1" placeholder="도로명주소" readonly/>&nbsp;
+                                <input type="text" class="form-control" id="address2" name="address2" placeholder="상세주소"/>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label>요청사항</label></td>
+                        <td><input type="text" id="request" name="request"></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div id="title">
+            <span>주문 상품 정보</span>
+        </div>
+        <div id="mypage-form">
+            <form action="/mypage" method="post">
+                <table id=order-table>
+                    <thead>
+		                <tr>
+		                    <th>상품 이름</th>
+		                    <th>상품 가격</th>
+		                    <th>수량</th>
+		                    <th>주문 금액</th>
+		                    <th>배송 금액</th>
+		                </tr>
+		            </thead>
+		            <tbody>
+					    <tr>
+					        <td>
+					            <div class="product-container">
+					                <img src="/img/human-icon.jpg" alt="상품 A 이미지" class="product-image">
+					                <div class="product-details">
+					                    <p class="product-type">그래픽 카드</p>
+					                    <p class="product-name">NVIDIA RTX 4090</p>
+					                </div>
+					            </div>
+					        </td>
+					        <td>10,000원</td>
+					        <td>2</td>
+					        <td>20,000원</td>
+					        <td class="shipping-fee">
+					        	<p>멀캠</p>
+					       		<span>5,000원</span>
+					       	</td>
+					    </tr>
+					    <tr>
+					        <td>
+					            <div class="product-container">
+					                <img src="/img/human-icon.jpg" alt="상품 B 이미지" class="product-image">
+					                <div class="product-details">
+					                    <p class="product-type">그래픽 카드</p>
+					                    <p class="product-name">NVIDIA RTX 4090</p>
+					                </div>
+					            </div>
+					        </td>
+					        <td>15,000원</td>
+					        <td>1</td>
+					        <td>15,000원</td>
+					    </tr>
+					    <tr>
+					        <td>
+					            <div class="product-container">
+					                <img src="/img/human-icon.jpg" alt="상품 C 이미지" class="product-image">
+					                <div class="product-details">
+					                    <p class="product-type">그래픽 카드</p>
+					                    <p class="product-name">NVIDIA RTX 4090</p>
+					                </div>
+					            </div>
+					        </td>
+					        <td>12,000원</td>
+					        <td>3</td>
+					        <td>36,000원</td>
+					    </tr>
+					</tbody>
+                </table>
+            </form>
+            <div class="payment-summary">
+			    <div class="item">
+			        <span class="label">선택상품 총금액</span>
+			        <span class="amount">60000원</span>
+			    </div>
+			    <img class="icon" src="/img/plus.png" alt="더하기">
+			    <div class="item">
+			        <span class="label">배송금액</span>
+			        <span class="amount">5000원</span>
+			    </div>
+			    <img class="icon" src="/img/same.png" alt="같다">
+			    <span class="label">최종 결제금액</span>
+			    <span class="amount">2000000원</span>
+			</div>
+			<div id="title">
+			    결제수단
+			    <input type="checkbox" id="toss-payments" name="payment-method" value="TossPayments">
+			    <label for="toss-payments">토스페이먼츠</label>
+			</div>
+			<div id="title">
+				<button class="btn-pay">결제하기</button>
+			</div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <img src="/img/logo-footer.png" alt="로고">
+            <div class="footer-text">
+                <p>&copy; 2024 Copyright: SelfTop All rights reserved.</p>
+                <p>팀원: 김지성, 오원석, 권장현, 양다연, 임성규</p>
+                <p>문의: 02-1234-5678</p>
+                <p>메일: SelfTop@selftop.com</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
