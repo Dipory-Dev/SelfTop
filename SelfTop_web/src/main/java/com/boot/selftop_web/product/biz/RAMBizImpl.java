@@ -18,7 +18,7 @@ public class RAMBizImpl implements ProductBiz<RAMDto> {
 
     @Override
     public List<RAMDto> selectAll() {
-        return null;
+    	return null;
     }
 
     @Override
@@ -44,4 +44,12 @@ public class RAMBizImpl implements ProductBiz<RAMDto> {
         }
         return result;
     }
+
+	@Override
+	public List<RAMDto> getProductsByCategory(String category) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 }

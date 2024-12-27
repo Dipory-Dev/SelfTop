@@ -44,4 +44,11 @@ public class GPUBizImpl implements ProductBiz<GPUDto> {
         }
         return result;
     }
+
+	@Override
+	public List<GPUDto> getProductsByCategory(String category) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
