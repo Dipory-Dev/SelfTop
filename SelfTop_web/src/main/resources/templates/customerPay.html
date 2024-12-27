@@ -6,14 +6,14 @@
     <title>Customer_Pay</title>
     <link rel="stylesheet" href="/css/customerPay.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://js.tosspayments.com/v2/standard"></script>  
+    <script src="https://js.tosspayments.com/v2/standard"></script>
     <script>
         // 전화번호 숫자로만 입력
         function validatePhoneInput(input) {
             input.value = input.value.replace(/[^0-9]/g, '');
         }
 
-        // 주소검색 팝업창 
+        // 주소검색 팝업창
         function goPopup() {
             const popupUrl = '/seller/addressPopup';
             window.open(popupUrl, 'pop', "width=570,height=420, scrollbars=yes, resizable=yes");
@@ -45,7 +45,7 @@
             };
 
             mergeFixedShippingFee();
-            
+
             // 결제 버튼 이벤트 추가
             const paymentButton = document.getElementById('payment-button');
             const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm"; // 토스 클라이언트 키
@@ -121,7 +121,7 @@
         <div class="header-content">
             <img src="/img/logo.png">
             <p>
-                <span th:text="${customer.name} + 님"></span>&nbsp| 
+                <span th:text="${customer.name} + 님"></span>&nbsp|
                 <a href="mypage">
                     <img src="/img/human-icon.png" class="human-icon">
                 </a>
