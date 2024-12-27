@@ -18,7 +18,7 @@ public class MainBoardBizImpl implements ProductBiz<MainBoardDto> {
 
     @Override
     public List<MainBoardDto> selectAll() {
-        return null;
+    	return null;
     }
 
     @Override
@@ -44,4 +44,13 @@ public class MainBoardBizImpl implements ProductBiz<MainBoardDto> {
         }
         return result;
     }
+
+	@Override
+	public List<MainBoardDto> getProductsByCategory(String category) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+
 }

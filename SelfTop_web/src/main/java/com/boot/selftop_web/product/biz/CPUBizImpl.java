@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("CPU")
@@ -44,4 +45,15 @@ public class CPUBizImpl implements ProductBiz<CPUDto> {
         }
         return result;
     }
+    
+    //main에서 cpu선택하면 모든 cpu가져오기
+    @Override
+    public List<CPUDto> getProductsByCategory(String category) {
+        // 카테고리에 맞는 CPU 제품만 조회
+        if ("cpu".equalsIgnoreCase(category)) {
+            return productMapper.findAllDetailedCpuProducts();
+        }
+        return new ArrayList<>();
+    }
+    
 }

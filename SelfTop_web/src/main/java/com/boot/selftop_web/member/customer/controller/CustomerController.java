@@ -7,10 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +24,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.boot.selftop_web.member.customer.biz.CustomerBiz;
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
+import com.boot.selftop_web.product.biz.ProductBiz;
+import com.boot.selftop_web.product.biz.ProductBizFactory;
 import com.boot.selftop_web.member.customer.model.dto.CustomerorderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
@@ -254,7 +262,7 @@ public class CustomerController {
 			return "redirect:/signup";
 		}
 	}
-	
+
 	@GetMapping("/order")
 	public String customerorder(HttpSession session, Model model) {
 		if (session.getAttribute("member_no") == null) {
@@ -267,7 +275,7 @@ public class CustomerController {
 		List<CustomerorderDto> orderres = new ArrayList<>();
 		System.out.println(res.get(0).getAmount());
 		System.out.println(res.size());
-		
+
 		for (SellerOrderDto copyres : res) {
 			// 이미 orderres에 해당 order_no가 있는지 확인
 			CustomerorderDto exportres = orderres.stream()
@@ -286,7 +294,7 @@ public class CustomerController {
 				exportres.setPrice(exportres.getPrice() + (copyres.getPrice() * copyres.getAmount()));
 			}
 		}
-		
+
 
 		model.addAttribute("membername", session.getAttribute("name"));
 		model.addAttribute("customerorder",orderres);
@@ -295,12 +303,12 @@ public class CustomerController {
 		int shippingcount = 0; // 결제완료
 		int endshippingcount = 0; // 결제완료
 		int canclecount = 0; // 결제완료
-		
+
 
 		// orderres 리스트 순회하면서 주문 상태별 개수 세기
 		for (CustomerorderDto order : orderres) {
 		    String status = order.getOrder_status();
-		    
+
 		    // 주문 상태별로 카운트 증가
 		    if ("입금대기".equals(status.replaceAll("\\s+", ""))) {
 		    	waitdepositcount++;
@@ -321,10 +329,10 @@ public class CustomerController {
 		model.addAttribute("shippingcount",shippingcount);
 		model.addAttribute("endshippingcount",endshippingcount);
 		model.addAttribute("canclecount",canclecount);
-		
+
 		return "customerorder";
 	}
-	
+
 	@GetMapping("/ordersearch")
 	public String searchorder(@RequestParam(required = false) String startdate, @RequestParam(required = false) String enddate,
 			Model model, HttpSession session) {
@@ -339,7 +347,7 @@ public class CustomerController {
 		Integer member_no = (Integer) session.getAttribute("member_no");
 		List<CustomerorderDto> orderres = new ArrayList<>();
 		List<SellerOrderDto> res = customerBiz.searchcustomerorderlist(startdate,enddate,member_no);
-		
+
 		for (SellerOrderDto copyres : res) {
 			// 이미 orderres에 해당 order_no가 있는지 확인
 			CustomerorderDto exportres = orderres.stream()
@@ -357,7 +365,7 @@ public class CustomerController {
 				exportres.setPrice(exportres.getPrice() + (copyres.getPrice() * copyres.getAmount()));
 			}
 		}
-	
+
 		model.addAttribute("customerorder",orderres);
 		return "customerorder :: tbody";
 
@@ -396,4 +404,27 @@ public class CustomerController {
 			}
 		}
 	}
+
+	// side-panel에서 부품을 선택하면 카테고리로 설정해 content-box안에 부품들을 리스트해서 보여줌
+	@Autowired
+	private ProductBizFactory productBizFactory;
+
+	@GetMapping("/products/{category}")
+	public ResponseEntity<?> getProductsByCategory(@PathVariable String category) {
+	    System.out.println("Fetching products for category: " + category);
+	    ProductBiz<?> productBiz = productBizFactory.getBiz(category.toLowerCase());
+	    if (productBiz == null) {
+	        System.err.println("No ProductBiz found for category: " + category);
+	        return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Invalid category: " + category));
+	    }
+
+	    List<?> products = productBiz.getProductsByCategory(category);
+	    if (products.isEmpty()) {
+	        System.out.println("No products found for category: " + category);
+	        return ResponseEntity.notFound().build();
+	    }
+
+	    return ResponseEntity.ok(products);
+	}
+
 }
