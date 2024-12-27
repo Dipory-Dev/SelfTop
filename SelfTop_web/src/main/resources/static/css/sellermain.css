@@ -93,7 +93,7 @@ main{
   display: flex;
   padding: 0;  
   margin: 0;
-  height: 10%;
+  height: 80px;
   margin-left:4.7%;
 
 }
@@ -137,14 +137,13 @@ main{
   border:none;
   border-top:1px solid #ccc;
   border-bottom:1px solid#ccc;
-
-  height: 7%;
+  height: 42px;
 
 }
 
 .datesearch{
 	margin-left:4.7%;
-	height:50%;
+	height:32px;
 	padding: 5px;
 
 }

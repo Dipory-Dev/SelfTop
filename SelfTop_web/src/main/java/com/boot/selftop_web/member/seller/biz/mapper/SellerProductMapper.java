@@ -35,6 +35,7 @@ public interface SellerProductMapper {
 	        "<if test='keyword != null and !keyword.isEmpty()'>" +
 	        " AND product_name LIKE '%' || #{keyword} || '%' " +	
 	        "</if>" +
+	        "ORDER BY product_name DESC" +
 	        "</script>")
 
 	List<SellerOrderDto> selectSearch(@Param("startdate") String startdate, @Param("enddate") String enddate,

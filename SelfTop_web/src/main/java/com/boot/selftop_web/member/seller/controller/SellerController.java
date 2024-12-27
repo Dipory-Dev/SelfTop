@@ -389,13 +389,13 @@ public class SellerController {
 
 	//판매자가 올린 아이템을 수정, 삭제하는 기능(Product_Status table에서 수정, 삭제)
 	@PostMapping("/changeproduct")
-	public ResponseEntity<?> changeProductStatus(HttpSession session, @RequestBody(required=false) Map<String, Object> payload, 
+	public ResponseEntity<?> changeProductStatus(HttpSession session, @RequestBody(required=false) Map<String, Object> payload,
 												 @RequestParam("productCode") int productCode, @RequestParam("action") String action) {
 	    Integer sellerNo = (Integer) session.getAttribute("member_no");
 	    if (sellerNo == null) {
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "로그인이 필요합니다."));
 	    }
-	    
+
 	    // 수정 기능 처리
 	    if ("update".equals(action)) {
 	        // 수정할 값이 모두 제공되었는지 확인

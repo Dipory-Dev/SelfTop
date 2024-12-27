@@ -13,6 +13,7 @@ public class SellerOrderDto {
     private int customer_no;
     private int seller_no;
     private int order_no;
+    
 	public Date getOrder_Date() {
 		return order_Date;
 	}
