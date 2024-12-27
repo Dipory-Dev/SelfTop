@@ -1,0 +1,131 @@
+* {
+	margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    color: #666;
+}
+
+header {
+	position: fixed;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+    z-index: 1000;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: white;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-content img {
+    width: 170px;
+    margin-left: 10%;
+    height: 70px;
+}
+
+.header-content p {
+    margin-right: 12%;
+    display: flex;
+    align-items: center;
+}
+
+.header-content p span {
+	font-size: 20px;
+    cursor: pointer;
+}
+
+.header-content p img {
+    width: 30px;
+    height: 30px;
+    transition: transform 0.3s ease;
+}
+
+.header-content p .human-icon {
+	width: 40px;
+	height: 40px;
+    margin-left: 10px;
+}
+
+.header-content p .cart-icon {
+    margin-left: 10px;
+}
+
+.header-content p .lock-icon {
+    margin-left: 20px;
+}
+
+.header-content p span:hover {
+    text-decoration: underline;
+}
+
+.header-content p img:hover {
+    transform: scale(1.5);
+}
+
+body {
+    padding-top: 90px;
+    min-height: 100vh;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+}
+
+main p {
+    font-size: 30px;
+    margin: 10px 0;
+}
+
+.btn-return {
+    padding: 10px 30px;
+    background: #008ADA;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 20px;
+    cursor: pointer;
+    margin-top: 100px;
+}
+
+.btn-return:hover {
+    background: #006bb3;
+}
+
+footer {
+    background-color: #E8E8E8;
+    font-size: 14px;
+    color: #4f4f4f;
+    height: 120px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.footer-content img {
+	width: 170px;
+    margin-left: 10%;
+    height: 90px;
+}
+
+.footer-text {
+    text-align: right;
+    margin-right: 10%;
+}
+
+.footer-text p, .footer-text span {
+    margin: 5px 0;
+}

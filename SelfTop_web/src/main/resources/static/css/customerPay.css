@@ -89,13 +89,13 @@ main{
     padding-top:20px;
     padding-bottom:20px;
     border-bottom: #ccc solid 1px;
-    
 }
+
 /* 공통 테이블 스타일 */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 30px;
+    font-size: 20px;
 }
 
 table th, table td {
@@ -105,7 +105,7 @@ table th, table td {
 }
 
 table th {
-    background-color: #f5f5f5;
+    background-color: #EAEAEA;
     font-weight: bold;
 }
 
@@ -114,20 +114,26 @@ table td {
 }
 
 /* 첫 번째 폼 스타일 (세로 배치) */
-#form-delivery table td:first-child {
-    width: 30%;
+#info-form table td:first-child {
+    width: 240px;
     font-weight: bold;
-    background-color: #f9f9f9;
+    text-align: center;
+    background-color: #EAEAEA;
+}
+
+#info-form input[type="text"] {
+    width: 300px;
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
 
 /* 두 번째 폼 스타일 (가로 배치) */
-#form-order table tr:first-child th {
+#pay-form table tr:first-child th {
     text-align: center;
-    background-color: #f0f0f0;
-}
-
-#form-order table td {
-    text-align: center;
+    background-color: #EAEAEA;
 }
 
 /* 상품 정보를 감싸는 컨테이너 */
@@ -172,7 +178,9 @@ table td {
 .payment-summary {
     display: flex;
     align-items: center;
-    gap: 20px;
+    justify-content: center; /* 전체 내용을 중앙 정렬 */
+    gap: 60px;
+    font-size: 20px; /* 텍스트 크기 설정 */
 }
 
 .item {
@@ -182,11 +190,13 @@ table td {
 .label {
     display: block;
     font-weight: bold;
+    font-size: 20px; /* 글씨 크기 */
 }
 
 .amount {
     display: block;
     margin-top: 5px;
+    font-size: 20px; /* 글씨 크기 */
 }
 
 .icon {
@@ -196,21 +206,30 @@ table td {
     height: 30px;
 }
 
-/* 버튼 스타일 */
-button {
-    background-color: #007bff;
+
+.btn-find-address,
+.btn-pay {
+    padding: 10px 30px;
+    margin-left: 80px;
+    background: #008ADA;
     color: #fff;
     border: none;
-    padding: 10px 15px;
-    cursor: pointer;
     border-radius: 4px;
-    font-size: 0.9rem;
+    font-size: 20px;
+    cursor: pointer;   
 }
 
-button:hover {
-    background-color: #0056b3;
+.btn-pay {
+	display: block;
+    margin: 0 auto;
+    text-align: center;
 }
 
+.btn-find-address:hover,
+.btn-pay:hover {
+    background: #006bb3;
+    transition: background-color 0.3s ease;
+}
 
 footer {
     background-color: #E8E8E8;

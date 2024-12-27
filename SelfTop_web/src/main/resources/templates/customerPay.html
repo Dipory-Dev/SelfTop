@@ -6,7 +6,22 @@
     <title>Customer_Pay</title>
     <link rel="stylesheet" href="/css/customerPay.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://js.tosspayments.com/v2/standard"></script>
     <script>
+	 	// 주소검색 팝업창 
+	    function goPopup() {
+	    	const popupUrl = '/seller/addressPopup';
+	
+	    	window.open(popupUrl, 'pop', "width=570,height=420, scrollbars=yes, resizable=yes");
+	    }
+	
+	    function jusoCallBack(zipNo, roadAddrPart1, addrDetail) {
+	
+	    	document.getElementById("zipNo").value = zipNo;
+	    	document.getElementById("address1").value = roadAddrPart1;
+	    	document.getElementById("address2").value = addrDetail;
+	    }
+	    
 	    document.addEventListener("DOMContentLoaded", () => {
 	        const mergeFixedShippingFee = () => {
 	            const rows = document.querySelectorAll("#order-table tbody tr");
@@ -27,6 +42,24 @@
 	
 	        mergeFixedShippingFee();
 	    });
+	    
+	    document.getElementById('payment-button').addEventListener('click', function () {
+	        tossPayments.requestPayment('카드', {
+	            amount: 20000,
+	            orderId: 'ORDER_ID', // 고유 주문 번호
+	            orderName: '상품 이름', // 주문 이름
+	            customerName: '고객 이름', // 고객 이름
+	            successUrl: 'http://localhost:8080/paysuccess', // 결제 성공 시 리다이렉트 URL
+	            failUrl: 'http://localhost:8080/payfail' // 결제 실패 시 리다이렉트 URL
+	        }).catch(function (error) {
+	            if (error.code === 'USER_CANCEL') {
+	                alert('결제가 취소되었습니다.');
+	            } else {
+	                alert('결제에 실패하였습니다. 다시 시도해주세요.');
+	            }
+	        });
+	    });
+
     </script>
 </head>
 <body>
@@ -54,7 +87,7 @@
         <div id="title">
             <span>배송정보</span>
         </div>
-        <div id="mypage-form">
+        <div id="info-form">
             <form action="/mypage" method="post">
                 <table>
                     <tr>
@@ -89,7 +122,7 @@
         <div id="title">
             <span>주문 상품 정보</span>
         </div>
-        <div id="mypage-form">
+        <div id="pay-form">
             <form action="/mypage" method="post">
                 <table id=order-table>
                     <thead>
@@ -105,7 +138,7 @@
 					    <tr>
 					        <td>
 					            <div class="product-container">
-					                <img src="/img/human-icon.jpg" alt="상품 A 이미지" class="product-image">
+					                <img src="/img/human-icon.png" alt="상품 A 이미지" class="product-image">
 					                <div class="product-details">
 					                    <p class="product-type">그래픽 카드</p>
 					                    <p class="product-name">NVIDIA RTX 4090</p>
@@ -123,7 +156,7 @@
 					    <tr>
 					        <td>
 					            <div class="product-container">
-					                <img src="/img/human-icon.jpg" alt="상품 B 이미지" class="product-image">
+					                <img src="/img/human-icon.png" alt="상품 B 이미지" class="product-image">
 					                <div class="product-details">
 					                    <p class="product-type">그래픽 카드</p>
 					                    <p class="product-name">NVIDIA RTX 4090</p>
@@ -137,7 +170,7 @@
 					    <tr>
 					        <td>
 					            <div class="product-container">
-					                <img src="/img/human-icon.jpg" alt="상품 C 이미지" class="product-image">
+					                <img src="/img/human-icon.png" alt="상품 C 이미지" class="product-image">
 					                <div class="product-details">
 					                    <p class="product-type">그래픽 카드</p>
 					                    <p class="product-name">NVIDIA RTX 4090</p>
@@ -154,16 +187,16 @@
             <div class="payment-summary">
 			    <div class="item">
 			        <span class="label">선택상품 총금액</span>
-			        <span class="amount">60000원</span>
+			        <span class="amount">71000원</span>
 			    </div>
 			    <img class="icon" src="/img/plus.png" alt="더하기">
 			    <div class="item">
 			        <span class="label">배송금액</span>
 			        <span class="amount">5000원</span>
 			    </div>
-			    <img class="icon" src="/img/same.png" alt="같다">
+			    <img class="icon" src="/img/same.png" alt="결과">
 			    <span class="label">최종 결제금액</span>
-			    <span class="amount">2000000원</span>
+			    <span class="amount">76000원</span>
 			</div>
 			<div id="title">
 			    결제수단
@@ -171,7 +204,7 @@
 			    <label for="toss-payments">토스페이먼츠</label>
 			</div>
 			<div id="title">
-				<button class="btn-pay">결제하기</button>
+				<button class="btn-pay" id="payment-button">결제하기</button>
 			</div>
         </div>
     </main>
