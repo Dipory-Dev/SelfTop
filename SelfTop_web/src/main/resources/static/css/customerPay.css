@@ -178,9 +178,9 @@ table td {
 .payment-summary {
     display: flex;
     align-items: center;
-    justify-content: center; /* 전체 내용을 중앙 정렬 */
+    justify-content: center;
     gap: 60px;
-    font-size: 20px; /* 텍스트 크기 설정 */
+    font-size: 20px;
 }
 
 .item {
@@ -190,13 +190,13 @@ table td {
 .label {
     display: block;
     font-weight: bold;
-    font-size: 20px; /* 글씨 크기 */
+    font-size: 20px;
 }
 
 .amount {
     display: block;
     margin-top: 5px;
-    font-size: 20px; /* 글씨 크기 */
+    font-size: 20px;
 }
 
 .icon {
@@ -206,11 +206,15 @@ table td {
     height: 30px;
 }
 
+#payment-method,
+#agreement {
+	width: 1250px;
+}
 
 .btn-find-address,
 .btn-pay {
     padding: 10px 30px;
-    margin-left: 80px;
+    margin-left: 120px;
     background: #008ADA;
     color: #fff;
     border: none;
