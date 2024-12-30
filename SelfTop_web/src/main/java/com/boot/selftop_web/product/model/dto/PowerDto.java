@@ -2,9 +2,11 @@ package com.boot.selftop_web.product.model.dto;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.boot.selftop_web.member.seller.model.dto.ProductStatusDto;
+
 import java.util.Date;
 
-public class PowerDto implements ProductDto {
+public class PowerDto extends ProductStatusDto implements ProductDto {
     private int product_code;
     private String category;
     private String product_name;

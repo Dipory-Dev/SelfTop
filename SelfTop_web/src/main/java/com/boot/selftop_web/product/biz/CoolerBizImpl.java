@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("쿨러")
@@ -48,8 +49,10 @@ public class CoolerBizImpl implements ProductBiz<CoolerDto>{
 
 	@Override
 	public List<CoolerDto> getProductsByCategory(String category) {
-		// TODO Auto-generated method stub
-		return null;
+		if ("쿨러".equalsIgnoreCase(category)) {
+            return productMapper.findAllDetailedCoolerProducts();
+        }
+        return new ArrayList<>();
 	}
 
 

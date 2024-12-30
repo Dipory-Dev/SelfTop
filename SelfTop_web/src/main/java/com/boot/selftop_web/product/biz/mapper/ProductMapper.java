@@ -63,7 +63,7 @@ public interface ProductMapper {
         return countByProductCode(productCode) > 0;
     }
     
-    //product테이블에서 cpu만 가져오는 쿼리문
+    //product테이블에서 가져오는 쿼리문
     @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price " +
             "FROM PRODUCT p " +
@@ -72,4 +72,67 @@ public interface ProductMapper {
             "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL")
     List<CPUDto> findAllDetailedCpuProducts();
     
+    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
+            "MIN(ps.PRICE) AS price " +
+            "FROM PRODUCT p " +
+            "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "WHERE p.CATEGORY = '쿨러' " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL")
+    List<CoolerDto> findAllDetailedCoolerProducts();
+    
+    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
+            "MIN(ps.PRICE) AS price " +
+            "FROM PRODUCT p " +
+            "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "WHERE p.CATEGORY = '케이스' " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL")
+    List<CaseDto> findAllDetailedCaseProducts();
+    
+    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
+            "MIN(ps.PRICE) AS price " +
+            "FROM PRODUCT p " +
+            "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "WHERE p.CATEGORY = '그래픽카드' " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL")
+    List<GPUDto> findAllDetailedGpuProducts();
+    
+    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
+            "MIN(ps.PRICE) AS price " +
+            "FROM PRODUCT p " +
+            "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "WHERE p.CATEGORY = 'HDD' " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL")
+    List<HDDDto> findAllDetailedHddProducts();
+    
+    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
+            "MIN(ps.PRICE) AS price " +
+            "FROM PRODUCT p " +
+            "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "WHERE p.CATEGORY = '파워' " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL")
+    List<PowerDto> findAllDetailedPowerProducts();
+    
+    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
+            "MIN(ps.PRICE) AS price " +
+            "FROM PRODUCT p " +
+            "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "WHERE p.CATEGORY = 'RAM' " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL")
+    List<RAMDto> findAllDetailedRamProducts();
+    
+    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
+            "MIN(ps.PRICE) AS price " +
+            "FROM PRODUCT p " +
+            "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "WHERE p.CATEGORY = 'SSD' " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL")
+    List<SSDDto> findAllDetailedSsdProducts();
+    
+    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
+            "MIN(ps.PRICE) AS price " +
+            "FROM PRODUCT p " +
+            "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "WHERE p.CATEGORY = 'SSD' " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL")
+    List<MainBoardDto> findAllDetailedMainBoardProducts();
 }
