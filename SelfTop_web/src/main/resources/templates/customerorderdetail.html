@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Customer_order_detail</title>
-<link rel="stylesheet" href="/css/customerorder.css">
+<link rel="stylesheet" href="/css/customerorderdetail.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
 	document.addEventListener("DOMContentLoaded", function () {
@@ -15,14 +15,14 @@
 		}
 	});
 </script>
-<script type="text/javascript" src="/js/customerorder.js"></script>
+<script type="text/javascript" src="/js/customerorderdetail.js"></script>
 </head>
 <body>
 	<header>
 		<div class="header-content">
 			<img src="/img/logo.png">
 			<p>
-				  <span th:text="${membername} + 님"></span>&nbsp| <a href="mypage">
+				<span th:text="${membername} + 님"></span>&nbsp| <a href="mypage">
 					<img src="/img/human-icon.png" class="human-icon">
 				</a> <a href="cart"> <img src="/img/cart-icon.png" class="cart-icon">
 				</a> <a href="signup"> <img src="/img/lock-icon.png"
@@ -33,49 +33,122 @@
 	</header>
 	<main>
 		<div id="title">
-			<a href="mypage"> 
-				<span id="mypage-tab" >마이페이지</span> 
-			</a>| 
-			<a href="order"> 
-				<span id="order-tab" class="selected">주문 내역</span>
+			<a href="mypage"> <span id="mypage-tab">마이페이지</span>
+			</a>| <a href="order"> <span id="order-tab" class="selected">주문
+					내역</span>
 			</a>
 		</div>
 		<div class="order_status">
 			<div>
 				<div>
-					<h2>주문 <br> 상세정보</h2>
+					<h2>
+						주문 <br> 상세정보
+					</h2>
 				</div>
-				<div><h2>취소요청</h2></div>
+				<div>
+					<h2>취소요청</h2>
+				</div>
 			</div>
 			<div>
 				<h2>주문번호</h2>
-				<h2 th:text=${waitdepositcount}></h2>
+				<h2 th:text=${ordernum}></h2>
 			</div>
 			<div>
 				<h2>주문날짜</h2>
-				<h2 th:text=${completepaycount}></h2>
+				<h2 th:text=${orderdate}></h2>
 			</div>
 			<div>
 				<h2>상태</h2>
-				<h2 th:text=${shippingcount}></h2>
+				<h2 th:text=${orderstatus}></h2>
 			</div>
 		</div>
-		<div class="delivery">
-				<h2>송장번호</h2>
+		<div class="namezone">
+			<h2>송장번호</h2>
 		</div>
 		<div class="orderprice">
 			<div class="productprice">
-				<div><p>상품금액</p></div>
-				<div>500원</div>
+				<div>
+					<p>상품금액</p>
+				</div>
+				<div>
+					<p th:text="${orderprice} + 원"></p>
+				</div>
 			</div>
-			<div class ="deliveryprice">
-				<div>배송비</div>
-				<div>500원</div>
+			<div class="deliveryprice">
+				<div>
+					<p>배송비</p>
+				</div>
+				<div>
+					<p>5000원</p>
+				</div>
 			</div>
 			<div class="totalprice">
-				<div>결제금액</div>
-				<div>1000원</div>
+				<div>
+					<p>결제금액</p>
+				</div>
+				<div>
+					<p th:text="${orderprice} +5000 +원"></p>
+				</div>
 			</div>
+		</div>
+		<div class="namezone">
+			<h2>배송지 정보</h2>
+		</div>
+		<div class="deliveryinform">
+			<div>
+				<div>
+					<h3>성함</h3>
+				</div>
+				<div>
+					<h4 th:text="${customerinfo.name}"></h4>
+				</div>
+			</div>
+			<div>
+				<div>
+					<h3>연락처</h3>
+				</div>
+				<div>
+					<h4 th:text="${customerinfo.phone}"></h4>
+				</div>
+			</div>
+			<div>
+				<div>
+					<h3>배송주소</h3>
+				</div>
+				<div>
+					<h4 th:text="${customerinfo.address}"></h4>
+				</div>
+			</div>
+			<div>
+				<div>
+					<h3>요청사항</h3>
+				</div>
+				<div>
+					<h4 th:text="${customerinfo.request}"></h4>
+				</div>
+			</div>
+		</div>
+		<div class="namezone">
+			<h2>주문 상품 정보</h2>
+		</div>
+		<div class="productinform">
+			<table class="productorder_table">
+				<tr>
+					<th>후기작성</th>
+					<th>상품 이름</th>
+					<th>금액</th>
+					<th>수량</th>
+					<th>배송비/판매자</th>
+				</tr>
+				<tr th:each="dto : ${orderinfo}">
+					<th th:text="${dto.customer_no}"></th>
+					<th th:text="${dto.product_name}"></th>
+					<th th:text="${dto.price} * ${dto.amount} +원"></th>
+					<th th:text="${dto.amount}"></th>
+					<th th:text="${dto.seller_no} + '배송비:5000원'"></th>
+				</tr>
+
+			</table>
 		</div>
 
 

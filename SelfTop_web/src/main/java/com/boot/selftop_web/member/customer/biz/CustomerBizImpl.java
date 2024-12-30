@@ -146,4 +146,10 @@ public class CustomerBizImpl implements CustomerBiz {
         System.out.println("Payment Failed: " + errorMessage);
         return "Payment failed: " + errorMessage;
     }*/
+
+	@Override
+	public List<SellerOrderDto> customerpurchaselist(int member_no, int order_no) {
+		// TODO Auto-generated method stub
+		return mapper.customerpurchaselist(member_no, order_no);
+	}
 }

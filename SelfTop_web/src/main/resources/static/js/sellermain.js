@@ -210,8 +210,6 @@ document.addEventListener('click', function(event) {
 			})
 			.then(data => {
 
-				console.log(document.getElementById('ordernum'));
-				console.log(document.querySelector('#ordernum'));
 				document.getElementById('ordernum').textContent = data[0].order_no;
 				document.getElementById('name').textContent = data[0].name;
 				document.getElementById('address').textContent = data[0].address;

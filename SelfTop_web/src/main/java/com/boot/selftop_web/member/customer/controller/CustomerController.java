@@ -28,6 +28,9 @@ import com.boot.selftop_web.product.biz.ProductBizFactory;
 import com.boot.selftop_web.product.biz.mapper.ProductMapper;
 import com.boot.selftop_web.member.customer.model.dto.CustomerorderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
+import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
+import com.boot.selftop_web.order.biz.OrderBoardBiz;
+import com.boot.selftop_web.order.model.dto.OrderBoardDto;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -42,6 +45,8 @@ public class CustomerController {
 
 	@Autowired
 	private KakaoService kakaoService;
+
+	@Autowired OrderBoardBiz orderboardBiz;
 
 	@GetMapping("/loginform")
     public String LoginSection(HttpSession session) {
@@ -198,7 +203,7 @@ public class CustomerController {
 		model.addAttribute("customer", dto);
 		return "customerPay";
 	}
-	
+
 	@GetMapping("/payfail")
 	public String showPayFail(HttpSession session, Model model) {
 		if(session.getAttribute("member_no") == null) {
@@ -211,7 +216,7 @@ public class CustomerController {
 		model.addAttribute("customer", dto);
 		return "payFail";
 	}
-	
+
 	@GetMapping("/paysuccess")
 	public String showPaySuccess(HttpSession session, Model model) {
 		if(session.getAttribute("member_no") == null) {
@@ -224,7 +229,7 @@ public class CustomerController {
 		model.addAttribute("customer", dto);
 		return "paySuccess";
 	}
-	
+
 	@PostMapping("/infochange")
 	public String showInfoChangeForm(HttpSession session, Model model) {
 		if(session.getAttribute("member_no") == null) {
@@ -288,7 +293,6 @@ public class CustomerController {
 				);
 				orderres.add(neworder);
 			} else {
-				System.out.println("돌앗음");
 				exportres.setItem(exportres.getItem() + 1);
 				exportres.setPrice(exportres.getPrice() + (copyres.getPrice() * copyres.getAmount()));
 			}
@@ -370,71 +374,29 @@ public class CustomerController {
 
 	}
 	@PostMapping("/orderdetail")
-	public String customerorderdetail(HttpSession session, Model model) {
+	public String customerorderdetail(HttpSession session, Model model,@RequestParam("order_num") String orderNum,
+			@RequestParam("orderprice") String orderprice,
+			@RequestParam("orderdate") String orderdate,
+			@RequestParam("orderstatus") String orderstatus) {
 		if (session.getAttribute("member_no") == null) {
 			return "redirect:/loginform";
 		}
 
 		Integer member_no = (Integer) session.getAttribute("member_no");
-		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + member_no);
-		List<SellerOrderDto> res = customerBiz.selectcustomerorderlist(member_no);
-		List<CustomerorderDto> orderres = new ArrayList<>();
-		System.out.println(res.get(0).getAmount());
-		System.out.println(res.size());
+		List<SellerOrderDto> res = customerBiz.customerpurchaselist(member_no,Integer.parseInt(orderNum));
+		List<OrderBoardDto> customerinfo = orderboardBiz.vieworderboard(Integer.parseInt(orderNum));
 		
-		for (SellerOrderDto copyres : res) {
-			// 이미 orderres에 해당 order_no가 있는지 확인
-			CustomerorderDto exportres = orderres.stream()
-					.filter(dto -> dto.getOrder_num() == copyres.getOrder_no()).findFirst().orElse(null);
 
-			if (exportres == null) {
-				CustomerorderDto neworder = new CustomerorderDto(copyres.getThumbnail(), copyres.getOrder_Date(),
-						copyres.getProduct_name(), copyres.getPrice() * copyres.getAmount(), copyres.getOrder_no(),
-						copyres.getOrder_status(), member_no, 0
-
-				);
-				orderres.add(neworder);
-			} else {
-				System.out.println("돌앗음");
-				exportres.setItem(exportres.getItem() + 1);
-				exportres.setPrice(exportres.getPrice() + (copyres.getPrice() * copyres.getAmount()));
-			}
-		}
 		
 
 		model.addAttribute("membername", session.getAttribute("name"));
-		model.addAttribute("customerorder",orderres);
-		int waitdepositcount = 0; // 입금대기
-		int completepaycount = 0; // 결제완료
-		int shippingcount = 0; // 결제완료
-		int endshippingcount = 0; // 결제완료
-		int canclecount = 0; // 결제완료
-		
+		model.addAttribute("orderinfo",res);
+		model.addAttribute("ordernum",orderNum);
+		model.addAttribute("orderprice",orderprice);
+		model.addAttribute("orderstatus",orderstatus);
+		model.addAttribute("orderdate",orderdate);
+		model.addAttribute("customerinfo", customerinfo.get(0));
 
-		// orderres 리스트 순회하면서 주문 상태별 개수 세기
-		for (CustomerorderDto order : orderres) {
-		    String status = order.getOrder_status();
-		    
-		    // 주문 상태별로 카운트 증가
-		    if ("입금대기".equals(status.replaceAll("\\s+", ""))) {
-		    	waitdepositcount++;
-		    } else if ("결제완료".equals(status.replaceAll("\\s+", ""))) {
-		    	completepaycount++;
-		    }else if ("배송중".equals(status.replaceAll("\\s+", ""))) {
-		    	shippingcount++;
-		    }else if ("배송완료".equals(status.replaceAll("\\s+", ""))) {
-		    	endshippingcount++;
-		    }else if ("취소".equals(status.replaceAll("\\s+", ""))) {
-		    	canclecount++;
-		    }else if ("테스트중".equals(status.replaceAll("\\s+", ""))) {
-		    	canclecount++;
-		    }
-		}
-		model.addAttribute("waitdepositcount",waitdepositcount);
-		model.addAttribute("completepaycount",completepaycount);
-		model.addAttribute("shippingcount",shippingcount);
-		model.addAttribute("endshippingcount",endshippingcount);
-		model.addAttribute("canclecount",canclecount);
 		
 		return "customerorderdetail";
 	}
