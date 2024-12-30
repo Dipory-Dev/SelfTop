@@ -45,4 +45,12 @@ public class CoolerBizImpl implements ProductBiz<CoolerDto>{
         }
         return result;
     }
+
+	@Override
+	public List<CoolerDto> getProductsByCategory(String category) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 }

@@ -1,0 +1,7 @@
+function moveDetail(){
+
+}
+
+function moveReview(){
+
+}

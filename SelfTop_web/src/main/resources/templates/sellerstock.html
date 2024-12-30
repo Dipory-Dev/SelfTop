@@ -8,7 +8,7 @@
             <button id="openModalBtn" class="btn">제품 등록하기</button>
         </div>
         <!-- 모달 -->
-	    <div id="modal" class="modal">
+	    <div id="stockmodal" class="modal">
 	        <div class="modal-content">
 	            <div class="modal-header">수량 및 가격 수정</div>
 	            <div class="modal-body">
@@ -73,9 +73,10 @@
 	            </div>
 	        </div>
     	</div>
-        <script>
-		     // 모달 제어 스크립트
-		   	 const modal = document.getElementById('modal');
+           <script>
+           const modelNameInput = document.getElementById('model-name-input');
+		   // 모달 제어 스크립트
+		   	/* const modal = document.getElementById('modal');
 		   	 const openModalBtn = document.getElementById('openModalBtn');
 		   	 const closeModalBtn = document.getElementById('closeModalBtn');
 		   	 
@@ -123,14 +124,15 @@
 		                modelNameDatalist.appendChild(option);
 		            });
 		        }
-		    }
+		    }*/
 
 		 	// 제품 모델명 선택시 설명 노출
-		    modelNameInput.addEventListener('input', function() {
+		  /*  modelNameInput.addEventListener('input', function() {
 		        const selectedOption = Array.from(document.getElementById('model-names').options).find(option => option.value === this.value);
 		        const etcInfo = selectedOption ? selectedOption.getAttribute('data-etc') : '상세 정보가 없습니다.';
 		        document.querySelector('.detail').innerHTML = `<p>${etcInfo}</p>`;  // ETC 정보 출력
-		    });
+		    })*/
+
 
 		    //제품 모델명 선택시 설명 노출
     		document.getElementById('model-name-input').addEventListener('input', function() {
@@ -147,7 +149,7 @@
 			});
     		
     		//등록 버튼을 누르면 PRODUCT_STATUS 테이블에 PRODUCT_CODE, SELLER_NO, STOCK, PRICE, REG_DATE를 등록
-    		 document.getElementById('registerModalBtn').addEventListener('click', function() {
+    		/* document.getElementById('registerModalBtn').addEventListener('click', function() {
 		        const selectedOption = Array.from(document.getElementById('model-names').options).find(option => option.value === modelNameInput.value);
 		        const productCode = selectedOption ? selectedOption.getAttribute('data-product-code') : null;
 
@@ -196,7 +198,7 @@
 		            console.error('Error:', error);
 		            alert(error.message);
 		        });
-		    });
+		    });*/
         </script>
         <div class="searchbox">
             <input type="text" placeholder="검색할 제품 입력" id="keyword">
@@ -205,42 +207,115 @@
         </div>
 
         </div>
-        <div>
-	<form action="/seller/changeproduct" method="post">
-	        <table class ="product_table" >
-	        <tr>
-	            <th>분류</th>
-	            <th>상품이미지</th>
-	            <th>제품명</th>
-	            <th>변경 후 가격</th>
-	            <th>재고 수량</th>
-	            <th>수정</th>
-	            <th>삭제</th>
-	        </tr>
-	        <tbody id="product_view">
-		        <tr th:each="dto : ${stocktable}" th:value=${dto.product_code}>
-		        	<td th:text="${dto.category}"></td>
-		            <td><img th:src="${dto.thumbnail}" width="50" height="50" /></td>
-		            <td th:text="${dto.product_name}"></td>
-					<td><input type="text" class="stockprice" th:value=${dto.price}  th:attr="data-id=${dto.product_code}" readonly>원</td>
-					<td><input type="text" class="stockamount" th:value=${dto.stock} th:attr="data-id=${dto.product_code}" readonly>개</td>
-		        	<td>
-		            	<button type="submit" class="btn-update" th:attr="data-id=${dto.product_code}" title="update">✏️</button>
-		            	<button type="submit" class="btn-save" th:attr="data-id=${dto.product_code}" title="save" style="display: none;">💾</button>
-		            </td>
-	    			<td>
-				        <button type="button" class="btn-delete" th:data-product-code="${dto.product_code}" title="삭제">🗑️</button>
-				    </td>
-	            </tr>
-	        </tbody>
-    	</table>
-    </form>
-    <script>
-  		//판매자가 아이템을 삭제 했을때 동작하는 스크립트
-	    document.querySelectorAll('.btn-delete').forEach(button => {
-		    button.addEventListener('click', function(event) {
-		        event.preventDefault(); // 기본 이벤트 방지
-		        const productCode = this.getAttribute('data-product-code'); // 버튼의 데이터 속성에서 productCode 가져오기
+		<form action="/seller/changeproduct" method="post">
+		        <table class ="product_table" >
+		        <tr>
+		            <th>분류</th>
+		            <th>상품이미지</th>
+		            <th>제품명</th>
+		            <th>변경 후 가격</th>
+		            <th>재고 수량</th>
+		            <th>수정</th>
+		            <th>삭제</th>
+		        </tr>
+		        <tbody id="product_view">
+			        <tr th:each="dto : ${stocktable}" th:value=${dto.product_code}>
+			        	<td th:text="${dto.category}"></td>
+			            <td><img th:src="${dto.thumbnail}" width="50" height="50" /></td>
+			            <td th:text="${dto.product_name}"></td>
+						<td><input type="text" class="stockprice" th:value=${dto.price}  th:attr="data-id=${dto.product_code}" readonly>원</td>
+						<td><input type="text" class="stockamount" th:value=${dto.stock} th:attr="data-id=${dto.product_code}" readonly>개</td>
+			        	<td>
+			            	<button type="button" class="btn-update" th:data-product-code="${dto.product_code}" title="수정">✏️</button>
+			            	<button type="button" class="btn-save" th:data-product-code="${dto.product_code}" title="저장" style="display: none;">💾</button>
+			            </td>
+		    			<td>
+					        <button type="button" class="btn-delete" th:data-product-code="${dto.product_code}" title="삭제">🗑️</button>
+					    </td>
+		            </tr>
+		        </tbody>
+	    	</table>
+	    </form>
+	    <script>
+		    document.querySelectorAll('.btn-update').forEach(button => {
+		        button.addEventListener('click', function() {
+		        	event.preventDefault(); // 기본 이벤트 방지
+			        const productCode = this.getAttribute('data-product-code'); // 버튼의 데이터 속성에서 productCode 가져오기
+
+		            // 해당 제품의 가격 및 재고 입력 필드를 찾아 readonly 속성 제거
+		            const priceInput = document.querySelector(`input[data-id="${productCode}"].stockprice`);
+		            const stockInput = document.querySelector(`input[data-id="${productCode}"].stockamount`);
+
+		            // readonly 속성 제거하여 수정 가능하게 만듦
+		            priceInput.removeAttribute('readonly');
+		            stockInput.removeAttribute('readonly');
+
+		            // 수정 버튼 숨기고 저장 버튼 표시
+		            this.style.display = 'none';  // 수정 버튼 숨기기
+		            const saveButton = document.querySelector(`button[data-product-code="${productCode}"].btn-save`);
+		            saveButton.style.display = 'inline-block';  // 저장 버튼 표시
+		        });
+		    });
+
+		    document.querySelectorAll('.btn-save').forEach(button => {
+		        button.addEventListener('click', function() {
+
+		            // 저장하려는 제품의 ID 가져오기
+		            const productCode = this.getAttribute('data-product-code');
+
+		            // 해당 제품의 가격 및 재고 입력 필드에서 값 가져오기
+		            const priceInput = document.querySelector(`input[data-id="${productCode}"].stockprice`);
+		            const stockInput = document.querySelector(`input[data-id="${productCode}"].stockamount`);
+
+		            const updatedPrice = parseInt(priceInput.value, 10);
+		            const updatedStock = parseInt(stockInput.value, 10);
+
+		            if (isNaN(updatedPrice) || isNaN(updatedStock)) {
+		                alert("가격과 재고는 숫자여야 합니다.");
+		                return; // 저장 중단
+		            }
+
+		            if (confirm('정말 수정하시겠습니까?')) {
+		                // 서버로 가격과 재고 정보를 전송
+		                fetch(`/seller/changeproduct?productCode=${productCode}&action=update`, {
+		                    method: 'POST',
+		                    headers: {
+		                        'Content-Type': 'application/json'
+		                    },
+		                    body: JSON.stringify({
+		                        price: updatedPrice,
+		                        stock: updatedStock
+		                    })
+		                }).then(response => {
+		                    if (response.ok) {
+		                        return response.json();
+		                    } else {
+		                        return response.text().then(text => { throw new Error(text || 'Failed to update product'); });
+		                    }
+		                }).then(result => {
+		                    alert(result.message); // 서버에서 반환된 메시지를 표시
+		                    location.reload(); // 페이지 새로고침
+		                }).catch(error => {
+		                    alert(error.message);
+		                });
+		            }
+
+		            // 저장 후 수정 버튼과 저장 버튼 상태 복원
+		            priceInput.setAttribute('readonly', 'true');
+		            stockInput.setAttribute('readonly', 'true');
+
+		            // 저장 버튼 숨기고 수정 버튼 표시
+		            this.style.display = 'none';  // 저장 버튼 숨기기
+		            const updateButton = document.querySelector(`button[data-id="${productCode}"].btn-update`);
+		            updateButton.style.display = 'inline-block';  // 수정 버튼 표시
+		        });
+		    });
+
+	  		//판매자가 아이템을 삭제 했을때 동작하는 스크립트
+		    document.querySelectorAll('.btn-delete').forEach(button => {
+			    button.addEventListener('click', function(event) {
+			        event.preventDefault(); // 기본 이벤트 방지
+			        const productCode = this.getAttribute('data-product-code'); // 버튼의 데이터 속성에서 productCode 가져오기
 
 		        if (confirm('정말 삭제하시겠습니까?')) {
 		            fetch(`/seller/changeproduct?productCode=${productCode}&action=delete`, {
@@ -261,33 +336,4 @@
 		    });
 		});
     </script>
-	<div>
-		<form action="/seller/changeproduct" method="post">
-	        <table class ="product_table" >
-	        <tr>
-	            <th>분류</th>
-	            <th>상품이미지</th>
-	            <th>제품명</th>
-	            <th>변경 후 가격</th>
-	            <th>재고 수량</th>
-	            <th>수정</th>
-	            <th>삭제</th>
-	        </tr>
-		        <tbody id="product_view">
-		            <tr th:each="dto : ${stocktable}" th:value=${dto.product_code}>
-		                <td th:text="${dto.category}"></td>
-		                <td><img th:src="${dto.thumbnail}" width="50" height="50" /></td>
-		                <td th:text="${dto.product_name}"></td>
-						<td><input type="text" class="stockprice" name="price" th:value=${dto.price}  th:attr="data-id=${dto.product_code}" readonly>원</td>
-						<td><input type="text" class="stockamount" name="stock" th:value=${dto.stock} th:attr="data-id=${dto.product_code}" readonly>개</td>
-		            	<td>
-		            		<button type="submit" class="btn-update" th:attr="data-id=${dto.product_code}" title="update">✏️</button>
-		            		<button type="submit" class="btn-save" th:attr="data-id=${dto.product_code}" title="save" style="display: none;">💾</button>
-		            	</td>
-		    			<td><button type="submit" class="btn-delete" th:attr="data-id=${dto.product_code}" title="delete">🗑️</button></td>
-		            </tr>
-		        </tbody>
-		    </table>
-	    </form>
-    </div>
 </th:block>

@@ -1,7 +1,11 @@
 package com.boot.selftop_web.member.customer.biz.mapper;
 
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
+import com.boot.selftop_web.member.customer.model.dto.CustomerorderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerDto;
+
+import java.util.List;
+
 import org.apache.ibatis.annotations.*;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
 
@@ -38,4 +42,24 @@ public interface CustomerMapper {
 
     @Update("update customer set email=#{email}, phone = #{phone} where member_no = #{member_no}")
     int changeInfo(@Param("email") String email, @Param("phone") String phone, @Param("member_no") int member_no);
+
+
+    @Select("SELECT * FROM customer WHERE id = #{id}")
+    CustomerDto findkakao(@Param("id") String id);
+
+
+    @Select("SELECT * FROM viewsellerorder WHERE customer_no = #{member_no}")
+    List<SellerOrderDto> selectcustomerorderlist(@Param("member_no")int member_no);
+
+   @Select("<script>" +
+	        "SELECT * FROM viewsellerorder " +
+	        "WHERE customer_no= #{member_no} " +
+	        "<if test='startdate != null and !startdate.isEmpty()'>" +
+	        "   AND order_date &gt;= #{startdate} " +
+	        "</if>" +
+	        "<if test='enddate != null and !enddate.isEmpty()'>" +
+	        "   AND order_date &lt;= #{enddate} " +
+	        "</if>" +
+	        "</script>")
+    List<SellerOrderDto> searchcustomerorderlist(@Param("startdate")String startdate,@Param("enddate") String enddate,@Param("member_no") int member_no);
 }

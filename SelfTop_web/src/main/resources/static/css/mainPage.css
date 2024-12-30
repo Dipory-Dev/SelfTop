@@ -103,51 +103,18 @@ p{
     padding: 20px;
 }
 
-.top-box {
+.top-box{
     width: 49%;
     height: 100px;
-    background-color: #007bff;
+    border: 1px solid #007bff;
     color: white;
     padding: 10px;
 }
 
-.tab {
-    cursor: pointer;
-    padding: 10px 20px;
-    margin: 0px 2px;
-    background-color: brown;
-    color: white;
-    display: inline-block;
-    border-radius: 3px 3px 0px 0px;
-}
-
-.panels{
-    background-color: white;
-    min-height: 200px;
-    width: 286px;
-    max-width: 500px;
-    border-radius: 3px;
-    overflow: hidden;
-    text-align: center;
-}
-
-.panel{
-    display: none;
-}
-
-.panel-title{
-    font-size: 1.5em;
-    font-weight: bold;
-}
-
-.radio-group {
-    display: flex;        
-    flex-direction: column;
-    align-items: left;
-}
-
-.radio{
-     display: none;
+.content-box{
+	width: 100%;
+	height: 500px;
+    border: 1px solid black;	
 }
 
 .side-panel {

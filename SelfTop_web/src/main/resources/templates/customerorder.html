@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer_order</title>
+<link rel="stylesheet" href="/css/customerorder.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function () {
+		const params = new URLSearchParams(window.location.search);
+		const message = params.get("message");
+		if (message) {
+			alert(message);
+		}
+	});
+</script>
+<script type="text/javascript" src="/js/customerorder.js"></script>
+</head>
+<body>
+	<header>
+		<div class="header-content">
+			<img src="/img/logo.png">
+			<p>
+				  <span th:text="${membername} + 님"></span>&nbsp| <a href="mypage">
+					<img src="/img/human-icon.png" class="human-icon">
+				</a> <a href="cart"> <img src="/img/cart-icon.png" class="cart-icon">
+				</a> <a href="signup"> <img src="/img/lock-icon.png"
+					class="lock-icon">
+				</a>
+			</p>
+		</div>
+	</header>
+	<main>
+		<div id="title">
+			<a href="mypage"> 
+				<span id="mypage-tab" >마이페이지</span> 
+			</a>| 
+			<a href="order"> 
+				<span id="order-tab" class="selected">주문 내역</span>
+			</a>
+		</div>
+		<div class="order_status">
+			<div>
+				<h2>주문 <br> 배송조회</h2>
+			</div>
+			<div>
+				<h2>입금대기</h2>
+				<h2 th:text=${waitdepositcount}></h2>
+			</div>
+			<div>
+				<h2>결제완료</h2>
+				<h2 th:text=${completepaycount}></h2>
+			</div>
+			<div>
+				<h2>배송중</h2>
+				<h2 th:text=${shippingcount}></h2>
+			</div>
+			<div>
+				<h2>배송완료</h2>
+				<h2 th:text=${endshippingcount}></h2>
+			</div>
+			<div>
+				<h2>취소/취소완료</h2>
+				<h2 th:text=${canclecount}>5</h2>
+			</div>
+		</div>
+		<div class="search">
+			<div class="searchbox">
+				<input type="date" id="start-date" /> <span>~</span> 
+				<input type="date" id="end-date" />
+				<button class="searchbutton" onclick=Search()>조회</button>
+				 <button class="searchbutton" onclick=Reset()>초기화</button>
+			</div>
+		</div>
+		<div id = "orderview" th:fragment="tbody">
+			<div class="customer-order-data" th:each="dto : ${customerorder}">
+				<div class="imagedate">
+					<div class="inform">
+						<span th:text="${#dates.format(dto.order_date, 'MM/dd')}"></span>
+						| <span th:text="${dto.order_num}"></span>
+					</div>
+					<div class="image">
+						<img th:src=${dto.thumbnail}></img>
+					</div>
+				</div>
+				<div class="productlink">
+					<p th:text=${dto.product_name}></p>
+					<p th:if="${dto.item != 0}"
+						th:text="외 + ' '+ ${dto.item} + ' ' + 건"></p>
+				</div>
+				<div class="pricestatus">
+					 <div>
+						<p th:text="${dto.order_status}"></p>
+					</div>
+					 <div>
+						<p th:text="${dto.price} + 원"></p>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+		<div class="info-section">
+			<h2>주문/결제 안내 </h2>
+			<br>
+			<ul>
+				<li>무통장 입금으로 주문한 경우, 주문일로부터 3일 내에 입금하지 않으시면 자동 주문 취소처리 됩니다.</li>
+				<li>무통장 입금 시 입금자명과 주문자명이 다르더라도, 주문하신 금액과 입금하신 금액이 일치하면 결제가
+					완료됩니다.</li>
+				<li>결제수단 및 이미 주문한 상품 변경은 불가하오니, 다시 주문해 주세요.</li>
+				<li>다나와 특가몰 주문대기 상품은 상품을 클릭한 뒤 30분이 지나면 자동으로 상품이 삭제됩니다.</li>
+				<li>영수증(매출전표, 현금영수증, 거래내역서) 조회 시 고객 인증절차(이메일 또는 구매자명, 금액)를 거처야
+					확인이 가능합니다.</li>
+			</ul>
+		</div>
+
+		<div class="info-section">
+			<h2>배송 안내 </h2>
+			<br>
+			<ul>
+				<li>배송중, 배송완료 상태에서는 [배송추적] 버튼을 클릭하면 구매하신 상품의 위치를 확인할 수 있습니다.</li>
+				<li>배송방법 변경은 결제완료, 배송중 상태에서 1회만 변경이 가능합니다.</li>
+				<li>배송지 정보 수정은 결제완료 상태에서만 가능합니다.</li>
+				<li>배송완료 상태에서는 직접 [구매결정] 버튼을 클릭하면 구매결정을 할 수 있으며, [구매결정] 버튼 아래
+					날짜는 자동구매 확정일을 나타냅니다.</li>
+				<li>배송된 상품에 한하여 배송완료일로부터 3일(영업일 기준) 후에 자동구매 결정이 되며, 구매 결정 이후에는
+					반품 및 교환이 불가합니다.</li>
+			</ul>
+		</div>
+
+
+
+	</main>
+
+	<footer>
+		<div class="footer-content">
+			<img src="/img/logo-footer.png" alt="로고">
+			<div class="footer-text">
+				<p>&copy; 2024 Copyright: SelfTop All rights reserved.</p>
+				<p>팀원: 김지성, 오원석, 권장현, 양다연, 임성규</p>
+				<p>문의: 02-1234-5678</p>
+				<p>메일: SelfTop@selftop.com</p>
+			</div>
+		</div>
+	</footer>
+
+</body>
+</html>

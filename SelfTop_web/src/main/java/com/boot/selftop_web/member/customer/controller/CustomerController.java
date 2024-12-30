@@ -1,11 +1,22 @@
 package com.boot.selftop_web.member.customer.controller;
 
+import com.boot.selftop_web.member.customer.biz.KakaoService;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.relational.core.sql.In;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,15 +24,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.boot.selftop_web.member.customer.biz.CustomerBiz;
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
+import com.boot.selftop_web.product.biz.ProductBiz;
+import com.boot.selftop_web.product.biz.ProductBizFactory;
+import com.boot.selftop_web.member.customer.model.dto.CustomerorderDto;
+import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
+import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Map;
 
 @Controller
 @RequestMapping("/")
 public class CustomerController {
 	@Autowired
 	private CustomerBiz customerBiz;
+
+	@Autowired
+	private KakaoService kakaoService;
 
 	@GetMapping("/loginform")
     public String LoginSection(HttpSession session) {
@@ -94,7 +115,6 @@ public class CustomerController {
 	public String changepw(@RequestParam("cur_pw") String cur_pw,
             			   @RequestParam("new_pw") String new_pw,
             			   HttpSession session,
-            			   Model model,
             			   RedirectAttributes redirectAttributes) {
 
 		// 세션에서 로그인한 사용자 정보 가져오기
@@ -106,7 +126,7 @@ public class CustomerController {
 
 	    String curpw = customerBiz.checkpw(customerDto);
 	    if (!curpw.equals(cur_pw)) {
-	        model.addAttribute("errorMessage", "기존 비밀번호가 일치하지 않습니다."); // 에러 메시지 전달
+	    	redirectAttributes.addAttribute("message", "기존 비밀번호와 일치하지 않습니다.");
 	        return "redirect:infoChange"; // 비밀번호 변경 페이지로 돌아가면서 에러 메시지를 표시
 	    }
 		int resnewpw = customerBiz.changepw(customerDto, new_pw);
@@ -116,6 +136,7 @@ public class CustomerController {
 			return "redirect:/";
 		}
 		else {
+			redirectAttributes.addAttribute("message", "비밀번호 변경에 실패했습니다.");
 			return "redirect:infoChange";
 		}
 	}
@@ -201,6 +222,170 @@ public class CustomerController {
 		} else {
 			return "redirect:/signup";
 		}
+	}
+
+	@GetMapping("/order")
+	public String customerorder(HttpSession session, Model model) {
+		if (session.getAttribute("member_no") == null) {
+			return "redirect:/loginform";
+		}
+
+		Integer member_no = (Integer) session.getAttribute("member_no");
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + member_no);
+		List<SellerOrderDto> res = customerBiz.selectcustomerorderlist(member_no);
+		List<CustomerorderDto> orderres = new ArrayList<>();
+		System.out.println(res.get(0).getAmount());
+		System.out.println(res.size());
+
+		for (SellerOrderDto copyres : res) {
+			// 이미 orderres에 해당 order_no가 있는지 확인
+			CustomerorderDto exportres = orderres.stream()
+					.filter(dto -> dto.getOrder_num() == copyres.getOrder_no()).findFirst().orElse(null);
+
+			if (exportres == null) {
+				CustomerorderDto neworder = new CustomerorderDto(copyres.getThumbnail(), copyres.getOrder_Date(),
+						copyres.getProduct_name(), copyres.getPrice() * copyres.getAmount(), copyres.getOrder_no(),
+						copyres.getOrder_status(), member_no, 0
+
+				);
+				orderres.add(neworder);
+			} else {
+				System.out.println("돌앗음");
+				exportres.setItem(exportres.getItem() + 1);
+				exportres.setPrice(exportres.getPrice() + (copyres.getPrice() * copyres.getAmount()));
+			}
+		}
+
+
+		model.addAttribute("membername", session.getAttribute("name"));
+		model.addAttribute("customerorder",orderres);
+		int waitdepositcount = 0; // 입금대기
+		int completepaycount = 0; // 결제완료
+		int shippingcount = 0; // 결제완료
+		int endshippingcount = 0; // 결제완료
+		int canclecount = 0; // 결제완료
+
+
+		// orderres 리스트 순회하면서 주문 상태별 개수 세기
+		for (CustomerorderDto order : orderres) {
+		    String status = order.getOrder_status();
+
+		    // 주문 상태별로 카운트 증가
+		    if ("입금대기".equals(status.replaceAll("\\s+", ""))) {
+		    	waitdepositcount++;
+		    } else if ("결제완료".equals(status.replaceAll("\\s+", ""))) {
+		    	completepaycount++;
+		    }else if ("배송중".equals(status.replaceAll("\\s+", ""))) {
+		    	shippingcount++;
+		    }else if ("배송완료".equals(status.replaceAll("\\s+", ""))) {
+		    	endshippingcount++;
+		    }else if ("취소".equals(status.replaceAll("\\s+", ""))) {
+		    	canclecount++;
+		    }else if ("테스트중".equals(status.replaceAll("\\s+", ""))) {
+		    	canclecount++;
+		    }
+		}
+		model.addAttribute("waitdepositcount",waitdepositcount);
+		model.addAttribute("completepaycount",completepaycount);
+		model.addAttribute("shippingcount",shippingcount);
+		model.addAttribute("endshippingcount",endshippingcount);
+		model.addAttribute("canclecount",canclecount);
+
+		return "customerorder";
+	}
+
+	@GetMapping("/ordersearch")
+	public String searchorder(@RequestParam(required = false) String startdate, @RequestParam(required = false) String enddate,
+			Model model, HttpSession session) {
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@검색기능이 돌고있음");
+		if (startdate == null || startdate.isEmpty()) {
+			startdate = null;
+		}
+		if (enddate == null || enddate.isEmpty()) {
+			enddate = null;
+		}
+
+		Integer member_no = (Integer) session.getAttribute("member_no");
+		List<CustomerorderDto> orderres = new ArrayList<>();
+		List<SellerOrderDto> res = customerBiz.searchcustomerorderlist(startdate,enddate,member_no);
+
+		for (SellerOrderDto copyres : res) {
+			// 이미 orderres에 해당 order_no가 있는지 확인
+			CustomerorderDto exportres = orderres.stream()
+					.filter(dto -> dto.getOrder_num() == copyres.getOrder_no()).findFirst().orElse(null);
+
+			if (exportres == null) {
+				CustomerorderDto neworder = new CustomerorderDto(copyres.getThumbnail(), copyres.getOrder_Date(),
+						copyres.getProduct_name(), copyres.getPrice() * copyres.getAmount(), copyres.getOrder_no(),
+						copyres.getOrder_status(), member_no, 0
+
+				);
+				orderres.add(neworder);
+			} else {
+				exportres.setItem(exportres.getItem() + 1);
+				exportres.setPrice(exportres.getPrice() + (copyres.getPrice() * copyres.getAmount()));
+			}
+		}
+
+		model.addAttribute("customerorder",orderres);
+		return "customerorder :: tbody";
+
+	}
+
+	//카카오 로그인 기능이 처리되는 페이지
+	@RequestMapping(value = "/loginform/getKakaoAuthUrl")
+	public @ResponseBody String getKakaoAuthUrl(HttpServletRequest request) throws Exception {
+
+		String reqUrl =
+				"https://kauth.kakao.com/oauth/authorize?client_id=66f3a9b8a7fc33ae96bc2f1fbc513320&redirect_uri=http://localhost:8080/kakaoLogin&response_type=code";
+		return reqUrl;
+	}
+
+	@RequestMapping(value = "/kakaoLogin")
+	public String oauthKakao(@RequestParam(value = "code",required = false) String code,
+							 HttpSession session, RedirectAttributes redirectAttributes) {
+
+		String access_Token = kakaoService.getAccessToken(code);
+		CustomerDto kakaouser = kakaoService.getuserinfo(access_Token);
+
+		if (kakaouser == null) {
+			redirectAttributes.addFlashAttribute("message", "카카오 로그인에 실패했습니다.");
+			return "redirect:/loginform";
+		} else {
+			session.setAttribute("role", kakaouser.getRole());
+			session.setAttribute("member_no", kakaouser.getMember_no());
+			if (kakaouser.getRole() == 'D') {
+				redirectAttributes.addFlashAttribute("message", "탈퇴된 계정입니다.");
+				return "redirect:/loginform";
+			} else if (kakaouser.getRole() == 'C') {
+				return "redirect:/";
+			} else {
+				redirectAttributes.addFlashAttribute("message", "계정 정보를 확인해주세요.");
+				return "redirect:/loginform";
+			}
+		}
+	}
+
+	// side-panel에서 부품을 선택하면 카테고리로 설정해 content-box안에 부품들을 리스트해서 보여줌
+	@Autowired
+	private ProductBizFactory productBizFactory;
+
+	@GetMapping("/products/{category}")
+	public ResponseEntity<?> getProductsByCategory(@PathVariable String category) {
+	    System.out.println("Fetching products for category: " + category);
+	    ProductBiz<?> productBiz = productBizFactory.getBiz(category.toLowerCase());
+	    if (productBiz == null) {
+	        System.err.println("No ProductBiz found for category: " + category);
+	        return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Invalid category: " + category));
+	    }
+
+	    List<?> products = productBiz.getProductsByCategory(category);
+	    if (products.isEmpty()) {
+	        System.out.println("No products found for category: " + category);
+	        return ResponseEntity.notFound().build();
+	    }
+
+	    return ResponseEntity.ok(products);
 	}
 
 }
