@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/popup_comparison.css">
+    <title>팝업_견적 비교</title>
+</head>
+<body>
+    <!-- 임시 버튼 -->
+    <p id="open-modal">견적 비교</p>
+
+    <!-- 모달 -->
+    <div id="compare-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">견적 비교</div>
+            <p>장바구니에 담은 견적을 동시에 비교해보세요. 🛒</p>
+            <h5>견적은 최소 2개이상, 3개까지 비교할 수 있습니다.</h5>
+            <div class="check">
+                <input type="checkbox" id="quote1" value="0">
+                <label for="quote1">견적 1</label>
+            </div>
+            <div class="check">
+                <input type="checkbox" id="quote2" value="1">
+                <label for="quote2">견적 2</label>
+            </div>
+            <div class="check">
+                <input type="checkbox" id="quote3" value="2">
+                <label for="quote3">견적 3</label>
+            </div>
+            <button class="btn" id="compare-button">비교하기</button>
+            <hr>
+            <div id="table-container"></div>
+            <div class="modal-footer">
+                <button id="close-modal" class="btn btn-close">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../static/js/popup_comparison.js" type="text/javascript"></script>
+
+</body>
+</html>
