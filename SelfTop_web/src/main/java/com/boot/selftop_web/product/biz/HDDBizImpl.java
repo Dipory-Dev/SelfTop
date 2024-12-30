@@ -18,7 +18,7 @@ public class HDDBizImpl implements ProductBiz<HDDDto> {
 
     @Override
     public List<HDDDto> selectAll() {
-        return null;
+    	return null;
     }
 
     @Override
@@ -44,4 +44,11 @@ public class HDDBizImpl implements ProductBiz<HDDDto> {
         }
         return result;
     }
+
+	@Override
+	public List<HDDDto> getProductsByCategory(String category) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -387,7 +387,6 @@ public class SellerController {
 	    }
 	}
 
-
 	//판매자가 올린 아이템을 수정, 삭제하는 기능(Product_Status table에서 수정, 삭제)
 	@PostMapping("/changeproduct")
 	public ResponseEntity<?> changeProductStatus(HttpSession session, @RequestBody(required=false) Map<String, Object> payload,
@@ -430,5 +429,4 @@ public class SellerController {
 
 	    return ResponseEntity.badRequest().body(Map.of("message", "지원하지 않는 작업입니다."));
 	}
-
 }

@@ -17,7 +17,7 @@ public interface ProductStatusMapper {
 
     @Update("UPDATE PRODUCT_STATUS SET PRICE = #{price}, STOCK = #{stock} WHERE PRODUCT_CODE = #{product_code} AND SELLER_NO = #{seller_no}")
     int updateProductStatus(@Param("price") int price, @Param("stock") int stock, @Param("product_code") int productCode, @Param("seller_no") int sellerNo);
-    
+
     @Delete("DELETE FROM PRODUCT_STATUS WHERE PRODUCT_CODE = #{product_code} AND SELLER_NO = #{seller_no}")
     int deleteProductStatus(@Param("product_code") int productCode, @Param("seller_no") int sellerNo);
 

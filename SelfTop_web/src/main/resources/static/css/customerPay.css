@@ -1,0 +1,265 @@
+* {
+	margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    color: #666;
+}
+
+header {
+	position: fixed;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+    z-index: 1000;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: white;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-content img {
+    width: 170px;
+    margin-left: 10%;
+    height: 70px;
+}
+
+.header-content p {
+    margin-right: 12%;
+    display: flex;
+    align-items: center;
+}
+
+.header-content p span {
+	font-size: 20px;
+    cursor: pointer;
+}
+
+.header-content p img {
+    width: 30px;
+    height: 30px;
+    transition: transform 0.3s ease;
+}
+
+.header-content p .human-icon {
+	width: 40px;
+	height: 40px;
+    margin-left: 10px;
+}
+
+.header-content p .cart-icon {
+    margin-left: 10px;
+}
+
+.header-content p .lock-icon {
+    margin-left: 20px;
+}
+
+.header-content p span:hover {
+    text-decoration: underline;
+}
+
+.header-content p img:hover {
+    transform: scale(1.5);
+}
+
+body {
+    padding-top: 90px;
+}
+
+main{
+    flex: 1;
+    align-items: center;
+    width: 1300px;
+    margin: 0 auto;
+    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+}
+
+#title {
+    width:1270px;
+    font-weight: bold;
+    font-size: 20px;
+    color:#333;
+    padding-left: 30px;
+    padding-top:20px;
+    padding-bottom:20px;
+    border-bottom: #ccc solid 1px;
+}
+
+/* 공통 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: #EAEAEA;
+    font-weight: bold;
+}
+
+table td {
+    vertical-align: middle;
+}
+
+/* 첫 번째 폼 스타일 (세로 배치) */
+#info-form table td:first-child {
+    width: 240px;
+    font-weight: bold;
+    text-align: center;
+    background-color: #EAEAEA;
+}
+
+#info-form input[type="text"] {
+    width: 300px;
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* 두 번째 폼 스타일 (가로 배치) */
+#pay-form table tr:first-child th {
+    text-align: center;
+    background-color: #EAEAEA;
+}
+
+/* 상품 정보를 감싸는 컨테이너 */
+.product-container {
+    display: flex;
+    align-items: center;
+}
+
+/* 상품 이미지 스타일 */
+.product-image {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* 상품 상세 정보 */
+.product-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-type {
+    font-weight: bold;
+    margin: 0;
+}
+
+.product-name {
+    margin: 0;
+    font-size: 0.9em;
+    color: #555;
+}
+/* 병합된 셀 스타일 */
+.merged-cell {
+    text-align: center;
+    font-weight: bold;
+    background-color: #f7f7f7;
+}
+
+.payment-summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    font-size: 20px;
+}
+
+.item {
+    text-align: center;
+}
+
+.label {
+    display: block;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.amount {
+    display: block;
+    margin-top: 5px;
+    font-size: 20px;
+}
+
+.icon {
+    display: block;
+    margin-top: 5px;
+    width: 30px;
+    height: 30px;
+}
+
+#payment-method,
+#agreement {
+	width: 1250px;
+}
+
+.btn-find-address,
+.btn-pay {
+    padding: 10px 30px;
+    margin-left: 120px;
+    background: #008ADA;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 20px;
+    cursor: pointer;   
+}
+
+.btn-pay {
+	display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.btn-find-address:hover,
+.btn-pay:hover {
+    background: #006bb3;
+    transition: background-color 0.3s ease;
+}
+
+footer {
+    background-color: #E8E8E8;
+    font-size: 14px;
+    color: #4f4f4f;
+    height: 120px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.footer-content img {
+	width: 170px;
+    margin-left: 10%;
+    height: 90px;
+}
+
+.footer-text {
+    text-align: right;
+    margin-right: 10%;
+}
+
+.footer-text p, .footer-text span {
+    margin: 5px 0;
+}

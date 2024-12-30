@@ -8,7 +8,7 @@
             <button id="openModalBtn" class="btn">제품 등록하기</button>
         </div>
         <!-- 모달 -->
-	    <div id="modal" class="modal">
+	    <div id="stockmodal" class="modal">
 	        <div class="modal-content">
 	            <div class="modal-header">수량 및 가격 수정</div>
 	            <div class="modal-body">
@@ -28,7 +28,6 @@
 	                                <option value="ssd">SSD</option>
 	                                <option value="hdd">HDD</option>
 	                                <option value="cooler">쿨러</option>
-	
 	                            </select>
 	                        </td>
 	                    </tr>
@@ -74,9 +73,10 @@
 	            </div>
 	        </div>
     	</div>
-        <script>
-		     // 모달 제어 스크립트
-		   	 const modal = document.getElementById('modal');
+           <script>
+           const modelNameInput = document.getElementById('model-name-input');
+		   // 모달 제어 스크립트
+		   	/* const modal = document.getElementById('modal');
 		   	 const openModalBtn = document.getElementById('openModalBtn');
 		   	 const closeModalBtn = document.getElementById('closeModalBtn');
 		   	 
@@ -124,14 +124,15 @@
 		                modelNameDatalist.appendChild(option);
 		            });
 		        }
-		    }
+		    }*/
 
 		 	// 제품 모델명 선택시 설명 노출
-		    modelNameInput.addEventListener('input', function() {
+		  /*  modelNameInput.addEventListener('input', function() {
 		        const selectedOption = Array.from(document.getElementById('model-names').options).find(option => option.value === this.value);
 		        const etcInfo = selectedOption ? selectedOption.getAttribute('data-etc') : '상세 정보가 없습니다.';
 		        document.querySelector('.detail').innerHTML = `<p>${etcInfo}</p>`;  // ETC 정보 출력
-		    });
+		    })*/
+
 
 		    //제품 모델명 선택시 설명 노출
     		document.getElementById('model-name-input').addEventListener('input', function() {
@@ -148,7 +149,7 @@
 			});
     		
     		//등록 버튼을 누르면 PRODUCT_STATUS 테이블에 PRODUCT_CODE, SELLER_NO, STOCK, PRICE, REG_DATE를 등록
-    		 document.getElementById('registerModalBtn').addEventListener('click', function() {
+    		/* document.getElementById('registerModalBtn').addEventListener('click', function() {
 		        const selectedOption = Array.from(document.getElementById('model-names').options).find(option => option.value === modelNameInput.value);
 		        const productCode = selectedOption ? selectedOption.getAttribute('data-product-code') : null;
 
@@ -197,7 +198,7 @@
 		            console.error('Error:', error);
 		            alert(error.message);
 		        });
-		    });
+		    });*/
         </script>
         <div class="searchbox">
             <input type="text" placeholder="검색할 제품 입력" id="keyword">
@@ -316,24 +317,23 @@
 			        event.preventDefault(); // 기본 이벤트 방지
 			        const productCode = this.getAttribute('data-product-code'); // 버튼의 데이터 속성에서 productCode 가져오기
 
-			        if (confirm('정말 삭제하시겠습니까?')) {
-			            fetch(`/seller/changeproduct?productCode=${productCode}&action=delete`, {
-			                method: 'POST'
-			            }).then(response => {
-			            	console.log(response);
-			                if (response.ok) {
-			                    return response.json();
-			                } else {
-			                    return response.text().then(text => { throw new Error(text || 'Failed to delete product'); });
-			                }
-			            }).then(result => {
-			                alert(result.message); // 서버에서 반환된 메시지를 표시
-			                location.reload(); // 페이지 새로고침
-			            }).catch(error => {
-			                alert(error.message);
-			            });
-			        }
-			    });
-			});
-	    </script>
+		        if (confirm('정말 삭제하시겠습니까?')) {
+		            fetch(`/seller/changeproduct?productCode=${productCode}&action=delete`, {
+		                method: 'POST'
+		            }).then(response => {
+		                if (response.ok) {
+		                    return response.json();
+		                } else {
+		                    return response.text().then(text => { throw new Error(text || 'Failed to delete product'); });
+		                }
+		            }).then(result => {
+		                alert(result.message); // 서버에서 반환된 메시지를 표시
+		                location.reload(); // 페이지 새로고침
+		            }).catch(error => {
+		                alert(error.message);
+		            });
+		        }
+		    });
+		});
+    </script>
 </th:block>
