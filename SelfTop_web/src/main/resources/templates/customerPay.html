@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer_Pay</title>
+    <link rel="stylesheet" href="/css/customerPay.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://js.tosspayments.com/v2/standard"></script>  
+    <script>
+        // 전화번호 숫자로만 입력
+        function validatePhoneInput(input) {
+            input.value = input.value.replace(/[^0-9]/g, '');
+        }
+
+        // 주소검색 팝업창 
+        function goPopup() {
+            const popupUrl = '/seller/addressPopup';
+            window.open(popupUrl, 'pop', "width=570,height=420, scrollbars=yes, resizable=yes");
+        }
+
+        function jusoCallBack(zipNo, roadAddrPart1, addrDetail) {
+            document.getElementById("zipNo").value = zipNo;
+            document.getElementById("address1").value = roadAddrPart1;
+            document.getElementById("address2").value = addrDetail;
+        }
+
+        // 배송금액 하나로 병합
+        document.addEventListener("DOMContentLoaded", () => {
+            const mergeFixedShippingFee = () => {
+                const rows = document.querySelectorAll("#order-table tbody tr");
+                if (rows.length === 0) return;
+
+                // 첫 번째 행의 배송 금액 셀 가져오기
+                const firstFeeCell = rows[0].querySelector(".shipping-fee");
+                firstFeeCell.rowSpan = rows.length;
+
+                // 나머지 행의 배송 금액 셀 삭제
+                rows.forEach((row, index) => {
+                    if (index > 0) {
+                        const feeCell = row.querySelector(".shipping-fee");
+                        if (feeCell) feeCell.remove();
+                    }
+                });
+            };
+
+            mergeFixedShippingFee();
+            
+            // 결제 버튼 이벤트 추가
+            const paymentButton = document.getElementById('payment-button');
+            const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm"; // 토스 클라이언트 키
+            const tossPayments = TossPayments(clientKey);
+            const customerKey = "ANONYMOUS"; // 고객 키
+            const widgets = tossPayments.widgets({ customerKey });
+
+            // 기본 결제 금액 설정
+            let baseAmount = 76000; // 기본 결제 금액 (상품 가격 + 배송비)
+
+            // 결제 UI 및 이용약관 UI 렌더링
+            async function renderPaymentUI() {
+                await widgets.setAmount({
+                    currency: "KRW",
+                    value: baseAmount,
+                });
+
+                await Promise.all([
+                    widgets.renderPaymentMethods({
+                        selector: "#payment-method",
+                        variantKey: "DEFAULT",
+                    }),
+                    widgets.renderAgreement({ selector: "#agreement", variantKey: "AGREEMENT" }),
+                ]);
+            }
+
+            renderPaymentUI();
+
+            // 결제하기 버튼 클릭 시 결제 요청
+            paymentButton.addEventListener("click", async function () {
+                const name = document.getElementById('name').value;
+                const phone = document.getElementById('phone').value;
+                const zipNo = document.getElementById('zipNo').value;
+                const address1 = document.getElementById('address1').value;
+                const address2 = document.getElementById('address2').value;
+
+                // 필수 입력 항목 확인
+                if (!name || !phone || !zipNo || !address1 || !address2) {
+                    alert("성함, 연락처, 배송주소를 모두 입력해주세요.");
+                    return; // 입력이 누락된 경우 결제 요청을 중단
+                }
+
+                try {
+                    // 결제 요청
+                    const paymentResult = await widgets.requestPayment({
+                        orderId: "ORDER_ID_1234", // 고유 주문 번호
+                        orderName: "그래픽 카드 구매", // 주문 이름
+                        successUrl: "http://localhost:8080/paysuccess", // 결제 성공 시 리다이렉트 URL
+                        failUrl: "http://localhost:8080/payfail", // 결제 실패 시 리다이렉트 URL
+                        customerEmail: "customer123@gmail.com",
+                        customerName: name,
+                        customerMobilePhone: phone,
+                    });
+
+                    // 결제 승인 처리 (결제 성공 시)
+                    if (paymentResult.status === "SUCCESS") {
+                        window.location.href = "http://localhost:8080/paysuccess";
+                    } else {
+                        alert("결제에 실패하였습니다. 다시 시도해주세요.");
+                        window.location.href = "http://localhost:8080/payfail";
+                    }
+                } catch (error) {
+                    console.error("결제 처리 중 오류 발생:", error);
+                    alert("결제 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
+                    window.location.href = "http://localhost:8080/payfail";
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="/img/logo.png">
+            <p>
+                <span th:text="${customer.name} + 님"></span>&nbsp| 
+                <a href="mypage">
+                    <img src="/img/human-icon.png" class="human-icon">
+                </a>
+                <a href="cart">
+                    <img src="/img/cart-icon.png" class="cart-icon">
+                </a>
+                <a href="signup">
+                    <img src="/img/lock-icon.png" class="lock-icon">
+                </a>
+            </p>
+        </div>
+    </header>
+    <main>
+        <div id="title">
+            <h3>주문/결제</h3>
+        </div>
+        <div id="title">
+            <span>배송정보</span>
+        </div>
+        <div id="info-form">
+            <form action="/mypage" method="post">
+                <table>
+                    <tr>
+                        <td><label>성함</label></td>
+                        <td><input type="text" id="name" name="name"></td>
+                    </tr>
+                    <tr>
+                        <td><label>연락처</label></td>
+                        <td><input type="text" id="phone" name="phone" oninput="validatePhoneInput(this)"></td>
+                    </tr>
+                    <tr>
+                        <td><label>배송주소</label></td>
+                        <td>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="zipNo" name="zipNo" placeholder="우편번호" readonly>
+                                <button type="button" class="btn-find-address" onClick="goPopup()"><i class="fa fa-search"></i>우편번호 찾기</button>
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="address1" name="address1" placeholder="도로명주소" readonly/>&nbsp;
+                                <input type="text" class="form-control" id="address2" name="address2" placeholder="상세주소"/>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label>요청사항</label></td>
+                        <td><input type="text" id="request" name="request"></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div id="title">
+            <span>주문 상품 정보</span>
+        </div>
+        <div id="pay-form">
+            <form action="/mypage" method="post">
+                <table id="order-table">
+                    <thead>
+                        <tr>
+                            <th>상품 이름</th>
+                            <th>상품 가격</th>
+                            <th>수량</th>
+                            <th>주문 금액</th>
+                            <th>배송 금액</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="product-container">
+                                    <img src="/img/human-icon.png" alt="상품 A 이미지" class="product-image">
+                                    <div class="product-details">
+                                        <p class="product-type">그래픽 카드</p>
+                                        <p class="product-name">NVIDIA RTX 4090</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>10,000원</td>
+                            <td>2</td>
+                            <td>20,000원</td>
+                            <td class="shipping-fee">
+                                <p>멀캠</p>
+                                <span>5,000원</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="product-container">
+                                    <img src="/img/human-icon.png" alt="상품 B 이미지" class="product-image">
+                                    <div class="product-details">
+                                        <p class="product-type">그래픽 카드</p>
+                                        <p class="product-name">NVIDIA RTX 4090</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>15,000원</td>
+                            <td>1</td>
+                            <td>15,000원</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="product-container">
+                                    <img src="/img/human-icon.png" alt="상품 C 이미지" class="product-image">
+                                    <div class="product-details">
+                                        <p class="product-type">그래픽 카드</p>
+                                        <p class="product-name">NVIDIA RTX 4090</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>12,000원</td>
+                            <td>3</td>
+                            <td>36,000원</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+            <div class="payment-summary">
+                <div class="item">
+                    <span class="label">선택상품 총금액</span>
+                    <span class="amount">71000원</span>
+                </div>
+                <img class="icon" src="/img/plus.png" alt="더하기">
+                <div class="item">
+                    <span class="label">배송금액</span>
+                    <span class="amount">5000원</span>
+                </div>
+                <img class="icon" src="/img/same.png" alt="결과">
+                <span class="label">최종 결제금액</span>
+                <span class="amount">76000원</span>
+            </div>
+            <div id="title">
+                <div id="payment-method"></div>
+                <div id="agreement"></div>
+                <button id="payment-button" class="btn-pay">결제하기</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <img src="/img/logo-footer.png" alt="로고">
+            <div class="footer-text">
+                <p>&copy; 2024 Copyright: SelfTop All rights reserved.</p>
+                <p>팀원: 김지성, 오원석, 권장현, 양다연, 임성규</p>
+                <p>문의: 02-1234-5678</p>
+                <p>메일: SelfTop@selftop.com</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

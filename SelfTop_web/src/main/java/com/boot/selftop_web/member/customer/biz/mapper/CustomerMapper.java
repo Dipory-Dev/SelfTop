@@ -44,8 +44,8 @@ public interface CustomerMapper {
     int changeInfo(@Param("email") String email, @Param("phone") String phone, @Param("member_no") int member_no);
 
 
-    @Select("SELECT * FROM customer WHERE email = #{email}")
-    CustomerDto findkakao(@Param("email") String email);
+    @Select("SELECT * FROM customer WHERE id = #{id}")
+    CustomerDto findkakao(@Param("id") String id);
 
 
     @Select("SELECT * FROM viewsellerorder WHERE customer_no = #{member_no}")

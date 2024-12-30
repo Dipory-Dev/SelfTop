@@ -48,17 +48,26 @@ document.addEventListener("DOMContentLoaded", () => {
 	        return;
 	    }
 
-	    // 스타일과 테두리 추가
-	    let htmlContent = `<div style="display: flex; flex-direction: column; max-height: 400px; overflow-y: auto;">`;
+	    // 스타일과 테두리 추가, 스크롤 가능 설정
+	    let htmlContent = `<div style="display: flex; flex-direction: column; width: 1300px; max-height: 500px; overflow-y: auto;">`;
 
 	    products.forEach(product => {
 	        htmlContent += `
-	            <div style="display: flex; align-items: center; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; background-color: #f9f9f9;">
-	                <img src="${product.thumbnail}" alt="${product.product_name} 이미지" style="width: 100px; height: 100px; margin-right: 10px;">
-	                <div style="flex-grow: 1; min-width: 0;">
-	                    <div style="font-weight: bold; margin-bottom: 5px;">${product.product_name}</div>
-	                    <div style="margin-bottom: 5px; color: #666; font-size: 0.9em;">${product.etc}</div>
-	                    <div style="font-weight: bold; color: #333;">${product.price ? `${product.price}원` : '품절'}</div>
+	            <div style="display: flex; align-items: center; justify-content: space-between; border: 1px solid #ccc; padding: 10px; margin-bottom: 5px; background-color: #f9f9f9;">
+	                <div style="display: flex; align-items: center;">
+	                    <img src="${product.thumbnail}" alt="${product.product_name} 이미지" style="width: 100px; height: 100px; margin-right: 10px;">
+	                    <div style="flex-grow: 1; min-width: 0;">
+	                        <div style="font-weight: bold; border-bottom: 1px solid black; padding-bottom: 5px; width: 1000px;">${product.product_name}</div>
+	                        <div style="color: #666; font-size: 0.9em; width: 1000px;">${product.etc}</div>
+	                    </div>
+	                </div>
+	                <div style="text-align: right; margin-left: 10px; font-weight: bold; color: #333;">
+	                    ${product.price ? `${product.price}원` : '품절'}
+						<div><span class="stars">★★★★★</span> <!-- 별점 --></div>
+						<div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px;">
+							<button class="btn add-to-cart">담기</button>
+							<button class="btn buy-now">바로구매</button>
+						</div>
 	                </div>
 	            </div>
 	        `;

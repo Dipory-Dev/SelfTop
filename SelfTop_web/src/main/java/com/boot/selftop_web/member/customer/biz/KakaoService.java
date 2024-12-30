@@ -107,7 +107,7 @@ public class KakaoService {
             JsonElement element = parser.parse(result.toString());
             JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
             JsonObject kakao_account = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
-            String email = element.getAsJsonObject().get("id").getAsString();
+            String id = element.getAsJsonObject().get("id").getAsString();
 
             String name = properties.getAsJsonObject().get("nickname").getAsString();
             System.out.println("mnickname : " + name);
@@ -115,7 +115,7 @@ public class KakaoService {
             System.out.println(element);
 
             //userInfo에 사용자 정보 저장
-            userInfo.put("email", email);
+            userInfo.put("id", id);
             userInfo.put("name", name);
             userInfo.put("access_Token", access_Token);
 
@@ -135,10 +135,10 @@ public class KakaoService {
         if (member == null) {
             //member null 이면 DB에 저장하기 위해 dto에 kakao 인자값 지정
             CustomerDto dto = new CustomerDto();
-            dto.setId("kakao_account");
+            dto.setId(userInfo.get("id").toString());
             dto.setPw("kakao_default");
             dto.setName(userInfo.get("name").toString());
-            dto.setEmail(userInfo.get("email").toString());
+            dto.setEmail("kakao@kakao.com");
             dto.setPhone("N/A");
 
             // kakaoinsert 실행으로 customer 테이블에 정보 저장

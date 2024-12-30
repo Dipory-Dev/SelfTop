@@ -71,7 +71,7 @@ p{
     border-radius: 25px;
     overflow: hidden;
     background-color: #fff;
-    width: 1000px;
+    width: 1300px;
 }
 
 .search-box {
@@ -112,7 +112,7 @@ p{
 }
 
 .content-box{
-	width: 100%;
+	width: 1300px;
 	height: 500px;
     border: 1px solid black;	
 }

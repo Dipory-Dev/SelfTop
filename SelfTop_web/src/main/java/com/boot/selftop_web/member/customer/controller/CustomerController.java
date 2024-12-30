@@ -190,6 +190,45 @@ public class CustomerController {
 		model.addAttribute("customer", dto);
 		return "customerMyPage";
 	}
+	
+	@GetMapping("/pay")
+	public String showPayPage(HttpSession session, Model model) {
+		if(session.getAttribute("member_no") == null) {
+			return "redirect:/loginform";
+		}
+
+		Integer member_no = (Integer) session.getAttribute("member_no");
+
+		CustomerDto dto = customerBiz.selectCustomer(member_no);
+		model.addAttribute("customer", dto);
+		return "customerPay";
+	}
+	
+	@GetMapping("/payfail")
+	public String showPayFail(HttpSession session, Model model) {
+		if(session.getAttribute("member_no") == null) {
+			return "redirect:/loginform";
+		}
+
+		Integer member_no = (Integer) session.getAttribute("member_no");
+
+		CustomerDto dto = customerBiz.selectCustomer(member_no);
+		model.addAttribute("customer", dto);
+		return "payFail";
+	}
+	
+	@GetMapping("/paysuccess")
+	public String showPaySuccess(HttpSession session, Model model) {
+		if(session.getAttribute("member_no") == null) {
+			return "redirect:/loginform";
+		}
+
+		Integer member_no = (Integer) session.getAttribute("member_no");
+
+		CustomerDto dto = customerBiz.selectCustomer(member_no);
+		model.addAttribute("customer", dto);
+		return "paySuccess";
+	}
 
 	@PostMapping("/infochange")
 	public String showInfoChangeForm(HttpSession session, Model model) {
