@@ -36,4 +36,6 @@ public interface CustomerBiz {
 	public List<SellerOrderDto> selectcustomerorderlist(int member_no);
 
 	public List<SellerOrderDto> searchcustomerorderlist(String startdate,String enddate,int member_no);
+	
+	public  List<SellerOrderDto> customerpurchaselist(int member_no,int order_no);
 }

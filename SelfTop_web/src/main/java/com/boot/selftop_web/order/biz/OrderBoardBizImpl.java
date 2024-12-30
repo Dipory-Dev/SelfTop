@@ -19,4 +19,5 @@ public class OrderBoardBizImpl implements OrderBoardBiz{
 		return mapper.vieworderboard(ordernum);
 	}
 
+
 }

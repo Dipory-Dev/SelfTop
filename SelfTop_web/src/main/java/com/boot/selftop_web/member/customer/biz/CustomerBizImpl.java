@@ -97,4 +97,10 @@ public class CustomerBizImpl implements CustomerBiz {
 		// TODO Auto-generated method stub
 		return mapper.searchcustomerorderlist(startdate,enddate,member_no);
 	}
+
+	@Override
+	public List<SellerOrderDto> customerpurchaselist(int member_no, int order_no) {
+		// TODO Auto-generated method stub
+		return mapper.customerpurchaselist(member_no, order_no);
+	}
 }

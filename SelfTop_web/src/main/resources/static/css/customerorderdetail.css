@@ -133,6 +133,8 @@ span {
 .btn-modify:hover{
     background: #006bb3;
 }
+
+
 .order_status{
 	display:flex;
 	gap: 10px;
@@ -152,13 +154,29 @@ span {
 	margin-left:10px;
 }
 
+.namezone{
+	border: 1px solid; 
+	
+}
+.namezone h2{
+	text-align:center;
+}
+
 .orderprice{
 	display:flex;
+	
 	
 }
 
 .orderprice div{
-	flex:1;
+	flex: 1;
+}
+.deliveryinform{
+	display:flex;
+	flex-direction: column;
+}
+.deliveryinform div{
+	display:flex;
 }
 
 footer {
