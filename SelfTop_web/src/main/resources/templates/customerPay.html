@@ -24,7 +24,57 @@
             document.getElementById("address1").value = roadAddrPart1;
             document.getElementById("address2").value = addrDetail;
         }
+        
+     	// 페이지가 로드되면 실행되는 함수
+        document.addEventListener("DOMContentLoaded", function() {
+            // localStorage에서 저장된 'selectedProduct' 가져오기
+            const productInfo = JSON.parse(localStorage.getItem('selectedProduct'));
 
+            if (productInfo) {
+                // 가져온 데이터가 존재할 경우, 각 요소에 값 삽입
+                const productImage = document.querySelector('.product-image');
+                const productCategory = document.querySelector('.product-type');
+                const productName = document.querySelector('.product-name');
+                const productPrice = document.querySelector('.product-price');
+                const productAmount = document.querySelector('.quantity-input');
+                const productOrderPrice = document.querySelector('.order-price');
+                const productTotalPrice = document.querySelector('.total-price');
+
+                if (productImage && productCategory && productName && productPrice && productAmount && productOrderPrice && productTotalPrice) {
+                    productImage.src = productInfo.thumbnail; // 상품 이미지
+                    productCategory.textContent = productInfo.category; // 상품 분류
+                    productName.textContent = productInfo.name; // 상품 이름
+                    productPrice.textContent = productInfo.price.toLocaleString() + '원'; // 상품 가격
+                    productOrderPrice.textContent = productInfo.price.toLocaleString() + '원'; // 상품 가격
+                    productTotalPrice.textContent = productInfo.price.toLocaleString() + '원';
+                    productAmount.textContent = productInfo.quantity; // 상품 수량 1로 고정
+                 	// 선택상품 총금액과 최종 결제금액 업데이트
+                    updatePayment(productInfo.price, productInfo.quantity);
+                }
+            }
+        });
+     	
+        function updateQuantity(button, change) {
+            const quantityTag = button.parentElement.querySelector('.quantity-input');
+            let currentQuantity = parseInt(quantityTag.textContent); // 현재 수량
+            let newQuantity = currentQuantity + change; // 변경된 수량
+            if (newQuantity < 1) newQuantity = 1; // 최소 수량 제한
+            quantityTag.textContent = newQuantity; // 수량 업데이트
+            updatePrice(quantityTag);
+        }
+
+        function updatePrice(quantityTag) {
+            const row = quantityTag.closest('tr'); // 현재 행 선택
+            const price = parseInt(row.querySelector('.product-price').textContent.replace(/,/g, '')); // 상품 가격
+            const quantity = parseInt(quantityTag.textContent); // 수량
+            const orderPriceCell = row.querySelector('.order-price'); // 주문 금액 셀
+            const orderPrice = price * quantity; // 주문 금액 계산
+            orderPriceCell.textContent = orderPrice.toLocaleString() + '원'; // 업데이트
+            
+         	// 선택상품 총금액과 최종 결제금액 업데이트
+            updatePayment(price, quantity);
+        }
+        
         // 배송금액 하나로 병합
         document.addEventListener("DOMContentLoaded", () => {
             const mergeFixedShippingFee = () => {
@@ -45,74 +95,85 @@
             };
 
             mergeFixedShippingFee();
-            
-            // 결제 버튼 이벤트 추가
-            const paymentButton = document.getElementById('payment-button');
-            const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm"; // 토스 클라이언트 키
-            const tossPayments = TossPayments(clientKey);
-            const customerKey = "ANONYMOUS"; // 고객 키
-            const widgets = tossPayments.widgets({ customerKey });
+        });
+        
+     	// 선택상품 총금액과 최종 결제금액 업데이트 함수
+        function updatePayment(price, quantity) {
+            const totalAmount = price * quantity; // 선택상품 총금액
+            const shippingAmount = 5000; // 배송금액
+            const finalAmount = totalAmount + shippingAmount; // 최종 결제금액
 
-            // 기본 결제 금액 설정
-            let baseAmount = 76000; // 기본 결제 금액 (상품 가격 + 배송비)
+            // 선택상품 총금액과 최종 결제금액 업데이트
+            document.querySelector('.total-price').textContent = `${totalAmount.toLocaleString()}원`; // 선택상품 총금액
+            document.querySelector('.pay-price').textContent = `${finalAmount.toLocaleString()}원`; // 최종 결제금액
+     	}
+        
+        document.addEventListener("DOMContentLoaded", () => {
+	        // 결제 버튼 이벤트 추가
+	        const paymentButton = document.getElementById('payment-button');
+	        const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm"; // 토스 클라이언트 키
+	        const tossPayments = TossPayments(clientKey);
+	        const customerKey = "ANONYMOUS"; // 고객 키
+	        const widgets = tossPayments.widgets({ customerKey });
+	
+	        // 결제 UI 및 이용약관 UI 렌더링
+	        async function renderPaymentUI() {
+	        	// 기본 결제 금액 설정
+	            const baseAmount = parseInt(document.querySelector('.pay-price').textContent.replace(/[^0-9]/g, '')); // 기본 결제 금액 (상품 가격 + 배송비)
+	            await widgets.setAmount({
+	                currency: "KRW",
+	                value: baseAmount,
+	            });
+	
+	            await Promise.all([
+	                widgets.renderPaymentMethods({
+	                    selector: "#payment-method",
+	                    variantKey: "DEFAULT",
+	                }),
+	                widgets.renderAgreement({ selector: "#agreement", variantKey: "AGREEMENT" }),
+	            ]);
+	        }
+	        
+	        renderPaymentUI();
+	
+	        // 결제하기 버튼 클릭 시 결제 요청
+	        paymentButton.addEventListener("click", async function () {
+	            const name = document.getElementById('name').value;
+	            const phone = document.getElementById('phone').value;
+	            const zipNo = document.getElementById('zipNo').value;
+	            const address1 = document.getElementById('address1').value;
+	            const address2 = document.getElementById('address2').value;
+	
+	            // 필수 입력 항목 확인
+	            if (!name || !phone || !zipNo || !address1 || !address2) {
+	                alert("성함, 연락처, 배송주소를 모두 입력해주세요.");
+	                return; // 입력이 누락된 경우 결제 요청을 중단
+	            }
 
-            // 결제 UI 및 이용약관 UI 렌더링
-            async function renderPaymentUI() {
-                await widgets.setAmount({
-                    currency: "KRW",
-                    value: baseAmount,
-                });
-
-                await Promise.all([
-                    widgets.renderPaymentMethods({
-                        selector: "#payment-method",
-                        variantKey: "DEFAULT",
-                    }),
-                    widgets.renderAgreement({ selector: "#agreement", variantKey: "AGREEMENT" }),
-                ]);
-            }
-
-            renderPaymentUI();
-
-            // 결제하기 버튼 클릭 시 결제 요청
-            paymentButton.addEventListener("click", async function () {
-                const name = document.getElementById('name').value;
-                const phone = document.getElementById('phone').value;
-                const zipNo = document.getElementById('zipNo').value;
-                const address1 = document.getElementById('address1').value;
-                const address2 = document.getElementById('address2').value;
-
-                // 필수 입력 항목 확인
-                if (!name || !phone || !zipNo || !address1 || !address2) {
-                    alert("성함, 연락처, 배송주소를 모두 입력해주세요.");
-                    return; // 입력이 누락된 경우 결제 요청을 중단
-                }
-
-                try {
-                    // 결제 요청
-                    const paymentResult = await widgets.requestPayment({
-                        orderId: "ORDER_ID_1234", // 고유 주문 번호
-                        orderName: "그래픽 카드 구매", // 주문 이름
-                        successUrl: "http://localhost:8080/paysuccess", // 결제 성공 시 리다이렉트 URL
-                        failUrl: "http://localhost:8080/payfail", // 결제 실패 시 리다이렉트 URL
-                        customerEmail: "customer123@gmail.com",
-                        customerName: name,
-                        customerMobilePhone: phone,
-                    });
-
-                    // 결제 승인 처리 (결제 성공 시)
-                    if (paymentResult.status === "SUCCESS") {
-                        window.location.href = "http://localhost:8080/paysuccess";
-                    } else {
-                        alert("결제에 실패하였습니다. 다시 시도해주세요.");
-                        window.location.href = "http://localhost:8080/payfail";
-                    }
-                } catch (error) {
-                    console.error("결제 처리 중 오류 발생:", error);
-                    alert("결제 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
-                    window.location.href = "http://localhost:8080/payfail";
-                }
-            });
+	            try {            
+	            	// 결제 요청
+	                const paymentResult = await widgets.requestPayment({
+	                    orderId: "ORDER_ID_1234", // 고유 주문 번호
+	                    orderName: "그래픽 카드 구매", // 주문 이름
+	                    successUrl: "http://localhost:8080/paysuccess", // 결제 성공 시 리다이렉트 URL
+	                    failUrl: "http://localhost:8080/payfail", // 결제 실패 시 리다이렉트 URL
+	                    customerName: name,
+	                    customerMobilePhone: phone,
+	                });
+	
+	                // 결제 승인 처리 (결제 성공 시)
+	                if (paymentResult.status === "SUCCESS") {
+	                    window.location.href = "http://localhost:8080/paysuccess";
+	                } else {
+	                    alert("결제에 실패하였습니다. 다시 시도해주세요.");
+	                    window.location.href = "http://localhost:8080/payfail";
+	                }
+	            } catch (error) {
+	                console.error("결제 처리 중 오류 발생:", error);
+	                alert("결제 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
+	                window.location.href = "http://localhost:8080/pay";
+	            }
+	        });
         });
     </script>
 </head>
@@ -145,7 +206,7 @@
             <form action="/mypage" method="post">
                 <table>
                     <tr>
-                        <td><label>성함</label></td>
+                        <td><label>소유주명</label></td>
                         <td><input type="text" id="name" name="name"></td>
                     </tr>
                     <tr>
@@ -192,48 +253,24 @@
                         <tr>
                             <td>
                                 <div class="product-container">
-                                    <img src="/img/human-icon.png" alt="상품 A 이미지" class="product-image">
+                                    <img class="product-image">
                                     <div class="product-details">
-                                        <p class="product-type">그래픽 카드</p>
-                                        <p class="product-name">NVIDIA RTX 4090</p>
+                                        <p class="product-type"></p>
+                                        <p class="product-name"></p>
                                     </div>
                                 </div>
                             </td>
-                            <td>10,000원</td>
-                            <td>2</td>
-                            <td>20,000원</td>
+                            <td class="product-price"></td>
+                            <td class="quantity">
+			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
+			                    <p class="quantity-input"></p>
+			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
+			                </td>
+                            <td class="order-price"></td>
                             <td class="shipping-fee">
                                 <p>멀캠</p>
                                 <span>5,000원</span>
                             </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="product-container">
-                                    <img src="/img/human-icon.png" alt="상품 B 이미지" class="product-image">
-                                    <div class="product-details">
-                                        <p class="product-type">그래픽 카드</p>
-                                        <p class="product-name">NVIDIA RTX 4090</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>15,000원</td>
-                            <td>1</td>
-                            <td>15,000원</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="product-container">
-                                    <img src="/img/human-icon.png" alt="상품 C 이미지" class="product-image">
-                                    <div class="product-details">
-                                        <p class="product-type">그래픽 카드</p>
-                                        <p class="product-name">NVIDIA RTX 4090</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>12,000원</td>
-                            <td>3</td>
-                            <td>36,000원</td>
                         </tr>
                     </tbody>
                 </table>
@@ -241,16 +278,16 @@
             <div class="payment-summary">
                 <div class="item">
                     <span class="label">선택상품 총금액</span>
-                    <span class="amount">71000원</span>
+                    <span id="amount" class="total-price"></span>
                 </div>
-                <img class="icon" src="/img/plus.png" alt="더하기">
+                <img class="plus" src="/img/plus.png" alt="더하기">
                 <div class="item">
                     <span class="label">배송금액</span>
-                    <span class="amount">5000원</span>
+                    <span id="amount">5000원</span>
                 </div>
-                <img class="icon" src="/img/same.png" alt="결과">
+                <img class="same" src="/img/same.png" alt="결과">
                 <span class="label">최종 결제금액</span>
-                <span class="amount">76000원</span>
+                <span id="amount" class="pay-price"></span>
             </div>
             <div id="title">
                 <div id="payment-method"></div>
