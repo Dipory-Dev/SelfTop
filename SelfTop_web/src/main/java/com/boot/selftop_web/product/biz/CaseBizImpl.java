@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("케이스")
@@ -44,10 +45,11 @@ public class CaseBizImpl implements ProductBiz<CaseDto> {
         return result;
     }
 
-	@Override
-	public List<CaseDto> getProductsByCategory(String category) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<CaseDto> getProductsByCategory(String category, String sort) {
+        List<CaseDto> results = productMapper.findAllDetailedCaseProducts(category, sort);
+
+        return results;
+    }
 
 }

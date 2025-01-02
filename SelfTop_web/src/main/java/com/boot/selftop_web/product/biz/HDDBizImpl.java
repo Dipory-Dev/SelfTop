@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("HDD")
@@ -45,10 +46,11 @@ public class HDDBizImpl implements ProductBiz<HDDDto> {
         return result;
     }
 
-	@Override
-	public List<HDDDto> getProductsByCategory(String category) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<HDDDto> getProductsByCategory(String category, String sort) {
+        List<HDDDto> results = productMapper.findAllDetailedHddProducts(category, sort);
+
+        return results;
+    }
 
 }

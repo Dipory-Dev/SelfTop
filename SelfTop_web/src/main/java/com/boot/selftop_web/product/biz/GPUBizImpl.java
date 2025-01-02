@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("그래픽카드")
@@ -45,10 +46,11 @@ public class GPUBizImpl implements ProductBiz<GPUDto> {
         return result;
     }
 
-	@Override
-	public List<GPUDto> getProductsByCategory(String category) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<GPUDto> getProductsByCategory(String category, String sort) {
+        List<GPUDto> results = productMapper.findAllDetailedGpuProducts(category, sort);
+
+        return results;
+    }
 
 }

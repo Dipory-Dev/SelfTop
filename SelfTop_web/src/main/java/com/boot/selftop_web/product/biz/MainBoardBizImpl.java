@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("메인보드")
@@ -45,11 +46,12 @@ public class MainBoardBizImpl implements ProductBiz<MainBoardDto> {
         return result;
     }
 
-	@Override
-	public List<MainBoardDto> getProductsByCategory(String category) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<MainBoardDto> getProductsByCategory(String category, String sort) {
+        List<MainBoardDto> results = productMapper.findAllDetailedMainBoardProducts(category, sort);
+
+        return results;
+    }
 
 	
 

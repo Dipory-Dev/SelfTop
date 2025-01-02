@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("SSD")
@@ -45,11 +46,12 @@ public class SSDBizImpl implements ProductBiz<SSDDto> {
         return result;
     }
 
-	@Override
-	public List<SSDDto> getProductsByCategory(String category) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<SSDDto> getProductsByCategory(String category, String sort) {
+        List<SSDDto> results = productMapper.findAllDetailedSsdProducts(category, sort);
+
+        return results;
+    }
 
 
 }

@@ -71,7 +71,7 @@ p{
     border-radius: 25px;
     overflow: hidden;
     background-color: #fff;
-    width: 1000px;
+    width: 1300px;
 }
 
 .search-box {
@@ -100,19 +100,34 @@ p{
 .top-boxes {
     display: flex;
     justify-content: space-between;
-    padding: 20px;
+    margin: 5px 0px;
+    width: 100%;
 }
 
-.top-box{
-    width: 49%;
-    height: 100px;
+.top-box.small {
+    width: 24%;
+    height: 190px;
     border: 1px solid #007bff;
     color: white;
     padding: 10px;
+    background-color: 000;
+}
+
+.top-box.large {
+    width: 74%;
+    height: 190px;
+    border: 1px solid #007bff;
+    color: white;
+    padding: 10px;
+    background-color: 000;
+}
+
+.top-boxes > *:not(:last-child) {
+    margin-right: 2%;
 }
 
 .content-box{
-	width: 100%;
+	width: 1300px;
 	height: 500px;
     border: 1px solid black;	
 }

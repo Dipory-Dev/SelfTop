@@ -168,6 +168,53 @@ table td {
     font-size: 0.9em;
     color: #555;
 }
+.product-price,
+.order-price {
+	text-align: right;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+    border: 1px solid #ccc;
+}
+
+/* 버튼 스타일 */
+.quantity-btn {
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 30px;
+    font-size: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease; /* 모든 변화에 대한 부드러운 트랜지션 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 버튼에 그림자 효과 */
+    line-height: 1.1;
+}
+
+/* 버튼 호버 효과 */
+.quantity-btn:hover {
+    background-color: #e0e0e0;
+    transform: scale(1.2); /* 호버 시 버튼 크기 살짝 확대 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* 호버 시 그림자 강하게 */
+}
+
+/* 버튼 간 간격 */
+.quantity-btn:first-child {
+    margin-right: 15px;
+}
+
+.quantity-btn:last-child {
+    margin-left: 15px;
+}
+
+.shipping-fee {
+	text-align: right;
+}
+
 /* 병합된 셀 스타일 */
 .merged-cell {
     text-align: center;
@@ -179,6 +226,7 @@ table td {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 20px;
     gap: 60px;
     font-size: 20px;
 }
@@ -193,17 +241,28 @@ table td {
     font-size: 20px;
 }
 
-.amount {
+.same {
     display: block;
     margin-top: 5px;
-    font-size: 20px;
+    width: 35px;
+    height: 35px;
 }
 
-.icon {
+.plus {
     display: block;
     margin-top: 5px;
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
+}
+
+#amount {
+    margin-top: 5px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.pay-price {
+	margin: 10px;
 }
 
 #payment-method,

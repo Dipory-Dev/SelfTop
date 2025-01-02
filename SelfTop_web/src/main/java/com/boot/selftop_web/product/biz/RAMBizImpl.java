@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("RAM")
@@ -45,11 +46,12 @@ public class RAMBizImpl implements ProductBiz<RAMDto> {
         return result;
     }
 
-	@Override
-	public List<RAMDto> getProductsByCategory(String category) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<RAMDto> getProductsByCategory(String category, String sort) {
+        List<RAMDto> results = productMapper.findAllDetailedRamProducts(category, sort);
+
+        return results;
+    }
 
 
 }

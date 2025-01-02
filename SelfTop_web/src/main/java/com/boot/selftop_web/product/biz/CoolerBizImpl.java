@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("쿨러")
@@ -46,11 +47,12 @@ public class CoolerBizImpl implements ProductBiz<CoolerDto>{
         return result;
     }
 
-	@Override
-	public List<CoolerDto> getProductsByCategory(String category) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<CoolerDto> getProductsByCategory(String category, String sort) {
+        List<CoolerDto> results = productMapper.findAllDetailedCoolerProducts(category, sort);
+
+        return results;
+    }
 
 
 }

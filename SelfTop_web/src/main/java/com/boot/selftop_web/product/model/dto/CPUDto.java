@@ -2,9 +2,11 @@ package com.boot.selftop_web.product.model.dto;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.boot.selftop_web.member.seller.model.dto.ProductStatusDto;
+
 import java.util.Date;
 
-public class CPUDto implements ProductDto {
+public class CPUDto extends ProductStatusDto implements ProductDto {
     private int product_code;
     private String category;
     private String product_name;
@@ -24,9 +26,9 @@ public class CPUDto implements ProductDto {
     private String package_type;
     private String cooler_status;
     private int core;
-    private int watt;
+    private int watt;    
     
-
+    
     public CPUDto() {}
 
     

@@ -6,6 +6,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const currentCartButton = document.getElementById("current-cart");
     const savedQuoteSelect = document.querySelector('.saved-quote');
     const contentBox = document.querySelector('.content-box');
+    const sortButtons = document.querySelectorAll('.sortBtn');
+    let selectedSort = 'byname';
+
+	const topBoxSmall = document.querySelector('.top-box.small');
+	const topBoxLarge = document.querySelector('.top-box.large');
 
     let currentCart = {};
 
@@ -13,19 +18,366 @@ document.addEventListener("DOMContentLoaded", () => {
         sidePanel.classList.toggle("active");
     });
 
+
+    //사이드 패널에서 카테고리를 골랐을때 동작
     components.forEach(component => {
         component.addEventListener('click', function() {
             if (!this.classList.contains('active')) {
                 components.forEach(comp => comp.classList.remove('active'));
                 this.classList.add('active');
-                fetchProducts(this.dataset.component);
+                fetchProducts(this.dataset.component, selectedSort);
+                if (this.dataset.component === "CPU") {
+                    displayCpuDetails();
+                    fetchCpuAttributes();
+                }else if(this.dataset.component === "RAM"){
+                    displayRamDetails();
+                    fetchRamAttributes();
+                }else if(this.dataset.component === "SSD"){
+                    displaySsdDetails();
+                    fetchSsdAttributes();
+                }else if(this.dataset.component === "파워"){
+                    displayPowerDetails();
+                    fetchPowerAttributes()
+                }else if(this.dataset.component === "쿨러"){
+                    displayCoolerDetails();
+                    fetchCoolerAttributes()
+                }else if(this.dataset.component === "메인보드"){
+                    displayMainBoardDetails();
+                    fetchMainBoardAttributes();
+                }else if(this.dataset.component === "그래픽카드"){
+                    displayGpuDetails();
+                    fetchGpuAttributes();
+                }else if(this.dataset.component === "HDD"){
+                    displayHddDetails();
+                    fetchHddAttributes()
+                }else if(this.dataset.component === "케이스"){
+                    displayCaseDetails();
+                    fetchCaseAttributes()
+                }
             }
         });
     });
 
-	//사이드 패널에서 카테고리를 골랐을때 동작
-	function fetchProducts(component) {
-	    fetch(`/products/${component}`)
+    /* 필터링 - 부품 별로 하나씩 */
+    //CPU의 필터를 html에 보여주는 기능
+    function displayCpuDetails() {
+        let detailsHtml = `
+			<div><strong>Socket</strong></div>
+		    <div><strong>DDR</strong></div>
+		    <div><strong>Generation</strong></div>
+		    <div><strong>Spec</strong></div>
+		    <div><strong>Inner VGA</strong></div>
+		    <div><strong>Package Type</strong></div>
+		    <div><strong>Cooler Status</strong></div>
+		    <div><strong>Core</strong></div>
+		    <div><strong>Company</strong></div>
+		`;
+        topBoxSmall.innerHTML = detailsHtml;
+    }
+    function fetchCpuAttributes() {
+        // Fetch API를 사용하여 서버로부터 CPU 속성 데이터를 가져옴
+        fetch(`/api/cpu/attributes`)
+            .then(response => response.json())
+            .then(data => {
+                displayCpuAttributes(data);
+            })
+            .catch(error => console.error('Error fetching CPU attributes:', error));
+    }
+    function displayCpuAttributes(data) {
+        // Display 순서를 정의
+        const order = ["Socket", "DDR", "Generation", "Spec", "Inner VGA", "Package Type", "Cooler Status", "Core", "Company"];
+        let attributesHtml = '';
+        // 정의된 순서대로 데이터를 표시
+        order.forEach(key => {
+            if(data[key]) {
+                const values = data[key];
+                attributesHtml += `<div> ${values.map(value =>
+                    `<label><input type="checkbox" name="${key}" value="${value}">${value}</label>`
+                ).join(' ')}</div>`;
+            }
+        });
+        topBoxLarge.innerHTML = attributesHtml;
+    }
+
+    //RAM의 필터를 html에 보여주는 기능
+    function displayRamDetails() {
+        let detailsHtml = `
+			<div><strong>DDR</strong></div>
+		    <div><strong>Storage</strong></div>
+		    <div><strong>Device</strong></div>
+		    <div><strong>Heatsync</strong></div>
+		    <div><strong>Company</strong></div>
+		`;
+        topBoxSmall.innerHTML = detailsHtml;
+    }
+    function fetchRamAttributes() {
+        fetch(`/api/ram/attributes`)
+            .then(response => response.json())
+            .then(data => {
+                displayRamAttributes(data);
+            })
+            .catch(error => console.error('Error fetching RAM attributes:', error));
+    }
+    function displayRamAttributes(data) {
+        const order = ["DDR", "Storage", "Device", "HeatSync", "Company"];
+        let attributesHtml = '';
+        order.forEach(key => {
+            if(data[key]) {
+                const values = data[key];
+                attributesHtml += `<div> ${values.map(value =>
+                    `<label><input type="checkbox" name="${key}" value="${value}">${value}</label>`
+                ).join(' ')}</div>`;
+            }
+        });
+        topBoxLarge.innerHTML = attributesHtml;
+    }
+
+    //SSD의 필터를 html에 보여주는 기능
+    function displaySsdDetails() {
+        let detailsHtml = `
+			<div><strong>Storage</strong></div>
+		    <div><strong>Type</strong></div>
+		    <div><strong>Company</strong></div>
+		`;
+        topBoxSmall.innerHTML = detailsHtml;
+    }
+    function fetchSsdAttributes() {
+        fetch(`/api/ssd/attributes`)
+            .then(response => response.json())
+            .then(data => {
+                displaySsdAttributes(data);
+            })
+            .catch(error => console.error('Error fetching SSD attributes:', error));
+    }
+    function displaySsdAttributes(data) {
+        const order = ["Storage", "Type", "Company"];
+        let attributesHtml = '';
+        order.forEach(key => {
+            if(data[key]) {
+                const values = data[key];
+                attributesHtml += `<div> ${values.map(value =>
+                    `<label><input type="checkbox" name="${key}" value="${value}">${value}</label>`
+                ).join(' ')}</div>`;
+            }
+        });
+        topBoxLarge.innerHTML = attributesHtml;
+    }
+
+    //파워의 필터를 html에 보여주는 기능
+    function displayPowerDetails() {
+        let detailsHtml = `
+			<div><strong>Supply</strong></div>
+		    <div><strong>Plus80</strong></div>
+		    <div><strong>Formfactor</strong></div>
+			<div><strong>Company</strong></div>
+		`;
+        topBoxSmall.innerHTML = detailsHtml;
+    }
+    function fetchPowerAttributes() {
+        fetch(`/api/power/attributes`)
+            .then(response => response.json())
+            .then(data => {
+                displayPowerAttributes(data);
+            })
+            .catch(error => console.error('Error fetching POWER attributes:', error));
+    }
+    function displayPowerAttributes(data) {
+        const order = ["Supply", "Plus80", "Formfactor", "Company"];
+        let attributesHtml = '';
+        order.forEach(key => {
+            if(data[key]) {
+                const values = data[key];
+                attributesHtml += `<div> ${values.map(value =>
+                    `<label><input type="checkbox" name="${key}" value="${value}">${value}</label>`
+                ).join(' ')}</div>`;
+            }
+        });
+        topBoxLarge.innerHTML = attributesHtml;
+    }
+
+    //쿨러의 필터를 html에 보여주는 기능
+    function displayCoolerDetails() {
+        let detailsHtml = `
+			<div><strong>Cooler Type</strong></div>
+		    <div><strong>Socket</strong></div>
+			<div><strong>Company</strong></div>
+		`;
+        topBoxSmall.innerHTML = detailsHtml;
+    }
+    function fetchCoolerAttributes() {
+        fetch(`/api/cooler/attributes`)
+            .then(response => response.json())
+            .then(data => {
+                displayCoolerAttributes(data);
+            })
+            .catch(error => console.error('Error fetching Cooler attributes:', error));
+    }
+    function displayCoolerAttributes(data) {
+        const order = ["Cooler Type", "Socket", "Company"];
+        let attributesHtml = '';
+        order.forEach(key => {
+            if(data[key]) {
+                const values = data[key];
+                attributesHtml += `<div> ${values.map(value =>
+                    `<label><input type="checkbox" name="${key}" value="${value}">${value}</label>`
+                ).join(' ')}</div>`;
+            }
+        });
+        topBoxLarge.innerHTML = attributesHtml;
+    }
+
+    //메인보드의 필터를 html에 보여주는 기능
+    function displayMainBoardDetails() {
+        let detailsHtml = `
+			<div><strong>Socket</strong></div>
+		    <div><strong>Formfactor</strong></div>
+			<div><strong>Memory Slot</strong></div>
+			<div><strong>DDR</strong></div>
+			<div><strong>Max Storage</strong></div>
+			<div><strong>Company</strong></div>
+		`;
+        topBoxSmall.innerHTML = detailsHtml;
+    }
+    function fetchMainBoardAttributes() {
+        fetch(`/api/mainboard/attributes`)
+            .then(response => response.json())
+            .then(data => {
+                displayMainBoardAttributes(data);
+            })
+            .catch(error => console.error('Error fetching MAINBOARD attributes:', error));
+    }
+    function displayMainBoardAttributes(data) {
+        const order = ["Socket", "Formfactor", "Memory Slot", "DDR", "Max Storage", "Company"];
+        let attributesHtml = '';
+        order.forEach(key => {
+            if(data[key]) {
+                const values = data[key];
+                attributesHtml += `<div> ${values.map(value =>
+                    `<label><input type="checkbox" name="${key}" value="${value}">${value}</label>`
+                ).join(' ')}</div>`;
+            }
+        });
+        topBoxLarge.innerHTML = attributesHtml;
+    }
+
+    //그래픽카드의 필터를 html에 보여주는 기능
+    function displayGpuDetails() {
+        let detailsHtml = `
+			<div><strong>Series</strong></div>
+		    <div><strong>Storage</strong></div>
+			<div><strong>Length</strong></div>
+			<div><strong>Company</strong></div>
+		`;
+        topBoxSmall.innerHTML = detailsHtml;
+    }
+    function fetchGpuAttributes() {
+        fetch(`/api/gpu/attributes`)
+            .then(response => response.json())
+            .then(data => {
+                displayGpuAttributes(data);
+            })
+            .catch(error => console.error('Error fetching GPU attributes:', error));
+    }
+    function displayGpuAttributes(data) {
+        const order = ["Series", "Storage", "Length", "Company"];
+        let attributesHtml = '';
+        order.forEach(key => {
+            if(data[key]) {
+                const values = data[key];
+                attributesHtml += `<div> ${values.map(value =>
+                    `<label><input type="checkbox" name="${key}" value="${value}">${value}</label>`
+                ).join(' ')}</div>`;
+            }
+        });
+        topBoxLarge.innerHTML = attributesHtml;
+    }
+
+    //HDD의 필터를 html에 보여주는 기능
+    function displayHddDetails() {
+        let detailsHtml = `
+			<div><strong>Device</strong></div>
+		    <div><strong>Storage</strong></div>
+			<div><strong>Company</strong></div>
+		`;
+        topBoxSmall.innerHTML = detailsHtml;
+    }
+    function fetchHddAttributes() {
+        fetch(`/api/hdd/attributes`)
+            .then(response => response.json())
+            .then(data => {
+                displayHddAttributes(data);
+            })
+            .catch(error => console.error('Error fetching HDD attributes:', error));
+    }
+    function displayHddAttributes(data) {
+        const order = ["Device", "Storage", "Company"];
+        let attributesHtml = '';
+        order.forEach(key => {
+            if(data[key]) {
+                const values = data[key];
+                attributesHtml += `<div> ${values.map(value =>
+                    `<label><input type="checkbox" name="${key}" value="${value}">${value}</label>`
+                ).join(' ')}</div>`;
+            }
+        });
+        topBoxLarge.innerHTML = attributesHtml;
+    }
+
+    //케이스의 필터를 html에 보여주는 기능
+    function displayCaseDetails() {
+        let detailsHtml = `
+			<div><strong>Power Status</strong></div>
+		    <div><strong>Formfactor</strong></div>
+			<div><strong>Tower Size</strong></div>
+			<div><strong>VGA Length</strong></div>
+			<div><strong>Power Size</strong></div>
+			<div><strong>Company</strong></div>
+		`;
+        topBoxSmall.innerHTML = detailsHtml;
+    }
+    function fetchCaseAttributes() {
+        fetch(`/api/case/attributes`)
+            .then(response => response.json())
+            .then(data => {
+                displayCaseAttributes(data);
+            })
+            .catch(error => console.error('Error fetching CASE attributes:', error));
+    }
+    function displayCaseAttributes(data) {
+        const order = ["Power Status", "Formfactor", "Tower Size", "VGA Length", "Power Size", "Company"];
+        let attributesHtml = '';
+        order.forEach(key => {
+            if(data[key]) {
+                const values = data[key];
+                attributesHtml += `<div> ${values.map(value =>
+                    `<label><input type="checkbox" name="${key}" value="${value}">${value}</label>`
+                ).join(' ')}</div>`;
+            }
+        });
+        topBoxLarge.innerHTML = attributesHtml;
+    }
+
+    /* filter에 따라 content-box에 보여주는 아이템을 변화하는 기능 */
+
+
+    // 정렬 목록 클릭 이벤트
+    sortButtons.forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+            sortButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            selectedSort = this.dataset.sort;
+
+            const activeComponent = document.querySelector('.component.active');
+            if (activeComponent) {
+                fetchProducts(activeComponent.dataset.component, selectedSort);
+            }
+        });
+    });
+
+	// 제품 목록 출력
+	function fetchProducts(component, sort) {
+	    fetch(`/products/${component}?sort=${sort}`)
 	        .then(response => {
 	            if (!response.ok) {
 	                throw new Error(`Failed to load ${component} products: ${response.statusText}`);
@@ -48,24 +400,54 @@ document.addEventListener("DOMContentLoaded", () => {
 	        return;
 	    }
 
-	    // 스타일과 테두리 추가
-	    let htmlContent = `<div style="display: flex; flex-direction: column; max-height: 400px; overflow-y: auto;">`;
+	    // 스타일과 테두리 추가, 스크롤 가능 설정
+	    let htmlContent = `<div style="display: flex; flex-direction: column; width: 1300px; max-height: 500px; overflow-y: auto;">`;
 
-	    products.forEach(product => {
-	        htmlContent += `
-	            <div style="display: flex; align-items: center; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; background-color: #f9f9f9;">
-	                <img src="${product.thumbnail}" alt="${product.product_name} 이미지" style="width: 100px; height: 100px; margin-right: 10px;">
-	                <div style="flex-grow: 1; min-width: 0;">
-	                    <div style="font-weight: bold; margin-bottom: 5px;">${product.product_name}</div>
-	                    <div style="margin-bottom: 5px; color: #666; font-size: 0.9em;">${product.etc}</div>
-	                    <div style="font-weight: bold; color: #333;">${product.price ? `${product.price}원` : '품절'}</div>
-	                </div>
-	            </div>
-	        `;
-	    });
+		products.forEach(product => {
+            htmlContent += `
+                <div class="product-box" style="display: flex; align-items: center; justify-content: space-between; border: 1px solid #ccc; padding: 10px; margin-bottom: 5px; background-color: #f9f9f9;">
+                    <div style="display: flex; align-items: center;">
+                        <img src="${product.thumbnail}" alt="${product.product_name} 이미지" style="width: 100px; height: 100px; margin-right: 10px;">
+                        <div style="flex-grow: 1; min-width: 0;">
+                            <div class="product-info" style="font-weight: bold; border-bottom: 1px solid black; padding-bottom: 5px; width: 1000px;">${product.product_name}</div>
+                            <div style="color: #666; font-size: 0.9em; width: 1000px;">${product.etc}</div>
+                        </div>
+                    </div>
+                    <div class="product-price" style="text-align: right; margin-left: 10px; font-weight: bold; color: #333;">
+                        ${product.price ? `${product.price}원` : '품절'}
+                        <div><span class="stars">★★★★★</span></div>
+                        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px;">
+                            <button class="btn add-to-cart">담기</button>
+                            <button class="btn buy-now">바로구매</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
 
 	    htmlContent += `</div>`;
 	    contentBox.innerHTML = htmlContent;
+		
+		// 바로구매 버튼 클릭 이벤트
+		contentBox.querySelectorAll('.buy-now').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const productDiv = event.target.closest('.product-box');
+                const productName = productDiv.querySelector('.product-info').textContent.trim();
+                const productPrice = productDiv.querySelector('.product-price').childNodes[0].textContent.trim().replace('원', '');
+                const productThumbnail = productDiv.querySelector('img').src;
+
+                const productInfo = {
+					thumbnail: productThumbnail,
+					category: component,
+                    name: productName,
+                    price: productPrice,
+                    quantity: 1
+                };
+                localStorage.setItem('selectedProduct', JSON.stringify(productInfo));
+
+                location.href = '/pay';
+            });
+        });
 	}
 	
     window.removeSelectedPart = function(component) {
@@ -104,4 +486,5 @@ document.addEventListener("DOMContentLoaded", () => {
             selectedPartDiv.innerHTML += `<p>${component}</p>`;
         });
     }
+	
 });

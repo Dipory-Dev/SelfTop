@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("파워")
@@ -45,11 +46,12 @@ public class PowerBizImpl implements ProductBiz<PowerDto> {
         return result;
     }
 
-	@Override
-	public List<PowerDto> getProductsByCategory(String category) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<PowerDto> getProductsByCategory(String category, String sort) {
+        List<PowerDto> results = productMapper.findAllDetailedPowerProducts(category, sort);
+
+        return results;
+    }
 
 
 
