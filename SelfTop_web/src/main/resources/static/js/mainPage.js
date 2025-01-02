@@ -321,30 +321,13 @@ document.addEventListener("DOMContentLoaded", () => {
         topBoxLarge.innerHTML = attributesHtml;
     }
 
-    // 사이드 패널에서 카테고리를 골랐을 때 동작
-    function fetchProducts(component) {
-        fetch(`/products/${component}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to load ${component} products: ${response.statusText}`);
-                }
-                return response.json();
-            })
-            .then(products => {
-                displayProducts(products, component);
-            })
-            .catch(error => {
-                console.error('Error loading products:', error);
-                contentBox.innerHTML = `<p>Error loading products: ${error.message}</p>`;
-            });
-    }
-
     // 제품 정보를 콘텐츠 박스에 동적으로 표시하는 함수
     function displayProducts(products, component) {
         if (!products || products.length === 0) {
             contentBox.innerHTML = `<p>No products found for ${component.toUpperCase()}.</p>`;
             return;
         }
+    }
     //HDD의 필터를 html에 보여주는 기능
     function displayHddDetails() {
         let detailsHtml = `
