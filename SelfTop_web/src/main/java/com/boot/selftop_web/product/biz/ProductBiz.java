@@ -3,6 +3,7 @@ package com.boot.selftop_web.product.biz;
 import com.boot.selftop_web.product.model.dto.ProductDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProductBiz<T extends ProductDto>{
     List<T> selectAll();

@@ -9,6 +9,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const sortButtons = document.querySelectorAll('.sortBtn');
     let selectedSort = 'byname';
 
+	const topBoxSmall = document.querySelector('.top-box.small');
+	const topBoxLarge = document.querySelector('.top-box.large');
+	topBoxLarge.addEventListener('change', filterProducts);
+
     let currentCart = {};
 
     toggleButton.addEventListener("click", () => {
@@ -23,6 +27,34 @@ document.addEventListener("DOMContentLoaded", () => {
                 components.forEach(comp => comp.classList.remove('active'));
                 this.classList.add('active');
                 fetchProducts(this.dataset.component, selectedSort);
+                if (this.dataset.component === "CPU") {
+                    displayCpuDetails();
+                    fetchCpuAttributes();
+                }else if(this.dataset.component === "RAM"){
+                    displayRamDetails();
+                    fetchRamAttributes();
+                }else if(this.dataset.component === "SSD"){
+                    displaySsdDetails();
+                    fetchSsdAttributes();
+                }else if(this.dataset.component === "파워"){
+                    displayPowerDetails();
+                    fetchPowerAttributes()
+                }else if(this.dataset.component === "쿨러"){
+                    displayCoolerDetails();
+                    fetchCoolerAttributes()
+                }else if(this.dataset.component === "메인보드"){
+                    displayMainBoardDetails();
+                    fetchMainBoardAttributes();
+                }else if(this.dataset.component === "그래픽카드"){
+                    displayGpuDetails();
+                    fetchGpuAttributes();
+                }else if(this.dataset.component === "HDD"){
+                    displayHddDetails();
+                    fetchHddAttributes()
+                }else if(this.dataset.component === "케이스"){
+                    displayCaseDetails();
+                    fetchCaseAttributes()
+                }
             }
         });
     });
