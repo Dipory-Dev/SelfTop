@@ -46,13 +46,12 @@ public class RAMBizImpl implements ProductBiz<RAMDto> {
         return result;
     }
 
-	@Override
-	public List<RAMDto> getProductsByCategory(String category) {
-		if ("ram".equalsIgnoreCase(category)) {
-            return productMapper.findAllDetailedRamProducts();
-        }
-        return new ArrayList<>();
-	}
+    @Override
+    public List<RAMDto> getProductsByCategory(String category, String sort) {
+        List<RAMDto> results = productMapper.findAllDetailedRamProducts(category, sort);
+
+        return results;
+    }
 
 
 }

@@ -46,12 +46,11 @@ public class GPUBizImpl implements ProductBiz<GPUDto> {
         return result;
     }
 
-	@Override
-	public List<GPUDto> getProductsByCategory(String category) {
-		if ("그래픽카드".equalsIgnoreCase(category)) {
-            return productMapper.findAllDetailedGpuProducts();
-        }
-        return new ArrayList<>();
-	}
+    @Override
+    public List<GPUDto> getProductsByCategory(String category, String sort) {
+        List<GPUDto> results = productMapper.findAllDetailedGpuProducts(category, sort);
+
+        return results;
+    }
 
 }

@@ -46,13 +46,12 @@ public class MainBoardBizImpl implements ProductBiz<MainBoardDto> {
         return result;
     }
 
-	@Override
-	public List<MainBoardDto> getProductsByCategory(String category) {
-        if ("메인보드".equalsIgnoreCase(category)) {
-            return productMapper.findAllDetailedMainBoardProducts();
-        }
-        return new ArrayList<>();
-	}
+    @Override
+    public List<MainBoardDto> getProductsByCategory(String category, String sort) {
+        List<MainBoardDto> results = productMapper.findAllDetailedMainBoardProducts(category, sort);
+
+        return results;
+    }
 
 	
 
