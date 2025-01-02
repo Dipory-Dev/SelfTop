@@ -21,3 +21,18 @@ function Reset(){
 
 	 Search();
 	}
+
+function sendordernum(element) {
+	var orderNum = element.getAttribute('data-order-num');
+	var price = element.getAttribute('data-price');
+	var orderStatus = element.getAttribute('data-order-status');
+	var orderDate = element.getAttribute('data-order-date');
+
+	document.getElementById('order_num').value = orderNum;
+	document.getElementById('orderprice').value = price;
+	document.getElementById('orderstatus').value = orderStatus;
+	document.getElementById('orderdate').value = orderDate;
+	// 폼 제출
+	document.getElementById('orderForm').submit();
+	
+}

@@ -50,6 +50,9 @@ public interface CustomerMapper {
 
     @Select("SELECT * FROM viewsellerorder WHERE customer_no = #{member_no}")
     List<SellerOrderDto> selectcustomerorderlist(@Param("member_no")int member_no);
+    
+    @Select("SELECT * FROM viewsellerorder WHERE customer_no = #{member_no} AND order_no =#{order_no}")
+    List<SellerOrderDto> customerpurchaselist(@Param("member_no")int member_no,@Param("order_no") int order_no);
 
    @Select("<script>" +
 	        "SELECT * FROM viewsellerorder " +

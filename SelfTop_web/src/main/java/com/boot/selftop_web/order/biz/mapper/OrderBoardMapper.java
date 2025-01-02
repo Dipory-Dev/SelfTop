@@ -12,5 +12,7 @@ import com.boot.selftop_web.order.model.dto.OrderBoardDto;
 public interface OrderBoardMapper {
 	@Select("SELECT * from vieworderboard WHERE order_no =#{ordernum} ")
 	public List<OrderBoardDto> vieworderboard(@Param("ordernum") int ordernum);
+	
+
 
 }

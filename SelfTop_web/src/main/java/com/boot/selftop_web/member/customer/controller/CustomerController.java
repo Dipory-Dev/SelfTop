@@ -4,6 +4,7 @@ import com.boot.selftop_web.member.customer.biz.KakaoService;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -26,8 +27,14 @@ import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
 import com.boot.selftop_web.product.biz.ProductBiz;
 import com.boot.selftop_web.product.biz.ProductBizFactory;
 import com.boot.selftop_web.product.biz.mapper.ProductMapper;
+import com.boot.selftop_web.quote.biz.QuoteBiz;
+import com.boot.selftop_web.quote.model.dto.QuoteDetailDto;
+import com.boot.selftop_web.quote.model.dto.QuoteDto;
 import com.boot.selftop_web.member.customer.model.dto.CustomerorderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
+import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
+import com.boot.selftop_web.order.biz.OrderBoardBiz;
+import com.boot.selftop_web.order.model.dto.OrderBoardDto;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -43,6 +50,11 @@ public class CustomerController {
 	@Autowired
 	private KakaoService kakaoService;
 
+	@Autowired
+	private OrderBoardBiz orderboardBiz;
+
+	@Autowired
+	private QuoteBiz quoteBiz;
 	@GetMapping("/loginform")
     public String LoginSection(HttpSession session) {
 		if(session.getAttribute("member_no") != null) {
@@ -185,7 +197,7 @@ public class CustomerController {
 		model.addAttribute("customer", dto);
 		return "customerMyPage";
 	}
-	
+
 	@GetMapping("/pay")
 	public String showPayPage(HttpSession session, Model model) {
 		if(session.getAttribute("member_no") == null) {
@@ -198,7 +210,7 @@ public class CustomerController {
 		model.addAttribute("customer", dto);
 		return "customerPay";
 	}
-	
+
 	@GetMapping("/payfail")
 	public String showPayFail(HttpSession session, Model model) {
 		if(session.getAttribute("member_no") == null) {
@@ -211,7 +223,7 @@ public class CustomerController {
 		model.addAttribute("customer", dto);
 		return "payFail";
 	}
-	
+
 	@GetMapping("/paysuccess")
 	public String showPaySuccess(HttpSession session, Model model) {
 		if(session.getAttribute("member_no") == null) {
@@ -269,7 +281,6 @@ public class CustomerController {
 		}
 
 		Integer member_no = (Integer) session.getAttribute("member_no");
-		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + member_no);
 		List<SellerOrderDto> res = customerBiz.selectcustomerorderlist(member_no);
 		List<CustomerorderDto> orderres = new ArrayList<>();
 		System.out.println(res.get(0).getAmount());
@@ -288,7 +299,6 @@ public class CustomerController {
 				);
 				orderres.add(neworder);
 			} else {
-				System.out.println("돌앗음");
 				exportres.setItem(exportres.getItem() + 1);
 				exportres.setPrice(exportres.getPrice() + (copyres.getPrice() * copyres.getAmount()));
 			}
@@ -335,7 +345,6 @@ public class CustomerController {
 	@GetMapping("/ordersearch")
 	public String searchorder(@RequestParam(required = false) String startdate, @RequestParam(required = false) String enddate,
 			Model model, HttpSession session) {
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@검색기능이 돌고있음");
 		if (startdate == null || startdate.isEmpty()) {
 			startdate = null;
 		}
@@ -368,6 +377,33 @@ public class CustomerController {
 		model.addAttribute("customerorder",orderres);
 		return "customerorder :: tbody";
 
+	}
+	@PostMapping("/orderdetail")
+	public String customerorderdetail(HttpSession session, Model model,@RequestParam("order_num") String orderNum,
+			@RequestParam("orderprice") String orderprice,
+			@RequestParam("orderdate") String orderdate,
+			@RequestParam("orderstatus") String orderstatus) {
+		if (session.getAttribute("member_no") == null) {
+			return "redirect:/loginform";
+		}
+
+		Integer member_no = (Integer) session.getAttribute("member_no");
+		List<SellerOrderDto> res = customerBiz.customerpurchaselist(member_no,Integer.parseInt(orderNum));
+		List<OrderBoardDto> customerinfo = orderboardBiz.vieworderboard(Integer.parseInt(orderNum));
+		
+
+		
+
+		model.addAttribute("membername", session.getAttribute("name"));
+		model.addAttribute("orderinfo",res);
+		model.addAttribute("ordernum",orderNum);
+		model.addAttribute("orderprice",orderprice);
+		model.addAttribute("orderstatus",orderstatus);
+		model.addAttribute("orderdate",orderdate);
+		model.addAttribute("customerinfo", customerinfo.get(0));
+
+		
+		return "customerorderdetail";
 	}
 
 	//카카오 로그인 기능이 처리되는 페이지
@@ -535,5 +571,44 @@ public class CustomerController {
 	    }
 	    return ResponseEntity.ok(products);
 	}
+
+	@GetMapping("/cartpage")
+	public String cartpage(HttpSession session, Model model) {
+		if(session.getAttribute("member_no") == null) {
+			return "redirect:/loginform";
+		}
+
+		model.addAttribute("membername", session.getAttribute("name"));
+		Integer member_no = (Integer) session.getAttribute("member_no");
+		List<QuoteDto> res =quoteBiz.SelectQuote(member_no); //견적리스트
+		List<QuoteDetailDto> dummycategory = Arrays.asList(
+			    new QuoteDetailDto(0, 0, 0, 0, 0, "CPU", "-", "-", 0),
+			    new QuoteDetailDto(0, 0, 0, 0, 0, "RAM", "-", "-", 0),
+			    new QuoteDetailDto(0, 0, 0, 0, 0, "그래픽카드", "-", "-", 0),
+			    new QuoteDetailDto(0, 0, 0, 0, 0, "메인보드", "-", "-", 0),
+			    new QuoteDetailDto(0, 0, 0, 0, 0, "파워", "-", "-", 0),
+			    new QuoteDetailDto(0, 0, 0, 0, 0, "HDD", "-", "-", 0),
+			    new QuoteDetailDto(0, 0, 0, 0, 0, "SSD", "-", "-", 0),
+			    new QuoteDetailDto(0, 0, 0, 0, 0, "쿨러", "-", "-", 0),
+			    new QuoteDetailDto(0, 0, 0, 0, 0, "케이스", "-", "-", 0)
+			);
+
+			model.addAttribute("quotedetail", dummycategory);
+
+		model.addAttribute("quote", res);
+
+		return "customercart";
+	}
+
+
+	@GetMapping("/quotedetail")
+	@ResponseBody
+	public List<QuoteDetailDto> cartpagedetail(@RequestParam("quote_no") int quoteNo) {
+		List<QuoteDetailDto> selectres=quoteBiz.QuoteDetailinfo(quoteNo);
+
+
+		return selectres;
+	}
+
 
 }

@@ -1,33 +1,61 @@
+const changePwButton = document.querySelector('.btn-change-pw');
+
+// 초기 상태: 비활성화
+changePwButton.disabled = true;
+
+let isPwValid = false;
+let isPwValid1 = false;
+
+// 비밀번호 유효 체크 함수
+function pwCheck() {
+    
+    if (isPwValid && isPwValid1) {
+        changePwButton.disabled = false;
+    } else {
+        changePwButton.disabled = true;
+    }
+}
+
+
 // 변경할 비밀번호 조건 검사
 function validatePassword() {
-	const password = document.getElementById("new_pw").value;
-	const passwordError = document.getElementById("new_pw-error");
-	const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,12}$/;
+    const password = document.getElementById("new_pw").value;
+    const passwordError = document.getElementById("new_pw-error");
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,12}$/;
 
-	if (!passwordPattern.test(password)) {
-		passwordError.textContent = "영문 대소문자, 숫자, 특수기호 포함 8~12자로 입력해주세요.";
-		passwordError.style.color = "red";
-	} else {
-		passwordError.textContent = "사용 가능한 비밀번호입니다.";
-		passwordError.style.color = "green";
-	}
+    if (!passwordPattern.test(password)) {
+        passwordError.textContent = "영문 대소문자, 숫자, 특수기호 포함 8~12자로 입력해주세요.";
+        passwordError.style.color = "red";
+        isPwValid = false;
+    } else {
+        passwordError.textContent = "사용 가능한 비밀번호입니다.";
+        passwordError.style.color = "green";
+        isPwValid = true;
+    }
+
+    pwCheck(); 
 }
 
 // 변경할 비밀번호 확인 검증
 function validateConfirmPassword() {
-	const password = document.getElementById("new_pw").value; // 비밀번호 입력값
-	const confirmPassword = document.getElementById("confirmPassword").value; // 재확인 비밀번호 입력값
-	const confirmError = document.getElementById("confirm-error"); // 오류 메시지 표시할 영역
+    const password = document.getElementById("new_pw").value; // 비밀번호 입력값
+    const confirmPassword = document.getElementById("confirmPassword").value; // 재확인 비밀번호 입력값
+    const confirmError = document.getElementById("confirm-error"); // 오류 메시지 표시할 영역
 
-	// 비밀번호 일치 여부
-	if (password !== confirmPassword) {
-		confirmError.textContent = "변경할 비밀번호가 일치하지 않습니다.";
-		confirmError.style.color = "red";
-	} else {
-		confirmError.textContent = "변경할 비밀번호가 일치합니다.";
-		confirmError.style.color = "green";
-	}
+    // 비밀번호 일치 여부
+    if (password !== confirmPassword) {
+        confirmError.textContent = "변경할 비밀번호가 일치하지 않습니다.";
+        confirmError.style.color = "red";
+        isPwValid1 = false;
+    } else {
+        confirmError.textContent = "변경할 비밀번호가 일치합니다.";
+        confirmError.style.color = "green";
+        isPwValid1 = true;
+    }
+
+    pwCheck(); 
 }
+
 
 // 주소검색 팝업창 
 function goPopup() {
@@ -89,36 +117,41 @@ document.querySelector('.btn-change-account').addEventListener('click', function
 	window.location.href = 'seller/sellerSignUp.html';
 });
 
+
 // 비밀번호 변경 함수
-document.querySelector('.btn-change-pw').addEventListener('click', function(event) {
-    // 폼 제출을 막고
+function pwChange(event){
     event.preventDefault();
 
-    // 비밀번호 변경 데이터를 준비
-    const currentPassword = document.getElementById('pw').value;
+    // 초기 상태에서 click 이벤트 차단 조건 확인
+    if (!isPwValid || !isPwValid1) {
+        alert('비밀번호 형식을 준수하거나 비밀번호 확인을 완료해주세요.');
+        return; // 추가 코드 실행 차단
+    }
+
+    // 비밀번호 일치 여부 확인
     const newPassword = document.getElementById('new_pw').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
 
-    // 비밀번호 유효성 검사
     if (newPassword !== confirmPassword) {
         alert('새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.');
-        return;
+        return; // 추가 코드 실행 차단
     }
 
-    // 비밀번호 데이터
+    
+    // 비밀번호 데이터 준비
+    const currentPassword = document.getElementById('pw').value;
     const passwordData = {
         currentPassword,
         newPassword
     };
 
-    // 서버로 데이터 전송 (AJAX 또는 fetch 사용)
-    // 예시로 콘솔에 출력
+    // 서버로 데이터 전송 (예시로 콘솔에 출력)
     console.log('비밀번호 변경:', passwordData);
 
     // 비밀번호 변경 후 메시지
     alert('비밀번호가 변경되었습니다.');
 
-    // 실제 서버 요청을 보내는 코드 추가 가능
+    // 실제 서버 요청 코드 추가 가능
     // fetch('/updatePassword', {
     //     method: 'POST',
     //     body: JSON.stringify(passwordData),
@@ -131,8 +164,13 @@ document.querySelector('.btn-change-pw').addEventListener('click', function(even
     //   }).catch(error => {
     //       console.error('Error:', error);
     //   });
-	window.location.href = 'seller/sellerSignUp.html';
-});
+
+    // 페이지 이동
+    window.location.href = 'seller/sellerSignUp.html';
+    
+    
+}
+
 
 // 탈퇴하기 버튼 클릭 시 확인 창 띄우기
 document.querySelector('.btn-delete').addEventListener('click', function(event) {
@@ -183,4 +221,4 @@ document.querySelector('.btn-delete').addEventListener('click', function(event) 
 
 // 이벤트 리스너 추가
 document.getElementById("new_pw").addEventListener("input", validatePassword);
-document.getElementById("confirmPassword").addEventListener("input", confirmPassword);
+document.getElementById("confirmPassword").addEventListener("input", validateConfirmPassword);

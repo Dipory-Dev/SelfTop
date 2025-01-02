@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer_MyPage</title>
+<link rel="stylesheet" href="/css/customercart.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="/js/customercart.js"></script>
+<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function () {
+		const params = new URLSearchParams(window.location.search);
+		const message = params.get("message");
+		if (message) {
+			alert(message);
+		}
+	});
+
+</script>
+</head>
+<body>
+	<header>
+		<div class="header-content">
+			<img src="/img/logo.png">
+			<p>
+				<span th:text="${membername} + 님"></span>&nbsp| <a href="mypage">
+					<img src="/img/human-icon.png" class="human-icon">
+				</a> <a href="cart"> <img src="/img/cart-icon.png" class="cart-icon">
+				</a> <a href="logout"> <img src="/img/lock-icon.png"
+					class="lock-icon">
+				</a>
+			</p>
+		</div>
+	</header>
+	<main>
+		<h1>내가 담은 견적리스트를 확인해보세요!</h1>
+		<hr>
+		<div class="cartinfosection">
+			<div class="selectcartlist">
+				<table>
+					<tr>
+						<th>선택</th>
+						<th>날짜</th>
+						<th>견적이름</th>
+						<th>수량</th>
+						<th>가격</th>
+					</tr>
+
+					<tbody id="cart_view">
+						<tr th:each="dto : ${quote}">
+							<td ><input type="checkbox" name="selectquote_no" th:value="${dto.quote_no}" /></td>
+							<td th:text="${#dates.format(dto.quote_date, 'YY/MM/dd')}"></td>
+							<td th:text=${dto.quote_name} th:data-quote-no="${dto.quote_no} "
+								th:onclick="'loadquotedetail(' + ${dto.quote_no} +')'"
+								class="quotename"></td>
+							<td>
+								<div class="quantity-control">
+									<button type="button" class="quantity-decrease">−</button>
+									<input type="number" class="quantity-input"
+										th:value="${dto.quote_amount}" min="0" />
+									<button type="button" class="quantity-increase">+</button>
+								</div>
+							</td>
+							<td th:text="${dto.price} +원 " ></td>
+						</tr>
+					</tbody>
+
+				</table>
+				<div class="bottombutton">
+					<button class="cartbutton">견적 비교</button>
+					<button class="cartbutton">견적 삭제</button>
+
+				</div>
+			</div>
+
+			<div id="detailview" class="viewcartproduct">
+				<div class="namesection">
+					<h2>견적별 부품 현황</h2>
+				</div>
+				<div th:fragment="#detailvew" th:each="detail : ${quotedetail}"
+					class="orderproduct">
+					<div class="category">
+						<p th:text="${detail.category}"></p>
+					</div>
+					<div class="thumbnail">
+						<img th:if="${detail.thumbnail != '-'}" th:src="${detail.thumbnail}"></img>
+						<div th:if="${detail.thumbnail == '-'}" class="no-thumbnail"></div>
+					</div>
+					<div class="productname">
+						<p th:text="${detail.product_name}"></p>
+					</div>
+					<div class="priceamount">
+						<div>
+							<p th:if ="${detail.price != 0}" th:text="${detail.price} + 원"></p>
+							<div th:if="${detail.amount != 0}" class="quantity-control">
+								<button type="button" class="quantity-decrease">−</button>
+								<input type="number" class="quantity-input"
+									th:value="${detail.amount}" min="0" />
+								<button type="button" class="quantity-increase">+</button>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="detailbottombutton">
+					<button class="detailbutton">결제</button>
+					<button class="detailbutton">호환성</button>
+					<button class="detailbutton">변경적용</button>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<footer>
+		<div class="footer-content">
+			<img src="/img/logo-footer.png" alt="로고">
+			<div class="footer-text">
+				<p>&copy; 2024 Copyright: SelfTop All rights reserved.</p>
+				<p>팀원: 김지성, 오원석, 권장현, 양다연, 임성규</p>
+				<p>문의: 02-1234-5678</p>
+				<p>메일: SelfTop@selftop.com</p>
+			</div>
+		</div>
+	</footer>
+
+</body>
+</html>

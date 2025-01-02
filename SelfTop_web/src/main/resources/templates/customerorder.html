@@ -85,15 +85,26 @@
 					</div>
 				</div>
 				<div class="productlink">
-					<p th:text=${dto.product_name}></p>
+					<form id="orderForm" action="/orderdetail" method="post"
+						style="display: none;">
+						<input type="hidden" name="order_num" id="order_num" /> 
+						<input type="hidden" name="orderprice" id="orderprice" /> 
+						<input type="hidden" name="orderdate" id="orderdate" /> 
+						<input type="hidden" name="orderstatus" id="orderstatus" />
+					</form>
+					<p th:text="${dto.product_name}"
+						th:attr="data-order-num=${dto.order_num}, data-price=${dto.price}, data-order-status=${dto.order_status}, data-order-date=${#dates.format(dto.order_date, 'MM/dd')}"
+						th:onclick="|sendordernum(this);|"></p>
 					<p th:if="${dto.item != 0}"
-						th:text="외 + ' '+ ${dto.item} + ' ' + 건"></p>
+						th:text="외 + ' '+ ${dto.item} + ' ' + 건"
+						th:onclick="'sendordernum(' + ${dto.order_num} + ');'"></p>
+
 				</div>
 				<div class="pricestatus">
-					 <div>
+					<div>
 						<p th:text="${dto.order_status}"></p>
 					</div>
-					 <div>
+					<div>
 						<p th:text="${dto.price} + 원"></p>
 					</div>
 				</div>

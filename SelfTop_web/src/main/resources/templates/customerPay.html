@@ -6,14 +6,14 @@
     <title>Customer_Pay</title>
     <link rel="stylesheet" href="/css/customerPay.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://js.tosspayments.com/v2/standard"></script>  
+    <script src="https://js.tosspayments.com/v2/standard"></script>
     <script>
         // 전화번호 숫자로만 입력
         function validatePhoneInput(input) {
             input.value = input.value.replace(/[^0-9]/g, '');
         }
 
-        // 주소검색 팝업창 
+        // 주소검색 팝업창
         function goPopup() {
             const popupUrl = '/seller/addressPopup';
             window.open(popupUrl, 'pop', "width=570,height=420, scrollbars=yes, resizable=yes");
@@ -24,7 +24,7 @@
             document.getElementById("address1").value = roadAddrPart1;
             document.getElementById("address2").value = addrDetail;
         }
-        
+
      	// 페이지가 로드되면 실행되는 함수
         document.addEventListener("DOMContentLoaded", function() {
             // localStorage에서 저장된 'selectedProduct' 가져오기
@@ -53,7 +53,7 @@
                 }
             }
         });
-     	
+
         function updateQuantity(button, change) {
             const quantityTag = button.parentElement.querySelector('.quantity-input');
             let currentQuantity = parseInt(quantityTag.textContent); // 현재 수량
@@ -70,11 +70,11 @@
             const orderPriceCell = row.querySelector('.order-price'); // 주문 금액 셀
             const orderPrice = price * quantity; // 주문 금액 계산
             orderPriceCell.textContent = orderPrice.toLocaleString() + '원'; // 업데이트
-            
+
          	// 선택상품 총금액과 최종 결제금액 업데이트
             updatePayment(price, quantity);
         }
-        
+
         // 배송금액 하나로 병합
         document.addEventListener("DOMContentLoaded", () => {
             const mergeFixedShippingFee = () => {
@@ -96,7 +96,7 @@
 
             mergeFixedShippingFee();
         });
-        
+
      	// 선택상품 총금액과 최종 결제금액 업데이트 함수
         function updatePayment(price, quantity) {
             const totalAmount = price * quantity; // 선택상품 총금액
@@ -107,7 +107,7 @@
             document.querySelector('.total-price').textContent = `${totalAmount.toLocaleString()}원`; // 선택상품 총금액
             document.querySelector('.pay-price').textContent = `${finalAmount.toLocaleString()}원`; // 최종 결제금액
      	}
-        
+
         document.addEventListener("DOMContentLoaded", () => {
 	        // 결제 버튼 이벤트 추가
 	        const paymentButton = document.getElementById('payment-button');
@@ -115,7 +115,7 @@
 	        const tossPayments = TossPayments(clientKey);
 	        const customerKey = "ANONYMOUS"; // 고객 키
 	        const widgets = tossPayments.widgets({ customerKey });
-	
+
 	        // 결제 UI 및 이용약관 UI 렌더링
 	        async function renderPaymentUI() {
 	        	// 기본 결제 금액 설정
@@ -124,7 +124,7 @@
 	                currency: "KRW",
 	                value: baseAmount,
 	            });
-	
+
 	            await Promise.all([
 	                widgets.renderPaymentMethods({
 	                    selector: "#payment-method",
@@ -133,9 +133,9 @@
 	                widgets.renderAgreement({ selector: "#agreement", variantKey: "AGREEMENT" }),
 	            ]);
 	        }
-	        
+
 	        renderPaymentUI();
-	
+
 	        // 결제하기 버튼 클릭 시 결제 요청
 	        paymentButton.addEventListener("click", async function () {
 	            const name = document.getElementById('name').value;
@@ -143,14 +143,14 @@
 	            const zipNo = document.getElementById('zipNo').value;
 	            const address1 = document.getElementById('address1').value;
 	            const address2 = document.getElementById('address2').value;
-	
+
 	            // 필수 입력 항목 확인
 	            if (!name || !phone || !zipNo || !address1 || !address2) {
 	                alert("성함, 연락처, 배송주소를 모두 입력해주세요.");
 	                return; // 입력이 누락된 경우 결제 요청을 중단
 	            }
 
-	            try {            
+	            try {
 	            	// 결제 요청
 	                const paymentResult = await widgets.requestPayment({
 	                    orderId: "ORDER_ID_1234", // 고유 주문 번호
@@ -160,7 +160,7 @@
 	                    customerName: name,
 	                    customerMobilePhone: phone,
 	                });
-	
+
 	                // 결제 승인 처리 (결제 성공 시)
 	                // 기존 stock과 구매자가 선택한 amount 비교 (stock>=amount)
 	                if (paymentResult.status === "SUCCESS") {
@@ -183,7 +183,7 @@
         <div class="header-content">
             <img src="/img/logo.png">
             <p>
-                <span th:text="${customer.name} + 님"></span>&nbsp| 
+                <span th:text="${customer.name} + 님"></span>&nbsp|
                 <a href="mypage">
                     <img src="/img/human-icon.png" class="human-icon">
                 </a>

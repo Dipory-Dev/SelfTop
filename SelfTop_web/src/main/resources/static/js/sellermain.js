@@ -210,8 +210,6 @@ document.addEventListener('click', function(event) {
 			})
 			.then(data => {
 
-				console.log(document.getElementById('ordernum'));
-				console.log(document.querySelector('#ordernum'));
 				document.getElementById('ordernum').textContent = data[0].order_no;
 				document.getElementById('name').textContent = data[0].name;
 				document.getElementById('address').textContent = data[0].address;
@@ -343,9 +341,6 @@ document.querySelectorAll('.btn-save').forEach(button => {
     });
 });
 
-
-
-
 document.querySelectorAll('.btn-update').forEach(button => {
     button.addEventListener('click', function() {
         // 수정하려는 제품의 ID 가져오기
@@ -391,5 +386,3 @@ document.querySelectorAll('.btn-save').forEach(button => {
         updateButton.style.display = 'inline-block';  // 수정 버튼 표시
     });
 });
-
-
