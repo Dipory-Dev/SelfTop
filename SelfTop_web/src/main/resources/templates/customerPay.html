@@ -162,6 +162,7 @@
 	                });
 
 	                // 결제 승인 처리 (결제 성공 시)
+	                // 기존 stock과 구매자가 선택한 amount 비교 (stock>=amount)
 	                if (paymentResult.status === "SUCCESS") {
 	                    window.location.href = "http://localhost:8080/paysuccess";
 	                } else {
@@ -206,7 +207,7 @@
             <form action="/mypage" method="post">
                 <table>
                     <tr>
-                        <td><label>소유주명</label></td>
+                        <td><label>카드소유주명</label></td>
                         <td><input type="text" id="name" name="name"></td>
                     </tr>
                     <tr>
@@ -268,7 +269,6 @@
 			                </td>
                             <td class="order-price"></td>
                             <td class="shipping-fee">
-                                <p>멀캠</p>
                                 <span>5,000원</span>
                             </td>
                         </tr>
