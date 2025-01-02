@@ -168,6 +168,10 @@ span {
 	
 }
 
+.grayzone{
+	background-color:#EAEAEA;
+}
+
 .orderprice div{
 	flex: 1;
 }
