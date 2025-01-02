@@ -4,6 +4,7 @@ import com.boot.selftop_web.member.customer.biz.KakaoService;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +27,9 @@ import com.boot.selftop_web.member.customer.biz.CustomerBiz;
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
 import com.boot.selftop_web.product.biz.ProductBiz;
 import com.boot.selftop_web.product.biz.ProductBizFactory;
+import com.boot.selftop_web.quote.biz.QuoteBiz;
+import com.boot.selftop_web.quote.model.dto.QuoteDetailDto;
+import com.boot.selftop_web.quote.model.dto.QuoteDto;
 import com.boot.selftop_web.member.customer.model.dto.CustomerorderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
@@ -46,8 +50,11 @@ public class CustomerController {
 	@Autowired
 	private KakaoService kakaoService;
 	
-	@Autowired OrderBoardBiz orderboardBiz;
+	@Autowired 
+	private OrderBoardBiz orderboardBiz;
 
+	@Autowired
+	private QuoteBiz quoteBiz;
 	@GetMapping("/loginform")
     public String LoginSection(HttpSession session) {
 		if(session.getAttribute("member_no") != null) {
@@ -274,7 +281,6 @@ public class CustomerController {
 		}
 
 		Integer member_no = (Integer) session.getAttribute("member_no");
-		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + member_no);
 		List<SellerOrderDto> res = customerBiz.selectcustomerorderlist(member_no);
 		List<CustomerorderDto> orderres = new ArrayList<>();
 		System.out.println(res.get(0).getAmount());
@@ -339,7 +345,6 @@ public class CustomerController {
 	@GetMapping("/ordersearch")
 	public String searchorder(@RequestParam(required = false) String startdate, @RequestParam(required = false) String enddate,
 			Model model, HttpSession session) {
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@검색기능이 돌고있음");
 		if (startdate == null || startdate.isEmpty()) {
 			startdate = null;
 		}
@@ -456,5 +461,44 @@ public class CustomerController {
 
 	    return ResponseEntity.ok(products);
 	}
+	
+	@GetMapping("/cartpage")
+	public String cartpage(HttpSession session, Model model) {
+		if(session.getAttribute("member_no") == null) {
+			return "redirect:/loginform";
+		}
+		
+		model.addAttribute("membername", session.getAttribute("name"));
+		Integer member_no = (Integer) session.getAttribute("member_no");
+		List<QuoteDto> res =quoteBiz.SelectQuote(member_no); //견적리스트
+		List<QuoteDetailDto> dummycategory = Arrays.asList(
+			    new QuoteDetailDto(0, 0, 0, 0, 0, "CPU", "-", "-", 0),
+			    new QuoteDetailDto(0, 0, 0, 0, 0, "RAM", "-", "-", 0),
+			    new QuoteDetailDto(0, 0, 0, 0, 0, "그래픽카드", "-", "-", 0),
+			    new QuoteDetailDto(0, 0, 0, 0, 0, "메인보드", "-", "-", 0),
+			    new QuoteDetailDto(0, 0, 0, 0, 0, "파워", "-", "-", 0),
+			    new QuoteDetailDto(0, 0, 0, 0, 0, "HDD", "-", "-", 0),
+			    new QuoteDetailDto(0, 0, 0, 0, 0, "SSD", "-", "-", 0),
+			    new QuoteDetailDto(0, 0, 0, 0, 0, "쿨러", "-", "-", 0),
+			    new QuoteDetailDto(0, 0, 0, 0, 0, "케이스", "-", "-", 0)
+			);
+
+			model.addAttribute("quotedetail", dummycategory);
+		
+		model.addAttribute("quote", res);
+
+		return "customercart";
+	}
+	
+
+	@GetMapping("/quotedetail")
+	@ResponseBody
+	public List<QuoteDetailDto> cartpagedetail(@RequestParam("quote_no") int quoteNo) {
+		List<QuoteDetailDto> selectres=quoteBiz.QuoteDetailinfo(quoteNo);
+	
+		
+		return selectres;
+	}
+	
 
 }
