@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	const topBoxSmall = document.querySelector('.top-box.small');
 	const topBoxLarge = document.querySelector('.top-box.large');
-	topBoxLarge.addEventListener('change', filterProducts);
 
     let currentCart = {};
 
@@ -58,6 +57,308 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
+
+    /* 필터링 - 부품 별로 하나씩 */
+    //CPU의 필터를 html에 보여주는 기능
+    function displayCpuDetails() {
+        let detailsHtml = `
+			<div><strong>Socket</strong></div>
+		    <div><strong>DDR</strong></div>
+		    <div><strong>Generation</strong></div>
+		    <div><strong>Spec</strong></div>
+		    <div><strong>Inner VGA</strong></div>
+		    <div><strong>Package Type</strong></div>
+		    <div><strong>Cooler Status</strong></div>
+		    <div><strong>Core</strong></div>
+		    <div><strong>Company</strong></div>
+		`;
+        topBoxSmall.innerHTML = detailsHtml;
+    }
+    function fetchCpuAttributes() {
+        // Fetch API를 사용하여 서버로부터 CPU 속성 데이터를 가져옴
+        fetch(`/api/cpu/attributes`)
+            .then(response => response.json())
+            .then(data => {
+                displayCpuAttributes(data);
+            })
+            .catch(error => console.error('Error fetching CPU attributes:', error));
+    }
+    function displayCpuAttributes(data) {
+        // Display 순서를 정의
+        const order = ["Socket", "DDR", "Generation", "Spec", "Inner VGA", "Package Type", "Cooler Status", "Core", "Company"];
+        let attributesHtml = '';
+        // 정의된 순서대로 데이터를 표시
+        order.forEach(key => {
+            if(data[key]) {
+                const values = data[key];
+                attributesHtml += `<div> ${values.map(value =>
+                    `<label><input type="checkbox" name="${key}" value="${value}">${value}</label>`
+                ).join(' ')}</div>`;
+            }
+        });
+        topBoxLarge.innerHTML = attributesHtml;
+    }
+
+    //RAM의 필터를 html에 보여주는 기능
+    function displayRamDetails() {
+        let detailsHtml = `
+			<div><strong>DDR</strong></div>
+		    <div><strong>Storage</strong></div>
+		    <div><strong>Device</strong></div>
+		    <div><strong>Heatsync</strong></div>
+		    <div><strong>Company</strong></div>
+		`;
+        topBoxSmall.innerHTML = detailsHtml;
+    }
+    function fetchRamAttributes() {
+        fetch(`/api/ram/attributes`)
+            .then(response => response.json())
+            .then(data => {
+                displayRamAttributes(data);
+            })
+            .catch(error => console.error('Error fetching RAM attributes:', error));
+    }
+    function displayRamAttributes(data) {
+        const order = ["DDR", "Storage", "Device", "HeatSync", "Company"];
+        let attributesHtml = '';
+        order.forEach(key => {
+            if(data[key]) {
+                const values = data[key];
+                attributesHtml += `<div> ${values.map(value =>
+                    `<label><input type="checkbox" name="${key}" value="${value}">${value}</label>`
+                ).join(' ')}</div>`;
+            }
+        });
+        topBoxLarge.innerHTML = attributesHtml;
+    }
+
+    //SSD의 필터를 html에 보여주는 기능
+    function displaySsdDetails() {
+        let detailsHtml = `
+			<div><strong>Storage</strong></div>
+		    <div><strong>Type</strong></div>
+		    <div><strong>Company</strong></div>
+		`;
+        topBoxSmall.innerHTML = detailsHtml;
+    }
+    function fetchSsdAttributes() {
+        fetch(`/api/ssd/attributes`)
+            .then(response => response.json())
+            .then(data => {
+                displaySsdAttributes(data);
+            })
+            .catch(error => console.error('Error fetching SSD attributes:', error));
+    }
+    function displaySsdAttributes(data) {
+        const order = ["Storage", "Type", "Company"];
+        let attributesHtml = '';
+        order.forEach(key => {
+            if(data[key]) {
+                const values = data[key];
+                attributesHtml += `<div> ${values.map(value =>
+                    `<label><input type="checkbox" name="${key}" value="${value}">${value}</label>`
+                ).join(' ')}</div>`;
+            }
+        });
+        topBoxLarge.innerHTML = attributesHtml;
+    }
+
+    //파워의 필터를 html에 보여주는 기능
+    function displayPowerDetails() {
+        let detailsHtml = `
+			<div><strong>Supply</strong></div>
+		    <div><strong>Plus80</strong></div>
+		    <div><strong>Formfactor</strong></div>
+			<div><strong>Company</strong></div>
+		`;
+        topBoxSmall.innerHTML = detailsHtml;
+    }
+    function fetchPowerAttributes() {
+        fetch(`/api/power/attributes`)
+            .then(response => response.json())
+            .then(data => {
+                displayPowerAttributes(data);
+            })
+            .catch(error => console.error('Error fetching POWER attributes:', error));
+    }
+    function displayPowerAttributes(data) {
+        const order = ["Supply", "Plus80", "Formfactor", "Company"];
+        let attributesHtml = '';
+        order.forEach(key => {
+            if(data[key]) {
+                const values = data[key];
+                attributesHtml += `<div> ${values.map(value =>
+                    `<label><input type="checkbox" name="${key}" value="${value}">${value}</label>`
+                ).join(' ')}</div>`;
+            }
+        });
+        topBoxLarge.innerHTML = attributesHtml;
+    }
+
+    //쿨러의 필터를 html에 보여주는 기능
+    function displayCoolerDetails() {
+        let detailsHtml = `
+			<div><strong>Cooler Type</strong></div>
+		    <div><strong>Socket</strong></div>
+			<div><strong>Company</strong></div>
+		`;
+        topBoxSmall.innerHTML = detailsHtml;
+    }
+    function fetchCoolerAttributes() {
+        fetch(`/api/cooler/attributes`)
+            .then(response => response.json())
+            .then(data => {
+                displayCoolerAttributes(data);
+            })
+            .catch(error => console.error('Error fetching Cooler attributes:', error));
+    }
+    function displayCoolerAttributes(data) {
+        const order = ["Cooler Type", "Socket", "Company"];
+        let attributesHtml = '';
+        order.forEach(key => {
+            if(data[key]) {
+                const values = data[key];
+                attributesHtml += `<div> ${values.map(value =>
+                    `<label><input type="checkbox" name="${key}" value="${value}">${value}</label>`
+                ).join(' ')}</div>`;
+            }
+        });
+        topBoxLarge.innerHTML = attributesHtml;
+    }
+
+    //메인보드의 필터를 html에 보여주는 기능
+    function displayMainBoardDetails() {
+        let detailsHtml = `
+			<div><strong>Socket</strong></div>
+		    <div><strong>Formfactor</strong></div>
+			<div><strong>Memory Slot</strong></div>
+			<div><strong>DDR</strong></div>
+			<div><strong>Max Storage</strong></div>
+			<div><strong>Company</strong></div>
+		`;
+        topBoxSmall.innerHTML = detailsHtml;
+    }
+    function fetchMainBoardAttributes() {
+        fetch(`/api/mainboard/attributes`)
+            .then(response => response.json())
+            .then(data => {
+                displayMainBoardAttributes(data);
+            })
+            .catch(error => console.error('Error fetching MAINBOARD attributes:', error));
+    }
+    function displayMainBoardAttributes(data) {
+        const order = ["Socket", "Formfactor", "Memory Slot", "DDR", "Max Storage", "Company"];
+        let attributesHtml = '';
+        order.forEach(key => {
+            if(data[key]) {
+                const values = data[key];
+                attributesHtml += `<div> ${values.map(value =>
+                    `<label><input type="checkbox" name="${key}" value="${value}">${value}</label>`
+                ).join(' ')}</div>`;
+            }
+        });
+        topBoxLarge.innerHTML = attributesHtml;
+    }
+
+    //그래픽카드의 필터를 html에 보여주는 기능
+    function displayGpuDetails() {
+        let detailsHtml = `
+			<div><strong>Series</strong></div>
+		    <div><strong>Storage</strong></div>
+			<div><strong>Length</strong></div>
+			<div><strong>Company</strong></div>
+		`;
+        topBoxSmall.innerHTML = detailsHtml;
+    }
+    function fetchGpuAttributes() {
+        fetch(`/api/gpu/attributes`)
+            .then(response => response.json())
+            .then(data => {
+                displayGpuAttributes(data);
+            })
+            .catch(error => console.error('Error fetching GPU attributes:', error));
+    }
+    function displayGpuAttributes(data) {
+        const order = ["Series", "Storage", "Length", "Company"];
+        let attributesHtml = '';
+        order.forEach(key => {
+            if(data[key]) {
+                const values = data[key];
+                attributesHtml += `<div> ${values.map(value =>
+                    `<label><input type="checkbox" name="${key}" value="${value}">${value}</label>`
+                ).join(' ')}</div>`;
+            }
+        });
+        topBoxLarge.innerHTML = attributesHtml;
+    }
+
+    //HDD의 필터를 html에 보여주는 기능
+    function displayHddDetails() {
+        let detailsHtml = `
+			<div><strong>Device</strong></div>
+		    <div><strong>Storage</strong></div>
+			<div><strong>Company</strong></div>
+		`;
+        topBoxSmall.innerHTML = detailsHtml;
+    }
+    function fetchHddAttributes() {
+        fetch(`/api/hdd/attributes`)
+            .then(response => response.json())
+            .then(data => {
+                displayHddAttributes(data);
+            })
+            .catch(error => console.error('Error fetching HDD attributes:', error));
+    }
+    function displayHddAttributes(data) {
+        const order = ["Device", "Storage", "Company"];
+        let attributesHtml = '';
+        order.forEach(key => {
+            if(data[key]) {
+                const values = data[key];
+                attributesHtml += `<div> ${values.map(value =>
+                    `<label><input type="checkbox" name="${key}" value="${value}">${value}</label>`
+                ).join(' ')}</div>`;
+            }
+        });
+        topBoxLarge.innerHTML = attributesHtml;
+    }
+
+    //케이스의 필터를 html에 보여주는 기능
+    function displayCaseDetails() {
+        let detailsHtml = `
+			<div><strong>Power Status</strong></div>
+		    <div><strong>Formfactor</strong></div>
+			<div><strong>Tower Size</strong></div>
+			<div><strong>VGA Length</strong></div>
+			<div><strong>Power Size</strong></div>
+			<div><strong>Company</strong></div>
+		`;
+        topBoxSmall.innerHTML = detailsHtml;
+    }
+    function fetchCaseAttributes() {
+        fetch(`/api/case/attributes`)
+            .then(response => response.json())
+            .then(data => {
+                displayCaseAttributes(data);
+            })
+            .catch(error => console.error('Error fetching CASE attributes:', error));
+    }
+    function displayCaseAttributes(data) {
+        const order = ["Power Status", "Formfactor", "Tower Size", "VGA Length", "Power Size", "Company"];
+        let attributesHtml = '';
+        order.forEach(key => {
+            if(data[key]) {
+                const values = data[key];
+                attributesHtml += `<div> ${values.map(value =>
+                    `<label><input type="checkbox" name="${key}" value="${value}">${value}</label>`
+                ).join(' ')}</div>`;
+            }
+        });
+        topBoxLarge.innerHTML = attributesHtml;
+    }
+
+    /* filter에 따라 content-box에 보여주는 아이템을 변화하는 기능 */
+
 
     // 정렬 목록 클릭 이벤트
     sortButtons.forEach(button => {
