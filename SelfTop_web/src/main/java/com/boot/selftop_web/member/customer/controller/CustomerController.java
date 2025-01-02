@@ -6,11 +6,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +34,8 @@ import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
 import com.boot.selftop_web.order.biz.OrderBoardBiz;
 import com.boot.selftop_web.order.model.dto.OrderBoardDto;
+import com.boot.selftop_web.product.biz.mapper.ProductMapper;
+
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -440,25 +441,135 @@ public class CustomerController {
 		}
 	}
 
+	//side-panel에서 부품을 선택하면 해당 카테고리의 필터를 보여주는 기능
+	@Autowired
+    private ProductMapper productMapper;
+
+	@GetMapping("/api/cpu/attributes")
+	public ResponseEntity<Map<String, List<String>>> getCpuAttributes() {
+	    Map<String, List<String>> attributes = new HashMap<>();
+	    attributes.put("Socket", productMapper.findAllcpuSocket());
+	    attributes.put("DDR", productMapper.findAllcpuDdr());
+        attributes.put("Generation", productMapper.findAllcpuGeneration());
+	    attributes.put("Spec", productMapper.findAllcpuSpec());
+	    attributes.put("Inner VGA", productMapper.findAllcpuInnerVga());
+	    attributes.put("Package Type", productMapper.findAllcpuPackageType());
+	    attributes.put("Cooler Status", productMapper.findAllcpuCoolerStatus());
+	    attributes.put("Core", productMapper.findAllcpuCore());
+	    attributes.put("Company", productMapper.findAllcpuCompany());
+	    return ResponseEntity.ok(attributes);
+	}
+
+	@GetMapping("/api/ram/attributes")
+	public ResponseEntity<Map<String, List<String>>> getRamAttributes() {
+	    Map<String, List<String>> attributes = new HashMap<>();
+	    attributes.put("DDR", productMapper.findAllramDdr());
+	    attributes.put("Storage", productMapper.findAllramStorage());
+        attributes.put("Device", productMapper.findAllramDevice());
+	    attributes.put("Heatsync", productMapper.findAllramHeatsync());
+	    attributes.put("Company", productMapper.findAllramCompany());
+	    return ResponseEntity.ok(attributes);
+	}
+
+	@GetMapping("/api/ssd/attributes")
+	public ResponseEntity<Map<String, List<String>>> getSsdAttributes() {
+	    Map<String, List<String>> attributes = new HashMap<>();
+	    attributes.put("Storage", productMapper.findAllssdStorage());
+	    attributes.put("Type", productMapper.findAllssdType());
+	    attributes.put("Company", productMapper.findAllssdCompany());
+	    return ResponseEntity.ok(attributes);
+	}
+
+	@GetMapping("/api/power/attributes")
+	public ResponseEntity<Map<String, List<String>>> getPowerAttributes() {
+	    Map<String, List<String>> attributes = new HashMap<>();
+	    attributes.put("Supply", productMapper.findAllpowerSupply());
+	    attributes.put("Plus80", productMapper.findAllpowerPlus80());
+	    attributes.put("Formfactor", productMapper.findAllpowerFormfactor());
+	    attributes.put("Company", productMapper.findAllpowerCompany());
+	    return ResponseEntity.ok(attributes);
+	}
+
+	@GetMapping("/api/cooler/attributes")
+	public ResponseEntity<Map<String, List<String>>> getCoolerAttributes() {
+	    Map<String, List<String>> attributes = new HashMap<>();
+	    attributes.put("Cooler Type", productMapper.findAllcoolerCooler_Type());
+	    attributes.put("Socket", productMapper.findAllcoolerSocket());
+	    attributes.put("Company", productMapper.findAllcoolerCompany());
+	    return ResponseEntity.ok(attributes);
+	}
+
+	@GetMapping("/api/mainboard/attributes")
+	public ResponseEntity<Map<String, List<String>>> getMainBoardAttributes() {
+	    Map<String, List<String>> attributes = new HashMap<>();
+	    attributes.put("Socket", productMapper.findAllmainboardSocket());
+	    attributes.put("Formfactor", productMapper.findAllmainboardFormfactor());
+	    attributes.put("Memory Slot", productMapper.findAllmainboardMemory_Slot());
+	    attributes.put("DDR", productMapper.findAllmainboardDdr());
+	    attributes.put("Max_Storage", productMapper.findAllmainboardMax_Storage());
+	    attributes.put("Company", productMapper.findAllmainboardCompany());
+	    return ResponseEntity.ok(attributes);
+	}
+
+	@GetMapping("/api/gpu/attributes")
+	public ResponseEntity<Map<String, List<String>>> getGpuAttributes() {
+	    Map<String, List<String>> attributes = new HashMap<>();
+	    attributes.put("Series", productMapper.findAllgpuSeries());
+	    attributes.put("Storage", productMapper.findAllgpuStorage());
+	    attributes.put("Length", productMapper.findAllgpuLength());
+	    attributes.put("Company", productMapper.findAllgpuCompany());
+	    return ResponseEntity.ok(attributes);
+	}
+
+	@GetMapping("/api/hdd/attributes")
+	public ResponseEntity<Map<String, List<String>>> getHddAttributes() {
+	    Map<String, List<String>> attributes = new HashMap<>();
+	    attributes.put("Device", productMapper.findAllhddDevice());
+	    attributes.put("Storage", productMapper.findAllhddStorage());
+	    attributes.put("Company", productMapper.findAllhddCompany());
+	    return ResponseEntity.ok(attributes);
+	}
+
+	@GetMapping("/api/case/attributes")
+	public ResponseEntity<Map<String, List<String>>> getCaseAttributes() {
+	    Map<String, List<String>> attributes = new HashMap<>();
+	    attributes.put("Power Status", productMapper.findAllcasePower_Status());
+	    attributes.put("Formfactor", productMapper.findAllcaseFormfactor());
+	    attributes.put("Tower Size", productMapper.findAllcaseTower_Size());
+	    attributes.put("VGA Length", productMapper.findAllcaseVga_Length());
+	    attributes.put("Power Size", productMapper.findAllcasePower_Size());
+	    attributes.put("Company", productMapper.findAllcaseCompany());
+	    return ResponseEntity.ok(attributes);
+	}
+
+	//필터에 선택된 체크박스에 따라 데이터를 넘겨줌
+
+
 	// side-panel에서 부품을 선택하면 카테고리로 설정해 content-box안에 부품들을 리스트해서 보여줌
 	@Autowired
 	private ProductBizFactory productBizFactory;
 
 	@GetMapping("/products/{category}")
-	public ResponseEntity<?> getProductsByCategory(@PathVariable String category) {
+	public ResponseEntity<?> getProductsByCategory(
+			@PathVariable String category,
+			@RequestParam(value = "sort", defaultValue = "byname") String sort) {
+
 	    System.out.println("Fetching products for category: " + category);
+		System.out.println("Sort by : " + sort);
+
+
 	    ProductBiz<?> productBiz = productBizFactory.getBiz(category.toLowerCase());
 	    if (productBiz == null) {
 	        System.err.println("No ProductBiz found for category: " + category);
 	        return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Invalid category: " + category));
 	    }
 
-	    List<?> products = productBiz.getProductsByCategory(category);
+
+	    List<?> products = productBiz.getProductsByCategory(category, sort);
 	    if (products.isEmpty()) {
 	        System.out.println("No products found for category: " + category);
 	        return ResponseEntity.notFound().build();
 	    }
-
 	    return ResponseEntity.ok(products);
 	}
 	

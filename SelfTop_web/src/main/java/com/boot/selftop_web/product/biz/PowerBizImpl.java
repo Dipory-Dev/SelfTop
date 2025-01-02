@@ -46,13 +46,12 @@ public class PowerBizImpl implements ProductBiz<PowerDto> {
         return result;
     }
 
-	@Override
-	public List<PowerDto> getProductsByCategory(String category) {
-		if ("파워".equalsIgnoreCase(category)) {
-            return productMapper.findAllDetailedPowerProducts();
-        }
-        return new ArrayList<>();
-	}
+    @Override
+    public List<PowerDto> getProductsByCategory(String category, String sort) {
+        List<PowerDto> results = productMapper.findAllDetailedPowerProducts(category, sort);
+
+        return results;
+    }
 
 
 

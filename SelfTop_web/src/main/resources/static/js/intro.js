@@ -13,6 +13,10 @@ document.addEventListener("DOMContentLoaded", function() {
 		divselect();
 });
 
+function movemain(){
+	location.href='/main'
+}
+
 function movelogin(){
 	location.href='/loginform'
 }

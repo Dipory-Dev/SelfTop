@@ -47,13 +47,12 @@ public class CoolerBizImpl implements ProductBiz<CoolerDto>{
         return result;
     }
 
-	@Override
-	public List<CoolerDto> getProductsByCategory(String category) {
-		if ("쿨러".equalsIgnoreCase(category)) {
-            return productMapper.findAllDetailedCoolerProducts();
-        }
-        return new ArrayList<>();
-	}
+    @Override
+    public List<CoolerDto> getProductsByCategory(String category, String sort) {
+        List<CoolerDto> results = productMapper.findAllDetailedCoolerProducts(category, sort);
+
+        return results;
+    }
 
 
 }

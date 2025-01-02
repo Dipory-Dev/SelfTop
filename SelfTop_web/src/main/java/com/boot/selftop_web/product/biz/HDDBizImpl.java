@@ -46,12 +46,11 @@ public class HDDBizImpl implements ProductBiz<HDDDto> {
         return result;
     }
 
-	@Override
-	public List<HDDDto> getProductsByCategory(String category) {
-		if ("hdd".equalsIgnoreCase(category)) {
-            return productMapper.findAllDetailedHddProducts();
-        }
-        return new ArrayList<>();
-	}
+    @Override
+    public List<HDDDto> getProductsByCategory(String category, String sort) {
+        List<HDDDto> results = productMapper.findAllDetailedHddProducts(category, sort);
+
+        return results;
+    }
 
 }

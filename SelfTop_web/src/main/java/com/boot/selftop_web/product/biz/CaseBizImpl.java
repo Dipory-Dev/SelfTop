@@ -45,12 +45,11 @@ public class CaseBizImpl implements ProductBiz<CaseDto> {
         return result;
     }
 
-	@Override
-	public List<CaseDto> getProductsByCategory(String category) {
-		if ("케이스".equalsIgnoreCase(category)) {
-            return productMapper.findAllDetailedCaseProducts();
-        }
-        return new ArrayList<>();
-	}
+    @Override
+    public List<CaseDto> getProductsByCategory(String category, String sort) {
+        List<CaseDto> results = productMapper.findAllDetailedCaseProducts(category, sort);
+
+        return results;
+    }
 
 }
