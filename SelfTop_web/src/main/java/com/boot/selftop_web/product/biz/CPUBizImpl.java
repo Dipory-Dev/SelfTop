@@ -3,6 +3,7 @@ package com.boot.selftop_web.product.biz;
 import com.boot.selftop_web.product.model.dto.CPUDto;
 import com.boot.selftop_web.product.biz.mapper.CPUMapper;
 import com.boot.selftop_web.product.biz.mapper.ProductMapper;
+import com.boot.selftop_web.product.model.dto.ProductDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import java.util.List;
 public class CPUBizImpl implements ProductBiz<CPUDto> {
     @Autowired
     private ProductMapper productMapper;
+
     @Autowired
     private CPUMapper cpuMapper;
 
@@ -48,11 +50,12 @@ public class CPUBizImpl implements ProductBiz<CPUDto> {
     
     //main에서 cpu선택하면 모든 cpu가져오기
     @Override
-    public List<CPUDto> getProductsByCategory(String category) {
-        if ("cpu".equalsIgnoreCase(category)) {
-            return productMapper.findAllDetailedCpuProducts();
-        }
-        return new ArrayList<>();
+    public List<CPUDto> getProductsByCategory(String category, String sort) {
+        List<CPUDto> results = productMapper.findAllDetailedCpuProducts(category, sort);
+
+        System.out.println(results);
+
+        return results;
     }
     
 }

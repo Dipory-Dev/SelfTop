@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const currentCartButton = document.getElementById("current-cart");
     const savedQuoteSelect = document.querySelector('.saved-quote');
     const contentBox = document.querySelector('.content-box');
+    const sortButtons = document.querySelectorAll('.sortBtn');
+    let selectedSort = 'byname';
 
     let currentCart = {};
 
@@ -13,19 +15,36 @@ document.addEventListener("DOMContentLoaded", () => {
         sidePanel.classList.toggle("active");
     });
 
+
+    //사이드 패널에서 카테고리를 골랐을때 동작
     components.forEach(component => {
         component.addEventListener('click', function() {
             if (!this.classList.contains('active')) {
                 components.forEach(comp => comp.classList.remove('active'));
                 this.classList.add('active');
-                fetchProducts(this.dataset.component);
+                fetchProducts(this.dataset.component, selectedSort);
             }
         });
     });
 
-	//사이드 패널에서 카테고리를 골랐을때 동작
-	function fetchProducts(component) {
-	    fetch(`/products/${component}`)
+    // 정렬 목록 클릭 이벤트
+    sortButtons.forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+            sortButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            selectedSort = this.dataset.sort;
+
+            const activeComponent = document.querySelector('.component.active');
+            if (activeComponent) {
+                fetchProducts(activeComponent.dataset.component, selectedSort);
+            }
+        });
+    });
+
+	// 제품 목록 출력
+	function fetchProducts(component, sort) {
+	    fetch(`/products/${component}?sort=${sort}`)
 	        .then(response => {
 	            if (!response.ok) {
 	                throw new Error(`Failed to load ${component} products: ${response.statusText}`);

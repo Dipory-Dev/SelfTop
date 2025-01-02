@@ -62,77 +62,204 @@ public interface ProductMapper {
     default boolean isValidProductCode(int productCode) {
         return countByProductCode(productCode) > 0;
     }
-    
+
     //product테이블에서 가져오는 쿼리문
-    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
+    @Select("<script>" +
+            "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
-            "WHERE p.CATEGORY = 'CPU' " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL")
-    List<CPUDto> findAllDetailedCpuProducts();
-    
-    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
+            "WHERE p.CATEGORY = #{category} " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "<if test='sort != null'>ORDER BY " +
+            "   <choose>" +
+            "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
+            "       <when test='sort == \"bylowprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price" +
+            "       </when>" +
+            "       <when test='sort == \"byhighprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price DESC" +
+            "       </when>" +
+            "       <otherwise>p.PRODUCT_NAME</otherwise>" +
+            "   </choose>" +
+            "</if>" +
+            "</script>")
+    List<CPUDto> findAllDetailedCpuProducts(@Param("category") String category, @Param("sort") String sort);
+
+    @Select("<script>" +
+            "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
-            "WHERE p.CATEGORY = '쿨러' " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL")
-    List<CoolerDto> findAllDetailedCoolerProducts();
-    
-    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
+            "WHERE p.CATEGORY = #{category} " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "<if test='sort != null'>ORDER BY " +
+            "   <choose>" +
+            "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
+            "       <when test='sort == \"bylowprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price" +
+            "       </when>" +
+            "       <when test='sort == \"byhighprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price DESC" +
+            "       </when>" +
+            "       <otherwise>p.PRODUCT_NAME</otherwise>" +
+            "   </choose>" +
+            "</if>" +
+            "</script>")
+    List<CoolerDto> findAllDetailedCoolerProducts(@Param("category") String category, @Param("sort") String sort);
+
+    @Select("<script>" +
+            "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
-            "WHERE p.CATEGORY = '케이스' " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL")
-    List<CaseDto> findAllDetailedCaseProducts();
-    
-    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
+            "WHERE p.CATEGORY = #{category} " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "<if test='sort != null'>ORDER BY " +
+            "   <choose>" +
+            "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
+            "       <when test='sort == \"bylowprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price" +
+            "       </when>" +
+            "       <when test='sort == \"byhighprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price DESC" +
+            "       </when>" +
+            "       <otherwise>p.PRODUCT_NAME</otherwise>" +
+            "   </choose>" +
+            "</if>" +
+            "</script>")
+    List<CaseDto> findAllDetailedCaseProducts(@Param("category") String category, @Param("sort") String sort);
+
+    @Select("<script>" +
+            "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
-            "WHERE p.CATEGORY = '그래픽카드' " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL")
-    List<GPUDto> findAllDetailedGpuProducts();
-    
-    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
+            "WHERE p.CATEGORY = #{category} " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "<if test='sort != null'>ORDER BY " +
+            "   <choose>" +
+            "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
+            "       <when test='sort == \"bylowprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price" +
+            "       </when>" +
+            "       <when test='sort == \"byhighprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price DESC" +
+            "       </when>" +
+            "       <otherwise>p.PRODUCT_NAME</otherwise>" +
+            "   </choose>" +
+            "</if>" +
+            "</script>")
+    List<GPUDto> findAllDetailedGpuProducts(@Param("category") String category, @Param("sort") String sort);
+
+    @Select("<script>" +
+            "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
-            "WHERE p.CATEGORY = 'HDD' " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL")
-    List<HDDDto> findAllDetailedHddProducts();
-    
-    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
+            "WHERE p.CATEGORY = #{category} " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "<if test='sort != null'>ORDER BY " +
+            "   <choose>" +
+            "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
+            "       <when test='sort == \"bylowprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price" +
+            "       </when>" +
+            "       <when test='sort == \"byhighprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price DESC" +
+            "       </when>" +
+            "       <otherwise>p.PRODUCT_NAME</otherwise>" +
+            "   </choose>" +
+            "</if>" +
+            "</script>")
+    List<HDDDto> findAllDetailedHddProducts(@Param("category") String category, @Param("sort") String sort);
+
+    @Select("<script>" +
+            "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
-            "WHERE p.CATEGORY = '파워' " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL")
-    List<PowerDto> findAllDetailedPowerProducts();
-    
-    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
+            "WHERE p.CATEGORY = #{category} " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "<if test='sort != null'>ORDER BY " +
+            "   <choose>" +
+            "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
+            "       <when test='sort == \"bylowprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price" +
+            "       </when>" +
+            "       <when test='sort == \"byhighprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price DESC" +
+            "       </when>" +
+            "       <otherwise>p.PRODUCT_NAME</otherwise>" +
+            "   </choose>" +
+            "</if>" +
+            "</script>")
+    List<PowerDto> findAllDetailedPowerProducts(@Param("category") String category, @Param("sort") String sort);
+
+    @Select("<script>" +
+            "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
-            "WHERE p.CATEGORY = 'RAM' " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL")
-    List<RAMDto> findAllDetailedRamProducts();
-    
-    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
+            "WHERE p.CATEGORY = #{category} " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "<if test='sort != null'>ORDER BY " +
+            "   <choose>" +
+            "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
+            "       <when test='sort == \"bylowprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price" +
+            "       </when>" +
+            "       <when test='sort == \"byhighprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price DESC" +
+            "       </when>" +
+            "       <otherwise>p.PRODUCT_NAME</otherwise>" +
+            "   </choose>" +
+            "</if>" +
+            "</script>")
+    List<RAMDto> findAllDetailedRamProducts(@Param("category") String category, @Param("sort") String sort);
+
+    @Select("<script>" +
+            "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
-            "WHERE p.CATEGORY = 'SSD' " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL")
-    List<SSDDto> findAllDetailedSsdProducts();
-    
-    @Select("SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
+            "WHERE p.CATEGORY = #{category} " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "<if test='sort != null'>ORDER BY " +
+            "   <choose>" +
+            "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
+            "       <when test='sort == \"bylowprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price" +
+            "       </when>" +
+            "       <when test='sort == \"byhighprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price DESC" +
+            "       </when>" +
+            "       <otherwise>p.PRODUCT_NAME</otherwise>" +
+            "   </choose>" +
+            "</if>" +
+            "</script>")
+    List<SSDDto> findAllDetailedSsdProducts(@Param("category") String category, @Param("sort") String sort);
+
+    @Select("<script>" +
+            "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
-            "WHERE p.CATEGORY = 'SSD' " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL")
-    List<MainBoardDto> findAllDetailedMainBoardProducts();
+            "WHERE p.CATEGORY = #{category} " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "<if test='sort != null'>ORDER BY " +
+            "   <choose>" +
+            "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
+            "       <when test='sort == \"bylowprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price" +
+            "       </when>" +
+            "       <when test='sort == \"byhighprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price DESC" +
+            "       </when>" +
+            "       <otherwise>p.PRODUCT_NAME</otherwise>" +
+            "   </choose>" +
+            "</if>" +
+            "</script>")
+    List<MainBoardDto> findAllDetailedMainBoardProducts(@Param("category") String category, @Param("sort") String sort);
+
 }

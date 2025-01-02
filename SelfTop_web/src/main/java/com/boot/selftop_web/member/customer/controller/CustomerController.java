@@ -410,15 +410,22 @@ public class CustomerController {
 	private ProductBizFactory productBizFactory;
 
 	@GetMapping("/products/{category}")
-	public ResponseEntity<?> getProductsByCategory(@PathVariable String category) {
+	public ResponseEntity<?> getProductsByCategory(
+			@PathVariable String category,
+			@RequestParam(value = "sort", defaultValue = "byname") String sort) {
+
 	    System.out.println("Fetching products for category: " + category);
+		System.out.println("Sort by : " + sort);
+
+
 	    ProductBiz<?> productBiz = productBizFactory.getBiz(category.toLowerCase());
 	    if (productBiz == null) {
 	        System.err.println("No ProductBiz found for category: " + category);
 	        return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Invalid category: " + category));
 	    }
 
-	    List<?> products = productBiz.getProductsByCategory(category);
+
+	    List<?> products = productBiz.getProductsByCategory(category, sort);
 	    if (products.isEmpty()) {
 	        System.out.println("No products found for category: " + category);
 	        return ResponseEntity.notFound().build();
@@ -426,5 +433,7 @@ public class CustomerController {
 
 	    return ResponseEntity.ok(products);
 	}
+
+
 
 }

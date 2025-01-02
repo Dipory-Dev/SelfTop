@@ -46,13 +46,12 @@ public class SSDBizImpl implements ProductBiz<SSDDto> {
         return result;
     }
 
-	@Override
-	public List<SSDDto> getProductsByCategory(String category) {
-        if ("ssd".equalsIgnoreCase(category)) {
-            return productMapper.findAllDetailedSsdProducts();
-        }
-        return new ArrayList<>();
-	}
+    @Override
+    public List<SSDDto> getProductsByCategory(String category, String sort) {
+        List<SSDDto> results = productMapper.findAllDetailedSsdProducts(category, sort);
+
+        return results;
+    }
 
 
 }

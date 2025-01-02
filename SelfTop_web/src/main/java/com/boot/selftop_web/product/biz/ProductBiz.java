@@ -10,5 +10,6 @@ public interface ProductBiz<T extends ProductDto>{
     int insert(T dto);
     
     //main에서 부품 선택시 카테고리로 설정
-    List<T> getProductsByCategory(String category);
+    List<?> getProductsByCategory(String category, String sort);
+
 }
