@@ -36,7 +36,7 @@ const tableData = [
             memory: { name: "Corsair DDR4 32GB", price: 200000 },
             graphiccard: { name: "NVIDIA RTX 3080", price: 800000 },
             SSD: { name: "Samsung 980 Pro 2TB", price: 250000 },
-            HDD: { name: "Western Digital 4TB", price: 150000 },
+            HDD: { name: "-", price: 0 },
             power: { name: "EVGA 850W", price: 150000 },
             case: { name: "Lian Li PC-O11", price: 180000 },
             cooler: { name: "NZXT Kraken X73", price: 250000 }
