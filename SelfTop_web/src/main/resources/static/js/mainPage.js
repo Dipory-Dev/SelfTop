@@ -440,19 +440,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
         products.forEach(product => {
             htmlContent += `
-                <div style="display: flex; align-items: center; justify-content: space-between; border: 1px solid #ccc; padding: 10px; margin-bottom: 5px; background-color: #f9f9f9;">
+                <div class="product-box" style="display: flex; align-items: center; justify-content: space-between; border: 1px solid #ccc; padding: 10px; margin-bottom: 5px; background-color: #f9f9f9;">
                     <div style="display: flex; align-items: center;">
                         <img src="${product.thumbnail}" alt="${product.product_name} 이미지" style="width: 100px; height: 100px; margin-right: 10px;">
                         <div style="flex-grow: 1; min-width: 0;">
-                            <div style="font-weight: bold; border-bottom: 1px solid black; padding-bottom: 5px; width: 1000px;">${product.product_name}</div>
+                            <div class="product-info" style="font-weight: bold; border-bottom: 1px solid black; padding-bottom: 5px; width: 1000px;">${product.product_name}</div>
                             <div style="color: #666; font-size: 0.9em; width: 1000px;">${product.etc}</div>
                         </div>
                     </div>
-                    <div style="text-align: right; margin-left: 10px; font-weight: bold; color: #333;">
-                            ${product.price ? `${product.price}원` : '품절'}
+                    <div class="product-price" style="text-align: right; margin-left: 10px; font-weight: bold; color: #333;">
+                        ${product.price ? `${product.price}원` : '품절'}
                         <div><span class="stars">★★★★★</span></div>
                         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px;">
-                            <button class="btn add-to-cart" data-product-name="${product.product_name}" data-product-price="${product.price}">담기</button>
+                            <button class="btn add-to-cart">담기</button>
                             <button class="btn buy-now">바로구매</button>
                         </div>
                     </div>
@@ -462,6 +462,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
         htmlContent += `</div>`;
         contentBox.innerHTML = htmlContent;
+
+        // 바로구매 버튼 클릭 이벤트
+        contentBox.querySelectorAll('.buy-now').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const productDiv = event.target.closest('.product-box');
+                const productName = productDiv.querySelector('.product-info').textContent.trim();
+                const productPrice = productDiv.querySelector('.product-price').childNodes[0].textContent.trim().replace('원', '');
+                const productThumbnail = productDiv.querySelector('img').src;
+
+                const productInfo = {
+                    thumbnail: productThumbnail,
+                    category: component,
+                    name: productName,
+                    price: productPrice,
+                    quantity: 1
+                };
+                localStorage.setItem('selectedProduct', JSON.stringify(productInfo));
+
+                location.href = '/pay';
+            });
+        });
 
         // "담기" 버튼 이벤트 추가
         document.querySelectorAll('.add-to-cart').forEach(button => {
