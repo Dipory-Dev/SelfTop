@@ -216,7 +216,6 @@ main{
     border: 1px solid #007bff;
     color: white;
     padding: 10px;
-    background-color: 000;
 }
 
 .top-boxes > *:not(:last-child) {
@@ -226,7 +225,8 @@ main{
 .content-box{
 	width: 1300px;
 	height: 600px;
-    border: 1px solid black;	
+    border: 1px solid black;
+    margin-top: 10px;
 }
 
 .side-panel {
@@ -542,6 +542,10 @@ footer {
 
 li{
     margin-top:2px;
+    float: left;
+    list-style: none;
+    border: 1px solid #ccc;
+    padding: 2px;
 }
 
 .body-top{

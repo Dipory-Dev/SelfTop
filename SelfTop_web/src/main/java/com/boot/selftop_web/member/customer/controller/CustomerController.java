@@ -1,6 +1,8 @@
 package com.boot.selftop_web.member.customer.controller;
 
 import com.boot.selftop_web.member.customer.biz.KakaoService;
+import com.boot.selftop_web.product.biz.ProductInfoBizImpl;
+import com.boot.selftop_web.product.model.dto.ProductInfoDto;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
@@ -52,6 +54,9 @@ public class CustomerController {
 
 	@Autowired
 	private OrderBoardBiz orderboardBiz;
+
+	@Autowired
+	private ProductInfoBizImpl productInfoBiz;
 
 	@Autowired
 	private QuoteBiz quoteBiz;
@@ -610,5 +615,12 @@ public class CustomerController {
 		return selectres;
 	}
 
+	@GetMapping("/productDetail")
+	public String productDetail(Model model, @RequestParam("product_code") int product_code) {
+		ProductInfoDto dto = productInfoBiz.selectOne(product_code);
+		model.addAttribute("product", dto);
+
+		return "popup_product_info";
+	}
 
 }

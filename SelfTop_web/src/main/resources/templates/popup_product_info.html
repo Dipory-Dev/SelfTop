@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="../static/css/popup_product_info.css" />
+    <link rel="stylesheet" href="/css/popup_product_info.css" />
     <title>제품 상세페이지</title>
 </head>
 <body>
     <div class="header">
-        <div class="header-title">인텔 코어i5-14세대 14400F (랩터레이크 리프레시) (정품)</div>
+        <div class="header-title" th:text="상품명 + ' : ' + ${product.product_name}">제품명</div>
     </div>
     <main id="tablesection">
         <div class="var">
@@ -18,14 +18,14 @@
         </div>   
         <div class="content">
             <div class="image-placeholder">
-                <img src="https://iws.danawa.com/prod_img/500000/667/038/desc/prod_32038667/add_1/20240108134409842_TVOZ6GVD.png">
+                <img th:src="${product.content_img}">
             </div>
         </div>
     </main>
     <div class="footer">
         <input type="button" class="close-button" value="닫기" onclick="self.close();"/>
     </div>
-    
-    <script type="text/javascript" src="../static/js/popup_product_info.js"></script>
+
+    <script type="text/javascript" src="/js/popup_product_info.js"></script>
 </body>
 </html>

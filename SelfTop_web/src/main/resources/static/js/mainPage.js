@@ -444,7 +444,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div style="display: flex; align-items: center;">
                         <img src="${product.thumbnail}" alt="${product.product_name} 이미지" style="width: 100px; height: 100px; margin-right: 10px;">
                         <div style="flex-grow: 1; min-width: 0;">
-                            <div class="product-info" style="font-weight: bold; border-bottom: 1px solid black; padding-bottom: 5px; width: 1000px;">${product.product_name}</div>
+                            <div class="product-info" style="font-weight: bold; border-bottom: 1px solid black; padding-bottom: 5px; width: 1000px;">
+                                <a style="cursor: pointer" onclick="showPopup(${product.product_code}, '${component}')">
+                                    ${product.product_name}
+                                </a>
+                            </div>
                             <div style="color: #666; font-size: 0.9em; width: 1000px;">${product.etc}</div>
                         </div>
                     </div>
@@ -493,6 +497,11 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     }
+
+    // popup
+    window.showPopup = function (product_code, category) {
+        window.open(`/productDetail?product_code=${product_code}&category=${category}`, "제품상세이미지팝업", "width=1000, height=1500, left=100, top=50, scrollbars=1");
+    };
 
     // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 는 함수
     function addToCart(productName, productPrice) {

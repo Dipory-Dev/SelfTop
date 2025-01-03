@@ -1,15 +1,6 @@
 package com.boot.selftop_web.product.biz.mapper;
 
-import com.boot.selftop_web.product.model.dto.CPUDto;
-import com.boot.selftop_web.product.model.dto.CaseDto;
-import com.boot.selftop_web.product.model.dto.CoolerDto;
-import com.boot.selftop_web.product.model.dto.GPUDto;
-import com.boot.selftop_web.product.model.dto.HDDDto;
-import com.boot.selftop_web.product.model.dto.MainBoardDto;
-import com.boot.selftop_web.product.model.dto.PowerDto;
-import com.boot.selftop_web.product.model.dto.ProductDto;
-import com.boot.selftop_web.product.model.dto.RAMDto;
-import com.boot.selftop_web.product.model.dto.SSDDto;
+import com.boot.selftop_web.product.model.dto.*;
 
 import java.util.List;
 import java.util.Map;
@@ -370,5 +361,9 @@ public interface ProductMapper {
             "</if>" +
             "</script>")
     List<MainBoardDto> findAllDetailedMainBoardProducts(@Param("category") String category, @Param("sort") String sort);
+
+
+    @Select("Select * from product where product_code=#{product_code}")
+    ProductInfoDto selectOne(@Param("product_code") int product_code);
 
 }
