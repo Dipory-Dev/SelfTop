@@ -1,5 +1,7 @@
 package com.boot.selftop_web.quote.controller;
 
+import java.util.Map;
+
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,13 +17,18 @@ import java.util.Map;
 @RequestMapping("/api")
 public class CartController {
 	
+
+	@PostMapping("/items")
+	public Map<String, Object> receiveItems(@RequestBody Map<String, Object> items) {
+
+        return items;
 	private final CartBizImpl cartBizImpl;
-	
+
 	public CartController(CartBizImpl cartBizImpl) {
 		this.cartBizImpl = cartBizImpl;
 	}
-	
-	
+
+
 	@PostMapping("/save-cart")
     public String saveCart(@RequestBody Map cartDTO, HttpSession session) {
         // CartDTO 데이터를 저장

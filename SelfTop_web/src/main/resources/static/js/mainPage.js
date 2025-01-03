@@ -38,10 +38,13 @@ document.addEventListener("DOMContentLoaded", () => {
             updateTotalPrice(); // 총 가격 즉각 업데이트
         });
     });
-    
+
     saveQuoteButton.addEventListener("click", () =>{
         const quoteName =quoteNameInput.value.trim();
 
+        //Json으로 변환
+        const jsonCart = JSON.stringify(currentCart);
+        console.log("json형식:"+jsonCart);
         if(!quoteName){
             alert("견적 이름을 입력하세요.");
             return;
@@ -50,24 +53,16 @@ document.addEventListener("DOMContentLoaded", () => {
         //견적 이름과 currentCart 저장
         currentCart['quoteName'] = quoteName;
 
-        console.log(currentCart);
-        console.log(typeof (currentCart));
-
-        let cartJson = JSON.stringify(currentCart);
-
-        console.log(cartJson);
-
-
         //입력 필드 초기화
         quoteNameInput.value="";
 
         //서버로 전송
-        fetch('/api/save-cart', {
+        fetch('http://localhost:8080/api/items', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: cartJson,
+            body: jsonCart,
         })
             .then((response) => {
                 if (!response.ok) {
@@ -76,18 +71,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 return response.json();
             })
             .then((data) => {
-                alert('견적이 저장되었습니다!');
+                alert('견적이 저장되었습니다.');
                 console.log('서버 응답:', data);
             })
             .catch((error) => {
                 console.error('저장 오류:', error);
                 alert('견적 저장 중 오류가 발생했습니다.');
             });
-    
+
         // 입력 필드 초기화
         quoteNameInput.value = '';
 
-       
+
     })
 
     toggleButton.addEventListener("click", () => {
