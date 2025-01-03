@@ -7,11 +7,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const components = document.querySelectorAll('.component');
     const selectedPartDiv = document.querySelector('.selected-part');
     const currentCartButton = document.getElementById("current-cart");
-    const savedQuoteSelect = document.querySelector('.saved-quote');
+   //const savedQuoteSelect = document.querySelector('.saved-quote');
+    const saveQuoteButton = document.getElementById("save-quote");
+    const quoteNameInput = document.getElementById("quote-name");
     const contentBox = document.querySelector('.content-box');
     const sortButtons = document.querySelectorAll('.sortBtn');
     let selectedSort = 'byname';
-
 	const topBoxSmall = document.querySelector('.top-box.small');
 	const topBoxLarge = document.querySelector('.top-box.large');
     const radioButtons = document.querySelectorAll('input[name="assembly"]');
@@ -24,22 +25,65 @@ document.addEventListener("DOMContentLoaded", () => {
                 // 조립 신청이 선택되었을 때
                 if (!isAssemblyRequested) {
                     isAssemblyRequested = true;
-                    addAssemblyPrice();
+                    currentCart['assembly'] = { name: '조립 서비스', price: assemblyPrice, quantity: 1 };
                 }
             } else if (radio.value === 'not_requested' && radio.checked) {
                 // 조립 미신청이 선택되었을 때
                 if (isAssemblyRequested) {
                     isAssemblyRequested = false;
-                    removeAssemblyPrice();
+                    delete currentCart['assembly'];
                 }
             }
+            updateTotalPrice(); // 총 가격 즉각 업데이트
         });
     });
+    
+    saveQuoteButton.addEventListener("click", () =>{
+        const quoteName =quoteNameInput.value.trim();
+
+        if(!quoteName){
+            alert("견적 이름을 입력하세요.");
+            return;
+        }
+
+        //견적 이름과 currentCart 저장
+        currentCart['quoteName'] = quoteName;
+
+        //입력 필드 초기화
+        quoteNameInput.value="";
+
+        //서버로 전송
+        fetch('/api/save-cart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: jsonCart,
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('견적 저장 실패');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                alert('견적이 저장되었습니다!');
+                console.log('서버 응답:', data);
+            })
+            .catch((error) => {
+                console.error('저장 오류:', error);
+                alert('견적 저장 중 오류가 발생했습니다.');
+            });
+    
+        // 입력 필드 초기화
+        quoteNameInput.value = '';
+
+       
+    })
 
     toggleButton.addEventListener("click", () => {
         sidePanel.classList.toggle("active");
     });
-
 
     //사이드 패널에서 카테고리를 골랐을때 동작
     components.forEach(component => {
@@ -546,6 +590,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // 수량 버튼 생성 및 총 가격 업데이트 함수
     function createQuantityControls(productPrice) {
         const container = document.createElement('div');
         container.classList.add('product-quantity'); // 수량 컨트롤을 포함하는 컨테이너
@@ -587,7 +632,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 quantityInput.value = quantity;
                 updatePriceDisplay(quantity, productPrice, priceDisplay);
                 updateCartQuantity(quantity);
-                updateTotalPrice(); // 총합 즉각 업데이트
+                updateTotalPrice(); // 총합 업데이트
             }
         });
 
@@ -598,7 +643,7 @@ document.addEventListener("DOMContentLoaded", () => {
             quantityInput.value = quantity;
             updatePriceDisplay(quantity, productPrice, priceDisplay);
             updateCartQuantity(quantity);
-            updateTotalPrice(); // 총합 즉각 업데이트
+            updateTotalPrice(); // 총합 업데이트
         });
 
         quantityInput.addEventListener('input', (event) => {
@@ -610,7 +655,7 @@ document.addEventListener("DOMContentLoaded", () => {
             quantityInput.value = quantity;
             updatePriceDisplay(quantity, productPrice, priceDisplay);
             updateCartQuantity(quantity);
-            updateTotalPrice(); // 총합 즉각 업데이트
+            updateTotalPrice(); // 총합 업데이트
         });
 
         return controlsWrapper;
@@ -642,6 +687,7 @@ document.addEventListener("DOMContentLoaded", () => {
         delete currentCart[component]; // 컴포넌트 제거
     };
 
+    /*
     savedQuoteSelect.addEventListener('change', () => {
         const selectedOption = savedQuoteSelect.value;
         // 선택된 견적 로드
@@ -649,8 +695,11 @@ document.addEventListener("DOMContentLoaded", () => {
             loadQuote(savedQuotes[selectedOption]); // 예제에서 savedQuotes를 정의하고 사용해야 함
         }
     });
+    */
 
     currentCartButton.addEventListener('click', () => {
+        console.log(currentCart);
+
         loadCurrentCart();
     });
 
@@ -675,14 +724,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const totalPriceElement = document.querySelector('.total-price');
         let currentTotal = parseInt(totalPriceElement.textContent.replace(/[^0-9]/g, '')) || 0;
         currentTotal += assemblyPrice;
-        totalPriceElement.textContent = `${currentTotal.toLocaleString()}원`;
-    }
-
-    // 조립 신청 금액 제거 함수
-    function removeAssemblyPrice() {
-        const totalPriceElement = document.querySelector('.total-price');
-        let currentTotal = parseInt(totalPriceElement.textContent.replace(/[^0-9]/g, '')) || 0;
-        currentTotal -= assemblyPrice;
         totalPriceElement.textContent = `${currentTotal.toLocaleString()}원`;
     }
 
@@ -785,7 +826,6 @@ function goPayPage(){
 }
 
 /*-----호환성체크 모달 코드----- */
-
 // 모달 제어 스크립트
 const modal = document.getElementById('modal');
 const openModal = document.getElementById('openModalBtn');
@@ -801,3 +841,11 @@ window.addEventListener('click', (event) => {
         modal.style.display = 'none';
     }
 });
+
+/*---currentCart Json타입 변경---*/
+
+//Json 문자열로 변환
+const jsonCart = JSON.stringify(currentCart);
+
+
+
