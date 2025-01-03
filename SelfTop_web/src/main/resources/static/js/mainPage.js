@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const assemblyPrice = 20000; // 조립 신청 시 추가금액
     let isAssemblyRequested = false; // 현재 조립 신청 상태
 
+    // 조립 신청 여부 체크
     radioButtons.forEach(radio => {
         radio.addEventListener('change', () => {
             if (radio.value === 'requested' && radio.checked) {
@@ -49,6 +50,14 @@ document.addEventListener("DOMContentLoaded", () => {
         //견적 이름과 currentCart 저장
         currentCart['quoteName'] = quoteName;
 
+        console.log(currentCart);
+        console.log(typeof (currentCart));
+
+        let cartJson = JSON.stringify(currentCart);
+
+        console.log(cartJson);
+
+
         //입력 필드 초기화
         quoteNameInput.value="";
 
@@ -58,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: jsonCart,
+            body: cartJson,
         })
             .then((response) => {
                 if (!response.ok) {
@@ -841,11 +850,4 @@ window.addEventListener('click', (event) => {
         modal.style.display = 'none';
     }
 });
-
-/*---currentCart Json타입 변경---*/
-
-//Json 문자열로 변환
-const jsonCart = JSON.stringify(currentCart);
-
-
 
