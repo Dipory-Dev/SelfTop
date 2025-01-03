@@ -26,13 +26,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 // 조립 신청이 선택되었을 때
                 if (!isAssemblyRequested) {
                     isAssemblyRequested = true;
-                    currentCart['assembly'] = { name: '조립 서비스', price: assemblyPrice, quantity: 1 };
+                    currentCart['assembly_price'] = 20000;
                 }
             } else if (radio.value === 'not_requested' && radio.checked) {
                 // 조립 미신청이 선택되었을 때
                 if (isAssemblyRequested) {
                     isAssemblyRequested = false;
-                    delete currentCart['assembly'];
+                    delete currentCart['assembly_price'];
                 }
             }
             updateTotalPrice(); // 총 가격 즉각 업데이트
@@ -42,17 +42,19 @@ document.addEventListener("DOMContentLoaded", () => {
     saveQuoteButton.addEventListener("click", () =>{
         const quoteName =quoteNameInput.value.trim();
 
-        //Json으로 변환
-        const jsonCart = JSON.stringify(currentCart);
-        console.log("json형식:"+jsonCart);
+        //견적 이름과 currentCart 저장
+        currentCart['quoteName'] = quoteName;
+
         if(!quoteName){
             alert("견적 이름을 입력하세요.");
             return;
         }
-
-        //견적 이름과 currentCart 저장
+        // 견적 이름 및 조립 신청 여부를 currentCart에 추가
         currentCart['quoteName'] = quoteName;
-
+        currentCart['assemblyStatus'] = isAssemblyRequested ? '조립 신청' : '조립 미신청';
+        // JSON으로 변환
+        const jsonCart = JSON.stringify(currentCart);
+        console.log("json형식:", jsonCart);
         //입력 필드 초기화
         quoteNameInput.value="";
 
@@ -65,24 +67,26 @@ document.addEventListener("DOMContentLoaded", () => {
             body: jsonCart,
         })
             .then((response) => {
+                if (response.status === 401) {
+                    // 로그인이 필요한 경우
+                    return response.json().then(data => {
+                        alert(data.msg);
+                        window.location.href = data.url;
+                    });
+                }
                 if (!response.ok) {
                     throw new Error('견적 저장 실패');
                 }
                 return response.json();
             })
             .then((data) => {
-                alert('견적이 저장되었습니다.');
-                console.log('서버 응답:', data);
+                alert(data.msg);
+                window.location.href = data.url;
             })
             .catch((error) => {
                 console.error('저장 오류:', error);
                 alert('견적 저장 중 오류가 발생했습니다.');
             });
-
-        // 입력 필드 초기화
-        quoteNameInput.value = '';
-
-
     })
 
     toggleButton.addEventListener("click", () => {
@@ -504,7 +508,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         ${product.price ? `${product.price}원` : '품절'}
                         <div><span class="stars">★★★★★</span></div>
                         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px;">
-                            <button class="btn add-to-cart" data-product-name="${product.product_name}" data-product-price="${product.price}">담기</button>
+                            <button class="btn add-to-cart" data-product-code="${product.product_code}" data-product-name="${product.product_name}" data-product-price="${product.price}">담기</button>
                             <button class="btn buy-now">바로구매</button>
                         </div>
                     </div>
@@ -541,7 +545,8 @@ document.addEventListener("DOMContentLoaded", () => {
             button.addEventListener('click', () => {
                 const productName = button.getAttribute('data-product-name'); // 상품명 가져오기
                 const productPrice = button.getAttribute('data-product-price'); // 가격 가져오기
-                addToCart(productName, productPrice);
+                const productCode = button.getAttribute('data-product-code');
+                addToCart(productName, productPrice, productCode);
             });
         });
     }
@@ -552,7 +557,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 는 함수
-    function addToCart(productName, productPrice) {
+    function addToCart(productName, productPrice, productCode) {
         const activeComponent = document.querySelector('.component.active');
 
         if (activeComponent) {
@@ -571,6 +576,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // 장바구니에 추가
             const componentName = activeComponent.dataset.component;
             currentCart[componentName] = {
+                product_code: productCode,
                 name: productName,
                 price: parseInt(productPrice),
                 quantity: 1, // 기본 수량 :1
