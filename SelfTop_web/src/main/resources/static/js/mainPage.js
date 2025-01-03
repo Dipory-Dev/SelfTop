@@ -18,6 +18,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const radioButtons = document.querySelectorAll('input[name="assembly"]');
     const assemblyPrice = 20000; // 조립 신청 시 추가금액
     let isAssemblyRequested = false; // 현재 조립 신청 상태
+	
+	// mainPage처음 들어왔을때 CPU가 자동으로 선택되도록 설정
+    const cpuComponent = document.querySelector('.component[data-component="CPU"]');
+    if (cpuComponent) {
+        cpuComponent.classList.add('active'); // 'active' 클래스를 추가하여 선택 표시
+        fetchProducts('CPU'); // CPU 제품 목록을 가져오는 함수 호출
+        displayCpuDetails(); // CPU 세부 정보 표시
+        fetchCpuAttributes(); // CPU 속성 정보를 가져오는 함수 호출
+    }
 
     radioButtons.forEach(radio => {
         radio.addEventListener('change', () => {
