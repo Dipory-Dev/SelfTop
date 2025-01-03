@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const sortButtons = document.querySelectorAll('.sortBtn');
     let selectedSort = 'byname';
 
+	const categoryCountElement = document.getElementById('category-count');
 	const topBoxSmall = document.querySelector('.top-box.small');
 	const topBoxLarge = document.querySelector('.top-box.large');
     const radioButtons = document.querySelectorAll('input[name="assembly"]');
@@ -434,6 +435,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	        if (!response.ok) {
 	            console.error('Server responded with:', response.status, response.statusText);
 	            contentBox.innerHTML = `<p>Error loading products: ${response.statusText}</p>`; // 에러 메시지 업데이트
+	            categoryCountElement.textContent = `${component.toUpperCase()}: 0개`; // 제품이 없는 경우에도 카운트를 0으로 설정
 	            return Promise.reject(response.statusText);
 	        }
 	        return response.json();
@@ -441,6 +443,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	    .then(products => {
 	        if (products.length === 0) {
 	            contentBox.innerHTML = `<p>조건에 맞는 ${component.toUpperCase()} 아이템을 찾을 수 없습니다.</p>`;
+	            categoryCountElement.textContent = `${component.toUpperCase()}: 0개`; // 제품이 없는 경우에도 카운트를 0으로 설정
 	        } else {
 	            displayProducts(products, component);
 	        }
@@ -448,6 +451,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	    .catch(error => {
 	        console.error('Error fetching filtered products:', error);
 	        contentBox.innerHTML = `<p>조건에 맞는 ${component.toUpperCase()} 아이템을 찾을 수 없습니다.</p>`;
+	        categoryCountElement.textContent = `${component.toUpperCase()}: 0개`; // 오류 발생 시에도 카운트를 0으로 설정
 	    });
 	}
 
@@ -487,8 +491,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// 제품 정보를 콘텐츠 박스에 동적으로 표시하는 함수
 	function displayProducts(products, component) {
-	    if (!products || products.length === 0) {
-	        contentBox.innerHTML = `<p>${component.toUpperCase()} 아이템을 찾을 수 없습니다.</p>`;
+		if (!products || products.length === 0) {
+	        contentBox.innerHTML = `<p>No products found for ${component.toUpperCase()}.</p>`;
+	        categoryCountElement.textContent = `${component.toUpperCase()}: 0개`;
 	        return;
 	    }
 
@@ -517,6 +522,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	    htmlContent += `</div>`;
 	    contentBox.innerHTML = htmlContent;
+		categoryCountElement.textContent = `${component.toUpperCase()}: ${products.length}개`; // 제품 개수 업데이트
 
         // 바로구매 버튼 클릭 이벤트
         contentBox.querySelectorAll('.buy-now').forEach(button => {
