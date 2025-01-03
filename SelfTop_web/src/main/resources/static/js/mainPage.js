@@ -40,7 +40,10 @@ document.addEventListener("DOMContentLoaded", () => {
     
     saveQuoteButton.addEventListener("click", () =>{
         const quoteName =quoteNameInput.value.trim();
-
+       
+        //Json으로 변환
+        const jsonCart = JSON.stringify(currentCart);
+        console.log("json형식:"+jsonCart);
         if(!quoteName){
             alert("견적 이름을 입력하세요.");
             return;
@@ -53,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
         quoteNameInput.value="";
 
         //서버로 전송
-        fetch('/api/save-cart', {
+        fetch('http://localhost:8080/api/items', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -67,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return response.json();
             })
             .then((data) => {
-                alert('견적이 저장되었습니다!');
+                alert('견적이 저장되었습니다.');
                 console.log('서버 응답:', data);
             })
             .catch((error) => {
@@ -832,11 +835,3 @@ window.addEventListener('click', (event) => {
         modal.style.display = 'none';
     }
 });
-
-/*---currentCart Json타입 변경---*/
-
-//Json 문자열로 변환
-const jsonCart = JSON.stringify(currentCart);
-
-
-
