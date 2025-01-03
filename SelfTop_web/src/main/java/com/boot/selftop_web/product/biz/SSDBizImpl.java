@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service("SSD")
 public class SSDBizImpl implements ProductBiz<SSDDto> {
@@ -53,5 +54,15 @@ public class SSDBizImpl implements ProductBiz<SSDDto> {
         return results;
     }
 
+	@Override
+	public List<SSDDto> filterProducts(Map<String, List<String>> filters) {
+		try {
+            return ssdMapper.findFilteredSSDs(filters);
+        } catch (Exception e) {
+            System.err.println("Error filtering SSDs with filters: " + filters + "\nError: " + e.getMessage());
+            e.printStackTrace(); // 스택 추적을 통해 더 자세한 오류 정보 제공
+            throw new RuntimeException("Error processing SSD filter", e);
+        }
+	}
 
 }

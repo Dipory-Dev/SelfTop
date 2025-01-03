@@ -13,11 +13,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const contentBox = document.querySelector('.content-box');
     const sortButtons = document.querySelectorAll('.sortBtn');
     let selectedSort = 'byname';
+
+	const categoryCountElement = document.getElementById('category-count');
 	const topBoxSmall = document.querySelector('.top-box.small');
 	const topBoxLarge = document.querySelector('.top-box.large');
     const radioButtons = document.querySelectorAll('input[name="assembly"]');
     const assemblyPrice = 20000; // 조립 신청 시 추가금액
     let isAssemblyRequested = false; // 현재 조립 신청 상태
+
+	// mainPage처음 들어왔을때 CPU가 자동으로 선택되도록 설정
+    const cpuComponent = document.querySelector('.component[data-component="CPU"]');
+    if (cpuComponent) {
+        cpuComponent.classList.add('active'); // 'active' 클래스를 추가하여 선택 표시
+        fetchProducts('CPU'); // CPU 제품 목록을 가져오는 함수 호출
+        displayCpuDetails(); // CPU 세부 정보 표시
+        fetchCpuAttributes(); // CPU 속성 정보를 가져오는 함수 호출
+    }
 
     // 조립 신청 여부 체크
     radioButtons.forEach(radio => {
@@ -147,9 +158,9 @@ document.addEventListener("DOMContentLoaded", () => {
 		    <div><strong>DDR</strong></div>
 		    <div><strong>Generation</strong></div>
 		    <div><strong>Spec</strong></div>
-		    <div><strong>Inner VGA</strong></div>
-		    <div><strong>Package Type</strong></div>
-		    <div><strong>Cooler Status</strong></div>
+		    <div><strong>Inner_VGA</strong></div>
+		    <div><strong>Package_Type</strong></div>
+		    <div><strong>Cooler_Status</strong></div>
 		    <div><strong>Core</strong></div>
 		    <div><strong>Company</strong></div>
 		`;
@@ -166,7 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     function displayCpuAttributes(data) {
         // Display 순서를 정의
-        const order = ["Socket", "DDR", "Generation", "Spec", "Inner VGA", "Package Type", "Cooler Status", "Core", "Company"];
+        const order = ["Socket", "DDR", "Generation", "Spec", "Inner_VGA", "Package_Type", "Cooler_Status", "Core", "Company"];
         let attributesHtml = '';
         // 정의된 순서대로 데이터를 표시
         order.forEach(key => {
@@ -279,7 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //쿨러의 필터를 html에 보여주는 기능
     function displayCoolerDetails() {
         let detailsHtml = `
-			<div><strong>Cooler Type</strong></div>
+			<div><strong>Cooler_Type</strong></div>
 		    <div><strong>Socket</strong></div>
 			<div><strong>Company</strong></div>
 		`;
@@ -294,7 +305,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(error => console.error('Error fetching Cooler attributes:', error));
     }
     function displayCoolerAttributes(data) {
-        const order = ["Cooler Type", "Socket", "Company"];
+        const order = ["Cooler_Type", "Socket", "Company"];
         let attributesHtml = '';
         order.forEach(key => {
             if(data[key]) {
@@ -312,9 +323,9 @@ document.addEventListener("DOMContentLoaded", () => {
         let detailsHtml = `
 			<div><strong>Socket</strong></div>
 		    <div><strong>Formfactor</strong></div>
-			<div><strong>Memory Slot</strong></div>
+			<div><strong>Memory_Slot</strong></div>
 			<div><strong>DDR</strong></div>
-			<div><strong>Max Storage</strong></div>
+			<div><strong>Max_Storage</strong></div>
 			<div><strong>Company</strong></div>
 		`;
         topBoxSmall.innerHTML = detailsHtml;
@@ -328,7 +339,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(error => console.error('Error fetching MAINBOARD attributes:', error));
     }
     function displayMainBoardAttributes(data) {
-        const order = ["Socket", "Formfactor", "Memory Slot", "DDR", "Max Storage", "Company"];
+        const order = ["Socket", "Formfactor", "Memory_Slot", "DDR", "Max_Storage", "Company"];
         let attributesHtml = '';
         order.forEach(key => {
             if(data[key]) {
@@ -414,11 +425,11 @@ document.addEventListener("DOMContentLoaded", () => {
     //케이스의 필터를 html에 보여주는 기능
     function displayCaseDetails() {
         let detailsHtml = `
-			<div><strong>Power Status</strong></div>
+			<div><strong>Power_Status</strong></div>
 		    <div><strong>Formfactor</strong></div>
-			<div><strong>Tower Size</strong></div>
-			<div><strong>VGA Length</strong></div>
-			<div><strong>Power Size</strong></div>
+			<div><strong>Tower_Size</strong></div>
+			<div><strong>VGA_Length</strong></div>
+			<div><strong>Power_Size</strong></div>
 			<div><strong>Company</strong></div>
 		`;
         topBoxSmall.innerHTML = detailsHtml;
@@ -432,7 +443,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(error => console.error('Error fetching CASE attributes:', error));
     }
     function displayCaseAttributes(data) {
-        const order = ["Power Status", "Formfactor", "Tower Size", "VGA Length", "Power Size", "Company"];
+        const order = ["Power_Status", "Formfactor", "Tower_Size", "VGA_Length", "Power_Size", "Company"];
         let attributesHtml = '';
         order.forEach(key => {
             if(data[key]) {
@@ -446,8 +457,67 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* filter에 따라 content-box에 보여주는 아이템을 변화하는 기능 */
+	// 기존 코드에서 체크박스에 대한 이벤트 리스너 등록
 
+	topBoxLarge.addEventListener('change', function(event) {
+	    if (event.target.type === 'checkbox') {
+	        const activeComponent = document.querySelector('.component.active');
+	        if (activeComponent) {
+	            filterProducts(activeComponent.dataset.component);
+	        }
+	    }
+	});
 
+	// 필터링된 제품을 불러오는 함수
+	function filterProducts(component) {
+	    const filters = {};
+	    document.querySelectorAll('.top-box.large input[type="checkbox"]:checked').forEach(checkbox => {
+	        const key = checkbox.name;
+	        const value = checkbox.value;
+	        if (!filters[key]) {
+	            filters[key] = [];
+	        }
+	        filters[key].push(value);
+	    });
+
+	    fetchFilteredProducts(component, filters);
+	}
+
+	// 서버에 필터링 요청을 보내는 함수
+	function fetchFilteredProducts(component, filters) {
+	    console.log('Sending filters to server:', JSON.stringify(filters)); // 필터 데이터 로깅
+	    fetch(`/api/products/filter/${component}`, {
+	        method: 'POST',
+	        headers: {
+	            'Content-Type': 'application/json'
+	        },
+	        body: JSON.stringify(filters) // filters 객체를 직접 보내도록 수정
+	    })
+	    .then(response => {
+	        if (!response.ok) {
+	            console.error('Server responded with:', response.status, response.statusText);
+	            contentBox.innerHTML = `<p>Error loading products: ${response.statusText}</p>`; // 에러 메시지 업데이트
+	            categoryCountElement.textContent = `${component.toUpperCase()}: 0개`; // 제품이 없는 경우에도 카운트를 0으로 설정
+	            return Promise.reject(response.statusText);
+	        }
+	        return response.json();
+	    })
+	    .then(products => {
+	        if (products.length === 0) {
+	            contentBox.innerHTML = `<p>조건에 맞는 ${component.toUpperCase()} 아이템을 찾을 수 없습니다.</p>`;
+	            categoryCountElement.textContent = `${component.toUpperCase()}: 0개`; // 제품이 없는 경우에도 카운트를 0으로 설정
+	        } else {
+	            displayProducts(products, component);
+	        }
+	    })
+	    .catch(error => {
+	        console.error('Error fetching filtered products:', error);
+	        contentBox.innerHTML = `<p>조건에 맞는 ${component.toUpperCase()} 아이템을 찾을 수 없습니다.</p>`;
+	        categoryCountElement.textContent = `${component.toUpperCase()}: 0개`; // 오류 발생 시에도 카운트를 0으로 설정
+	    });
+	}
+
+	/* 제품 정렬 기능 */
     // 정렬 목록 클릭 이벤트
     sortButtons.forEach(button => {
         button.addEventListener('click', function (event) {
@@ -483,8 +553,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// 제품 정보를 콘텐츠 박스에 동적으로 표시하는 함수
 	function displayProducts(products, component) {
-	    if (!products || products.length === 0) {
+		if (!products || products.length === 0) {
 	        contentBox.innerHTML = `<p>No products found for ${component.toUpperCase()}.</p>`;
+	        categoryCountElement.textContent = `${component.toUpperCase()}: 0개`;
 	        return;
 	    }
 
@@ -516,8 +587,9 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
         });
 
-        htmlContent += `</div>`;
-        contentBox.innerHTML = htmlContent;
+	    htmlContent += `</div>`;
+	    contentBox.innerHTML = htmlContent;
+		categoryCountElement.textContent = `${component.toUpperCase()}: ${products.length}개`; // 제품 개수 업데이트
 
         // 바로구매 버튼 클릭 이벤트
         contentBox.querySelectorAll('.buy-now').forEach(button => {

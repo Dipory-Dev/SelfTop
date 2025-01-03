@@ -14,12 +14,14 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,6 +31,7 @@ import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
 import com.boot.selftop_web.product.biz.ProductBiz;
 import com.boot.selftop_web.product.biz.ProductBizFactory;
 import com.boot.selftop_web.product.biz.mapper.ProductMapper;
+import com.boot.selftop_web.product.model.dto.ProductDto;
 import com.boot.selftop_web.quote.biz.QuoteBiz;
 import com.boot.selftop_web.quote.model.dto.QuoteDetailDto;
 import com.boot.selftop_web.quote.model.dto.QuoteDto;
@@ -458,9 +461,9 @@ public class CustomerController {
 	    attributes.put("DDR", productMapper.findAllcpuDdr());
         attributes.put("Generation", productMapper.findAllcpuGeneration());
 	    attributes.put("Spec", productMapper.findAllcpuSpec());
-	    attributes.put("Inner VGA", productMapper.findAllcpuInnerVga());
-	    attributes.put("Package Type", productMapper.findAllcpuPackageType());
-	    attributes.put("Cooler Status", productMapper.findAllcpuCoolerStatus());
+	    attributes.put("Inner_VGA", productMapper.findAllcpuInnerVga());
+	    attributes.put("Package_Type", productMapper.findAllcpuPackageType());
+	    attributes.put("Cooler_Status", productMapper.findAllcpuCoolerStatus());
 	    attributes.put("Core", productMapper.findAllcpuCore());
 	    attributes.put("Company", productMapper.findAllcpuCompany());
 	    return ResponseEntity.ok(attributes);
@@ -499,7 +502,7 @@ public class CustomerController {
 	@GetMapping("/api/cooler/attributes")
 	public ResponseEntity<Map<String, List<String>>> getCoolerAttributes() {
 	    Map<String, List<String>> attributes = new HashMap<>();
-	    attributes.put("Cooler Type", productMapper.findAllcoolerCooler_Type());
+	    attributes.put("Cooler_Type", productMapper.findAllcoolerCooler_Type());
 	    attributes.put("Socket", productMapper.findAllcoolerSocket());
 	    attributes.put("Company", productMapper.findAllcoolerCompany());
 	    return ResponseEntity.ok(attributes);
@@ -510,7 +513,7 @@ public class CustomerController {
 	    Map<String, List<String>> attributes = new HashMap<>();
 	    attributes.put("Socket", productMapper.findAllmainboardSocket());
 	    attributes.put("Formfactor", productMapper.findAllmainboardFormfactor());
-	    attributes.put("Memory Slot", productMapper.findAllmainboardMemory_Slot());
+	    attributes.put("Memory_Slot", productMapper.findAllmainboardMemory_Slot());
 	    attributes.put("DDR", productMapper.findAllmainboardDdr());
 	    attributes.put("Max_Storage", productMapper.findAllmainboardMax_Storage());
 	    attributes.put("Company", productMapper.findAllmainboardCompany());
@@ -539,17 +542,35 @@ public class CustomerController {
 	@GetMapping("/api/case/attributes")
 	public ResponseEntity<Map<String, List<String>>> getCaseAttributes() {
 	    Map<String, List<String>> attributes = new HashMap<>();
-	    attributes.put("Power Status", productMapper.findAllcasePower_Status());
+	    attributes.put("Power_Status", productMapper.findAllcasePower_Status());
 	    attributes.put("Formfactor", productMapper.findAllcaseFormfactor());
-	    attributes.put("Tower Size", productMapper.findAllcaseTower_Size());
-	    attributes.put("VGA Length", productMapper.findAllcaseVga_Length());
-	    attributes.put("Power Size", productMapper.findAllcasePower_Size());
+	    attributes.put("Tower_Size", productMapper.findAllcaseTower_Size());
+	    attributes.put("VGA_Length", productMapper.findAllcaseVga_Length());
+	    attributes.put("Power_Size", productMapper.findAllcasePower_Size());
 	    attributes.put("Company", productMapper.findAllcaseCompany());
 	    return ResponseEntity.ok(attributes);
 	}
 
 	//필터에 선택된 체크박스에 따라 데이터를 넘겨줌
+	@PostMapping("/api/products/filter/{category}")
+	public ResponseEntity<?> filterProducts(@PathVariable String category, @RequestBody Map<String, List<String>> filters) {
+	    System.out.println("Received filters: " + filters);
+	    ProductBiz<?> productBiz = productBizFactory.getBiz(category);
+	    if (productBiz == null) {
+	        return ResponseEntity.badRequest().body("Invalid category: " + category);
+	    }
 
+	    try {
+	        List<?> filteredProducts = productBiz.filterProducts(filters);
+	        if (filteredProducts.isEmpty()) {
+	            return ResponseEntity.noContent().build();
+	        }
+	        return ResponseEntity.ok(filteredProducts);
+	    } catch (Exception e) {
+	        System.err.println("Server side error during filtering: " + e.getMessage());
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing request");
+	    }
+	}
 
 	// side-panel에서 부품을 선택하면 카테고리로 설정해 content-box안에 부품들을 리스트해서 보여줌
 	@Autowired

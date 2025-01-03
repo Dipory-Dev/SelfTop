@@ -160,9 +160,6 @@ public interface ProductMapper {
     @Select("SELECT DISTINCT p.company FROM product p JOIN case_board cb ON p.product_code = cb.product_code WHERE p.category = '케이스'")
     List<String> findAllcaseCompany();
 
-    //필터링한 데이터를 가져오는 쿼리문
-
-
     //product테이블에서 가져오는 쿼리문
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
