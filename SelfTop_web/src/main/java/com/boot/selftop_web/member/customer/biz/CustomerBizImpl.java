@@ -97,7 +97,8 @@ public class CustomerBizImpl implements CustomerBiz {
 		// TODO Auto-generated method stub
 		return mapper.searchcustomerorderlist(startdate,enddate,member_no);
 	}
-
+	
+	
 	// 결제 관련 메서드 추가
 
     /**

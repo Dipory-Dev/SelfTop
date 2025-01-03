@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.boot.selftop_web.member.customer.biz.CustomerBiz;
+import com.boot.selftop_web.member.customer.biz.CustomerBizImpl;
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
 import com.boot.selftop_web.product.biz.ProductBiz;
 import com.boot.selftop_web.product.biz.ProductBizFactory;
@@ -55,6 +55,7 @@ public class CustomerController {
 
 	@Autowired
 	private QuoteBiz quoteBiz;
+	
 	@GetMapping("/loginform")
     public String LoginSection(HttpSession session) {
 		if(session.getAttribute("member_no") != null) {
@@ -176,7 +177,8 @@ public class CustomerController {
 	}
 
 	@GetMapping("/main")
-	public String SelfTopMain() {
+	public String SelfTopMain(Model model) {
+		
 		return "mainPage";
 	}
 
