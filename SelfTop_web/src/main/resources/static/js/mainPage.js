@@ -544,6 +544,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	        })
 	        .then(products => {
 	            displayProducts(products, component);
+				console.log(products);
 	        })
 	        .catch(error => {
 	            console.error('Error loading products:', error);
@@ -571,7 +572,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <a style="cursor: pointer" onclick="showPopup(${product.product_code}, '${component}')">
                                     ${product.product_name}
                                 </a>
-                            </div>
+							<div class="product-stock">${product.stock}</div>
                             <div style="color: #666; font-size: 0.9em; width: 1000px;">${product.etc}</div>
                         </div>
                     </div>
@@ -598,17 +599,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 const productName = productDiv.querySelector('.product-info').textContent.trim();
                 const productPrice = productDiv.querySelector('.product-price').childNodes[0].textContent.trim().replace('원', '');
                 const productThumbnail = productDiv.querySelector('img').src;
+				const productStock = productDiv.querySelector('.product-stock').textContent.trim();
 
                 const productInfo = {
                     thumbnail: productThumbnail,
                     category: component,
                     name: productName,
                     price: productPrice,
-                    quantity: 1
+                    quantity: 1,
+					stock: productStock
                 };
                 localStorage.setItem('selectedProduct', JSON.stringify(productInfo));
 
-                location.href = '/pay';
+				if(productPrice=="품절") {
+					alert("재고가 없어 결제할 수 없습니다!");
+				}else{
+                	location.href = '/pay';
+				}
             });
         });
 
@@ -904,7 +911,15 @@ function resetCart(){
 }
 
 function goPayPage(){
-    window.location.href = "/pay";
+	//모든 컴포넌트 초기화
+    const components = document.querySelectorAll('.component');
+    components.forEach(component =>{
+        const productDetail = component.querySelector('#product-detail');
+        const productPriceDiv = component.querySelector('#product-price');
+		console.log(component+" : "+productDetail);
+		console.log(productPriceDiv);
+    })
+    //window.location.href = "/pay";
 }
 
 /*-----호환성체크 모달 코드----- */
