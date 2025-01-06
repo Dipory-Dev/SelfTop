@@ -2,6 +2,8 @@ package com.boot.selftop_web.quote.biz.mapper;
 
 import java.util.List;
 
+import com.boot.selftop_web.quote.model.dto.CartDTO;
+import com.boot.selftop_web.quote.model.dto.CartDetailDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -33,4 +35,10 @@ public interface QuoteMapper {
 			+ " JOIN PRODUCT_STATUS ps ON ps.PRODUCT_CODE =qd.PRODUCT_CODE "
 			+ " WHERE quote_no=#{quote_no}")
 	List<QuoteDetailDto> QuoteDetailinfo(@Param("quote_no")int quote_no);
+
+	@Select("SELECT * FROM QUOTE q WHERE q.CUSTOMER_NO = #{member_no} ORDER BY q.QUOTE_NO desc")
+	List<CartDTO> selectCart(@Param("member_no") int member_no);
+
+	@Select("select * from quote_detail where quote_no = #{quote_no}")
+	List<CartDetailDto> selectCartDetail(@Param("quote_no")int quote_no);
 }

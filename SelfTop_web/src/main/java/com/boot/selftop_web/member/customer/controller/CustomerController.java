@@ -3,6 +3,8 @@ package com.boot.selftop_web.member.customer.controller;
 import com.boot.selftop_web.member.customer.biz.KakaoService;
 import com.boot.selftop_web.product.biz.ProductInfoBizImpl;
 import com.boot.selftop_web.product.model.dto.ProductInfoDto;
+import com.boot.selftop_web.quote.model.dto.CartDTO;
+import com.boot.selftop_web.quote.model.dto.CartDetailDto;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
@@ -190,10 +192,30 @@ public class CustomerController {
 	}
 
 	@GetMapping("/main")
-	public String SelfTopMain(Model model) {
-		
+	public String SelfTopMain(HttpSession session, Model model) {
+		Integer member_no = (Integer) session.getAttribute("member_no");
+		if (member_no != null) {
+			List<CartDTO> cartList = quoteBiz.selectCart(member_no);
+			System.out.println(cartList);
+			model.addAttribute("cartList", cartList);
+		}
+
 		return "mainPage";
 	}
+
+	@GetMapping("/quote")
+	public ResponseEntity<?> selectCartDetail(@RequestParam("quote_no") int quote_no) {
+		System.out.println(quote_no);
+
+		List<CartDetailDto> quote_detail = quoteBiz.selectCartDetail(quote_no);
+		for (CartDetailDto cartDetailDto : quote_detail) {
+			quoteBiz.selectProduct(cartDetailDto.getProduct_code());
+		}
+
+		System.out.println("Quote_detail : " + quote_detail);
+		return null;
+	}
+
 
 	@GetMapping("/signup")
 	public String showSignUpForm() {
@@ -298,8 +320,8 @@ public class CustomerController {
 		Integer member_no = (Integer) session.getAttribute("member_no");
 		List<SellerOrderDto> res = customerBiz.selectcustomerorderlist(member_no);
 		List<CustomerorderDto> orderres = new ArrayList<>();
-		System.out.println(res.get(0).getAmount());
-		System.out.println(res.size());
+//		System.out.println(res.get(0).getAmount());
+//		System.out.println(res.size());
 
 		for (SellerOrderDto copyres : res) {
 			// 이미 orderres에 해당 order_no가 있는지 확인
