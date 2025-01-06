@@ -71,6 +71,11 @@ main{
     gap:1px;
 }
 
+.a-product-name:hover{
+    color:#008ADA;
+    transition:0.1s;
+}
+
 .quantity-controls-wrapper {
     display: flex;
     flex-direction: column;
@@ -489,6 +494,11 @@ li{
     float: left;
     list-style: none;
     border: 1px solid #ccc;
+}
+
+.sortBtn:hover{
+    background-color: #C7E6FF;
+    transition:0.3s;
 }
 
 .sortBtn.active{
