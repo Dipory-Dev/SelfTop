@@ -28,7 +28,8 @@ public class QuoteBizImpl implements QuoteBiz{
 
 	@Override
 	public List<CartDTO> selectCart(int member_no) {
-		return mapper.selectCart(member_no);
+//		return mapper.selectCart(member_no);
+		return null;
 	}
 
 }
