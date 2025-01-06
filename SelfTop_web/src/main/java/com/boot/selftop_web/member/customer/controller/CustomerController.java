@@ -1,6 +1,8 @@
 package com.boot.selftop_web.member.customer.controller;
 
 import com.boot.selftop_web.member.customer.biz.KakaoService;
+import com.boot.selftop_web.product.biz.ProductInfoBizImpl;
+import com.boot.selftop_web.product.model.dto.ProductInfoDto;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
@@ -12,12 +14,14 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,6 +31,7 @@ import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
 import com.boot.selftop_web.product.biz.ProductBiz;
 import com.boot.selftop_web.product.biz.ProductBizFactory;
 import com.boot.selftop_web.product.biz.mapper.ProductMapper;
+import com.boot.selftop_web.product.model.dto.ProductDto;
 import com.boot.selftop_web.quote.biz.QuoteBiz;
 import com.boot.selftop_web.quote.model.dto.QuoteDetailDto;
 import com.boot.selftop_web.quote.model.dto.QuoteDto;
@@ -34,7 +39,9 @@ import com.boot.selftop_web.member.customer.model.dto.CustomerorderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
 import com.boot.selftop_web.order.biz.OrderBoardBiz;
+import com.boot.selftop_web.order.biz.OrderDetailBiz;
 import com.boot.selftop_web.order.model.dto.OrderBoardDto;
+import com.boot.selftop_web.order.model.dto.OrderDetailDto;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -52,6 +59,12 @@ public class CustomerController {
 
 	@Autowired
 	private OrderBoardBiz orderboardBiz;
+	
+	@Autowired
+    private OrderDetailBiz orderDetailBiz;
+
+	@Autowired
+	private ProductInfoBizImpl productInfoBiz;
 
 	@Autowired
 	private QuoteBiz quoteBiz;
@@ -343,6 +356,50 @@ public class CustomerController {
 
 		return "customerorder";
 	}
+	
+	// 결제 성공 후 주문 정보를 저장하는 메서드
+	@PostMapping("/order/save")
+	public String saveOrder(@RequestParam int productCode,
+	                        @RequestParam int sellerNo,
+	                        @RequestParam int amount,
+	                        @RequestParam int orderPrice,
+	                        @RequestParam String customerName,  // 결제 후 고객 이름
+	                        @RequestParam String customerPhone, // 결제 후 고객 전화번호
+	                        @RequestParam String shippingAddress, // 결제 후 배송 주소
+	                        @RequestParam String zipCode, // 결제 후 우편번호
+	                        @RequestParam String orderId, // 결제 후 주문 번호
+	                        HttpSession session,
+	                        RedirectAttributes redirectAttributes) {
+
+	    Integer memberNo = (Integer) session.getAttribute("member_no");
+	    if (memberNo == null) {
+	        redirectAttributes.addFlashAttribute("message", "로그인 후 주문을 진행해주세요.");
+	        return "redirect:/loginform";
+	    }
+
+	    // 주문 정보를 OrderDetailDto 객체에 담기
+	    OrderDetailDto orderDetailDto = new OrderDetailDto();
+	    orderDetailDto.setCustomer_no(memberNo);  // 로그인한 사용자 번호
+	    orderDetailDto.setProduct_code(productCode);  // 상품 코드
+	    orderDetailDto.setSeller_no(sellerNo);  // 판매자 번호
+	    orderDetailDto.setAmount(amount);  // 주문 수량
+	    orderDetailDto.setOrder_price(orderPrice);  // 주문 금액
+	    //orderBoardDto.setCustomer_name(customerName);  // 고객 이름
+	    //orderDetailDto.setCustomer_phone(customerPhone);  // 고객 전화번호
+	    //orderDetailDto.setShipping_address(shippingAddress);  // 배송 주소
+	    //orderDetailDto.setZip_code(zipCode);  // 우편번호
+	    //orderDetailDto.setOrder_id(orderId);  // 결제 후 주문 번호
+
+	    // 주문 정보 저장
+	    try {
+	        orderDetailBiz.saveOrderDetail(orderDetailDto);  // OrderDetailBiz를 통해 저장
+	        redirectAttributes.addFlashAttribute("message", "주문이 성공적으로 처리되었습니다.");
+	    } catch (Exception e) {
+	        redirectAttributes.addFlashAttribute("message", "주문 처리 중 오류가 발생했습니다.");
+	    }
+
+	    return "redirect:/order/confirmation";  // 주문 확인 페이지로 리다이렉트
+	}
 
 	@GetMapping("/ordersearch")
 	public String searchorder(@RequestParam(required = false) String startdate, @RequestParam(required = false) String enddate,
@@ -453,9 +510,9 @@ public class CustomerController {
 	    attributes.put("DDR", productMapper.findAllcpuDdr());
         attributes.put("Generation", productMapper.findAllcpuGeneration());
 	    attributes.put("Spec", productMapper.findAllcpuSpec());
-	    attributes.put("Inner VGA", productMapper.findAllcpuInnerVga());
-	    attributes.put("Package Type", productMapper.findAllcpuPackageType());
-	    attributes.put("Cooler Status", productMapper.findAllcpuCoolerStatus());
+	    attributes.put("Inner_VGA", productMapper.findAllcpuInnerVga());
+	    attributes.put("Package_Type", productMapper.findAllcpuPackageType());
+	    attributes.put("Cooler_Status", productMapper.findAllcpuCoolerStatus());
 	    attributes.put("Core", productMapper.findAllcpuCore());
 	    attributes.put("Company", productMapper.findAllcpuCompany());
 	    return ResponseEntity.ok(attributes);
@@ -494,7 +551,7 @@ public class CustomerController {
 	@GetMapping("/api/cooler/attributes")
 	public ResponseEntity<Map<String, List<String>>> getCoolerAttributes() {
 	    Map<String, List<String>> attributes = new HashMap<>();
-	    attributes.put("Cooler Type", productMapper.findAllcoolerCooler_Type());
+	    attributes.put("Cooler_Type", productMapper.findAllcoolerCooler_Type());
 	    attributes.put("Socket", productMapper.findAllcoolerSocket());
 	    attributes.put("Company", productMapper.findAllcoolerCompany());
 	    return ResponseEntity.ok(attributes);
@@ -505,7 +562,7 @@ public class CustomerController {
 	    Map<String, List<String>> attributes = new HashMap<>();
 	    attributes.put("Socket", productMapper.findAllmainboardSocket());
 	    attributes.put("Formfactor", productMapper.findAllmainboardFormfactor());
-	    attributes.put("Memory Slot", productMapper.findAllmainboardMemory_Slot());
+	    attributes.put("Memory_Slot", productMapper.findAllmainboardMemory_Slot());
 	    attributes.put("DDR", productMapper.findAllmainboardDdr());
 	    attributes.put("Max_Storage", productMapper.findAllmainboardMax_Storage());
 	    attributes.put("Company", productMapper.findAllmainboardCompany());
@@ -534,17 +591,35 @@ public class CustomerController {
 	@GetMapping("/api/case/attributes")
 	public ResponseEntity<Map<String, List<String>>> getCaseAttributes() {
 	    Map<String, List<String>> attributes = new HashMap<>();
-	    attributes.put("Power Status", productMapper.findAllcasePower_Status());
+	    attributes.put("Power_Status", productMapper.findAllcasePower_Status());
 	    attributes.put("Formfactor", productMapper.findAllcaseFormfactor());
-	    attributes.put("Tower Size", productMapper.findAllcaseTower_Size());
-	    attributes.put("VGA Length", productMapper.findAllcaseVga_Length());
-	    attributes.put("Power Size", productMapper.findAllcasePower_Size());
+	    attributes.put("Tower_Size", productMapper.findAllcaseTower_Size());
+	    attributes.put("VGA_Length", productMapper.findAllcaseVga_Length());
+	    attributes.put("Power_Size", productMapper.findAllcasePower_Size());
 	    attributes.put("Company", productMapper.findAllcaseCompany());
 	    return ResponseEntity.ok(attributes);
 	}
 
 	//필터에 선택된 체크박스에 따라 데이터를 넘겨줌
+	@PostMapping("/api/products/filter/{category}")
+	public ResponseEntity<?> filterProducts(@PathVariable String category, @RequestBody Map<String, List<String>> filters) {
+	    System.out.println("Received filters: " + filters);
+	    ProductBiz<?> productBiz = productBizFactory.getBiz(category);
+	    if (productBiz == null) {
+	        return ResponseEntity.badRequest().body("Invalid category: " + category);
+	    }
 
+	    try {
+	        List<?> filteredProducts = productBiz.filterProducts(filters);
+	        if (filteredProducts.isEmpty()) {
+	            return ResponseEntity.noContent().build();
+	        }
+	        return ResponseEntity.ok(filteredProducts);
+	    } catch (Exception e) {
+	        System.err.println("Server side error during filtering: " + e.getMessage());
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing request");
+	    }
+	}
 
 	// side-panel에서 부품을 선택하면 카테고리로 설정해 content-box안에 부품들을 리스트해서 보여줌
 	@Autowired
@@ -612,5 +687,12 @@ public class CustomerController {
 		return selectres;
 	}
 
+	@GetMapping("/productDetail")
+	public String productDetail(Model model, @RequestParam("product_code") int product_code) {
+		ProductInfoDto dto = productInfoBiz.selectOne(product_code);
+		model.addAttribute("product", dto);
+
+		return "popup_product_info";
+	}
 
 }

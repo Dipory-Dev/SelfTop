@@ -13,46 +13,57 @@ document.addEventListener("DOMContentLoaded", () => {
     const contentBox = document.querySelector('.content-box');
     const sortButtons = document.querySelectorAll('.sortBtn');
     let selectedSort = 'byname';
+
+	const categoryCountElement = document.getElementById('category-count');
 	const topBoxSmall = document.querySelector('.top-box.small');
 	const topBoxLarge = document.querySelector('.top-box.large');
     const radioButtons = document.querySelectorAll('input[name="assembly"]');
     const assemblyPrice = 20000; // 조립 신청 시 추가금액
     let isAssemblyRequested = false; // 현재 조립 신청 상태
 
+	// mainPage처음 들어왔을때 CPU가 자동으로 선택되도록 설정
+    const cpuComponent = document.querySelector('.component[data-component="CPU"]');
+    if (cpuComponent) {
+        cpuComponent.classList.add('active'); // 'active' 클래스를 추가하여 선택 표시
+        fetchProducts('CPU'); // CPU 제품 목록을 가져오는 함수 호출
+        displayCpuDetails(); // CPU 세부 정보 표시
+        fetchCpuAttributes(); // CPU 속성 정보를 가져오는 함수 호출
+    }
+
+    // 조립 신청 여부 체크
     radioButtons.forEach(radio => {
         radio.addEventListener('change', () => {
             if (radio.value === 'requested' && radio.checked) {
-                // 조립 신청이 선택되었을 때
                 if (!isAssemblyRequested) {
                     isAssemblyRequested = true;
-                    currentCart['assembly'] = { name: '조립 서비스', price: assemblyPrice, quantity: 1 };
+                    currentCart['assembly_price'] = assemblyPrice;
                 }
             } else if (radio.value === 'not_requested' && radio.checked) {
-                // 조립 미신청이 선택되었을 때
                 if (isAssemblyRequested) {
                     isAssemblyRequested = false;
-                    delete currentCart['assembly'];
+                    delete currentCart['assembly_price'];
                 }
             }
             updateTotalPrice(); // 총 가격 즉시 업데이트
         });
     });
-    
+
     saveQuoteButton.addEventListener("click", () =>{
         const quoteName =quoteNameInput.value.trim();
-        
+
+        //견적 이름과 currentCart 저장
+        currentCart['quoteName'] = quoteName;
+
         if(!quoteName){
             alert("견적 이름을 입력하세요.");
             return;
         }
-
         // 견적 이름 및 조립 신청 여부를 currentCart에 추가
         currentCart['quoteName'] = quoteName;
         currentCart['assemblyStatus'] = isAssemblyRequested ? '조립 신청' : '조립 미신청';
-
         // JSON으로 변환
         const jsonCart = JSON.stringify(currentCart);
-       
+        console.log("json형식:", jsonCart);
         //입력 필드 초기화
         quoteNameInput.value="";
 
@@ -65,24 +76,26 @@ document.addEventListener("DOMContentLoaded", () => {
             body: jsonCart,
         })
             .then((response) => {
+                if (response.status === 401) {
+                    // 로그인이 필요한 경우
+                    return response.json().then(data => {
+                        alert(data.msg);
+                        window.location.href = data.url;
+                    });
+                }
                 if (!response.ok) {
                     throw new Error('견적 저장 실패');
                 }
                 return response.json();
             })
             .then((data) => {
-                alert('견적이 저장되었습니다.');
-                console.log('서버 응답:', data);
+                alert(data.msg);
+                window.location.href = data.url;
             })
             .catch((error) => {
                 console.error('저장 오류:', error);
                 alert('견적 저장 중 오류가 발생했습니다.');
             });
-    
-        // 입력 필드 초기화
-        quoteNameInput.value = '';
-
-       
     })
 
     toggleButton.addEventListener("click", () => {
@@ -143,9 +156,9 @@ document.addEventListener("DOMContentLoaded", () => {
 		    <div><strong>DDR</strong></div>
 		    <div><strong>Generation</strong></div>
 		    <div><strong>Spec</strong></div>
-		    <div><strong>Inner VGA</strong></div>
-		    <div><strong>Package Type</strong></div>
-		    <div><strong>Cooler Status</strong></div>
+		    <div><strong>Inner_VGA</strong></div>
+		    <div><strong>Package_Type</strong></div>
+		    <div><strong>Cooler_Status</strong></div>
 		    <div><strong>Core</strong></div>
 		    <div><strong>Company</strong></div>
 		`;
@@ -162,7 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     function displayCpuAttributes(data) {
         // Display 순서를 정의
-        const order = ["Socket", "DDR", "Generation", "Spec", "Inner VGA", "Package Type", "Cooler Status", "Core", "Company"];
+        const order = ["Socket", "DDR", "Generation", "Spec", "Inner_VGA", "Package_Type", "Cooler_Status", "Core", "Company"];
         let attributesHtml = '';
         // 정의된 순서대로 데이터를 표시
         order.forEach(key => {
@@ -275,7 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //쿨러의 필터를 html에 보여주는 기능
     function displayCoolerDetails() {
         let detailsHtml = `
-			<div><strong>Cooler Type</strong></div>
+			<div><strong>Cooler_Type</strong></div>
 		    <div><strong>Socket</strong></div>
 			<div><strong>Company</strong></div>
 		`;
@@ -290,7 +303,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(error => console.error('Error fetching Cooler attributes:', error));
     }
     function displayCoolerAttributes(data) {
-        const order = ["Cooler Type", "Socket", "Company"];
+        const order = ["Cooler_Type", "Socket", "Company"];
         let attributesHtml = '';
         order.forEach(key => {
             if(data[key]) {
@@ -308,9 +321,9 @@ document.addEventListener("DOMContentLoaded", () => {
         let detailsHtml = `
 			<div><strong>Socket</strong></div>
 		    <div><strong>Formfactor</strong></div>
-			<div><strong>Memory Slot</strong></div>
+			<div><strong>Memory_Slot</strong></div>
 			<div><strong>DDR</strong></div>
-			<div><strong>Max Storage</strong></div>
+			<div><strong>Max_Storage</strong></div>
 			<div><strong>Company</strong></div>
 		`;
         topBoxSmall.innerHTML = detailsHtml;
@@ -324,7 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(error => console.error('Error fetching MAINBOARD attributes:', error));
     }
     function displayMainBoardAttributes(data) {
-        const order = ["Socket", "Formfactor", "Memory Slot", "DDR", "Max Storage", "Company"];
+        const order = ["Socket", "Formfactor", "Memory_Slot", "DDR", "Max_Storage", "Company"];
         let attributesHtml = '';
         order.forEach(key => {
             if(data[key]) {
@@ -410,11 +423,11 @@ document.addEventListener("DOMContentLoaded", () => {
     //케이스의 필터를 html에 보여주는 기능
     function displayCaseDetails() {
         let detailsHtml = `
-			<div><strong>Power Status</strong></div>
+			<div><strong>Power_Status</strong></div>
 		    <div><strong>Formfactor</strong></div>
-			<div><strong>Tower Size</strong></div>
-			<div><strong>VGA Length</strong></div>
-			<div><strong>Power Size</strong></div>
+			<div><strong>Tower_Size</strong></div>
+			<div><strong>VGA_Length</strong></div>
+			<div><strong>Power_Size</strong></div>
 			<div><strong>Company</strong></div>
 		`;
         topBoxSmall.innerHTML = detailsHtml;
@@ -428,7 +441,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(error => console.error('Error fetching CASE attributes:', error));
     }
     function displayCaseAttributes(data) {
-        const order = ["Power Status", "Formfactor", "Tower Size", "VGA Length", "Power Size", "Company"];
+        const order = ["Power_Status", "Formfactor", "Tower_Size", "VGA_Length", "Power_Size", "Company"];
         let attributesHtml = '';
         order.forEach(key => {
             if(data[key]) {
@@ -442,8 +455,67 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* filter에 따라 content-box에 보여주는 아이템을 변화하는 기능 */
+	// 기존 코드에서 체크박스에 대한 이벤트 리스너 등록
 
+	topBoxLarge.addEventListener('change', function(event) {
+	    if (event.target.type === 'checkbox') {
+	        const activeComponent = document.querySelector('.component.active');
+	        if (activeComponent) {
+	            filterProducts(activeComponent.dataset.component);
+	        }
+	    }
+	});
 
+	// 필터링된 제품을 불러오는 함수
+	function filterProducts(component) {
+	    const filters = {};
+	    document.querySelectorAll('.top-box.large input[type="checkbox"]:checked').forEach(checkbox => {
+	        const key = checkbox.name;
+	        const value = checkbox.value;
+	        if (!filters[key]) {
+	            filters[key] = [];
+	        }
+	        filters[key].push(value);
+	    });
+
+	    fetchFilteredProducts(component, filters);
+	}
+
+	// 서버에 필터링 요청을 보내는 함수
+	function fetchFilteredProducts(component, filters) {
+	    console.log('Sending filters to server:', JSON.stringify(filters)); // 필터 데이터 로깅
+	    fetch(`/api/products/filter/${component}`, {
+	        method: 'POST',
+	        headers: {
+	            'Content-Type': 'application/json'
+	        },
+	        body: JSON.stringify(filters) // filters 객체를 직접 보내도록 수정
+	    })
+	    .then(response => {
+	        if (!response.ok) {
+	            console.error('Server responded with:', response.status, response.statusText);
+	            contentBox.innerHTML = `<p>Error loading products: ${response.statusText}</p>`; // 에러 메시지 업데이트
+	            categoryCountElement.textContent = `${component.toUpperCase()}: 0개`; // 제품이 없는 경우에도 카운트를 0으로 설정
+	            return Promise.reject(response.statusText);
+	        }
+	        return response.json();
+	    })
+	    .then(products => {
+	        if (products.length === 0) {
+	            contentBox.innerHTML = `<p>조건에 맞는 ${component.toUpperCase()} 아이템을 찾을 수 없습니다.</p>`;
+	            categoryCountElement.textContent = `${component.toUpperCase()}: 0개`; // 제품이 없는 경우에도 카운트를 0으로 설정
+	        } else {
+	            displayProducts(products, component);
+	        }
+	    })
+	    .catch(error => {
+	        console.error('Error fetching filtered products:', error);
+	        contentBox.innerHTML = `<p>조건에 맞는 ${component.toUpperCase()} 아이템을 찾을 수 없습니다.</p>`;
+	        categoryCountElement.textContent = `${component.toUpperCase()}: 0개`; // 오류 발생 시에도 카운트를 0으로 설정
+	    });
+	}
+
+	/* 제품 정렬 기능 */
     // 정렬 목록 클릭 이벤트
     sortButtons.forEach(button => {
         button.addEventListener('click', function (event) {
@@ -470,6 +542,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	        })
 	        .then(products => {
 	            displayProducts(products, component);
+				console.log(products);
 	        })
 	        .catch(error => {
 	            console.error('Error loading products:', error);
@@ -479,8 +552,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// 제품 정보를 콘텐츠 박스에 동적으로 표시하는 함수
 	function displayProducts(products, component) {
-	    if (!products || products.length === 0) {
+		if (!products || products.length === 0) {
 	        contentBox.innerHTML = `<p>No products found for ${component.toUpperCase()}.</p>`;
+	        categoryCountElement.textContent = `${component.toUpperCase()}: 0개`;
 	        return;
 	    }
 
@@ -492,7 +566,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div style="display: flex; align-items: center;">
                         <img src="${product.thumbnail}" alt="${product.product_name} 이미지" style="width: 100px; height: 100px; margin-right: 10px;">
                         <div style="flex-grow: 1; min-width: 0;">
-                            <div class="product-info" style="font-weight: bold; border-bottom: 1px solid black; padding-bottom: 5px; width: 1000px;">${product.product_name}</div>
+                            <div class="product-info" style="font-weight: bold; border-bottom: 1px solid black; padding-bottom: 5px; width: 1000px;">
+                                <a style="cursor: pointer" onclick="showPopup(${product.product_code}, '${component}')">
+                                    ${product.product_name}
+                                </a>
+                            </div>
+							<div class="product-stock">${product.stock}</div>
                             <div style="color: #666; font-size: 0.9em; width: 1000px;">${product.etc}</div>
                         </div>
                     </div>
@@ -500,7 +579,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         ${product.price ? `${product.price}원` : '품절'}
                         <div><span class="stars">★★★★★</span></div>
                         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px;">
-                            <button class="btn add-to-cart" data-product-name="${product.product_name}" data-product-price="${product.price}">담기</button>
+                            <button class="btn add-to-cart" data-product-code="${product.product_code}" data-product-name="${product.product_name}" data-product-price="${product.price}">담기</button>
                             <button class="btn buy-now">바로구매</button>
                         </div>
                     </div>
@@ -508,8 +587,9 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
         });
 
-        htmlContent += `</div>`;
-        contentBox.innerHTML = htmlContent;
+	    htmlContent += `</div>`;
+	    contentBox.innerHTML = htmlContent;
+		categoryCountElement.textContent = `${component.toUpperCase()}: ${products.length}개`; // 제품 개수 업데이트
 
         // 바로구매 버튼 클릭 이벤트
         contentBox.querySelectorAll('.buy-now').forEach(button => {
@@ -518,17 +598,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 const productName = productDiv.querySelector('.product-info').textContent.trim();
                 const productPrice = productDiv.querySelector('.product-price').childNodes[0].textContent.trim().replace('원', '');
                 const productThumbnail = productDiv.querySelector('img').src;
+				const productStock = productDiv.querySelector('.product-stock').textContent.trim();
 
                 const productInfo = {
                     thumbnail: productThumbnail,
                     category: component,
                     name: productName,
                     price: productPrice,
-                    quantity: 1
+                    quantity: 1,
+					stock: productStock
                 };
                 localStorage.setItem('selectedProduct', JSON.stringify(productInfo));
 
-                location.href = '/pay';
+				if(productPrice=="품절") {
+					alert("재고가 없어 결제할 수 없습니다!");
+				}else{
+                	location.href = '/pay';
+				}
             });
         });
 
@@ -537,13 +623,19 @@ document.addEventListener("DOMContentLoaded", () => {
             button.addEventListener('click', () => {
                 const productName = button.getAttribute('data-product-name'); // 상품명 가져오기
                 const productPrice = button.getAttribute('data-product-price'); // 가격 가져오기
-                addToCart(productName, productPrice);
+                const productCode = button.getAttribute('data-product-code');
+                addToCart(productName, productPrice, productCode);
             });
         });
     }
 
-    // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 담는 함수
-    function addToCart(productName, productPrice) {
+    // popup
+    window.showPopup = function (product_code, category) {
+        window.open(`/productDetail?product_code=${product_code}&category=${category}`, "제품상세이미지팝업", "width=1000, height=1500, left=100, top=50, scrollbars=1");
+    };
+
+    // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 는 함수
+    function addToCart(productName, productPrice, productCode) {
         const activeComponent = document.querySelector('.component.active');
 
         if (activeComponent) {
@@ -562,6 +654,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // 장바구니에 추가
             const componentName = activeComponent.dataset.component;
             currentCart[componentName] = {
+                product_code: productCode,
                 name: productName,
                 price: parseInt(productPrice),
                 quantity: 1, // 기본 수량 :1
@@ -575,10 +668,17 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateTotalPrice() {
         let total = 0;
 
-        // 모든 항목의 총 가격 계산
+        // 장바구니의 모든 항목 가격 합산
         Object.values(currentCart).forEach(item => {
-            total += item.price * item.quantity;
+            const price = parseFloat(item.price) || 0; // 가격을 숫자로 변환, 유효하지 않으면 0으로 설정
+            const quantity = parseInt(item.quantity, 10) || 0; // 수량을 정수로 변환, 유효하지 않으면 0으로 설정
+            total += price * quantity; // 가격 * 수량
         });
+
+        // 조립 신청 금액 추가 여부 확인
+        if (isAssemblyRequested) {
+            total += assemblyPrice;
+        }
 
         const totalPriceElement = document.querySelector('.total-price');
         if (totalPriceElement) {
@@ -715,8 +815,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-     // 조립 신청 금액 추가 함수
-     function addAssemblyPrice() {
+    // 조립 신청 금액 추가 함수
+    function addAssemblyPrice() {
         const totalPriceElement = document.querySelector('.total-price');
         let currentTotal = parseInt(totalPriceElement.textContent.replace(/[^0-9]/g, '')) || 0;
         currentTotal += assemblyPrice;
@@ -818,10 +918,19 @@ function resetCart(){
 }
 
 function goPayPage(){
-    window.location.href = "/pay";
+	//모든 컴포넌트 초기화
+    const components = document.querySelectorAll('.component');
+    components.forEach(component =>{
+        const productDetail = component.querySelector('#product-detail');
+        const productPriceDiv = component.querySelector('#product-price');
+		console.log(component+" : "+productDetail);
+		console.log(productPriceDiv);
+    })
+    //window.location.href = "/pay";
 }
 
-/*-----호환성체크 모달 코드----- */
+
+/*-----호환성체크 모달----- */
 // 모달 제어 스크립트
 const modal = document.getElementById('modal');
 const openModal = document.getElementById('openModalBtn');
@@ -837,3 +946,22 @@ window.addEventListener('click', (event) => {
         modal.style.display = 'none';
     }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    // 모든 .compatibility 요소를 선택
+    const compatibilityElements = document.querySelectorAll(".compatibility");
+
+    // 각 요소의 내용을 검사
+    compatibilityElements.forEach((element) => {
+        const content = element.textContent.trim();
+
+        if (content === "✕") {
+            element.style.color = "red";
+        } else if (content === "𐤏") {
+            element.style.color = "blue";
+        }
+    });
+});
+
+/*-------------------------*/
+

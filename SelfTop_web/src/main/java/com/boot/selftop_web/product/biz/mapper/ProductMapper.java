@@ -1,15 +1,6 @@
 package com.boot.selftop_web.product.biz.mapper;
 
-import com.boot.selftop_web.product.model.dto.CPUDto;
-import com.boot.selftop_web.product.model.dto.CaseDto;
-import com.boot.selftop_web.product.model.dto.CoolerDto;
-import com.boot.selftop_web.product.model.dto.GPUDto;
-import com.boot.selftop_web.product.model.dto.HDDDto;
-import com.boot.selftop_web.product.model.dto.MainBoardDto;
-import com.boot.selftop_web.product.model.dto.PowerDto;
-import com.boot.selftop_web.product.model.dto.ProductDto;
-import com.boot.selftop_web.product.model.dto.RAMDto;
-import com.boot.selftop_web.product.model.dto.SSDDto;
+import com.boot.selftop_web.product.model.dto.*;
 
 import java.util.List;
 import java.util.Map;
@@ -169,13 +160,19 @@ public interface ProductMapper {
     @Select("SELECT DISTINCT p.company FROM product p JOIN case_board cb ON p.product_code = cb.product_code WHERE p.category = '케이스'")
     List<String> findAllcaseCompany();
 
-    //필터링한 데이터를 가져오는 쿼리문
-
-
     //product테이블에서 가져오는 쿼리문
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
-            "MIN(ps.PRICE) AS price " +
+            "MIN(ps.PRICE) AS price, " +
+            "(SELECT ps2.STOCK " + 
+	        "FROM PRODUCT_STATUS ps2 " + 
+	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
+	        "AND ps2.PRICE = ( " +
+	        "SELECT MIN(ps3.PRICE) " + 
+	        "FROM PRODUCT_STATUS ps3 " +
+	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
+	        ") " +
+            ") AS STOCK " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
@@ -197,7 +194,16 @@ public interface ProductMapper {
 
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
-            "MIN(ps.PRICE) AS price " +
+            "MIN(ps.PRICE) AS price, " +
+            "(SELECT ps2.STOCK " + 
+	        "FROM PRODUCT_STATUS ps2 " + 
+	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
+	        "AND ps2.PRICE = ( " +
+	        "SELECT MIN(ps3.PRICE) " + 
+	        "FROM PRODUCT_STATUS ps3 " +
+	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
+	        ") " +
+            ") AS STOCK " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
@@ -219,7 +225,16 @@ public interface ProductMapper {
 
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
-            "MIN(ps.PRICE) AS price " +
+            "MIN(ps.PRICE) AS price, " +
+            "(SELECT ps2.STOCK " + 
+	        "FROM PRODUCT_STATUS ps2 " + 
+	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
+	        "AND ps2.PRICE = ( " +
+	        "SELECT MIN(ps3.PRICE) " + 
+	        "FROM PRODUCT_STATUS ps3 " +
+	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
+	        ") " +
+            ") AS STOCK " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
@@ -241,7 +256,16 @@ public interface ProductMapper {
 
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
-            "MIN(ps.PRICE) AS price " +
+            "MIN(ps.PRICE) AS price, " +
+            "(SELECT ps2.STOCK " + 
+	        "FROM PRODUCT_STATUS ps2 " + 
+	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
+	        "AND ps2.PRICE = ( " +
+	        "SELECT MIN(ps3.PRICE) " + 
+	        "FROM PRODUCT_STATUS ps3 " +
+	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
+	        ") " +
+            ") AS STOCK " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
@@ -263,7 +287,16 @@ public interface ProductMapper {
 
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
-            "MIN(ps.PRICE) AS price " +
+            "MIN(ps.PRICE) AS price, " +
+            "(SELECT ps2.STOCK " + 
+	        "FROM PRODUCT_STATUS ps2 " + 
+	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
+	        "AND ps2.PRICE = ( " +
+	        "SELECT MIN(ps3.PRICE) " + 
+	        "FROM PRODUCT_STATUS ps3 " +
+	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
+	        ") " +
+            ") AS STOCK " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
@@ -285,7 +318,16 @@ public interface ProductMapper {
 
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
-            "MIN(ps.PRICE) AS price " +
+            "MIN(ps.PRICE) AS price, " +
+            "(SELECT ps2.STOCK " + 
+	        "FROM PRODUCT_STATUS ps2 " + 
+	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
+	        "AND ps2.PRICE = ( " +
+	        "SELECT MIN(ps3.PRICE) " + 
+	        "FROM PRODUCT_STATUS ps3 " +
+	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
+	        ") " +
+            ") AS STOCK " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
@@ -307,7 +349,16 @@ public interface ProductMapper {
 
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
-            "MIN(ps.PRICE) AS price " +
+            "MIN(ps.PRICE) AS price, " +
+            "(SELECT ps2.STOCK " + 
+	        "FROM PRODUCT_STATUS ps2 " + 
+	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
+	        "AND ps2.PRICE = ( " +
+	        "SELECT MIN(ps3.PRICE) " + 
+	        "FROM PRODUCT_STATUS ps3 " +
+	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
+	        ") " +
+            ") AS STOCK " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
@@ -329,7 +380,16 @@ public interface ProductMapper {
 
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
-            "MIN(ps.PRICE) AS price " +
+            "MIN(ps.PRICE) AS price, " +
+            "(SELECT ps2.STOCK " + 
+	        "FROM PRODUCT_STATUS ps2 " + 
+	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
+	        "AND ps2.PRICE = ( " +
+	        "SELECT MIN(ps3.PRICE) " + 
+	        "FROM PRODUCT_STATUS ps3 " +
+	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
+	        ") " +
+            ") AS STOCK " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
@@ -351,7 +411,16 @@ public interface ProductMapper {
 
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
-            "MIN(ps.PRICE) AS price " +
+            "MIN(ps.PRICE) AS price, " +
+            "(SELECT ps2.STOCK " + 
+	        "FROM PRODUCT_STATUS ps2 " + 
+	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
+	        "AND ps2.PRICE = ( " +
+	        "SELECT MIN(ps3.PRICE) " + 
+	        "FROM PRODUCT_STATUS ps3 " +
+	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
+	        ") " +
+            ") AS STOCK " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
@@ -370,5 +439,9 @@ public interface ProductMapper {
             "</if>" +
             "</script>")
     List<MainBoardDto> findAllDetailedMainBoardProducts(@Param("category") String category, @Param("sort") String sort);
+
+
+    @Select("Select * from product where product_code=#{product_code}")
+    ProductInfoDto selectOne(@Param("product_code") int product_code);
 
 }
