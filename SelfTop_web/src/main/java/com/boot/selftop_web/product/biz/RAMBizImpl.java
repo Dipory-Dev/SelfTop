@@ -55,9 +55,9 @@ public class RAMBizImpl implements ProductBiz<RAMDto> {
     }
 
 	@Override
-	public List<RAMDto> filterProducts(Map<String, List<String>> filters) {
+	public List<RAMDto> filterProducts(Map<String, List<String>> filters, String sort) {
 		try {
-            return ramMapper.findFilteredRAMs(filters);
+            return ramMapper.findFilteredRAMs(filters, sort);
         } catch (Exception e) {
             System.err.println("Error filtering RAMs with filters: " + filters + "\nError: " + e.getMessage());
             e.printStackTrace(); // 스택 추적을 통해 더 자세한 오류 정보 제공

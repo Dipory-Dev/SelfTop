@@ -55,9 +55,9 @@ public class HDDBizImpl implements ProductBiz<HDDDto> {
     }
 
 	@Override
-	public List<HDDDto> filterProducts(Map<String, List<String>> filters) {
+	public List<HDDDto> filterProducts(Map<String, List<String>> filters, String sort) {
 		try {
-            return hddMapper.findFilteredHDDs(filters);
+            return hddMapper.findFilteredHDDs(filters, sort);
         } catch (Exception e) {
             System.err.println("Error filtering HDDs with filters: " + filters + "\nError: " + e.getMessage());
             e.printStackTrace(); // 스택 추적을 통해 더 자세한 오류 정보 제공

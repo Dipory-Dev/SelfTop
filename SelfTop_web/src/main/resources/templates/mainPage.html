@@ -18,11 +18,11 @@
     <div>
     	<div>
 	    	<form id="search">
-		    	<div class="search-container">
-			        <input type="text" class="search-box" placeholder="원하는 상품명을 검색해주세요">
-			        <button class="search-button"></button>
-		    	</div>
-	    	</form>
+				<div class="search-container">
+					<input type="text" class="search-box" placeholder="원하는 상품명을 검색해주세요" id="search-input">
+					<button type="button" class="search-button" onclick="searchProducts()"></button>
+				</div>
+			</form>
 	    </div>
 	    <br>
 	    <div>
@@ -176,7 +176,7 @@
 	        			</div>
 	        		</div>
 	        		<div class="total">
-	            		<span>총 견적 금액 : </span><span class="total-price">원</span>
+	            		<span>총 견적 금액 : </span><span class="total-price">0원</span>
 	        		</div>
 	        		<div class="actions">
 						<button class="button compatibility-check-btn" id="openModalBtn">호환성 체크</button>
