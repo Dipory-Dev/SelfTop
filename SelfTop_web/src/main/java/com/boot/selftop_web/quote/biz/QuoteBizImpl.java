@@ -2,6 +2,7 @@ package com.boot.selftop_web.quote.biz;
 
 import java.util.List;
 
+import com.boot.selftop_web.quote.model.dto.CartDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,11 @@ public class QuoteBizImpl implements QuoteBiz{
 	public List<QuoteDetailDto> QuoteDetailinfo(int quote_no) {
 		// TODO Auto-generated method stub
 		return mapper.QuoteDetailinfo(quote_no);
+	}
+
+	@Override
+	public List<CartDTO> selectCart(int member_no) {
+		return mapper.selectCart(member_no);
 	}
 
 }

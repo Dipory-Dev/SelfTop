@@ -5,8 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import com.boot.selftop_web.quote.model.dto.CartItemDTO;
-
 @Mapper
 public interface CartMapper {
 	 // Cart 저장
