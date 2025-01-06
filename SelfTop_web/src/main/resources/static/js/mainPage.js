@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const assemblyPrice = 20000; // 조립 신청 시 추가금액
     let isAssemblyRequested = false; // 현재 조립 신청 상태
 
+
 	// mainPage처음 들어왔을때 CPU가 자동으로 선택되도록 설정
     const cpuComponent = document.querySelector('.component[data-component="CPU"]');
     if (cpuComponent) {
@@ -567,7 +568,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <img src="${product.thumbnail}" alt="${product.product_name} 이미지" style="width: 100px; height: 100px; margin-right: 10px;">
                         <div style="flex-grow: 1; min-width: 0;">
                             <div class="product-info" style="font-weight: bold; border-bottom: 1px solid black; padding-bottom: 5px; width: 1000px;">
-                                <a style="cursor: pointer" onclick="showPopup(${product.product_code}, '${component}')">
+                                <a class="a-product-name"style="cursor: pointer" onclick="showPopup(${product.product_code}, '${component}')">
                                     ${product.product_name}
                                 </a>
                             </div>
@@ -620,10 +621,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // "담기" 버튼 이벤트 추가
         document.querySelectorAll('.add-to-cart').forEach(button => {
+            
             button.addEventListener('click', () => {
+
                 const productName = button.getAttribute('data-product-name'); // 상품명 가져오기
                 const productPrice = button.getAttribute('data-product-price'); // 가격 가져오기
                 const productCode = button.getAttribute('data-product-code');
+
+                if(productPrice==0){
+                    alert("품절된 상품은 담을 수 없습니다.");
+                    return;
+                }
+
                 addToCart(productName, productPrice, productCode);
             });
         });
@@ -636,6 +645,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 는 함수
     function addToCart(productName, productPrice, productCode) {
+
         const activeComponent = document.querySelector('.component.active');
 
         if (activeComponent) {
