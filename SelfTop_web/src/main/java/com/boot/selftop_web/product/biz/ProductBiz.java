@@ -14,5 +14,5 @@ public interface ProductBiz<T extends ProductDto>{
     List<?> getProductsByCategory(String category, String sort);
     
     // 필터링을 위한 메소드 추가
-    List<T> filterProducts(Map<String, List<String>> filters);
+    List<T> filterProducts(Map<String, List<String>> filters, String sort);
 }

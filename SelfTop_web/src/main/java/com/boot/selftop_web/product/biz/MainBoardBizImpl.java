@@ -55,9 +55,9 @@ public class MainBoardBizImpl implements ProductBiz<MainBoardDto> {
     }
 
 	@Override
-	public List<MainBoardDto> filterProducts(Map<String, List<String>> filters) {
+	public List<MainBoardDto> filterProducts(Map<String, List<String>> filters, String sort) {
 		try {
-            return mainBoardMapper.findFilteredMainBoards(filters);
+            return mainBoardMapper.findFilteredMainBoards(filters, sort);
         } catch (Exception e) {
             System.err.println("Error filtering MainBoards with filters: " + filters + "\nError: " + e.getMessage());
             e.printStackTrace(); // 스택 추적을 통해 더 자세한 오류 정보 제공

@@ -55,9 +55,9 @@ public class PowerBizImpl implements ProductBiz<PowerDto> {
     }
 
 	@Override
-	public List<PowerDto> filterProducts(Map<String, List<String>> filters) {
+	public List<PowerDto> filterProducts(Map<String, List<String>> filters, String sort) {
 		try {
-            return powerMapper.findFilteredPowers(filters);
+            return powerMapper.findFilteredPowers(filters, sort);
         } catch (Exception e) {
             System.err.println("Error filtering Powers with filters: " + filters + "\nError: " + e.getMessage());
             e.printStackTrace(); // 스택 추적을 통해 더 자세한 오류 정보 제공
