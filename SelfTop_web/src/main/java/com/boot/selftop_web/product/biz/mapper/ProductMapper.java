@@ -164,19 +164,21 @@ public interface ProductMapper {
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
-            "(SELECT ps2.STOCK " + 
-	        "FROM PRODUCT_STATUS ps2 " + 
-	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        "AND ps2.PRICE = ( " +
-	        "SELECT MIN(ps3.PRICE) " + 
-	        "FROM PRODUCT_STATUS ps3 " +
-	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        ") " +
-            ") AS STOCK " +
+            "ps_min.STOCK, " +
+            "ps_min.SELLER_NO " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "LEFT JOIN (" +
+            "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
+            "    FROM PRODUCT_STATUS ps_inner " +
+            "    WHERE ps_inner.PRICE = (" +
+            "        SELECT MIN(ps_sub.PRICE) " +
+            "        FROM PRODUCT_STATUS ps_sub " +
+            "        WHERE ps_sub.PRODUCT_CODE = ps_inner.PRODUCT_CODE" +
+            "    )" +
+            ") ps_min ON p.PRODUCT_CODE = ps_min.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, ps_min.STOCK, ps_min.SELLER_NO " +
             "<if test='sort != null'>ORDER BY " +
             "   <choose>" +
             "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
@@ -192,22 +194,25 @@ public interface ProductMapper {
             "</script>")
     List<CPUDto> findAllDetailedCpuProducts(@Param("category") String category, @Param("sort") String sort);
 
+
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
-            "(SELECT ps2.STOCK " + 
-	        "FROM PRODUCT_STATUS ps2 " + 
-	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        "AND ps2.PRICE = ( " +
-	        "SELECT MIN(ps3.PRICE) " + 
-	        "FROM PRODUCT_STATUS ps3 " +
-	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        ") " +
-            ") AS STOCK " +
+            "ps_min.STOCK, " +
+            "ps_min.SELLER_NO " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "LEFT JOIN (" +
+            "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
+            "    FROM PRODUCT_STATUS ps_inner " +
+            "    WHERE ps_inner.PRICE = (" +
+            "        SELECT MIN(ps_sub.PRICE) " +
+            "        FROM PRODUCT_STATUS ps_sub " +
+            "        WHERE ps_sub.PRODUCT_CODE = ps_inner.PRODUCT_CODE" +
+            "    )" +
+            ") ps_min ON p.PRODUCT_CODE = ps_min.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, ps_min.STOCK, ps_min.SELLER_NO " +
             "<if test='sort != null'>ORDER BY " +
             "   <choose>" +
             "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
@@ -226,19 +231,21 @@ public interface ProductMapper {
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
-            "(SELECT ps2.STOCK " + 
-	        "FROM PRODUCT_STATUS ps2 " + 
-	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        "AND ps2.PRICE = ( " +
-	        "SELECT MIN(ps3.PRICE) " + 
-	        "FROM PRODUCT_STATUS ps3 " +
-	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        ") " +
-            ") AS STOCK " +
+            "ps_min.STOCK, " +
+            "ps_min.SELLER_NO " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "LEFT JOIN (" +
+            "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
+            "    FROM PRODUCT_STATUS ps_inner " +
+            "    WHERE ps_inner.PRICE = (" +
+            "        SELECT MIN(ps_sub.PRICE) " +
+            "        FROM PRODUCT_STATUS ps_sub " +
+            "        WHERE ps_sub.PRODUCT_CODE = ps_inner.PRODUCT_CODE" +
+            "    )" +
+            ") ps_min ON p.PRODUCT_CODE = ps_min.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, ps_min.STOCK, ps_min.SELLER_NO " +
             "<if test='sort != null'>ORDER BY " +
             "   <choose>" +
             "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
@@ -257,19 +264,21 @@ public interface ProductMapper {
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
-            "(SELECT ps2.STOCK " + 
-	        "FROM PRODUCT_STATUS ps2 " + 
-	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        "AND ps2.PRICE = ( " +
-	        "SELECT MIN(ps3.PRICE) " + 
-	        "FROM PRODUCT_STATUS ps3 " +
-	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        ") " +
-            ") AS STOCK " +
+            "ps_min.STOCK, " +
+            "ps_min.SELLER_NO " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "LEFT JOIN (" +
+            "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
+            "    FROM PRODUCT_STATUS ps_inner " +
+            "    WHERE ps_inner.PRICE = (" +
+            "        SELECT MIN(ps_sub.PRICE) " +
+            "        FROM PRODUCT_STATUS ps_sub " +
+            "        WHERE ps_sub.PRODUCT_CODE = ps_inner.PRODUCT_CODE" +
+            "    )" +
+            ") ps_min ON p.PRODUCT_CODE = ps_min.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, ps_min.STOCK, ps_min.SELLER_NO " +
             "<if test='sort != null'>ORDER BY " +
             "   <choose>" +
             "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
@@ -288,19 +297,21 @@ public interface ProductMapper {
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
-            "(SELECT ps2.STOCK " + 
-	        "FROM PRODUCT_STATUS ps2 " + 
-	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        "AND ps2.PRICE = ( " +
-	        "SELECT MIN(ps3.PRICE) " + 
-	        "FROM PRODUCT_STATUS ps3 " +
-	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        ") " +
-            ") AS STOCK " +
+            "ps_min.STOCK, " +
+            "ps_min.SELLER_NO " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "LEFT JOIN (" +
+            "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
+            "    FROM PRODUCT_STATUS ps_inner " +
+            "    WHERE ps_inner.PRICE = (" +
+            "        SELECT MIN(ps_sub.PRICE) " +
+            "        FROM PRODUCT_STATUS ps_sub " +
+            "        WHERE ps_sub.PRODUCT_CODE = ps_inner.PRODUCT_CODE" +
+            "    )" +
+            ") ps_min ON p.PRODUCT_CODE = ps_min.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, ps_min.STOCK, ps_min.SELLER_NO " +
             "<if test='sort != null'>ORDER BY " +
             "   <choose>" +
             "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
@@ -319,19 +330,21 @@ public interface ProductMapper {
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
-            "(SELECT ps2.STOCK " + 
-	        "FROM PRODUCT_STATUS ps2 " + 
-	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        "AND ps2.PRICE = ( " +
-	        "SELECT MIN(ps3.PRICE) " + 
-	        "FROM PRODUCT_STATUS ps3 " +
-	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        ") " +
-            ") AS STOCK " +
+            "ps_min.STOCK, " +
+            "ps_min.SELLER_NO " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "LEFT JOIN (" +
+            "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
+            "    FROM PRODUCT_STATUS ps_inner " +
+            "    WHERE ps_inner.PRICE = (" +
+            "        SELECT MIN(ps_sub.PRICE) " +
+            "        FROM PRODUCT_STATUS ps_sub " +
+            "        WHERE ps_sub.PRODUCT_CODE = ps_inner.PRODUCT_CODE" +
+            "    )" +
+            ") ps_min ON p.PRODUCT_CODE = ps_min.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, ps_min.STOCK, ps_min.SELLER_NO " +
             "<if test='sort != null'>ORDER BY " +
             "   <choose>" +
             "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
@@ -350,19 +363,21 @@ public interface ProductMapper {
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
-            "(SELECT ps2.STOCK " + 
-	        "FROM PRODUCT_STATUS ps2 " + 
-	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        "AND ps2.PRICE = ( " +
-	        "SELECT MIN(ps3.PRICE) " + 
-	        "FROM PRODUCT_STATUS ps3 " +
-	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        ") " +
-            ") AS STOCK " +
+            "ps_min.STOCK, " +
+            "ps_min.SELLER_NO " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "LEFT JOIN (" +
+            "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
+            "    FROM PRODUCT_STATUS ps_inner " +
+            "    WHERE ps_inner.PRICE = (" +
+            "        SELECT MIN(ps_sub.PRICE) " +
+            "        FROM PRODUCT_STATUS ps_sub " +
+            "        WHERE ps_sub.PRODUCT_CODE = ps_inner.PRODUCT_CODE" +
+            "    )" +
+            ") ps_min ON p.PRODUCT_CODE = ps_min.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, ps_min.STOCK, ps_min.SELLER_NO " +
             "<if test='sort != null'>ORDER BY " +
             "   <choose>" +
             "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
@@ -381,19 +396,21 @@ public interface ProductMapper {
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
-            "(SELECT ps2.STOCK " + 
-	        "FROM PRODUCT_STATUS ps2 " + 
-	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        "AND ps2.PRICE = ( " +
-	        "SELECT MIN(ps3.PRICE) " + 
-	        "FROM PRODUCT_STATUS ps3 " +
-	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        ") " +
-            ") AS STOCK " +
+            "ps_min.STOCK, " +
+            "ps_min.SELLER_NO " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "LEFT JOIN (" +
+            "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
+            "    FROM PRODUCT_STATUS ps_inner " +
+            "    WHERE ps_inner.PRICE = (" +
+            "        SELECT MIN(ps_sub.PRICE) " +
+            "        FROM PRODUCT_STATUS ps_sub " +
+            "        WHERE ps_sub.PRODUCT_CODE = ps_inner.PRODUCT_CODE" +
+            "    )" +
+            ") ps_min ON p.PRODUCT_CODE = ps_min.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, ps_min.STOCK, ps_min.SELLER_NO " +
             "<if test='sort != null'>ORDER BY " +
             "   <choose>" +
             "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
@@ -412,19 +429,21 @@ public interface ProductMapper {
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
-            "(SELECT ps2.STOCK " + 
-	        "FROM PRODUCT_STATUS ps2 " + 
-	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        "AND ps2.PRICE = ( " +
-	        "SELECT MIN(ps3.PRICE) " + 
-	        "FROM PRODUCT_STATUS ps3 " +
-	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        ") " +
-            ") AS STOCK " +
+            "ps_min.STOCK, " +
+            "ps_min.SELLER_NO " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "LEFT JOIN (" +
+            "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
+            "    FROM PRODUCT_STATUS ps_inner " +
+            "    WHERE ps_inner.PRICE = (" +
+            "        SELECT MIN(ps_sub.PRICE) " +
+            "        FROM PRODUCT_STATUS ps_sub " +
+            "        WHERE ps_sub.PRODUCT_CODE = ps_inner.PRODUCT_CODE" +
+            "    )" +
+            ") ps_min ON p.PRODUCT_CODE = ps_min.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, ps_min.STOCK, ps_min.SELLER_NO " +
             "<if test='sort != null'>ORDER BY " +
             "   <choose>" +
             "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +

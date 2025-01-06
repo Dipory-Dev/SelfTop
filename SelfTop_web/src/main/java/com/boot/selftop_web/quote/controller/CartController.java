@@ -42,7 +42,7 @@ public class CartController {
 		System.out.println("param1: " + param1);
 		System.out.println("param2: " + param2);
 
-//		int res = cartBizImpl.saveQuote(param1, param2);
+		int res = cartBizImpl.saveQuote(param1, param2);
 
 		Map<String, Object> result = new HashMap<>();
 

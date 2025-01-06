@@ -581,7 +581,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         ${product.price ? `${product.price}원` : '품절'}
                         <div><span class="stars">★★★★★</span></div>
                         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px;">
-                            <button class="btn add-to-cart" data-product-code="${product.product_code}" data-product-name="${product.product_name}" data-product-price="${product.price}">담기</button>
+                            <button class="btn add-to-cart" data-seller-no="${product.seller_no}" data-product-code="${product.product_code}" data-product-name="${product.product_name}" data-product-price="${product.price}">담기</button>
                             <button class="btn buy-now">바로구매</button>
                         </div>
                     </div>
@@ -626,7 +626,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 const productName = button.getAttribute('data-product-name'); // 상품명 가져오기
                 const productPrice = button.getAttribute('data-product-price'); // 가격 가져오기
                 const productCode = button.getAttribute('data-product-code');
-                addToCart(productName, productPrice, productCode);
+                const sellerNo = button.getAttribute('data-seller-no');
+                addToCart(productName, productPrice, productCode, sellerNo);
             });
         });
     }
@@ -637,7 +638,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 는 함수
-    function addToCart(productName, productPrice, productCode) {
+    function addToCart(productName, productPrice, productCode, sellerNo) {
         const activeComponent = document.querySelector('.component.active');
 
         if (activeComponent) {
@@ -659,6 +660,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 product_code: productCode,
                 name: productName,
                 price: parseInt(productPrice),
+                seller_no: sellerNo,
                 quantity: 1, // 기본 수량 :1
             };
 
