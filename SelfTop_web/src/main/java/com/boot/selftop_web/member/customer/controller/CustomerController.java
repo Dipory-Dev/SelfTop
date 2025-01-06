@@ -39,7 +39,9 @@ import com.boot.selftop_web.member.customer.model.dto.CustomerorderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
 import com.boot.selftop_web.order.biz.OrderBoardBiz;
+import com.boot.selftop_web.order.biz.OrderDetailBiz;
 import com.boot.selftop_web.order.model.dto.OrderBoardDto;
+import com.boot.selftop_web.order.model.dto.OrderDetailDto;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -57,6 +59,9 @@ public class CustomerController {
 
 	@Autowired
 	private OrderBoardBiz orderboardBiz;
+	
+	@Autowired
+    private OrderDetailBiz orderDetailBiz;
 
 	@Autowired
 	private ProductInfoBizImpl productInfoBiz;
@@ -350,6 +355,50 @@ public class CustomerController {
 		model.addAttribute("canclecount",canclecount);
 
 		return "customerorder";
+	}
+	
+	// 결제 성공 후 주문 정보를 저장하는 메서드
+	@PostMapping("/order/save")
+	public String saveOrder(@RequestParam int productCode,
+	                        @RequestParam int sellerNo,
+	                        @RequestParam int amount,
+	                        @RequestParam int orderPrice,
+	                        @RequestParam String customerName,  // 결제 후 고객 이름
+	                        @RequestParam String customerPhone, // 결제 후 고객 전화번호
+	                        @RequestParam String shippingAddress, // 결제 후 배송 주소
+	                        @RequestParam String zipCode, // 결제 후 우편번호
+	                        @RequestParam String orderId, // 결제 후 주문 번호
+	                        HttpSession session,
+	                        RedirectAttributes redirectAttributes) {
+
+	    Integer memberNo = (Integer) session.getAttribute("member_no");
+	    if (memberNo == null) {
+	        redirectAttributes.addFlashAttribute("message", "로그인 후 주문을 진행해주세요.");
+	        return "redirect:/loginform";
+	    }
+
+	    // 주문 정보를 OrderDetailDto 객체에 담기
+	    OrderDetailDto orderDetailDto = new OrderDetailDto();
+	    orderDetailDto.setCustomer_no(memberNo);  // 로그인한 사용자 번호
+	    orderDetailDto.setProduct_code(productCode);  // 상품 코드
+	    orderDetailDto.setSeller_no(sellerNo);  // 판매자 번호
+	    orderDetailDto.setAmount(amount);  // 주문 수량
+	    orderDetailDto.setOrder_price(orderPrice);  // 주문 금액
+	    //orderBoardDto.setCustomer_name(customerName);  // 고객 이름
+	    //orderDetailDto.setCustomer_phone(customerPhone);  // 고객 전화번호
+	    //orderDetailDto.setShipping_address(shippingAddress);  // 배송 주소
+	    //orderDetailDto.setZip_code(zipCode);  // 우편번호
+	    //orderDetailDto.setOrder_id(orderId);  // 결제 후 주문 번호
+
+	    // 주문 정보 저장
+	    try {
+	        orderDetailBiz.saveOrderDetail(orderDetailDto);  // OrderDetailBiz를 통해 저장
+	        redirectAttributes.addFlashAttribute("message", "주문이 성공적으로 처리되었습니다.");
+	    } catch (Exception e) {
+	        redirectAttributes.addFlashAttribute("message", "주문 처리 중 오류가 발생했습니다.");
+	    }
+
+	    return "redirect:/order/confirmation";  // 주문 확인 페이지로 리다이렉트
 	}
 
 	@GetMapping("/ordersearch")

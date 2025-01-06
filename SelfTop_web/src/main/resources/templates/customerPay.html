@@ -55,10 +55,18 @@
         });
 
         function updateQuantity(button, change) {
+        	
+        	// localStorage에서 저장된 'selectedProduct' 가져오기
+            const productInfo = JSON.parse(localStorage.getItem('selectedProduct'));
+        	
             const quantityTag = button.parentElement.querySelector('.quantity-input');
             let currentQuantity = parseInt(quantityTag.textContent); // 현재 수량
             let newQuantity = currentQuantity + change; // 변경된 수량
             if (newQuantity < 1) newQuantity = 1; // 최소 수량 제한
+            if (newQuantity > productInfo.stock) {
+            	alert("재고수를 초과하였습니다!");
+            	newQuantity = productInfo.stock;
+            }
             quantityTag.textContent = newQuantity; // 수량 업데이트
             updatePrice(quantityTag);
         }
@@ -96,7 +104,9 @@
 
             mergeFixedShippingFee();
         });
-
+     // 전역에서 widgets 객체를 선언
+        let widgets;
+        let isPaymentInProgress = false;
      	// 선택상품 총금액과 최종 결제금액 업데이트 함수
         function updatePayment(price, quantity) {
             const totalAmount = price * quantity; // 선택상품 총금액
@@ -106,38 +116,50 @@
             // 선택상품 총금액과 최종 결제금액 업데이트
             document.querySelector('.total-price').textContent = `${totalAmount.toLocaleString()}원`; // 선택상품 총금액
             document.querySelector('.pay-price').textContent = `${finalAmount.toLocaleString()}원`; // 최종 결제금액
+     	
+         	// baseAmount 업데이트
+            const baseAmount = finalAmount; // 최종 결제 금액을 baseAmount로 설정
+            updatePaymentUI(baseAmount); // 결제 UI 업데이트
      	}
+		
+     	// 결제 UI 업데이트 함수
+        async function updatePaymentUI(baseAmount) {
+            const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm"; // 토스 클라이언트 키
+            const tossPayments = TossPayments(clientKey);
+            const customerKey = "ANONYMOUS"; // 고객 키
+            widgets = tossPayments.widgets({ customerKey });
 
+            await widgets.setAmount({
+                currency: "KRW",
+                value: baseAmount,
+            });
+            
+            console.log(baseAmount);
+
+            await Promise.all([
+                widgets.renderPaymentMethods({
+                    selector: "#payment-method",
+                    variantKey: "DEFAULT",
+                }),
+                widgets.renderAgreement({ selector: "#agreement", variantKey: "AGREEMENT" }),
+            ]);
+        }
+     	
         document.addEventListener("DOMContentLoaded", () => {
 	        // 결제 버튼 이벤트 추가
 	        const paymentButton = document.getElementById('payment-button');
-	        const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm"; // 토스 클라이언트 키
-	        const tossPayments = TossPayments(clientKey);
-	        const customerKey = "ANONYMOUS"; // 고객 키
-	        const widgets = tossPayments.widgets({ customerKey });
-
-	        // 결제 UI 및 이용약관 UI 렌더링
-	        async function renderPaymentUI() {
-	        	// 기본 결제 금액 설정
-	            const baseAmount = parseInt(document.querySelector('.pay-price').textContent.replace(/[^0-9]/g, '')); // 기본 결제 금액 (상품 가격 + 배송비)
-	            await widgets.setAmount({
-	                currency: "KRW",
-	                value: baseAmount,
-	            });
-
-	            await Promise.all([
-	                widgets.renderPaymentMethods({
-	                    selector: "#payment-method",
-	                    variantKey: "DEFAULT",
-	                }),
-	                widgets.renderAgreement({ selector: "#agreement", variantKey: "AGREEMENT" }),
-	            ]);
-	        }
-
-	        renderPaymentUI();
-
+	        
 	        // 결제하기 버튼 클릭 시 결제 요청
 	        paymentButton.addEventListener("click", async function () {
+	        	// 이미 결제 진행 중이면 요청을 중단
+	            if (isPaymentInProgress) {
+	                alert("결제 요청이 이미 진행 중입니다. 잠시 후 다시 시도해주세요.");
+	                return;
+	            }
+
+	            // 결제 진행 상태를 true로 설정
+	            isPaymentInProgress = true;
+	            
 	            const name = document.getElementById('name').value;
 	            const phone = document.getElementById('phone').value;
 	            const zipNo = document.getElementById('zipNo').value;
@@ -162,8 +184,16 @@
 	                });
 
 	                // 결제 승인 처리 (결제 성공 시)
-	                // 기존 stock과 구매자가 선택한 amount 비교 (stock>=amount)
 	                if (paymentResult.status === "SUCCESS") {
+	                	// 결제 성공 후 서버에 주문 정보를 전송
+	                    await saveOrderToDB({
+	                        orderId: "ORDER_ID_1234", // 주문 번호
+	                        customerName: name, // 고객 이름
+	                        customerPhone: phone, // 고객 전화번호
+	                        shippingAddress: `${address1} ${address2}`, // 배송 주소
+	                        zipCode: zipNo, // 우편번호
+	                        orderPrice: 100000 // 예시 가격, 실제 결제 금액을 사용
+	                    });
 	                    window.location.href = "http://localhost:8080/paysuccess";
 	                } else {
 	                    alert("결제에 실패하였습니다. 다시 시도해주세요.");
@@ -172,10 +202,33 @@
 	            } catch (error) {
 	                console.error("결제 처리 중 오류 발생:", error);
 	                alert("결제 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
-	                window.location.href = "http://localhost:8080/pay";
+	            } finally {
+	                // 결제 진행 상태를 false로 설정하여 결제 완료 후 버튼을 다시 활성화
+	                isPaymentInProgress = false;
 	            }
 	        });
         });
+        
+     	// 결제 성공 후 서버에 주문 정보를 저장하는 함수
+        async function saveOrderToDB(orderData) {
+            try {
+                const response = await fetch("/order/save", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(orderData),
+                });
+                const result = await response.json();
+                if (result.status === "SUCCESS") {
+                    console.log("주문 정보가 성공적으로 저장되었습니다.");
+                } else {
+                    console.error("주문 정보 저장에 실패했습니다.");
+                }
+            } catch (error) {
+                console.error("서버에 주문 정보를 저장하는 중 오류 발생:", error);
+            }
+        }
     </script>
 </head>
 <body>
