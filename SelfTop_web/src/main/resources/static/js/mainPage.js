@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     delete currentCart['assembly_price'];
                 }
             }
-            updateTotalPrice(); // 총 가격 즉각 업데이트
+            updateTotalPrice(); // 총 가격 즉시 업데이트
         });
     });
 
@@ -662,6 +662,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateTotalPrice() {
         let total = 0;
 
+        // 모든 항목의 총 가격 계산
         Object.values(currentCart).forEach(item => {
             total += item.price * item.quantity;
         });
@@ -719,7 +720,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         increaseButton.addEventListener('click', (event) => {
-            event.stopPropagation(); // 이벤트 전파 방지
+            event.stopPropagation();
             let quantity = parseInt(quantityInput.value);
             quantity += 1;
             quantityInput.value = quantity;
@@ -729,7 +730,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         quantityInput.addEventListener('input', (event) => {
-            event.stopPropagation(); // 이벤트 전파 방지
+            event.stopPropagation();
             let quantity = parseInt(quantityInput.value);
             if (isNaN(quantity) || quantity < 1) {
                 quantity = 1;
