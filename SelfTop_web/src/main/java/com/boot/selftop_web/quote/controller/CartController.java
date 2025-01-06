@@ -7,9 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.boot.selftop_web.quote.biz.CartBizImpl;
-import com.boot.selftop_web.quote.model.dto.CartDTO;
-
 @RestController
 @RequestMapping("/api")
 public class CartController {

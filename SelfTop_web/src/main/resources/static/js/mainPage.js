@@ -34,24 +34,25 @@ document.addEventListener("DOMContentLoaded", () => {
                     delete currentCart['assembly'];
                 }
             }
-            updateTotalPrice(); // 총 가격 즉각 업데이트
+            updateTotalPrice(); // 총 가격 즉시 업데이트
         });
     });
     
     saveQuoteButton.addEventListener("click", () =>{
         const quoteName =quoteNameInput.value.trim();
-       
-        //Json으로 변환
-        const jsonCart = JSON.stringify(currentCart);
-        console.log("json형식:"+jsonCart);
+        
         if(!quoteName){
             alert("견적 이름을 입력하세요.");
             return;
         }
 
-        //견적 이름과 currentCart 저장
+        // 견적 이름 및 조립 신청 여부를 currentCart에 추가
         currentCart['quoteName'] = quoteName;
+        currentCart['assemblyStatus'] = isAssemblyRequested ? '조립 신청' : '조립 미신청';
 
+        // JSON으로 변환
+        const jsonCart = JSON.stringify(currentCart);
+       
         //입력 필드 초기화
         quoteNameInput.value="";
 
@@ -541,7 +542,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 는 함수
+    // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 담는 함수
     function addToCart(productName, productPrice) {
         const activeComponent = document.querySelector('.component.active');
 
@@ -574,6 +575,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateTotalPrice() {
         let total = 0;
 
+        // 모든 항목의 총 가격 계산
         Object.values(currentCart).forEach(item => {
             total += item.price * item.quantity;
         });
@@ -631,7 +633,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         increaseButton.addEventListener('click', (event) => {
-            event.stopPropagation(); // 이벤트 전파 방지
+            event.stopPropagation();
             let quantity = parseInt(quantityInput.value);
             quantity += 1;
             quantityInput.value = quantity;
@@ -641,7 +643,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         quantityInput.addEventListener('input', (event) => {
-            event.stopPropagation(); // 이벤트 전파 방지
+            event.stopPropagation();
             let quantity = parseInt(quantityInput.value);
             if (isNaN(quantity) || quantity < 1) {
                 quantity = 1;

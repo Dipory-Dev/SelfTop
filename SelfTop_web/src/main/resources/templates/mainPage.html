@@ -203,24 +203,136 @@
    		</div>
 	</footer>
 
-	<!-----모달----->
+	<!-----호환성체크 모달창----->
     <div id="modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">PC견적 호환성 체크</div>
             <div class="modal-body">
                 <div class="body-top">
-                    <li>호환성 체크는 CPU, 메인보드, 메모리, 케이스, 그래픽카드, 파워를 대상으로 합니다.</li>
+                    <li>호환성 체크는 <span style="font-weight:bold">CPU, 메인보드, 메모리, 케이스, 그래픽카드, 파워</span>를 대상으로 합니다.</li>
                     <li>본 서비스는 제조사의 상품정보를 기반으로 제공되며, 일부 상품은 호환성 체크 대상에서 제외됩니다.</li>
-                    <li>호환 성공 여부는 단순 참고용이며, 자세한 내용은 판매점 또는 제조사에 재확인이 필요할 수 있습니다.</li>
+                    <li><span style="font-weight: bold; color:red">호환 성공 여부는 단순 참고용</span>이며, 자세한 내용은 판매점 또는 제조사에 재확인이 필요할 수 있습니다.</li>
                     <li>카테고리별로 상품을 1개씩 담을 때만 호환성 체크가 가능합니다.</li>
                     <li>출시일이 오래된 상품 또는 특수 상품의 경우 호환성 체크 대상에서 제외될 수 있습니다.</li>
                     <li>CPU(소켓), 메인보드(CPU소켓), RAM(제품분류), 케이스(크기), 메인보드(폼펙터), 파워(제품분류), 그래픽카드(가로길이) 체크</li>
                 </div>
                 <div class="body-mid">
-
-
-                    
-                </div>
+					<div class="container">
+						<div class="first-section">
+							<div class="pair">
+								<div class="modal-component" id="cpu">
+									<p>CPU</p>
+									<div class="icon"><img class="modal-icon" src="/img/icon-cpu.png"></div>
+								</div>
+								<svg width="120" height="50" xmlns="http://www.w3.org/2000/svg">
+									<line x1="10" y1="25" x2="110" y2="25" stroke="black" stroke-width="2" />
+									<polygon points="10,25 20,20 20,30" fill="black" />
+								</svg>
+								<div class="connector">
+									<div class="background-circle">
+										<div class="compatibility" id="cpu-mainboard-compatibility">❌</div>
+									</div>
+								</div>
+							</div>
+							<div class="pair">
+								<div class="connector">
+									<div class="background-circle">
+										<div class="compatibility" id="graphicCard-case-compatibility">❌</div>
+									</div>
+								</div>
+								<svg width="120" height="50" xmlns="http://www.w3.org/2000/svg">
+									<line x1="10" y1="25" x2="110" y2="25" stroke="black" stroke-width="2" />
+									<polygon points="110,25 100,20 100,30" fill="black" />
+								</svg>
+								<div class="modal-component" id="gpu">
+									<p>그래픽카드</p>
+									<div class="icon"><img class="modal-icon" src="/img/icon-gpu.png"></div>
+								</div>
+							</div>
+						</div>
+						<svg width="47" height="80" xmlns="http://www.w3.org/2000/svg" class="uparrow-1">
+							<line x1="25" y1="90" x2="25" y2="10" stroke="black" stroke-width="2" />
+    						<polygon points="25,10 20,20 30,20" fill="black" />
+						</svg>
+						<svg width="47" height="88" xmlns="http://www.w3.org/2000/svg" class="downarrow-1">
+							<line x1="25" y1="10" x2="25" y2="80" stroke="black" stroke-width="2" />
+    						<polygon points="25,90 20,80 30,80" fill="black" />
+						</svg>
+						<svg width="47" height="88" xmlns="http://www.w3.org/2000/svg" class="downarrow-2">
+							<line x1="25" y1="10" x2="25" y2="80" stroke="black" stroke-width="2" />
+    						<polygon points="25,90 20,80 30,80" fill="black" />
+						</svg>
+						<div class="second-section">
+							<div class="pair">
+								<div class="connector">
+									<div class="background-circle">
+										<div class="compatibility" id="cpu-ram-compatibility">⭕</div>
+									</div>
+								</div>
+								<div class="modal-component" id="mainboard">
+									<p>메인보드</p>
+									<div class="icon"><img class="modal-icon" src="/img/icon-mainboard.png"></div>
+								</div>
+								<p style="font-size:30px">⟵</p>
+								<div class="connector" id="mainboard-case">
+									<div class="background-circle">
+										<div class="compatibility" id="mainboard-case-compatibility">❌</div>
+									</div>
+								</div>
+								<p style="font-size:30px">⟶</p>
+								<div class="modal-component" id="case">
+									<p>케이스</p>
+									<div class="icon"><img class="modal-icon" src="/img/icon-case.png"></div>
+								</div>
+							</div>
+						</div>
+						<svg width="47" height="88" xmlns="http://www.w3.org/2000/svg" class="downarrow-3">
+							<line x1="25" y1="10" x2="25" y2="80" stroke="black" stroke-width="2" />
+    						<polygon points="25,90 20,80 30,80" fill="black" />
+						</svg>
+						<svg width="47" height="80" xmlns="http://www.w3.org/2000/svg" class="uparrow-2">
+							<line x1="25" y1="90" x2="25" y2="10" stroke="black" stroke-width="2" />
+    						<polygon points="25,10 20,20 30,20" fill="black" />
+						</svg>
+						<svg width="47" height="80" xmlns="http://www.w3.org/2000/svg" class="uparrow-3">
+							<line x1="25" y1="90" x2="25" y2="10" stroke="black" stroke-width="2" />
+    						<polygon points="25,10 20,20 30,20" fill="black" />
+						</svg>
+						<div class="third-section">
+							<div class="pair">
+								<div class="modal-component" id="ram">
+									<p>RAM</p>
+									<div class="icon"><img class="modal-icon" src="/img/icon-ram.png"></div>
+								</div>
+								<svg width="120" height="50" xmlns="http://www.w3.org/2000/svg">
+									<line x1="10" y1="25" x2="110" y2="25" stroke="black" stroke-width="2" />
+									<polygon points="10,25 20,20 20,30" fill="black" />
+								</svg>
+								<div class="connector">
+									<div class="background-circle">
+										<div class="compatibility" id="ram-mainboard-compatibility">❌</div>
+									</div>
+								</div>
+							</div>
+							<div class="pair">
+								<div class="connector">
+									<div class="background-circle">
+										<div class="compatibility" id="cpu-motherboard-compatibility">❌</div>
+									</div>
+								</div>
+								<svg width="120" height="50" xmlns="http://www.w3.org/2000/svg">
+									<line x1="10" y1="25" x2="110" y2="25" stroke="black" stroke-width="2" />
+									<polygon points="110,25 100,20 100,30" fill="black" />
+								</svg>
+								<div class="modal-component" id="power">
+									<p>파워</p>
+									<div class="icon"><img class="modal-icon" src="/img/icon-power.png"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
                 <div class="body-bottom">
                     <li>CPU &nbsp;&nbsp;   ⬌ &nbsp; RAM : </li>
                     <li>CPU &nbsp;&nbsp;   ⬌ &nbsp;메인보드 : </li>
