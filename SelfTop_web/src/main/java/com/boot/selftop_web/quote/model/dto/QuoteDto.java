@@ -69,6 +69,9 @@ public class QuoteDto {
 		this.quote_amount = quote_amount;
 		this.price=price;
 	}
+
+	
+	
 	
 
 }

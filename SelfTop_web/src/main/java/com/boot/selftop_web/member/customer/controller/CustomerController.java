@@ -37,6 +37,10 @@ import com.boot.selftop_web.product.model.dto.ProductDto;
 import com.boot.selftop_web.quote.biz.QuoteBiz;
 import com.boot.selftop_web.quote.model.dto.QuoteDetailDto;
 import com.boot.selftop_web.quote.model.dto.QuoteDto;
+import com.boot.selftop_web.quote.model.dto.QuotecomparisonDto;
+
+import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
+
 import com.boot.selftop_web.member.customer.model.dto.CustomerorderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
@@ -49,6 +53,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/")
@@ -708,6 +713,28 @@ public class CustomerController {
 
 		return selectres;
 	}
+	
+	@PostMapping("/comparison")
+	@ResponseBody
+	public ResponseEntity<?> comparison(@RequestBody Map<String, List<String>> selectvalue){
+		List<String> values = selectvalue.get("values");
+		List<QuotecomparisonDto> res = quoteBiz.Quotecomprison(values);
+		Map<Integer, List<QuotecomparisonDto>> groupedData = res.stream()
+		        .collect(Collectors.groupingBy(QuotecomparisonDto::getQuote_no));
+		System.out.println(groupedData);
+		return ResponseEntity.ok(groupedData);
+	}
+	
+	@PostMapping("/deletequote")
+	@ResponseBody
+	public ResponseEntity<?> deletequote(@RequestBody Map<String, List<Integer>> selectvalue){
+		List<Integer> values = selectvalue.get("values");
+		int res2=quoteBiz.quotedetaildelete(values);
+		int res=quoteBiz.quotedelete(values);
+		
+		return ResponseEntity.ok(null);
+	}
+
 
 	@GetMapping("/productDetail")
 	public String productDetail(Model model, @RequestParam("product_code") int product_code) {
@@ -715,6 +742,28 @@ public class CustomerController {
 		model.addAttribute("product", dto);
 
 		return "popup_product_info";
+	}
+
+
+	@GetMapping("/loadquotelist")
+	public String getQuoteDiv(Model model,HttpSession session) {
+		Integer member_no = (Integer) session.getAttribute("member_no");
+		List<QuoteDto> res =quoteBiz.SelectQuote(member_no);
+		model.addAttribute("quote", res);
+	    return "fragmentcartquotelist :: cart_view"; // 특정 타임리프 fragment 반환
+	}
+	
+	@PostMapping("/updatequotedetailamount")
+	@ResponseBody
+	public ResponseEntity<?> updateQuote(@RequestBody List<Map<String, Object>> updatedData) {
+	    for (Map<String, Object> data : updatedData) {
+	        Integer quoteNo = Integer.parseInt((String) data.get("quoteNo"));
+	        Integer amount = Integer.parseInt((String) data.get("amount"));
+	        Integer productcode = Integer.parseInt((String)  data.get("productcode"));
+	        quoteBiz.updatedetailamount(quoteNo,productcode, amount );
+	       
+	    }
+	    return ResponseEntity.ok().body("저장되었습니다");
 	}
 
 }
