@@ -53,6 +53,68 @@
                 }
             }
         });
+     	
+        document.addEventListener("DOMContentLoaded", function() {
+            // localStorage에서 저장된 주문 데이터 가져오기
+            const orderData = JSON.parse(localStorage.getItem('orderData'));
+
+            if (orderData) {
+                // 테이블의 tbody를 가져옵니다.
+                const tbody = document.querySelector('#order-table tbody');
+                
+                // 기존 테이블 내용 초기화
+                tbody.innerHTML = '';
+
+                // 주문 데이터로 테이블 업데이트
+                orderData.forEach(item => {
+                    const row = document.createElement('tr');
+
+                    // 상품 이름
+                    const productNameCell = document.createElement('td');
+                    productNameCell.innerHTML = `
+                        <div class="product-container">
+                            <img class="product-image" src="path_to_image.jpg" alt="${item.name}">
+                            <div class="product-details">
+                                <p class="product-type">${item.name}</p>
+                                <p class="product-name">${item.name}</p>
+                            </div>
+                        </div>
+                    `;
+
+                    // 상품 가격
+                    const productPriceCell = document.createElement('td');
+                    productPriceCell.classList.add('product-price');
+                    productPriceCell.innerText = item.price;
+
+                    // 수량
+                    const quantityCell = document.createElement('td');
+                    quantityCell.classList.add('quantity');
+                    quantityCell.innerHTML = `
+                        <p class="quantity-input">${item.quantity}</p>
+                    `;
+
+                    // 주문 금액
+                    const orderPriceCell = document.createElement('td');
+                    orderPriceCell.classList.add('order-price');
+                    orderPriceCell.innerText = item.totalPrice;
+
+                    // 배송 금액
+                    const shippingFeeCell = document.createElement('td');
+                    shippingFeeCell.classList.add('shipping-fee');
+                    shippingFeeCell.innerText = '5,000원\n(조립미신청)';
+
+                    // 테이블 행에 추가
+                    row.appendChild(productNameCell);
+                    row.appendChild(productPriceCell);
+                    row.appendChild(quantityCell);
+                    row.appendChild(orderPriceCell);
+                    row.appendChild(shippingFeeCell);
+
+                    // tbody에 행 추가
+                    tbody.appendChild(row);
+                });
+            }
+        });
 
         function updateQuantity(button, change) {
         	
@@ -104,7 +166,8 @@
 
             mergeFixedShippingFee();
         });
-     // 전역에서 widgets 객체를 선언
+        
+     	// 전역에서 widgets 객체를 선언
         let widgets;
         let isPaymentInProgress = false;
      	// 선택상품 총금액과 최종 결제금액 업데이트 함수
@@ -121,13 +184,17 @@
             const baseAmount = finalAmount; // 최종 결제 금액을 baseAmount로 설정
             updatePaymentUI(baseAmount); // 결제 UI 업데이트
      	}
-		
+     	
+        let tossPayments;
      	// 결제 UI 업데이트 함수
         async function updatePaymentUI(baseAmount) {
             const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm"; // 토스 클라이언트 키
-            const tossPayments = TossPayments(clientKey);
-            const customerKey = "ANONYMOUS"; // 고객 키
-            widgets = tossPayments.widgets({ customerKey });
+            tossPayments = TossPayments(clientKey);
+            
+            if (!widgets) {
+            	const customerKey = "ANONYMOUS"; // 고객 키
+                widgets = tossPayments.widgets({ customerKey });
+            }
 
             await widgets.setAmount({
                 currency: "KRW",
@@ -169,6 +236,7 @@
 	            // 필수 입력 항목 확인
 	            if (!name || !phone || !zipNo || !address1 || !address2) {
 	                alert("성함, 연락처, 배송주소를 모두 입력해주세요.");
+	                isPaymentInProgress = false; // 초기화
 	                return; // 입력이 누락된 경우 결제 요청을 중단
 	            }
 
@@ -181,19 +249,21 @@
 	                    failUrl: "http://localhost:8080/payfail", // 결제 실패 시 리다이렉트 URL
 	                    customerName: name,
 	                    customerMobilePhone: phone,
+	                    
 	                });
+	                console.log("결제 결과:", paymentResult);
 
 	                // 결제 승인 처리 (결제 성공 시)
 	                if (paymentResult.status === "SUCCESS") {
 	                	// 결제 성공 후 서버에 주문 정보를 전송
-	                    await saveOrderToDB({
+	                    /*await saveOrderToDB({
 	                        orderId: "ORDER_ID_1234", // 주문 번호
 	                        customerName: name, // 고객 이름
 	                        customerPhone: phone, // 고객 전화번호
 	                        shippingAddress: `${address1} ${address2}`, // 배송 주소
 	                        zipCode: zipNo, // 우편번호
 	                        orderPrice: 100000 // 예시 가격, 실제 결제 금액을 사용
-	                    });
+	                    });*/
 	                    window.location.href = "http://localhost:8080/paysuccess";
 	                } else {
 	                    alert("결제에 실패하였습니다. 다시 시도해주세요.");
@@ -210,7 +280,7 @@
         });
         
      	// 결제 성공 후 서버에 주문 정보를 저장하는 함수
-        async function saveOrderToDB(orderData) {
+        /*async function saveOrderToDB(orderData) {
             try {
                 const response = await fetch("/order/save", {
                     method: "POST",
@@ -228,7 +298,7 @@
             } catch (error) {
                 console.error("서버에 주문 정보를 저장하는 중 오류 발생:", error);
             }
-        }
+        }*/
     </script>
 </head>
 <body>
@@ -321,9 +391,159 @@
 			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
 			                </td>
                             <td class="order-price"></td>
-                            <td class="shipping-fee">
-                                <span>5,000원</span>
+                            <td class="shipping-fee"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="product-container">
+                                    <img class="product-image">
+                                    <div class="product-details">
+                                        <p class="product-type"></p>
+                                        <p class="product-name"></p>
+                                    </div>
+                                </div>
                             </td>
+                            <td class="product-price"></td>
+                            <td class="quantity">
+			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
+			                    <p class="quantity-input"></p>
+			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
+			                </td>
+                            <td class="order-price"></td>
+                            <td class="shipping-fee"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="product-container">
+                                    <img class="product-image">
+                                    <div class="product-details">
+                                        <p class="product-type"></p>
+                                        <p class="product-name"></p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="product-price"></td>
+                            <td class="quantity">
+			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
+			                    <p class="quantity-input"></p>
+			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
+			                </td>
+                            <td class="order-price"></td>
+                            <td class="shipping-fee"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="product-container">
+                                    <img class="product-image">
+                                    <div class="product-details">
+                                        <p class="product-type"></p>
+                                        <p class="product-name"></p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="product-price"></td>
+                            <td class="quantity">
+			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
+			                    <p class="quantity-input"></p>
+			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
+			                </td>
+                            <td class="order-price"></td>
+                            <td class="shipping-fee"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="product-container">
+                                    <img class="product-image">
+                                    <div class="product-details">
+                                        <p class="product-type"></p>
+                                        <p class="product-name"></p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="product-price"></td>
+                            <td class="quantity">
+			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
+			                    <p class="quantity-input"></p>
+			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
+			                </td>
+                            <td class="order-price"></td>
+                            <td class="shipping-fee"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="product-container">
+                                    <img class="product-image">
+                                    <div class="product-details">
+                                        <p class="product-type"></p>
+                                        <p class="product-name"></p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="product-price"></td>
+                            <td class="quantity">
+			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
+			                    <p class="quantity-input"></p>
+			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
+			                </td>
+                            <td class="order-price"></td>
+                            <td class="shipping-fee"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="product-container">
+                                    <img class="product-image">
+                                    <div class="product-details">
+                                        <p class="product-type"></p>
+                                        <p class="product-name"></p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="product-price"></td>
+                            <td class="quantity">
+			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
+			                    <p class="quantity-input"></p>
+			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
+			                </td>
+                            <td class="order-price"></td>
+                            <td class="shipping-fee"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="product-container">
+                                    <img class="product-image">
+                                    <div class="product-details">
+                                        <p class="product-type"></p>
+                                        <p class="product-name"></p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="product-price"></td>
+                            <td class="quantity">
+			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
+			                    <p class="quantity-input"></p>
+			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
+			                </td>
+                            <td class="order-price"></td>
+                            <td class="shipping-fee"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="product-container">
+                                    <img class="product-image">
+                                    <div class="product-details">
+                                        <p class="product-type"></p>
+                                        <p class="product-name"></p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="product-price"></td>
+                            <td class="quantity">
+			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
+			                    <p class="quantity-input"></p>
+			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
+			                </td>
+                            <td class="order-price"></td>
+                            <td class="shipping-fee"></td>
                         </tr>
                     </tbody>
                 </table>

@@ -597,7 +597,7 @@ document.addEventListener("DOMContentLoaded", () => {
         contentBox.querySelectorAll('.buy-now').forEach(button => {
             button.addEventListener('click', (event) => {
                 const productDiv = event.target.closest('.product-box');
-                const productName = productDiv.querySelector('.product-info').textContent.trim();
+                const productName = productDiv.querySelector('.product-info a').textContent.trim();
                 const productPrice = productDiv.querySelector('.product-price').childNodes[0].textContent.trim().replace('원', '');
                 const productThumbnail = productDiv.querySelector('img').src;
 				const productStock = productDiv.querySelector('.product-stock').textContent.trim();
@@ -636,7 +636,7 @@ document.addEventListener("DOMContentLoaded", () => {
         window.open(`/productDetail?product_code=${product_code}&category=${category}`, "제품상세이미지팝업", "width=1000, height=1500, left=100, top=50, scrollbars=1");
     };
 
-    // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 는 함수
+    // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 넣는 함수
     function addToCart(productName, productPrice, productCode) {
         const activeComponent = document.querySelector('.component.active');
 
@@ -912,17 +912,54 @@ function resetCart(){
 
 }
 
-function goPayPage(){
-	//모든 컴포넌트 초기화
+// 구매하기 버튼 클릭 시 호출되는 함수
+function goPayPage() {
+    // 각 컴포넌트의 정보를 저장할 배열
+    const orderData = [];
+
+    // 각 컴포넌트 정보를 가져오기
     const components = document.querySelectorAll('.component');
-    components.forEach(component =>{
-        const productDetail = component.querySelector('#product-detail');
-        const productPriceDiv = component.querySelector('#product-price');
-		console.log(component+" : "+productDetail);
-		console.log(productPriceDiv);
-    })
-    //window.location.href = "/pay";
+	/*const productDiv = event.target.closest('.product-box');
+	                const productName = productDiv.querySelector('.product-info a').textContent.trim();
+	                const productPrice = productDiv.querySelector('.product-price').childNodes[0].textContent.trim().replace('원', '');
+	                const productThumbnail = productDiv.querySelector('img').src;
+					const productStock = productDiv.querySelector('.product-stock').textContent.trim();
+
+	                const productInfo = {
+	                    thumbnail: productThumbnail,
+	                    category: component,
+	                    name: productName,
+	                    price: productPrice,
+	                    quantity: 1,
+						stock: productStock
+	                };*/
+
+
+    components.forEach(component => {
+        const productName = component.querySelector('#product-detail').innerText; // 컴포넌트 이름
+        const productPrice = component.querySelector('#product-price').innerText; // 가격
+        const quantityInput = component.querySelector('#product-price'); // 수량 입력
+        const quantity = quantityInput ? quantityInput.value : 1; // 수량 기본값 1로 설정
+
+        // 컴포넌트 정보 객체 생성
+        const productInfo = {
+			category: component,
+            name: productName,
+            price: productPrice,
+            quantity: quantity
+        };
+
+        // 배열에 추가
+        orderData.push(productInfo);
+    });
+
+    // localStorage에 저장
+    localStorage.setItem('orderData', JSON.stringify(orderData));
+
+    // 결제 페이지로 이동
+    window.location.href = '/pay';  // 결제 페이지 URL로 이동
 }
+
 
 /*-----호환성체크 모달 코드----- */
 // 모달 제어 스크립트
