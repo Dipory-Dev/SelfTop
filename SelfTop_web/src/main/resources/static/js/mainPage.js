@@ -34,13 +34,11 @@ document.addEventListener("DOMContentLoaded", () => {
     radioButtons.forEach(radio => {
         radio.addEventListener('change', () => {
             if (radio.value === 'requested' && radio.checked) {
-                // 조립 신청이 선택되었을 때
                 if (!isAssemblyRequested) {
                     isAssemblyRequested = true;
-                    currentCart['assembly_price'] = 20000;
+                    currentCart['assembly_price'] = assemblyPrice;
                 }
             } else if (radio.value === 'not_requested' && radio.checked) {
-                // 조립 미신청이 선택되었을 때
                 if (isAssemblyRequested) {
                     isAssemblyRequested = false;
                     delete currentCart['assembly_price'];
@@ -670,10 +668,17 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateTotalPrice() {
         let total = 0;
 
-        // 모든 항목의 총 가격 계산
+        // 장바구니의 모든 항목 가격 합산
         Object.values(currentCart).forEach(item => {
-            total += item.price * item.quantity;
+            const price = parseFloat(item.price) || 0; // 가격을 숫자로 변환, 유효하지 않으면 0으로 설정
+            const quantity = parseInt(item.quantity, 10) || 0; // 수량을 정수로 변환, 유효하지 않으면 0으로 설정
+            total += price * quantity; // 가격 * 수량
         });
+
+        // 조립 신청 금액 추가 여부 확인
+        if (isAssemblyRequested) {
+            total += assemblyPrice;
+        }
 
         const totalPriceElement = document.querySelector('.total-price');
         if (totalPriceElement) {
@@ -810,8 +815,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-     // 조립 신청 금액 추가 함수
-     function addAssemblyPrice() {
+    // 조립 신청 금액 추가 함수
+    function addAssemblyPrice() {
         const totalPriceElement = document.querySelector('.total-price');
         let currentTotal = parseInt(totalPriceElement.textContent.replace(/[^0-9]/g, '')) || 0;
         currentTotal += assemblyPrice;
@@ -924,7 +929,8 @@ function goPayPage(){
     //window.location.href = "/pay";
 }
 
-/*-----호환성체크 모달 코드----- */
+
+/*-----호환성체크 모달----- */
 // 모달 제어 스크립트
 const modal = document.getElementById('modal');
 const openModal = document.getElementById('openModalBtn');
@@ -940,4 +946,22 @@ window.addEventListener('click', (event) => {
         modal.style.display = 'none';
     }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    // 모든 .compatibility 요소를 선택
+    const compatibilityElements = document.querySelectorAll(".compatibility");
+
+    // 각 요소의 내용을 검사
+    compatibilityElements.forEach((element) => {
+        const content = element.textContent.trim();
+
+        if (content === "✕") {
+            element.style.color = "red";
+        } else if (content === "𐤏") {
+            element.style.color = "blue";
+        }
+    });
+});
+
+/*-------------------------*/
 
