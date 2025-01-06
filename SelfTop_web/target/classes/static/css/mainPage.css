@@ -225,7 +225,6 @@ main{
 .content-box{
 	width: 1300px;
 	height: 600px;
-    border: 1px solid black;
     margin-top: 10px;
 }
 
@@ -486,6 +485,25 @@ footer {
     margin: 5px 0;
 }
 
+li{
+    float: left;
+    list-style: none;
+    border: 1px solid #ccc;
+}
+
+.sortBtn.active{
+    background-color: #C7E6FF;
+}
+
+.sortBtn{
+    text-decoration: none;
+    padding: 10px;
+    display: inline-block;
+    color: black;
+    background-color: white;
+    transition: background-color 0.3s;
+  }
+
 /*-----호환성체크 모달 코드-----*/
 *{
 
@@ -507,7 +525,7 @@ footer {
 
 .modal-content {
     background-color: #fff;
-    margin: 10% auto;
+    margin: 80px auto;
     margin-top:5%;
     padding: 20px;
     width: 1300px;
@@ -554,10 +572,6 @@ footer {
 
 li{
     margin-top:2px;
-    float: left;
-    list-style: none;
-    border: 1px solid #ccc;
-    padding: 2px;
 }
 
 .body-top{
@@ -669,9 +683,7 @@ li{
 }
 
 .btn-area{
-    margin-top:20px;
     padding: 10px 20px;
-    margin: 5px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -679,23 +691,9 @@ li{
 }
 
 .modal-footer{
-    margin-top:10px;
-    margin-left:1120px;
-}
+    margin-left:1000px;
+    margin-top:-90px;
 
-.btn-submit:hover{
-    transition: 0.6s;
-    background-color:#006bb3;
-}
-
-.btn-submit {
-    background-color: #008ADA;
-    color: white;
-    padding: 10px 20px;
-    margin: 5px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
 }
 
 .btn-close:hover{
@@ -707,10 +705,34 @@ li{
     background-color: #999;
     color: white;
     padding: 10px 20px;
-    margin: 5px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    margin-left:18px;
+}
+
+.connector > svg:first-child {
+    margin-left: 50px;
+}
+
+.connector > svg:last-child {
+    margin-right: 50px;
+}
+
+.background-circle{
+    background-color: #e7e5e5;
+    border-radius: 60px;
+    width:60px;
+    height:60px;
+    text-align: center;
+    margin-right:-30px;
+}
+
+.compatibility{
+    text-align: center;
+    padding-top: 9px;
+    font-size: 33px;
+    font-weight: bold;
 }
 
 .connector > svg:first-child {
