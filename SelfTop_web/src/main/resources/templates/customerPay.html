@@ -54,7 +54,7 @@
             }
         });
      	
-        document.addEventListener("DOMContentLoaded", function() {
+        /*document.addEventListener("DOMContentLoaded", function() {
             // localStorage에서 저장된 주문 데이터 가져오기
             const orderData = JSON.parse(localStorage.getItem('orderData'));
 
@@ -114,7 +114,7 @@
                     tbody.appendChild(row);
                 });
             }
-        });
+        });*/
 
         function updateQuantity(button, change) {
         	
@@ -391,7 +391,7 @@
 			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
 			                </td>
                             <td class="order-price"></td>
-                            <td class="shipping-fee"></td>
+                            <td class="shipping-fee"><span>5000원</span><br><span>조립미신청</span></td>
                         </tr>
                         <tr>
                             <td>
