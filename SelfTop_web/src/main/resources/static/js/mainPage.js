@@ -572,6 +572,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <a style="cursor: pointer" onclick="showPopup(${product.product_code}, '${component}')">
                                     ${product.product_name}
                                 </a>
+                            </div>
 							<div class="product-stock">${product.stock}</div>
                             <div style="color: #666; font-size: 0.9em; width: 1000px;">${product.etc}</div>
                         </div>

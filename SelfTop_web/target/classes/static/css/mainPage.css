@@ -55,7 +55,7 @@ main{
 .component-header{
     font-weight: bold;
     display: inline;
-    position: relative; 
+    position: relative;
 }
 
 .component-body{
@@ -120,7 +120,7 @@ main{
     font-weight: bold;
     color: #333;
     padding-top: 2px;
-    margin-top: -5px; 
+    margin-top: -5px;
     margin-left: 7px;
     transform: translateY(-7px);
 }
@@ -138,9 +138,9 @@ main{
     border:none;
     width:14px;
     height:14px;
-    position: absolute; 
-    top: 1px; 
-    right: 5px; 
+    position: absolute;
+    top: 1px;
+    right: 5px;
     text-align: center;
     border-radius: 2px;
     margin-top:3px;
@@ -266,7 +266,7 @@ main{
 }
 
 #product-detail{
-    
+
     font-size:12px;
     width:71%;
     margin-left:-5px;
@@ -314,7 +314,7 @@ h5{
 	width: 270px;
 	height: 30px;
 	margin: 5px 10px 9px 2px;
-    line-height: 30px; 
+    line-height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -358,7 +358,7 @@ h5{
 }
 
 .component.active {
-    background: linear-gradient(135deg, #ddf2ff, #f0fcff); 
+    background: linear-gradient(135deg, #ddf2ff, #f0fcff);
     transition: background 0.3s ease;
     color: black;
 }
@@ -569,7 +569,7 @@ li{
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 20px; 
+    gap: 20px;
     height:600px;
 }
 
@@ -600,12 +600,12 @@ li{
     width: 900px;
     height: 180px;
     display: flex;
-    align-items: center; 
+    align-items: center;
 }
 
 .second-section{
     margin-left: 20px;
-    
+
 }
 
 .first-section,
@@ -622,7 +622,7 @@ li{
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-right: 10px;
-    flex-shrink: 0; 
+    flex-shrink: 0;
 }
 
 .connector > #cpu-ram-compatibility{
@@ -665,7 +665,7 @@ li{
     margin-top:130px;
     width:1200px;
     height:170px;
-    
+
 }
 
 .btn-area{
