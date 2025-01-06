@@ -55,7 +55,7 @@ main{
 .component-header{
     font-weight: bold;
     display: inline;
-    position: relative; 
+    position: relative;
 }
 
 .component-body{
@@ -69,6 +69,11 @@ main{
     align-items: center;
     margin-top:-10px;
     gap:1px;
+}
+
+.a-product-name:hover{
+    color:#008ADA;
+    transition:0.1s;
 }
 
 .quantity-controls-wrapper {
@@ -491,6 +496,11 @@ li{
     border: 1px solid #ccc;
 }
 
+.sortBtn:hover{
+    background-color: #C7E6FF;
+    transition:0.3s;
+}
+
 .sortBtn.active{
     background-color: #C7E6FF;
 }
@@ -697,7 +707,7 @@ li{
 .modal-footer{
     margin-left:1000px;
     margin-top:-90px;
-    
+
 }
 
 .btn-close:hover{
