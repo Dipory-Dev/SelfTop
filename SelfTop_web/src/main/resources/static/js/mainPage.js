@@ -53,16 +53,15 @@ document.addEventListener("DOMContentLoaded", () => {
     saveQuoteButton.addEventListener("click", () =>{
         const quoteName =quoteNameInput.value.trim();
 
-        //견적 이름과 currentCart 저장
-        currentCart['quoteName'] = quoteName;
-
         if(!quoteName){
             alert("견적 이름을 입력하세요.");
             return;
         }
+
         // 견적 이름 및 조립 신청 여부를 currentCart에 추가
         currentCart['quoteName'] = quoteName;
         currentCart['assemblyStatus'] = isAssemblyRequested ? '조립 신청' : '조립 미신청';
+
         // JSON으로 변환
         const jsonCart = JSON.stringify(currentCart);
         console.log("json형식:", jsonCart);

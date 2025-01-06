@@ -55,7 +55,7 @@ main{
 .component-header{
     font-weight: bold;
     display: inline;
-    position: relative;
+    position: relative; 
 }
 
 .component-body{
