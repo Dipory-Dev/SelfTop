@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.boot.selftop_web.quote.biz.mapper.QuoteMapper;
 import com.boot.selftop_web.quote.model.dto.QuoteDetailDto;
 import com.boot.selftop_web.quote.model.dto.QuoteDto;
+import com.boot.selftop_web.quote.model.dto.QuotecomparisonDto;
 
 @Service
 public class QuoteBizImpl implements QuoteBiz{
@@ -26,6 +27,26 @@ public class QuoteBizImpl implements QuoteBiz{
 	public List<QuoteDetailDto> QuoteDetailinfo(int quote_no) {
 		// TODO Auto-generated method stub
 		return mapper.QuoteDetailinfo(quote_no);
+	}
+	@Override
+	public List<QuotecomparisonDto> Quotecomprison(List<String> value) {
+		// TODO Auto-generated method stub
+		return mapper.Quotecomprison(value);
+	}
+	@Override
+	public int quotedelete(List<Integer> value) {
+		// TODO Auto-generated method stub
+		return mapper.quotedelete(value);
+	}
+	@Override
+	public int quotedetaildelete(List<Integer> value) {
+		// TODO Auto-generated method stub
+		return mapper.quotedetaildelete(value);
+	}
+	@Override
+	public int updatedetailamount(int quoteno, int productcode, int amount) {
+		// TODO Auto-generated method stub
+		return mapper.updatedetailamount(quoteno,productcode,amount);
 	}
 
 	@Override
