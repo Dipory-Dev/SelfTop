@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // 조립 신청이 선택되었을 때
                 if (!isAssemblyRequested) {
                     isAssemblyRequested = true;
-                    currentCart['assembly_price'] = 20000;
+                    currentCart['assembly_price'] = assemblyPrice;
                 }
             } else if (radio.value === 'not_requested' && radio.checked) {
                 // 조립 미신청이 선택되었을 때
@@ -606,7 +606,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <img src="${product.thumbnail}" alt="${product.product_name} 이미지" style="width: 100px; height: 100px; margin-right: 10px;">
                         <div style="flex-grow: 1; min-width: 0;">
                             <div class="product-info" style="font-weight: bold; border-bottom: 1px solid black; padding-bottom: 5px; width: 1000px;">
-                                <a style="cursor: pointer" onclick="showPopup(${product.product_code}, '${component}')">
+                                <a class="a-product-name"style="cursor: pointer" onclick="showPopup(${product.product_code}, '${component}')">
                                     ${product.product_name}
                                 </a>
                             </div>
@@ -663,6 +663,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 const productName = button.getAttribute('data-product-name'); // 상품명 가져오기
                 const productPrice = button.getAttribute('data-product-price'); // 가격 가져오기
                 const productCode = button.getAttribute('data-product-code');
+
+                if(productPrice==0){
+                    alert("품절된 상품은 담을 수 없습니다.");
+                    return;
+                }
+
                 addToCart(productName, productPrice, productCode);
             });
         });
@@ -711,8 +717,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 모든 항목의 총 가격 계산
         Object.values(currentCart).forEach(item => {
-            total += item.price * item.quantity;
+            const price = parseFloat(item.price) || 0; // 가격을 숫자로 변환, 유효하지 않으면 0으로 설정
+            const quantity = parseInt(item.quantity, 10) || 0; // 수량을 정수로 변환, 유효하지 않으면 0으로 설정
+            total += price * quantity; // 가격 * 수량
         });
+
+        // 조립 신청 금액 추가 여부 확인
+        if (isAssemblyRequested) {
+            total += assemblyPrice;
+        }
 
         const totalPriceElement = document.querySelector('.total-price');
         if (totalPriceElement) {
@@ -850,7 +863,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
      // 조립 신청 금액 추가 함수
-     function addAssemblyPrice() {
+    function addAssemblyPrice() {
         const totalPriceElement = document.querySelector('.total-price');
         let currentTotal = parseInt(totalPriceElement.textContent.replace(/[^0-9]/g, '')) || 0;
         currentTotal += assemblyPrice;
@@ -1010,7 +1023,7 @@ function toggleSidePanel() {
     }
 }
 
-/*-----호환성체크 모달 코드----- */
+/*-----호환성체크 모달----- */
 // 모달 제어 스크립트
 const modal = document.getElementById('modal');
 const openModal = document.getElementById('openModalBtn');
@@ -1027,3 +1040,17 @@ window.addEventListener('click', (event) => {
     }
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    // 모든 .compatibility 요소를 선택
+    const compatibilityElements = document.querySelectorAll(".compatibility");
+    // 각 요소의 내용을 검사
+    compatibilityElements.forEach((element) => {
+        const content = element.textContent.trim();
+        if (content === "✕") {
+            element.style.color = "red";
+        } else if (content === "𐤏") {
+            element.style.color = "blue";
+        }
+    });
+});
+/*-------------------------*/
