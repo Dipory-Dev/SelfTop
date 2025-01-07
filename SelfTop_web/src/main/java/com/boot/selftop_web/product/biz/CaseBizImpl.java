@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service("케이스")
 public class CaseBizImpl implements ProductBiz<CaseDto> {
@@ -51,5 +52,16 @@ public class CaseBizImpl implements ProductBiz<CaseDto> {
 
         return results;
     }
+
+	@Override
+	public List<CaseDto> filterProducts(Map<String, List<String>> filters, String sort) {
+		try {
+            return caseMapper.findFilteredCases(filters, sort);
+        } catch (Exception e) {
+            System.err.println("Error filtering Cases with filters: " + filters + "\nError: " + e.getMessage());
+            e.printStackTrace(); // 스택 추적을 통해 더 자세한 오류 정보 제공
+            throw new RuntimeException("Error processing CASE filter", e);
+        }
+	}
 
 }

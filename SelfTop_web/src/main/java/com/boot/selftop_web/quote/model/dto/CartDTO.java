@@ -2,23 +2,24 @@ package com.boot.selftop_web.quote.model.dto;
 
 import java.util.Date;
 
-public class QuoteDto {
+public class CartDTO {
 	private int quote_no;
 	private int customer_no;
-	private String  quote_name;
+	private String quote_name;
 	private Date quote_date;
 	private int quote_amount;
-	private int price;
-	
-	public int getPrice() {
-		return price;
-	}
+	private char assembly;
 
-	public void setPrice(int price) {
-		this.price = price;
-	}
+	public CartDTO() {}
 
-	public QuoteDto() {}
+	public CartDTO(int quote_no, int customer_no, String quote_name, Date quote_date, int quote_amount, char assembly) {
+		this.quote_no = quote_no;
+		this.customer_no = customer_no;
+		this.quote_name = quote_name;
+		this.quote_date = quote_date;
+		this.quote_amount = quote_amount;
+		this.assembly = assembly;
+	}
 
 	public int getQuote_no() {
 		return quote_no;
@@ -60,18 +61,23 @@ public class QuoteDto {
 		this.quote_amount = quote_amount;
 	}
 
-	public QuoteDto(int quote_no, int customer_no, String quote_name, Date quote_date, int quote_amount,int price) {
-		super();
-		this.quote_no = quote_no;
-		this.customer_no = customer_no;
-		this.quote_name = quote_name;
-		this.quote_date = quote_date;
-		this.quote_amount = quote_amount;
-		this.price=price;
+	public char getAssembly() {
+		return assembly;
 	}
 
-	
-	
-	
+	public void setAssembly(char assembly) {
+		this.assembly = assembly;
+	}
 
+	@Override
+	public String toString() {
+		return "CartDTO{" +
+				"quote_no=" + quote_no +
+				", customer_no=" + customer_no +
+				", quote_name='" + quote_name + '\'' +
+				", quote_date=" + quote_date +
+				", quote_amount=" + quote_amount +
+				", assembly=" + assembly +
+				'}';
+	}
 }

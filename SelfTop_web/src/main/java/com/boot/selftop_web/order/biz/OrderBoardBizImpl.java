@@ -14,10 +14,8 @@ public class OrderBoardBizImpl implements OrderBoardBiz{
 	private OrderBoardMapper mapper;
 	
 	@Override
-	public List<OrderBoardDto> vieworderboard(int ordernum) {
-		
+	public List<OrderBoardDto> vieworderboard(int ordernum) {		
 		return mapper.vieworderboard(ordernum);
 	}
-
 
 }

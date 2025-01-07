@@ -133,8 +133,6 @@ span {
 .btn-modify:hover{
     background: #006bb3;
 }
-
-
 .order_status{
 	display:flex;
 	gap: 10px;
@@ -166,6 +164,10 @@ span {
 	display:flex;
 	
 
+}
+
+.grayzone{
+	background-color:#EAEAEA;
 }
 
 .grayzone{

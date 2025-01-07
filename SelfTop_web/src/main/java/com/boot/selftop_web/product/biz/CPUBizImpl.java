@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service("CPU")
 public class CPUBizImpl implements ProductBiz<CPUDto> {
@@ -52,12 +53,18 @@ public class CPUBizImpl implements ProductBiz<CPUDto> {
     @Override
     public List<CPUDto> getProductsByCategory(String category, String sort) {
         List<CPUDto> results = productMapper.findAllDetailedCpuProducts(category, sort);
-
-        System.out.println(results);
-
         return results;
     }
     
-    
+    @Override
+    public List<CPUDto> filterProducts(Map<String, List<String>> filters, String sort) {
+        try {
+            return cpuMapper.findFilteredCPUs(filters, sort);
+        } catch (Exception e) {
+            System.err.println("Error filtering CPUs with filters: " + filters + " and sort: " + sort + "\nError: " + e.getMessage());
+            e.printStackTrace(); // 스택 추적을 통해 더 자세한 오류 정보 제공
+            throw new RuntimeException("Error processing CPU filter", e);
+        }
+    }
     
 }

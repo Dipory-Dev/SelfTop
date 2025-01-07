@@ -11,7 +11,9 @@ public class CustomerDto {
 
 	public CustomerDto() {}
 
+
 	public CustomerDto(int member_no, String id, String pw, String name, String email, String phone, char role) {
+		super();
 		this.member_no = member_no;
 		this.id = id;
 		this.pw = pw;
@@ -19,6 +21,7 @@ public class CustomerDto {
 		this.email = email;
 		this.phone = phone;
 		this.role = role;
+		
 	}
 
 	public int getMember_no() {
@@ -89,4 +92,6 @@ public class CustomerDto {
 				", role=" + role +
 				'}';
 	}
+
+	
 }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Customer_MyPage</title>
+<title>Customer_cartPage</title>
 <link rel="stylesheet" href="/css/customercart.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="/js/customercart.js"></script>
@@ -33,10 +33,31 @@
 		</div>
 	</header>
 	<main>
+	
+	<!-- 모달 -->
+	<div id="compare-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">견적 비교</div>
+            <p>장바구니에 담은 견적을 동시에 비교해보세요. 🛒</p>
+            <h5 >견적은 최소 2개이상, 3개까지 비교할 수 있습니다.</h5>
+            <div class="check">
+                <input type="checkbox" id="quote1" value="0">
+                <label for="quote1">견적 1</label>
+            </div>
+            <button class="btn" id="compare-button">비교하기</button>
+            <hr>
+            <div id="table-container"></div>
+            <div class="modal-footer">
+                <button id="close-modal" class="btn btn-close">닫기</button>
+            </div>
+        </div>
+    </div>
+    <!-- 메인 내역 -->
 		<h1>내가 담은 견적리스트를 확인해보세요!</h1>
 		<hr>
 		<div class="cartinfosection">
-			<div class="selectcartlist">
+			<div  id ="quotelist" class="selectcartlist">
+				<div class="carttable">
 				<table>
 					<tr>
 						<th>선택</th>
@@ -57,18 +78,20 @@
 								<div class="quantity-control">
 									<button type="button" class="quantity-decrease">−</button>
 									<input type="number" class="quantity-input"
-										th:value="${dto.quote_amount}" min="0" />
+										th:value="${dto.quote_amount}"
+										th:data-price = "${dto.price}" min="0" />
 									<button type="button" class="quantity-increase">+</button>
 								</div>
 							</td>
-							<td th:text="${dto.price} +원 " ></td>
+							<td class ="quoteprice" th:text="${dto.price * dto.quote_amount}   +원 " ></td>
 						</tr>
 					</tbody>
 
 				</table>
+				</div>
 				<div class="bottombutton">
-					<button class="cartbutton">견적 비교</button>
-					<button class="cartbutton">견적 삭제</button>
+					<button  id ="showcomparison" class="cartbutton">견적 비교</button>
+					<button  id = "deletebutton" class="cartbutton" >견적 삭제</button>
 
 				</div>
 			</div>
@@ -94,8 +117,9 @@
 							<p th:if ="${detail.price != 0}" th:text="${detail.price} + 원"></p>
 							<div th:if="${detail.amount != 0}" class="quantity-control">
 								<button type="button" class="quantity-decrease">−</button>
-								<input type="number" class="quantity-input"
-									th:value="${detail.amount}" min="0" />
+								<input type="number" class="amount-input"
+									th:value="${detail.amount}"
+									 min="0" />
 								<button type="button" class="quantity-increase">+</button>
 							</div>
 						</div>
@@ -105,8 +129,8 @@
 
 				<div class="detailbottombutton">
 					<button class="detailbutton">결제</button>
-					<button class="detailbutton">호환성</button>
-					<button class="detailbutton">변경적용</button>
+					<button class="detailbutton">호환성 체크</button>
+					<button id ="changeamount" class="detailbutton">변경적용</button>
 				</div>
 			</div>
 		</div>
