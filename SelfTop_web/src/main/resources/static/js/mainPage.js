@@ -679,6 +679,105 @@ document.addEventListener("DOMContentLoaded", () => {
         window.open(`/productDetail?product_code=${product_code}&category=${category}`, "제품상세이미지팝업", "width=1000, height=1500, left=100, top=50, scrollbars=1");
     };
 
+    function fetchQuoteDetail(quote_no) {
+        if (quote_no === "none") {
+            alert("견적을 선택해주세요.");
+            return;
+        }
+
+        // 기존 사이드 패널 정보 비우기
+        resetQuote();
+
+        fetch(`/quote?quote_no=${quote_no}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+
+                updateComponents(data);
+
+                // 기존에 활성화된 컴포넌트를 비활성화
+                const deactivateActiveComponent = () => {
+                    const activeComponent = document.querySelector('.component.active');
+                    if (activeComponent) {
+                        activeComponent.classList.remove('active');
+                    }
+                };
+
+                // 각 category에 대해 처리
+                for (const category in data) {
+                    const categoryData = data[category];
+                    const component = document.querySelector(`.component[data-component='${category}']`);
+
+                    if (component) {
+                        // 이전 활성화 상태 제거
+                        deactivateActiveComponent();
+
+                        // 현재 카테고리 활성화
+                        component.classList.add('active');
+
+                        // 장바구니에 추가
+                        addToCart(categoryData.product_name, categoryData.price, categoryData.product_code);
+                    }
+                }
+
+                // CPU 컴포넌트를 기본 활성화
+                const cpuComponent = document.querySelector('.component[data-component="CPU"]');
+                if (cpuComponent) {
+                    deactivateActiveComponent(); // 마지막으로 기존 활성화 제거
+                    cpuComponent.classList.add('active'); // CPU 활성화
+                }
+            })
+            .catch(error => console.error('Error fetching quote details:', error));
+    }
+
+    function updateComponents(details) {
+        // 데이터를 기반으로 화면에 부품 정보 출력
+        console.log("Component details:", details);
+    }
+
+    // 전역으로 노출
+    window.fetchQuoteDetail = fetchQuoteDetail;
+
+    //초기화 버튼 클릭 시 기능하는 함수
+    function resetQuote(){
+
+        //모든 컴포넌트 초기화
+        const components = document.querySelectorAll('.component');
+        components.forEach(component =>{
+
+            //제품 이름 제거
+            const productDetail = component.querySelector('#product-detail');
+            if(productDetail){
+                productDetail.innerHTML = '';
+            }
+
+            //수량버튼, 가격 제거
+            const productPriceDiv = component.querySelector('#product-price');
+            if(productPriceDiv){
+                productPriceDiv.innerHTML='';
+            }
+
+            // 'active' 클래스 제거
+            component.classList.remove('active');
+        })
+
+        // 장바구니 데이터 초기화
+        currentCart = {};
+
+        // 총합 초기화
+        const totalPriceElement = document.querySelector('.total-price');
+        if (totalPriceElement) {
+            totalPriceElement.textContent = '0원';
+        }
+
+        // 선택된 부품 정보 초기화
+        const selectedPartDiv = document.querySelector('.selected-part');
+        if (selectedPartDiv) {
+            selectedPartDiv.innerHTML = '현재 견적 카트:<br>';
+        }
+
+    }
+
     // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 넣는 함수
     function addToCart(productName, productPrice, productCode) {
         const activeComponent = document.querySelector('.component.active');

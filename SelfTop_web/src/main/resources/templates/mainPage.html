@@ -5,32 +5,7 @@
 	<title>SELFTOP</title>
 	<link rel="stylesheet" href="/css/mainPage.css">
 	<script type="text/javascript" src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
-	<script type="text/javascript">
-		document.addEventListener('DOMContentLoaded', function () {
-			function fetchQuoteDetail(quote_no) {
-				if (quote_no === "none") {
-					alert("견적을 선택해주세요.");
-					return;
-				}
 
-				fetch(`/quote?quote_no=${quote_no}`)
-						.then(response => response.json())
-						.then(data => {
-							console.log(data);
-							updateComponents(data);
-						})
-						.catch(error => console.error('Error fetching quote details:', error));
-			}
-
-			function updateComponents(details) {
-				// 데이터를 기반으로 화면에 부품 정보 출력
-				console.log("Component details:", details);
-			}
-
-			// 전역으로 노출
-			window.fetchQuoteDetail = fetchQuoteDetail;
-		});
-	</script>
 </head>
 <body>
 	 <header>

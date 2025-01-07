@@ -1,8 +1,10 @@
 package com.boot.selftop_web.quote.biz;
 
 import java.util.List;
+import java.util.Map;
 
-import com.boot.selftop_web.product.model.dto.ProductDto;
+import com.boot.selftop_web.member.seller.model.dto.ProductStatusDto;
+import com.boot.selftop_web.product.model.dto.ProductInfoDto;
 import com.boot.selftop_web.quote.model.dto.CartDTO;
 import com.boot.selftop_web.quote.model.dto.CartDetailDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +62,13 @@ public class QuoteBizImpl implements QuoteBiz{
 	}
 
 	@Override
-	public ProductDto selectProduct(int product_code) {
-//		return mapper.selectProduct(product_code);
-		return null;
+	public ProductInfoDto selectProduct(int product_code) {
+		return mapper.selectProduct(product_code);
 	}
+
+	@Override
+	public ProductStatusDto selectProductStatus(int product_code) {
+		return mapper.selectProductStatus(product_code);
+	}
+
 }

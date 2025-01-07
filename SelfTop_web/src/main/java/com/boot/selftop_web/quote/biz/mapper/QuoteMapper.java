@@ -3,6 +3,8 @@ package com.boot.selftop_web.quote.biz.mapper;
 import java.util.List;
 
 
+import com.boot.selftop_web.member.seller.model.dto.ProductStatusDto;
+import com.boot.selftop_web.product.model.dto.ProductInfoDto;
 import com.boot.selftop_web.quote.model.dto.CartDTO;
 import com.boot.selftop_web.quote.model.dto.CartDetailDto;
 import org.apache.ibatis.annotations.Delete;
@@ -44,8 +46,16 @@ public interface QuoteMapper {
 	@Select("SELECT * FROM QUOTE q WHERE q.CUSTOMER_NO = #{member_no} ORDER BY q.QUOTE_NO desc")
 	List<CartDTO> selectCart(@Param("member_no") int member_no);
 
-	@Select("select * from quote_detail where quote_no = #{quote_no}")
+	@Select("select product_code, amount from quote_detail where quote_no = #{quote_no}")
 	List<CartDetailDto> selectCartDetail(@Param("quote_no")int quote_no);
+
+	@Select("select product_name, category from product where product_code = #{product_code}")
+	ProductInfoDto selectProduct(@Param("product_code")int product_code);
+
+	@Select("select seller_no, price from product_status where product_code = #{product_code} " +
+			"and price = (select min(price) from product_status where product_code = #{product_code})" +
+			"and reg_date = (select min(reg_date) from product_status where product_code = #{product_code})")
+	ProductStatusDto selectProductStatus(@Param("product_code")int product_code);
 
 	@Select("<script>" +
 			"SELECT qd.quote_no,q.quote_name,qd.amount,p.CATEGORY,p.PRODUCT_NAME,ps.price * qd.amount AS price \r\n"
@@ -77,6 +87,7 @@ public interface QuoteMapper {
 	        "</foreach>" +
 	        "</script>")
 	int quotedetaildelete(@Param("value")List<Integer> value);
+
 	@Update("UPDATE quote_detail SET amount = #{amount} WHERE quote_no=#{quoteno} AND product_code=#{productcode}")
 	int updatedetailamount(@Param("quoteno")int quoteno,@Param("productcode") int productcode,@Param("amount") int amount);
 

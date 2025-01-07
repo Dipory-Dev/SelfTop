@@ -1,6 +1,7 @@
 package com.boot.selftop_web.member.customer.controller;
 
 import com.boot.selftop_web.member.customer.biz.KakaoService;
+import com.boot.selftop_web.member.seller.model.dto.ProductStatusDto;
 import com.boot.selftop_web.product.biz.ProductInfoBizImpl;
 import com.boot.selftop_web.product.model.dto.ProductInfoDto;
 import com.boot.selftop_web.quote.model.dto.CartDTO;
@@ -212,14 +213,44 @@ public class CustomerController {
 	public ResponseEntity<?> selectCartDetail(@RequestParam("quote_no") int quote_no) {
 		System.out.println(quote_no);
 
+		// 견적 상세 정보를 가져옴
 		List<CartDetailDto> quote_detail = quoteBiz.selectCartDetail(quote_no);
+
+		// 결과를 저장할 Map
+		Map<String, Object> res = new HashMap<>();
+
+		// 각 제품 정보를 처리
 		for (CartDetailDto cartDetailDto : quote_detail) {
-			quoteBiz.selectProduct(cartDetailDto.getProduct_code());
+			int p_code = cartDetailDto.getProduct_code();
+			int amount = cartDetailDto.getAmount();
+
+			System.out.println("p_code: " + p_code);
+
+			// 제품 정보
+			ProductInfoDto productInfo = quoteBiz.selectProduct(p_code);
+			System.out.println("ProductInfoDto: " + productInfo);
+
+			// 제품 상태 정보
+			ProductStatusDto productStatus = quoteBiz.selectProductStatus(p_code);
+			System.out.println("ProductStatusDto: " + productStatus);
+
+			// 결과에 추가
+			Map<String, Object> productData = new HashMap<>();
+			productData.put("product_name", productInfo.getProduct_name());
+			productData.put("price", productStatus.getPrice());
+			productData.put("seller_no", productStatus.getSeller_no());
+			productData.put("amount", amount);
+
+			res.put(productInfo.getCategory(), productData);
 		}
 
-		System.out.println("Quote_detail : " + quote_detail);
-		return null;
+		System.out.println("res : " + res.toString());
+
+		// 결과 반환
+		return ResponseEntity.ok(res);
 	}
+
+
 
 
 	@GetMapping("/signup")

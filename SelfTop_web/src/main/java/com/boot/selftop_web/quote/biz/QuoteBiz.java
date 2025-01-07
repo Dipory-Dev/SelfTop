@@ -2,7 +2,8 @@ package com.boot.selftop_web.quote.biz;
 
 import java.util.List;
 
-import com.boot.selftop_web.product.model.dto.ProductDto;
+import com.boot.selftop_web.member.seller.model.dto.ProductStatusDto;
+import com.boot.selftop_web.product.model.dto.ProductInfoDto;
 import com.boot.selftop_web.quote.model.dto.CartDTO;
 import com.boot.selftop_web.quote.model.dto.CartDetailDto;
 import com.boot.selftop_web.quote.model.dto.QuoteDetailDto;
@@ -18,7 +19,8 @@ public interface QuoteBiz {
 	List<CartDTO> selectCart(int member_no);
 	List<CartDetailDto> selectCartDetail(int quote_no);
 
-	ProductDto selectProduct(int product_code);
+	ProductInfoDto selectProduct(int product_code);
+	ProductStatusDto selectProductStatus(int product_code);
 
 	List<QuotecomparisonDto> Quotecomprison(List<String> value);
 	int quotedelete(List<Integer> value);
