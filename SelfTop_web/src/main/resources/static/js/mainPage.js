@@ -4,6 +4,8 @@ let currentCart = {};
 let currentFilters = {};//필터링 된 상태에서 정렬기능 구현을 위해 현재 정렬된 정보를 담기
 
 document.addEventListener("DOMContentLoaded", () => {
+	const searchInput = document.getElementById('search-input');
+	const searchButton = document.querySelector('.search-button');
     const toggleButton = document.getElementById("toggle-button");
     const sidePanel = document.querySelector(".side-panel");
     const components = document.querySelectorAll('.component');
@@ -31,19 +33,45 @@ document.addEventListener("DOMContentLoaded", () => {
         displayCpuDetails(); // CPU 세부 정보 표시
         fetchCpuAttributes(); // CPU 속성 정보를 가져오는 함수 호출
     }
-
+	
 	/* 검색 기능 */
-
+	searchButton.addEventListener('click', () => {
+        searchProducts();
+    });	
+		
+	function searchProducts() {
+	    const searchInput = document.getElementById('search-input');
+	    const searchTerm = searchInput.value.trim().toLowerCase();  // 검색어를 소문자로 변환하고 공백을 제거
+	    const activeComponent = document.querySelector('.component.active');
+	    if (activeComponent && searchTerm) {
+	        const componentCategory = activeComponent.dataset.component;
+	        fetchProducts(componentCategory, selectedSort, searchTerm); // 검색어를 추가하여 fetchProducts 호출
+	    }
+	}
+	
+	// placeholder 업데이트 함수
+    function updatePlaceholder(componentName) {
+        searchInput.placeholder = `현재 카테고리: ${componentName}   카테고리를 선택 후 검색해주세요! `;
+    }
+	
+	searchInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            searchProducts();
+            event.preventDefault(); // 폼 제출 방지
+        }
+    });
 
     // 조립 신청 여부 체크
     radioButtons.forEach(radio => {
         radio.addEventListener('change', () => {
             if (radio.value === 'requested' && radio.checked) {
+                // 조립 신청이 선택되었을 때
                 if (!isAssemblyRequested) {
                     isAssemblyRequested = true;
                     currentCart['assembly_price'] = 20000;
                 }
             } else if (radio.value === 'not_requested' && radio.checked) {
+                // 조립 미신청이 선택되었을 때
                 if (isAssemblyRequested) {
                     isAssemblyRequested = false;
                     delete currentCart['assembly_price'];
@@ -56,15 +84,16 @@ document.addEventListener("DOMContentLoaded", () => {
     saveQuoteButton.addEventListener("click", () =>{
         const quoteName =quoteNameInput.value.trim();
 
+        //견적 이름과 currentCart 저장
+        currentCart['quoteName'] = quoteName;
+
         if(!quoteName){
             alert("견적 이름을 입력하세요.");
             return;
         }
-
         // 견적 이름 및 조립 신청 여부를 currentCart에 추가
         currentCart['quoteName'] = quoteName;
         currentCart['assemblyStatus'] = isAssemblyRequested ? '조립 신청' : '조립 미신청';
-
         // JSON으로 변환
         const jsonCart = JSON.stringify(currentCart);
         console.log("json형식:", jsonCart);
@@ -113,6 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 components.forEach(comp => comp.classList.remove('active'));
                 this.classList.add('active');
                 fetchProducts(this.dataset.component);
+				updatePlaceholder(this.dataset.component);
 
                 //사이드 패널 닫기
                 if(toggleButton){
@@ -537,8 +567,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 	// 제품 목록 출력
-	function fetchProducts(component, sort) {
-	    fetch(`/products/${component}?sort=${sort}`)
+	function fetchProducts(component, sort, search = '') {
+	    let url = `/products/${component}?sort=${sort}`;
+	    if (search) {
+	        url += `&search=${encodeURIComponent(search)}`; // 검색어 파라미터 추가
+	    }
+
+	    fetch(url)
 	        .then(response => {
 	            if (!response.ok) {
 	                throw new Error(`Failed to load ${component} products: ${response.statusText}`);
@@ -547,7 +582,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	        })
 	        .then(products => {
 	            displayProducts(products, component);
-				console.log(products);
 	        })
 	        .catch(error => {
 	            console.error('Error loading products:', error);
@@ -572,7 +606,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <img src="${product.thumbnail}" alt="${product.product_name} 이미지" style="width: 100px; height: 100px; margin-right: 10px;">
                         <div style="flex-grow: 1; min-width: 0;">
                             <div class="product-info" style="font-weight: bold; border-bottom: 1px solid black; padding-bottom: 5px; width: 1000px;">
-                                <a class="a-product-name"style="cursor: pointer" onclick="showPopup(${product.product_code}, '${component}')">
+                                <a style="cursor: pointer" onclick="showPopup(${product.product_code}, '${component}')">
                                     ${product.product_name}
                                 </a>
                             </div>
@@ -584,7 +618,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         ${product.price ? `${product.price}원` : '품절'}
                         <div><span class="stars">★★★★★</span></div>
                         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px;">
-                            <button class="btn add-to-cart" data-seller-no="${product.seller_no}" data-product-code="${product.product_code}" data-product-name="${product.product_name}" data-product-price="${product.price}">담기</button>
+                            <button class="btn add-to-cart" data-product-code="${product.product_code}" data-product-name="${product.product_name}" data-product-price="${product.price}">담기</button>
                             <button class="btn buy-now">바로구매</button>
                         </div>
                     </div>
@@ -629,12 +663,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 const productName = button.getAttribute('data-product-name'); // 상품명 가져오기
                 const productPrice = button.getAttribute('data-product-price'); // 가격 가져오기
                 const productCode = button.getAttribute('data-product-code');
-
-                if(productPrice==0){
-                    alert("품절된 상품은 담을 수 없습니다.");
-                    return;
-                }
-
                 addToCart(productName, productPrice, productCode);
             });
         });
@@ -646,7 +674,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 는 함수
-    function addToCart(productName, productPrice, productCode, sellerNo) {
+    function addToCart(productName, productPrice, productCode) {
         const activeComponent = document.querySelector('.component.active');
 
         if (activeComponent) {
@@ -668,12 +696,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 product_code: productCode,
                 name: productName,
                 price: parseInt(productPrice),
-                seller_no: sellerNo,
                 quantity: 1, // 기본 수량 :1
             };
 
             updateTotalPrice(); // 총합 업데이트
-
+			
 			toggleSidePanel();//사이드 패널 열기
         }
     }
@@ -682,17 +709,10 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateTotalPrice() {
         let total = 0;
 
-        // 장바구니의 모든 항목 가격 합산
+        // 모든 항목의 총 가격 계산
         Object.values(currentCart).forEach(item => {
-            const price = parseFloat(item.price) || 0; // 가격을 숫자로 변환, 유효하지 않으면 0으로 설정
-            const quantity = parseInt(item.quantity, 10) || 0; // 수량을 정수로 변환, 유효하지 않으면 0으로 설정
-            total += price * quantity; // 가격 * 수량
+            total += item.price * item.quantity;
         });
-
-        // 조립 신청 금액 추가 여부 확인
-        if (isAssemblyRequested) {
-            total += assemblyPrice;
-        }
 
         const totalPriceElement = document.querySelector('.total-price');
         if (totalPriceElement) {
@@ -829,8 +849,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 조립 신청 금액 추가 함수
-    function addAssemblyPrice() {
+     // 조립 신청 금액 추가 함수
+     function addAssemblyPrice() {
         const totalPriceElement = document.querySelector('.total-price');
         let currentTotal = parseInt(totalPriceElement.textContent.replace(/[^0-9]/g, '')) || 0;
         currentTotal += assemblyPrice;
@@ -930,17 +950,7 @@ function resetCart(){
     }
 
 	//모두 초기화 시킨 후 CPU가 선택되있는 상태로 만듬
-	activateCPU();
-}
-
-function activateCPU() {
-    const cpuComponent = document.querySelector('.component[data-component="CPU"]');
-    if (cpuComponent) {
-        cpuComponent.classList.add('active');
-        fetchProducts('CPU');
-        displayCpuDetails();
-        fetchCpuAttributes();
-    }
+	 window.location.reload();
 }
 
 function goPayPage(){
@@ -979,22 +989,4 @@ window.addEventListener('click', (event) => {
         modal.style.display = 'none';
     }
 });
-
-document.addEventListener("DOMContentLoaded", function () {
-    // 모든 .compatibility 요소를 선택
-    const compatibilityElements = document.querySelectorAll(".compatibility");
-
-    // 각 요소의 내용을 검사
-    compatibilityElements.forEach((element) => {
-        const content = element.textContent.trim();
-
-        if (content === "✕") {
-            element.style.color = "red";
-        } else if (content === "𐤏") {
-            element.style.color = "blue";
-        }
-    });
-});
-
-/*-------------------------*/
 

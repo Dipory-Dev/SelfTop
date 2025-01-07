@@ -49,10 +49,8 @@ public class CoolerBizImpl implements ProductBiz<CoolerDto>{
     }
 
     @Override
-    public List<CoolerDto> getProductsByCategory(String category, String sort) {
-        List<CoolerDto> results = productMapper.findAllDetailedCoolerProducts(category, sort);
-
-        return results;
+    public List<CoolerDto> getProductsByCategory(String category, String sort, String searchTerm) {
+    	return productMapper.findAllDetailedCoolerProducts(category, sort, searchTerm == null ? "" : searchTerm.trim());
     }
 
 	@Override

@@ -48,10 +48,8 @@ public class SSDBizImpl implements ProductBiz<SSDDto> {
     }
 
     @Override
-    public List<SSDDto> getProductsByCategory(String category, String sort) {
-        List<SSDDto> results = productMapper.findAllDetailedSsdProducts(category, sort);
-
-        return results;
+    public List<SSDDto> getProductsByCategory(String category, String sort, String searchTerm) {
+    	return productMapper.findAllDetailedSsdProducts(category, sort, searchTerm == null ? "" : searchTerm.trim());
     }
 
 	@Override

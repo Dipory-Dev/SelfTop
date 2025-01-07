@@ -48,10 +48,8 @@ public class MainBoardBizImpl implements ProductBiz<MainBoardDto> {
     }
 
     @Override
-    public List<MainBoardDto> getProductsByCategory(String category, String sort) {
-        List<MainBoardDto> results = productMapper.findAllDetailedMainBoardProducts(category, sort);
-
-        return results;
+    public List<MainBoardDto> getProductsByCategory(String category, String sort, String searchTerm) {
+    	return productMapper.findAllDetailedMainBoardProducts(category, sort, searchTerm == null ? "" : searchTerm.trim());
     }
 
 	@Override

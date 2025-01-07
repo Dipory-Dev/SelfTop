@@ -649,24 +649,20 @@ public class CustomerController {
 
 	@GetMapping("/products/{category}")
 	public ResponseEntity<?> getProductsByCategory(
-			@PathVariable String category,
-			@RequestParam(value = "sort", defaultValue = "byname") String sort) {
+	        @PathVariable String category,
+	        @RequestParam(value = "sort", defaultValue = "byname") String sort,
+	        @RequestParam(value = "search", required = false) String search) {
 
-	    System.out.println("Fetching products for category: " + category);
-		System.out.println("Sort by : " + sort);
-
-
+	    System.out.println("Fetching products for category: " + category + ", sort: " + sort + ", search: " + search);
 	    ProductBiz<?> productBiz = productBizFactory.getBiz(category.toLowerCase());
 	    if (productBiz == null) {
 	        System.err.println("No ProductBiz found for category: " + category);
-	        return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Invalid category: " + category));
+	        return ResponseEntity.badRequest().body("Invalid category: " + category);
 	    }
 
-
-	    List<?> products = productBiz.getProductsByCategory(category, sort);
+	    List<?> products = productBiz.getProductsByCategory(category, sort, search);
 	    if (products.isEmpty()) {
-	        System.out.println("No products found for category: " + category);
-	        return ResponseEntity.notFound().build();
+	        return ResponseEntity.noContent().build();
 	    }
 	    return ResponseEntity.ok(products);
 	}

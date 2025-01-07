@@ -48,10 +48,8 @@ public class HDDBizImpl implements ProductBiz<HDDDto> {
     }
 
     @Override
-    public List<HDDDto> getProductsByCategory(String category, String sort) {
-        List<HDDDto> results = productMapper.findAllDetailedHddProducts(category, sort);
-
-        return results;
+    public List<HDDDto> getProductsByCategory(String category, String sort, String searchTerm) {
+    	return productMapper.findAllDetailedHddProducts(category, sort, searchTerm == null ? "" : searchTerm.trim());
     }
 
 	@Override

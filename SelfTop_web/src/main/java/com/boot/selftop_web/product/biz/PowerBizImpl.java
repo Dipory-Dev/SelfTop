@@ -48,10 +48,8 @@ public class PowerBizImpl implements ProductBiz<PowerDto> {
     }
 
     @Override
-    public List<PowerDto> getProductsByCategory(String category, String sort) {
-        List<PowerDto> results = productMapper.findAllDetailedPowerProducts(category, sort);
-
-        return results;
+    public List<PowerDto> getProductsByCategory(String category, String sort, String searchTerm) {
+    	return productMapper.findAllDetailedPowerProducts(category, sort, searchTerm == null ? "" : searchTerm.trim());
     }
 
 	@Override

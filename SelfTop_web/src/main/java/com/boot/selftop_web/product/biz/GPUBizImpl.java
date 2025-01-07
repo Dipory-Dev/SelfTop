@@ -48,10 +48,8 @@ public class GPUBizImpl implements ProductBiz<GPUDto> {
     }
 
     @Override
-    public List<GPUDto> getProductsByCategory(String category, String sort) {
-        List<GPUDto> results = productMapper.findAllDetailedGpuProducts(category, sort);
-
-        return results;
+    public List<GPUDto> getProductsByCategory(String category, String sort, String searchTerm) {
+    	return productMapper.findAllDetailedGpuProducts(category, sort, searchTerm == null ? "" : searchTerm.trim());
     }
 
 	@Override

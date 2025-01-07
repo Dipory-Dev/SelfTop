@@ -51,9 +51,8 @@ public class CPUBizImpl implements ProductBiz<CPUDto> {
     
     //main에서 cpu선택하면 모든 cpu가져오기
     @Override
-    public List<CPUDto> getProductsByCategory(String category, String sort) {
-        List<CPUDto> results = productMapper.findAllDetailedCpuProducts(category, sort);
-        return results;
+    public List<CPUDto> getProductsByCategory(String category, String sort, String searchTerm) {
+        return productMapper.findAllDetailedCpuProducts(category, sort, searchTerm == null ? "" : searchTerm.trim());
     }
     
     @Override

@@ -42,13 +42,13 @@
     <main>
     <div>
     	<div>
-	    	<form id="search">
-				<div class="search-container">
-					<input type="text" class="search-box" placeholder="원하는 상품명을 검색해주세요" id="search-input">
-					<button type="button" class="search-button" onclick="searchProducts()"></button>
-				</div>
-			</form>
-	    </div>
+		    <form id="search" onsubmit="event.preventDefault(); searchProducts();">
+		        <div class="search-container">
+		            <input type="text" class="search-box" placeholder="현재 카테고리: CPU   카테고리를 선택 후 검색해주세요!" id="search-input">
+		            <button type="submit" class="search-button"></button>
+		        </div>
+		    </form>
+		</div>
 	    <br>
 	    <div>
 	    	<p id="category-count"></p>

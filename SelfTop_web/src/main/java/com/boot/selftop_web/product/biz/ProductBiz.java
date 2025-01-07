@@ -11,7 +11,7 @@ public interface ProductBiz<T extends ProductDto>{
     int insert(T dto);
     
     //main에서 부품 선택시 카테고리로 설정
-    List<?> getProductsByCategory(String category, String sort);
+    List<T> getProductsByCategory(String category, String sort, String searchTerm);
     
     // 필터링을 위한 메소드 추가
     List<T> filterProducts(Map<String, List<String>> filters, String sort);

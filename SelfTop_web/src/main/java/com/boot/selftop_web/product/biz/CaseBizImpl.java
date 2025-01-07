@@ -47,10 +47,8 @@ public class CaseBizImpl implements ProductBiz<CaseDto> {
     }
 
     @Override
-    public List<CaseDto> getProductsByCategory(String category, String sort) {
-        List<CaseDto> results = productMapper.findAllDetailedCaseProducts(category, sort);
-
-        return results;
+    public List<CaseDto> getProductsByCategory(String category, String sort, String searchTerm) {
+    	return productMapper.findAllDetailedCaseProducts(category, sort, searchTerm == null ? "" : searchTerm.trim());
     }
 
 	@Override
