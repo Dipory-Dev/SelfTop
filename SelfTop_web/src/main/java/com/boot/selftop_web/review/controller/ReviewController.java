@@ -31,24 +31,18 @@ public class ReviewController {
 
     // 특정 상품의 리뷰 가져오기
     @GetMapping("/reviews")
-    public ResponseEntity<?> getProductReviews(@RequestParam("productCode") String productCode) {
-    	
-    	int product_code = Integer.parseInt( productCode);
-    	/*수정중!
+    public ResponseEntity<?> getProductReviews(@RequestParam("productCode") Integer productCode) {
         if (productCode == null || productCode <= 0) {
             return ResponseEntity.badRequest().body("Invalid product code: " + productCode);
         }
 
         try {
             List<ReviewDto> reviews = reviewBiz.getReviewsByProductCode(productCode);
-            return ResponseEntity.ok(reviews);
+            return ResponseEntity.ok(reviews); // JSON 응답
         } catch (Exception e) {
-            // 서버 오류 로그 출력
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 데이터를 가져오는 데 실패했습니다.");
         }
-        */
-        return null;
     }
     
     
@@ -73,4 +67,16 @@ public class ReviewController {
         reviewBiz.deleteReview(reviewNo);
         return "redirect:/product/reviews?productCode=" + productCode;
     }
+    
+    /* 수정중
+    @GetMapping("/detail")
+    public String getProductDetail(@RequestParam("productCode") int productCode, Model model) {
+        // ProductBiz를 통해 데이터 가져오기
+        ProductDto product = productBiz.getProductByCode(productCode);
+        model.addAttribute("product", product);
+        return "productDetail"; // Thymeleaf 템플릿 파일 이름
+    }
+    */
+    
+    
 }

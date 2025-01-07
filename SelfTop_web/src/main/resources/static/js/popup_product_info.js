@@ -10,26 +10,25 @@ function loadReviews(productCode) {
     }
 
     $.ajax({
-        url: `/product/reviews?productCode=${productCode}`, // 서버 엔드포인트
+        url: `/product/reviews?productCode=${productCode}`, 
         type: 'GET',
         dataType: 'json', 
         success: function(reviews) {
-            //HTML로 변환
+            // HTML로 변환
             let html = '<div><h3>제품 후기</h3><ul>';
             reviews.forEach(review => {
                 html += `<li>
                     <div>
-                        <img th:src="${review.reviewImg}" alt="리뷰 이미지" style="width:100px; height:auto;" />
+                        <img src="${review.reviewImg}" alt="리뷰 이미지" style="width:100px; height:auto;" />
                     </div>
                     <p>리뷰 내용: ${review.content}</p>
-                    <p>평점: ${review.rating}★</p>
-                    <p>작성자: ${review.member_no}</p>
+                    <p>평점: ${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}</p>
+                    <p>작성자: ${review.member_no || "익명 사용자"}</p>
                 </li>`;
             });
             html += '</ul></div>';
             
             $("#content").html(html);
-            
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error(`Ajax 요청 실패: ${textStatus}`, errorThrown);
