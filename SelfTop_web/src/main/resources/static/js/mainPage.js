@@ -1072,21 +1072,6 @@ function goPayPage() {
 
     // 각 컴포넌트 정보를 가져오기
     const components = document.querySelectorAll('.component');
-	/*const productDiv = event.target.closest('.product-box');
-	                const productName = productDiv.querySelector('.product-info a').textContent.trim();
-	                const productPrice = productDiv.querySelector('.product-price').childNodes[0].textContent.trim().replace('원', '');
-	                const productThumbnail = productDiv.querySelector('img').src;
-					const productStock = productDiv.querySelector('.product-stock').textContent.trim();
-
-	                const productInfo = {
-	                    thumbnail: productThumbnail,
-	                    category: component,
-	                    name: productName,
-	                    price: productPrice,
-	                    quantity: 1,
-						stock: productStock
-	                };*/
-
 
     components.forEach(component => {
         const productName = component.querySelector('#product-detail').innerText; // 컴포넌트 이름
