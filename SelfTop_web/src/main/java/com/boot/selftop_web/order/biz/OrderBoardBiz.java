@@ -13,5 +13,5 @@ public interface OrderBoardBiz {
 	List<OrderDetailDto> selectOrderDetail(int order_no);
 	
 	ProductDto selectProduct(int product_code);
-
+	boolean updateOrder(int order_no);
 }
