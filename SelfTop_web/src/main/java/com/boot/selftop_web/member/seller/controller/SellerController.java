@@ -170,7 +170,6 @@ public class SellerController {
 	public ResponseEntity<List<OrderBoardDto>> informorder(@RequestBody int info) {
 		int ordernum = info;
 		List<OrderBoardDto> res = orderboardbiz.vieworderboard(ordernum);
-		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+res);
 		return ResponseEntity.ok(res);
 	}
 

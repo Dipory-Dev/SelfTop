@@ -25,6 +25,10 @@ function movemypage(){
 	location.href='/mypage'
 	
 }
+
+function movecart(){
+	location.href='/cartpage'
+}
 function logout() {
     sessionStorage.removeItem("loggedIn");
     location.href = '/logout';

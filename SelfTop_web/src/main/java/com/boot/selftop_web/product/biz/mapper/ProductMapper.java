@@ -164,19 +164,24 @@ public interface ProductMapper {
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
-            "(SELECT ps2.STOCK " + 
-	        "FROM PRODUCT_STATUS ps2 " + 
-	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        "AND ps2.PRICE = ( " +
-	        "SELECT MIN(ps3.PRICE) " + 
-	        "FROM PRODUCT_STATUS ps3 " +
-	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        ") " +
-            ") AS STOCK " +
+            "ps_min.STOCK, " +
+            "ps_min.SELLER_NO " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "LEFT JOIN (" +
+            "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
+            "    FROM PRODUCT_STATUS ps_inner " +
+            "    WHERE ps_inner.PRICE = (" +
+            "        SELECT MIN(ps_sub.PRICE) " +
+            "        FROM PRODUCT_STATUS ps_sub " +
+            "        WHERE ps_sub.PRODUCT_CODE = ps_inner.PRODUCT_CODE" +
+            "    )" +
+            ") ps_min ON p.PRODUCT_CODE = ps_min.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "<if test='searchTerm != null'>" +
+            "AND (LOWER(p.PRODUCT_NAME) LIKE '%' || LOWER(#{searchTerm}) || '%' OR LOWER(p.ETC) LIKE '%' || LOWER(#{searchTerm}) || '%')" +
+            "</if>" +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, ps_min.STOCK, ps_min.SELLER_NO " +
             "<if test='sort != null'>ORDER BY " +
             "   <choose>" +
             "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
@@ -190,24 +195,30 @@ public interface ProductMapper {
             "   </choose>" +
             "</if>" +
             "</script>")
-    List<CPUDto> findAllDetailedCpuProducts(@Param("category") String category, @Param("sort") String sort);
+    List<CPUDto> findAllDetailedCpuProducts(@Param("category") String category, @Param("sort") String sort, @Param("searchTerm") String searchTerm);
+
 
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
-            "(SELECT ps2.STOCK " + 
-	        "FROM PRODUCT_STATUS ps2 " + 
-	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        "AND ps2.PRICE = ( " +
-	        "SELECT MIN(ps3.PRICE) " + 
-	        "FROM PRODUCT_STATUS ps3 " +
-	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        ") " +
-            ") AS STOCK " +
+            "ps_min.STOCK, " +
+            "ps_min.SELLER_NO " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "LEFT JOIN (" +
+            "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
+            "    FROM PRODUCT_STATUS ps_inner " +
+            "    WHERE ps_inner.PRICE = (" +
+            "        SELECT MIN(ps_sub.PRICE) " +
+            "        FROM PRODUCT_STATUS ps_sub " +
+            "        WHERE ps_sub.PRODUCT_CODE = ps_inner.PRODUCT_CODE" +
+            "    )" +
+            ") ps_min ON p.PRODUCT_CODE = ps_min.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "<if test='searchTerm != null'>" +
+            "AND (LOWER(p.PRODUCT_NAME) LIKE '%' || LOWER(#{searchTerm}) || '%' OR LOWER(p.ETC) LIKE '%' || LOWER(#{searchTerm}) || '%')" +
+            "</if>" +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, ps_min.STOCK, ps_min.SELLER_NO " +
             "<if test='sort != null'>ORDER BY " +
             "   <choose>" +
             "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
@@ -221,24 +232,29 @@ public interface ProductMapper {
             "   </choose>" +
             "</if>" +
             "</script>")
-    List<CoolerDto> findAllDetailedCoolerProducts(@Param("category") String category, @Param("sort") String sort);
+    List<CoolerDto> findAllDetailedCoolerProducts(@Param("category") String category, @Param("sort") String sort, @Param("searchTerm") String searchTerm);
 
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
-            "(SELECT ps2.STOCK " + 
-	        "FROM PRODUCT_STATUS ps2 " + 
-	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        "AND ps2.PRICE = ( " +
-	        "SELECT MIN(ps3.PRICE) " + 
-	        "FROM PRODUCT_STATUS ps3 " +
-	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        ") " +
-            ") AS STOCK " +
+            "ps_min.STOCK, " +
+            "ps_min.SELLER_NO " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "LEFT JOIN (" +
+            "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
+            "    FROM PRODUCT_STATUS ps_inner " +
+            "    WHERE ps_inner.PRICE = (" +
+            "        SELECT MIN(ps_sub.PRICE) " +
+            "        FROM PRODUCT_STATUS ps_sub " +
+            "        WHERE ps_sub.PRODUCT_CODE = ps_inner.PRODUCT_CODE" +
+            "    )" +
+            ") ps_min ON p.PRODUCT_CODE = ps_min.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "<if test='searchTerm != null'>" +
+            "AND (LOWER(p.PRODUCT_NAME) LIKE '%' || LOWER(#{searchTerm}) || '%' OR LOWER(p.ETC) LIKE '%' || LOWER(#{searchTerm}) || '%')" +
+            "</if>" +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, ps_min.STOCK, ps_min.SELLER_NO " +
             "<if test='sort != null'>ORDER BY " +
             "   <choose>" +
             "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
@@ -252,24 +268,29 @@ public interface ProductMapper {
             "   </choose>" +
             "</if>" +
             "</script>")
-    List<CaseDto> findAllDetailedCaseProducts(@Param("category") String category, @Param("sort") String sort);
+    List<CaseDto> findAllDetailedCaseProducts(@Param("category") String category, @Param("sort") String sort, @Param("searchTerm") String searchTerm);
 
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
-            "(SELECT ps2.STOCK " + 
-	        "FROM PRODUCT_STATUS ps2 " + 
-	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        "AND ps2.PRICE = ( " +
-	        "SELECT MIN(ps3.PRICE) " + 
-	        "FROM PRODUCT_STATUS ps3 " +
-	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        ") " +
-            ") AS STOCK " +
+            "ps_min.STOCK, " +
+            "ps_min.SELLER_NO " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "LEFT JOIN (" +
+            "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
+            "    FROM PRODUCT_STATUS ps_inner " +
+            "    WHERE ps_inner.PRICE = (" +
+            "        SELECT MIN(ps_sub.PRICE) " +
+            "        FROM PRODUCT_STATUS ps_sub " +
+            "        WHERE ps_sub.PRODUCT_CODE = ps_inner.PRODUCT_CODE" +
+            "    )" +
+            ") ps_min ON p.PRODUCT_CODE = ps_min.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "<if test='searchTerm != null'>" +
+            "AND (LOWER(p.PRODUCT_NAME) LIKE '%' || LOWER(#{searchTerm}) || '%' OR LOWER(p.ETC) LIKE '%' || LOWER(#{searchTerm}) || '%')" +
+            "</if>" +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, ps_min.STOCK, ps_min.SELLER_NO " +
             "<if test='sort != null'>ORDER BY " +
             "   <choose>" +
             "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
@@ -283,24 +304,29 @@ public interface ProductMapper {
             "   </choose>" +
             "</if>" +
             "</script>")
-    List<GPUDto> findAllDetailedGpuProducts(@Param("category") String category, @Param("sort") String sort);
+    List<GPUDto> findAllDetailedGpuProducts(@Param("category") String category, @Param("sort") String sort, @Param("searchTerm") String searchTerm);
 
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
-            "(SELECT ps2.STOCK " + 
-	        "FROM PRODUCT_STATUS ps2 " + 
-	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        "AND ps2.PRICE = ( " +
-	        "SELECT MIN(ps3.PRICE) " + 
-	        "FROM PRODUCT_STATUS ps3 " +
-	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        ") " +
-            ") AS STOCK " +
+            "ps_min.STOCK, " +
+            "ps_min.SELLER_NO " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "LEFT JOIN (" +
+            "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
+            "    FROM PRODUCT_STATUS ps_inner " +
+            "    WHERE ps_inner.PRICE = (" +
+            "        SELECT MIN(ps_sub.PRICE) " +
+            "        FROM PRODUCT_STATUS ps_sub " +
+            "        WHERE ps_sub.PRODUCT_CODE = ps_inner.PRODUCT_CODE" +
+            "    )" +
+            ") ps_min ON p.PRODUCT_CODE = ps_min.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "<if test='searchTerm != null'>" +
+            "AND (LOWER(p.PRODUCT_NAME) LIKE '%' || LOWER(#{searchTerm}) || '%' OR LOWER(p.ETC) LIKE '%' || LOWER(#{searchTerm}) || '%')" +
+            "</if>" +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, ps_min.STOCK, ps_min.SELLER_NO " +
             "<if test='sort != null'>ORDER BY " +
             "   <choose>" +
             "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
@@ -314,24 +340,29 @@ public interface ProductMapper {
             "   </choose>" +
             "</if>" +
             "</script>")
-    List<HDDDto> findAllDetailedHddProducts(@Param("category") String category, @Param("sort") String sort);
+    List<HDDDto> findAllDetailedHddProducts(@Param("category") String category, @Param("sort") String sort, @Param("searchTerm") String searchTerm);
 
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
-            "(SELECT ps2.STOCK " + 
-	        "FROM PRODUCT_STATUS ps2 " + 
-	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        "AND ps2.PRICE = ( " +
-	        "SELECT MIN(ps3.PRICE) " + 
-	        "FROM PRODUCT_STATUS ps3 " +
-	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        ") " +
-            ") AS STOCK " +
+            "ps_min.STOCK, " +
+            "ps_min.SELLER_NO " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "LEFT JOIN (" +
+            "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
+            "    FROM PRODUCT_STATUS ps_inner " +
+            "    WHERE ps_inner.PRICE = (" +
+            "        SELECT MIN(ps_sub.PRICE) " +
+            "        FROM PRODUCT_STATUS ps_sub " +
+            "        WHERE ps_sub.PRODUCT_CODE = ps_inner.PRODUCT_CODE" +
+            "    )" +
+            ") ps_min ON p.PRODUCT_CODE = ps_min.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "<if test='searchTerm != null'>" +
+            "AND (LOWER(p.PRODUCT_NAME) LIKE '%' || LOWER(#{searchTerm}) || '%' OR LOWER(p.ETC) LIKE '%' || LOWER(#{searchTerm}) || '%')" +
+            "</if>" +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, ps_min.STOCK, ps_min.SELLER_NO " +
             "<if test='sort != null'>ORDER BY " +
             "   <choose>" +
             "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
@@ -345,24 +376,29 @@ public interface ProductMapper {
             "   </choose>" +
             "</if>" +
             "</script>")
-    List<PowerDto> findAllDetailedPowerProducts(@Param("category") String category, @Param("sort") String sort);
+    List<PowerDto> findAllDetailedPowerProducts(@Param("category") String category, @Param("sort") String sort, @Param("searchTerm") String searchTerm);
 
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
-            "(SELECT ps2.STOCK " + 
-	        "FROM PRODUCT_STATUS ps2 " + 
-	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        "AND ps2.PRICE = ( " +
-	        "SELECT MIN(ps3.PRICE) " + 
-	        "FROM PRODUCT_STATUS ps3 " +
-	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        ") " +
-            ") AS STOCK " +
+            "ps_min.STOCK, " +
+            "ps_min.SELLER_NO " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "LEFT JOIN (" +
+            "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
+            "    FROM PRODUCT_STATUS ps_inner " +
+            "    WHERE ps_inner.PRICE = (" +
+            "        SELECT MIN(ps_sub.PRICE) " +
+            "        FROM PRODUCT_STATUS ps_sub " +
+            "        WHERE ps_sub.PRODUCT_CODE = ps_inner.PRODUCT_CODE" +
+            "    )" +
+            ") ps_min ON p.PRODUCT_CODE = ps_min.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "<if test='searchTerm != null'>" +
+            "AND (LOWER(p.PRODUCT_NAME) LIKE '%' || LOWER(#{searchTerm}) || '%' OR LOWER(p.ETC) LIKE '%' || LOWER(#{searchTerm}) || '%')" +
+            "</if>" +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, ps_min.STOCK, ps_min.SELLER_NO " +
             "<if test='sort != null'>ORDER BY " +
             "   <choose>" +
             "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
@@ -376,24 +412,29 @@ public interface ProductMapper {
             "   </choose>" +
             "</if>" +
             "</script>")
-    List<RAMDto> findAllDetailedRamProducts(@Param("category") String category, @Param("sort") String sort);
+    List<RAMDto> findAllDetailedRamProducts(@Param("category") String category, @Param("sort") String sort, @Param("searchTerm") String searchTerm);
 
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
-            "(SELECT ps2.STOCK " + 
-	        "FROM PRODUCT_STATUS ps2 " + 
-	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        "AND ps2.PRICE = ( " +
-	        "SELECT MIN(ps3.PRICE) " + 
-	        "FROM PRODUCT_STATUS ps3 " +
-	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        ") " +
-            ") AS STOCK " +
+            "ps_min.STOCK, " +
+            "ps_min.SELLER_NO " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "LEFT JOIN (" +
+            "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
+            "    FROM PRODUCT_STATUS ps_inner " +
+            "    WHERE ps_inner.PRICE = (" +
+            "        SELECT MIN(ps_sub.PRICE) " +
+            "        FROM PRODUCT_STATUS ps_sub " +
+            "        WHERE ps_sub.PRODUCT_CODE = ps_inner.PRODUCT_CODE" +
+            "    )" +
+            ") ps_min ON p.PRODUCT_CODE = ps_min.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "<if test='searchTerm != null'>" +
+            "AND (LOWER(p.PRODUCT_NAME) LIKE '%' || LOWER(#{searchTerm}) || '%' OR LOWER(p.ETC) LIKE '%' || LOWER(#{searchTerm}) || '%')" +
+            "</if>" +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, ps_min.STOCK, ps_min.SELLER_NO " +
             "<if test='sort != null'>ORDER BY " +
             "   <choose>" +
             "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
@@ -407,24 +448,29 @@ public interface ProductMapper {
             "   </choose>" +
             "</if>" +
             "</script>")
-    List<SSDDto> findAllDetailedSsdProducts(@Param("category") String category, @Param("sort") String sort);
+    List<SSDDto> findAllDetailedSsdProducts(@Param("category") String category, @Param("sort") String sort, @Param("searchTerm") String searchTerm);
 
     @Select("<script>" +
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
-            "(SELECT ps2.STOCK " + 
-	        "FROM PRODUCT_STATUS ps2 " + 
-	        "WHERE ps2.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        "AND ps2.PRICE = ( " +
-	        "SELECT MIN(ps3.PRICE) " + 
-	        "FROM PRODUCT_STATUS ps3 " +
-	        "WHERE ps3.PRODUCT_CODE = p.PRODUCT_CODE " +
-	        ") " +
-            ") AS STOCK " +
+            "ps_min.STOCK, " +
+            "ps_min.SELLER_NO " +
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+            "LEFT JOIN (" +
+            "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
+            "    FROM PRODUCT_STATUS ps_inner " +
+            "    WHERE ps_inner.PRICE = (" +
+            "        SELECT MIN(ps_sub.PRICE) " +
+            "        FROM PRODUCT_STATUS ps_sub " +
+            "        WHERE ps_sub.PRODUCT_CODE = ps_inner.PRODUCT_CODE" +
+            "    )" +
+            ") ps_min ON p.PRODUCT_CODE = ps_min.PRODUCT_CODE " +
             "WHERE p.CATEGORY = #{category} " +
-            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL " +
+            "<if test='searchTerm != null'>" +
+            "AND (LOWER(p.PRODUCT_NAME) LIKE '%' || LOWER(#{searchTerm}) || '%' OR LOWER(p.ETC) LIKE '%' || LOWER(#{searchTerm}) || '%')" +
+            "</if>" +
+            "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, ps_min.STOCK, ps_min.SELLER_NO " +
             "<if test='sort != null'>ORDER BY " +
             "   <choose>" +
             "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
@@ -438,7 +484,7 @@ public interface ProductMapper {
             "   </choose>" +
             "</if>" +
             "</script>")
-    List<MainBoardDto> findAllDetailedMainBoardProducts(@Param("category") String category, @Param("sort") String sort);
+    List<MainBoardDto> findAllDetailedMainBoardProducts(@Param("category") String category, @Param("sort") String sort, @Param("searchTerm") String searchTerm);
 
 
     @Select("Select * from product where product_code=#{product_code}")

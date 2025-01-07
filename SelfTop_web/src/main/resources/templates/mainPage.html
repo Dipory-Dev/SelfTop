@@ -5,7 +5,7 @@
 	<title>SELFTOP</title>
 	<link rel="stylesheet" href="/css/mainPage.css">
 	<script type="text/javascript" src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
-    
+
 </head>
 <body>
 	 <header>
@@ -17,13 +17,13 @@
     <main>
     <div>
     	<div>
-	    	<form id="search">
-		    	<div class="search-container">
-			        <input type="text" class="search-box" placeholder="원하는 상품명을 검색해주세요">
-			        <button class="search-button"></button>
-		    	</div>
-	    	</form>
-	    </div>
+		    <form id="search" onsubmit="event.preventDefault(); searchProducts();">
+		        <div class="search-container">
+		            <input type="text" class="search-box" placeholder="현재 카테고리: CPU   카테고리를 선택 후 검색해주세요!" id="search-input">
+		            <button type="submit" class="search-button"></button>
+		        </div>
+		    </form>
+		</div>
 	    <br>
 	    <div>
 	    	<p id="category-count"></p>
@@ -47,10 +47,13 @@
 		    	<div class="side-panel">
 	            	<div class="panel-header">
 	            		<div>
-		            		<select class="saved-quote">
-		                		<option value="none" selected>견적을 선택해주세요.</option>
-		                		<option value="">${quote_name}</option>
-		            		</select>
+							<select class="saved-quote" id="saved-quote" th:onchange="fetchQuoteDetail(this.value)">
+								<option value="none" selected>견적을 선택해주세요.</option>
+								<option th:each="cart : ${cartList}"
+										th:value="${cart.quote_no}"
+										th:text="${cart.quote_name}">
+								</option>
+							</select>
 		            			<button id="current-cart" >현재 견적 카트</button>
 	            				<input type="text" id="quote-name" placeholder="견적 이름을 작성해주세요" />
 	            		</div>
@@ -176,7 +179,7 @@
 	        			</div>
 	        		</div>
 	        		<div class="total">
-	            		<span>총 견적 금액 : </span><span class="total-price">원</span>
+	            		<span>총 견적 금액 : </span><span class="total-price">0원</span>
 	        		</div>
 	        		<div class="actions">
 						<button class="button compatibility-check-btn" id="openModalBtn">호환성 체크</button>
@@ -209,13 +212,14 @@
             <div class="modal-header">PC견적 호환성 체크</div>
             <div class="modal-body">
                 <div class="body-top">
-                    <li>호환성 체크는 <span style="font-weight:bold">CPU, 메인보드, 메모리, 케이스, 그래픽카드, 파워</span>를 대상으로 합니다.</li>
-                    <li>본 서비스는 제조사의 상품정보를 기반으로 제공되며, 일부 상품은 호환성 체크 대상에서 제외됩니다.</li>
-                    <li><span style="font-weight: bold; color:red">호환 성공 여부는 단순 참고용</span>이며, 자세한 내용은 판매점 또는 제조사에 재확인이 필요할 수 있습니다.</li>
-                    <li>카테고리별로 상품을 1개씩 담을 때만 호환성 체크가 가능합니다.</li>
-                    <li>출시일이 오래된 상품 또는 특수 상품의 경우 호환성 체크 대상에서 제외될 수 있습니다.</li>
-                    <li>CPU(소켓), 메인보드(CPU소켓), RAM(제품분류), 케이스(크기), 메인보드(폼펙터), 파워(제품분류), 그래픽카드(가로길이) 체크</li>
-                </div>
+					<p>• 호환성 체크는 <span style="font-weight:bold;">CPU, 메인보드, 메모리, 케이스, 그래픽카드, 파워</span>를 대상으로 합니다.</p>
+					<p>• 본 서비스는 제조사의 상품정보를 기반으로 제공되며, 일부 상품은 호환성 체크 대상에서 제외됩니다.</p>
+					<p>• <span style="font-weight: bold; color:red;">호환 성공 여부는 단순 참고용</span>이며, 자세한 내용은 판매점 또는 제조사에 재확인이 필요할 수 있습니다.</p>
+					<p>• 카테고리별로 상품을 1개씩 담을 때만 호환성 체크가 가능합니다.</p>
+					<p>• 출시일이 오래된 상품 또는 특수 상품의 경우 호환성 체크 대상에서 제외될 수 있습니다.</p>
+                    <p>• CPU(소켓), 메인보드(CPU소켓), RAM(제품분류), 케이스(크기), 메인보드(폼펙터), 파워(제품분류), 그래픽카드(가로길이) 체크</p>
+				</div>
+				<hr>
                 <div class="body-mid">
 					<div class="container">
 						<div class="first-section">
@@ -230,14 +234,14 @@
 								</svg>
 								<div class="connector">
 									<div class="background-circle">
-										<div class="compatibility" id="cpu-mainboard-compatibility">❌</div>
+										<div class="compatibility" id="cpu-mainboard-compatibility">✕</div>
 									</div>
 								</div>
 							</div>
-							<div class="pair">
+							<div class="pair" id="GPU-pair">
 								<div class="connector">
 									<div class="background-circle">
-										<div class="compatibility" id="graphicCard-case-compatibility">❌</div>
+										<div class="compatibility" id="graphicCard-case-compatibility">✕</div>
 									</div>
 								</div>
 								<svg width="120" height="50" xmlns="http://www.w3.org/2000/svg">
@@ -266,20 +270,20 @@
 							<div class="pair">
 								<div class="connector">
 									<div class="background-circle">
-										<div class="compatibility" id="cpu-ram-compatibility">⭕</div>
+										<div class="compatibility" id="cpu-ram-compatibility">𐤏</div>
 									</div>
 								</div>
 								<div class="modal-component" id="mainboard">
 									<p>메인보드</p>
 									<div class="icon"><img class="modal-icon" src="/img/icon-mainboard.png"></div>
 								</div>
-								<p style="font-size:30px">⟵</p>
+								<p class="arrows">⟵</p>
 								<div class="connector" id="mainboard-case">
 									<div class="background-circle">
-										<div class="compatibility" id="mainboard-case-compatibility">❌</div>
+										<div class="compatibility" id="mainboard-case-compatibility">✕</div>
 									</div>
 								</div>
-								<p style="font-size:30px">⟶</p>
+								<p class="arrows">⟶</p>
 								<div class="modal-component" id="case">
 									<p>케이스</p>
 									<div class="icon"><img class="modal-icon" src="/img/icon-case.png"></div>
@@ -310,14 +314,14 @@
 								</svg>
 								<div class="connector">
 									<div class="background-circle">
-										<div class="compatibility" id="ram-mainboard-compatibility">❌</div>
+										<div class="compatibility" id="ram-mainboard-compatibility">✕</div>
 									</div>
 								</div>
 							</div>
-							<div class="pair">
+							<div class="pair" id="power-pair">
 								<div class="connector">
 									<div class="background-circle">
-										<div class="compatibility" id="cpu-motherboard-compatibility">❌</div>
+										<div class="compatibility" id="cpu-motherboard-compatibility">✕</div>
 									</div>
 								</div>
 								<svg width="120" height="50" xmlns="http://www.w3.org/2000/svg">
@@ -332,15 +336,44 @@
 						</div>
 					</div>
 				</div>
-				
+				<hr>
                 <div class="body-bottom">
-                    <li>CPU &nbsp;&nbsp;   ⬌ &nbsp; RAM : </li>
-                    <li>CPU &nbsp;&nbsp;   ⬌ &nbsp;메인보드 : </li>
-                    <li>메모리  ⬌  &nbsp;메인보드 : </li>
-                    <li>케이스  ⬌  &nbsp;메인보드 : </li>
-                    <li>케이스  ⬌  &nbsp;그래픽카드 : </li>
-                    <li>케이스  ⬌  &nbsp;파워 : </li>
-                    <li>파워  &nbsp;&nbsp; ⬌  &nbsp;소비전력 : </li>
+					<p>• CPU &nbsp;&nbsp;   ⬌ &nbsp; RAM &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+						<span class="CPUtoRAM">
+
+						</span>
+					</p>
+					<p>• CPU &nbsp;&nbsp;   ⬌ &nbsp;메인보드 &nbsp;&nbsp;&nbsp;&nbsp;:
+						<span class="CPUtoMainboard">
+
+						</span>
+					</p>
+					<p>• 메모리  ⬌  &nbsp;메인보드 &nbsp;&nbsp;&nbsp;&nbsp;:
+						<span class="MemorytoMainboard">
+
+						</span>
+					</p>
+					<p>• 케이스  ⬌  &nbsp;메인보드 &nbsp;&nbsp;&nbsp;&nbsp;:
+						<span class="CasetoMainboard">
+
+						</span>
+					</p>
+					<p>• 케이스  ⬌  &nbsp;그래픽카드&nbsp;:
+						<span class="CasetoGPU">
+
+						</span>
+					</p>
+					<p>• 케이스  ⬌  &nbsp;파워 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+						<span class="CasetoPower">
+
+						</span>
+					</p>
+					<p>• 파워  &nbsp;&nbsp; ⬌  &nbsp;소비전력 &nbsp;&nbsp;&nbsp;&nbsp;:
+						<span class="PowertoConsumption">
+
+						</span>
+					</p>
+					<p>(현재 소비전력은 <span class="power-consumption" style="color:red;">450</span>W이며, 선택된 파워는 <span class="power-current" style="color:red;">450</span>W입니다. 권장파워는 <span class="power-recommended" style="color:blue;">550W</span> 이상입니다.)</p>
                 </div>
 
             </div>
@@ -349,7 +382,6 @@
             <div class="modal-footer">
                 <div class="btn-area">
                     <button id="closeModalBtn" class="btn btn-close">닫기</button>
-                    <button id="submitModalBtn" class="btn btn-submit">저장</button>
                 </div>
             </div>
         </p>

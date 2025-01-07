@@ -21,22 +21,27 @@ public class CartBizImpl {
 
         res = cartMapper.insertCart(member_no, quoteName, assembly);
 
+        System.out.println("BIZ res : " + res);
         int quote_no = cartMapper.getCurrentQuoteNo();
-        param2.put("quote_no", quote_no);
+        System.out.println("quote_no : " + quote_no);
+
         for (Map.Entry<String, Object> entry : param2.entrySet()) {
-            if ("quote_no".equals(entry.getKey())) {
-                continue;
-            }
 
             // 각 카테고리의 정보를 Map으로 캐스팅
             Map<String, Object> categoryMap = (Map<String, Object>) entry.getValue();
 
-            // product_code 추출
-            int product_code = (Integer) categoryMap.get("product_code");
+            System.out.println("categoryMap : " + categoryMap);
+
+            // product_code, amount, seller_no 추출 후 변환
+            int product_code = Integer.parseInt((String) categoryMap.get("product_code"));
+            System.out.println("product_code : " + product_code);
             int amount = (Integer) categoryMap.get("quantity");
+            System.out.println("amount : " + amount);
+            int seller_no = Integer.parseInt((String) categoryMap.get("seller_no"));
+            System.out.println("seller_no : " + seller_no);
 
             // 각 카테고리의 정보를 테이블에 저장
-            int temp = cartMapper.insertCartDetail(quote_no, member_no, product_code, amount);
+            int temp = cartMapper.insertCartDetail(quote_no, member_no, product_code, seller_no, amount);
             res += temp;
         }
         return res;

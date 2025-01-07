@@ -48,16 +48,14 @@ public class GPUBizImpl implements ProductBiz<GPUDto> {
     }
 
     @Override
-    public List<GPUDto> getProductsByCategory(String category, String sort) {
-        List<GPUDto> results = productMapper.findAllDetailedGpuProducts(category, sort);
-
-        return results;
+    public List<GPUDto> getProductsByCategory(String category, String sort, String searchTerm) {
+    	return productMapper.findAllDetailedGpuProducts(category, sort, searchTerm == null ? "" : searchTerm.trim());
     }
 
 	@Override
-	public List<GPUDto> filterProducts(Map<String, List<String>> filters) {
+	public List<GPUDto> filterProducts(Map<String, List<String>> filters, String sort) {
 		try {
-            return gpuMapper.findFilteredGPUs(filters);
+            return gpuMapper.findFilteredGPUs(filters, sort);
         } catch (Exception e) {
             System.err.println("Error filtering GPUs with filters: " + filters + "\nError: " + e.getMessage());
             e.printStackTrace(); // 스택 추적을 통해 더 자세한 오류 정보 제공

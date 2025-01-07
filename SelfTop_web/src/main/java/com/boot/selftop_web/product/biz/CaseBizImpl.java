@@ -47,16 +47,14 @@ public class CaseBizImpl implements ProductBiz<CaseDto> {
     }
 
     @Override
-    public List<CaseDto> getProductsByCategory(String category, String sort) {
-        List<CaseDto> results = productMapper.findAllDetailedCaseProducts(category, sort);
-
-        return results;
+    public List<CaseDto> getProductsByCategory(String category, String sort, String searchTerm) {
+    	return productMapper.findAllDetailedCaseProducts(category, sort, searchTerm == null ? "" : searchTerm.trim());
     }
 
 	@Override
-	public List<CaseDto> filterProducts(Map<String, List<String>> filters) {
+	public List<CaseDto> filterProducts(Map<String, List<String>> filters, String sort) {
 		try {
-            return caseMapper.findFilteredCases(filters);
+            return caseMapper.findFilteredCases(filters, sort);
         } catch (Exception e) {
             System.err.println("Error filtering Cases with filters: " + filters + "\nError: " + e.getMessage());
             e.printStackTrace(); // 스택 추적을 통해 더 자세한 오류 정보 제공

@@ -59,6 +59,15 @@ public class ProductStatusDto {
 	public void setReg_date(Date reg_date) {
 		this.reg_date = reg_date;
 	};
-	
-	
+
+	@Override
+	public String toString() {
+		return "ProductStatusDto{" +
+				"product_code=" + product_code +
+				", seller_no=" + seller_no +
+				", stock=" + stock +
+				", price=" + price +
+				", reg_date=" + reg_date +
+				'}';
+	}
 }

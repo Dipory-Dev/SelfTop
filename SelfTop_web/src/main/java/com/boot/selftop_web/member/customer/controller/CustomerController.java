@@ -1,8 +1,11 @@
 package com.boot.selftop_web.member.customer.controller;
 
 import com.boot.selftop_web.member.customer.biz.KakaoService;
+import com.boot.selftop_web.member.seller.model.dto.ProductStatusDto;
 import com.boot.selftop_web.product.biz.ProductInfoBizImpl;
 import com.boot.selftop_web.product.model.dto.ProductInfoDto;
+import com.boot.selftop_web.quote.model.dto.CartDTO;
+import com.boot.selftop_web.quote.model.dto.CartDetailDto;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
@@ -35,11 +38,14 @@ import com.boot.selftop_web.product.model.dto.ProductDto;
 import com.boot.selftop_web.quote.biz.QuoteBiz;
 import com.boot.selftop_web.quote.model.dto.QuoteDetailDto;
 import com.boot.selftop_web.quote.model.dto.QuoteDto;
+import com.boot.selftop_web.quote.model.dto.QuotecomparisonDto;
+
+import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
+
 import com.boot.selftop_web.member.customer.model.dto.CustomerorderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
 import com.boot.selftop_web.order.biz.OrderBoardBiz;
-import com.boot.selftop_web.order.biz.OrderDetailBiz;
 import com.boot.selftop_web.order.model.dto.OrderBoardDto;
 import com.boot.selftop_web.order.model.dto.OrderDetailDto;
 
@@ -47,6 +53,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/")
@@ -59,9 +66,6 @@ public class CustomerController {
 
 	@Autowired
 	private OrderBoardBiz orderboardBiz;
-	
-	@Autowired
-    private OrderDetailBiz orderDetailBiz;
 
 	@Autowired
 	private ProductInfoBizImpl productInfoBiz;
@@ -190,10 +194,60 @@ public class CustomerController {
 	}
 
 	@GetMapping("/main")
-	public String SelfTopMain(Model model) {
-		
+	public String SelfTopMain(HttpSession session, Model model) {
+		Integer member_no = (Integer) session.getAttribute("member_no");
+		if (member_no != null) {
+			List<CartDTO> cartList = quoteBiz.selectCart(member_no);
+			System.out.println(cartList);
+			model.addAttribute("cartList", cartList);
+		}
+
 		return "mainPage";
 	}
+
+	@GetMapping("/quote")
+	public ResponseEntity<?> selectCartDetail(@RequestParam("quote_no") int quote_no) {
+		System.out.println(quote_no);
+
+		// 견적 상세 정보를 가져옴
+		List<CartDetailDto> quote_detail = quoteBiz.selectCartDetail(quote_no);
+
+		// 결과를 저장할 Map
+		Map<String, Object> res = new HashMap<>();
+
+		// 각 제품 정보를 처리
+		for (CartDetailDto cartDetailDto : quote_detail) {
+			int p_code = cartDetailDto.getProduct_code();
+			int amount = cartDetailDto.getAmount();
+
+			System.out.println("p_code: " + p_code);
+
+			// 제품 정보
+			ProductInfoDto productInfo = quoteBiz.selectProduct(p_code);
+			System.out.println("ProductInfoDto: " + productInfo);
+
+			// 제품 상태 정보
+			ProductStatusDto productStatus = quoteBiz.selectProductStatus(p_code);
+			System.out.println("ProductStatusDto: " + productStatus);
+
+			// 결과에 추가
+			Map<String, Object> productData = new HashMap<>();
+			productData.put("product_name", productInfo.getProduct_name());
+			productData.put("price", productStatus.getPrice());
+			productData.put("seller_no", productStatus.getSeller_no());
+			productData.put("amount", amount);
+
+			res.put(productInfo.getCategory(), productData);
+		}
+
+		System.out.println("res : " + res.toString());
+
+		// 결과 반환
+		return ResponseEntity.ok(res);
+	}
+
+
+
 
 	@GetMapping("/signup")
 	public String showSignUpForm() {
@@ -298,8 +352,8 @@ public class CustomerController {
 		Integer member_no = (Integer) session.getAttribute("member_no");
 		List<SellerOrderDto> res = customerBiz.selectcustomerorderlist(member_no);
 		List<CustomerorderDto> orderres = new ArrayList<>();
-		System.out.println(res.get(0).getAmount());
-		System.out.println(res.size());
+//		System.out.println(res.get(0).getAmount());
+//		System.out.println(res.size());
 
 		for (SellerOrderDto copyres : res) {
 			// 이미 orderres에 해당 order_no가 있는지 확인
@@ -355,50 +409,6 @@ public class CustomerController {
 		model.addAttribute("canclecount",canclecount);
 
 		return "customerorder";
-	}
-	
-	// 결제 성공 후 주문 정보를 저장하는 메서드
-	@PostMapping("/order/save")
-	public String saveOrder(@RequestParam int productCode,
-	                        @RequestParam int sellerNo,
-	                        @RequestParam int amount,
-	                        @RequestParam int orderPrice,
-	                        @RequestParam String customerName,  // 결제 후 고객 이름
-	                        @RequestParam String customerPhone, // 결제 후 고객 전화번호
-	                        @RequestParam String shippingAddress, // 결제 후 배송 주소
-	                        @RequestParam String zipCode, // 결제 후 우편번호
-	                        @RequestParam String orderId, // 결제 후 주문 번호
-	                        HttpSession session,
-	                        RedirectAttributes redirectAttributes) {
-
-	    Integer memberNo = (Integer) session.getAttribute("member_no");
-	    if (memberNo == null) {
-	        redirectAttributes.addFlashAttribute("message", "로그인 후 주문을 진행해주세요.");
-	        return "redirect:/loginform";
-	    }
-
-	    // 주문 정보를 OrderDetailDto 객체에 담기
-	    OrderDetailDto orderDetailDto = new OrderDetailDto();
-	    orderDetailDto.setCustomer_no(memberNo);  // 로그인한 사용자 번호
-	    orderDetailDto.setProduct_code(productCode);  // 상품 코드
-	    orderDetailDto.setSeller_no(sellerNo);  // 판매자 번호
-	    orderDetailDto.setAmount(amount);  // 주문 수량
-	    orderDetailDto.setOrder_price(orderPrice);  // 주문 금액
-	    //orderBoardDto.setCustomer_name(customerName);  // 고객 이름
-	    //orderDetailDto.setCustomer_phone(customerPhone);  // 고객 전화번호
-	    //orderDetailDto.setShipping_address(shippingAddress);  // 배송 주소
-	    //orderDetailDto.setZip_code(zipCode);  // 우편번호
-	    //orderDetailDto.setOrder_id(orderId);  // 결제 후 주문 번호
-
-	    // 주문 정보 저장
-	    try {
-	        orderDetailBiz.saveOrderDetail(orderDetailDto);  // OrderDetailBiz를 통해 저장
-	        redirectAttributes.addFlashAttribute("message", "주문이 성공적으로 처리되었습니다.");
-	    } catch (Exception e) {
-	        redirectAttributes.addFlashAttribute("message", "주문 처리 중 오류가 발생했습니다.");
-	    }
-
-	    return "redirect:/order/confirmation";  // 주문 확인 페이지로 리다이렉트
 	}
 
 	@GetMapping("/ordersearch")
@@ -602,15 +612,15 @@ public class CustomerController {
 
 	//필터에 선택된 체크박스에 따라 데이터를 넘겨줌
 	@PostMapping("/api/products/filter/{category}")
-	public ResponseEntity<?> filterProducts(@PathVariable String category, @RequestBody Map<String, List<String>> filters) {
-	    System.out.println("Received filters: " + filters);
+	public ResponseEntity<?> filterProducts(@PathVariable String category, @RequestBody Map<String, List<String>> filters, @RequestParam(value = "sort", defaultValue = "byname") String sort) {
+	    System.out.println("Received filters: " + filters + " with sort: " + sort);
 	    ProductBiz<?> productBiz = productBizFactory.getBiz(category);
 	    if (productBiz == null) {
 	        return ResponseEntity.badRequest().body("Invalid category: " + category);
 	    }
 
 	    try {
-	        List<?> filteredProducts = productBiz.filterProducts(filters);
+	        List<?> filteredProducts = productBiz.filterProducts(filters, sort); // 필터 및 정렬 매개변수를 비즈니스 로직에 전달
 	        if (filteredProducts.isEmpty()) {
 	            return ResponseEntity.noContent().build();
 	        }
@@ -627,24 +637,20 @@ public class CustomerController {
 
 	@GetMapping("/products/{category}")
 	public ResponseEntity<?> getProductsByCategory(
-			@PathVariable String category,
-			@RequestParam(value = "sort", defaultValue = "byname") String sort) {
+	        @PathVariable String category,
+	        @RequestParam(value = "sort", defaultValue = "byname") String sort,
+	        @RequestParam(value = "search", required = false) String search) {
 
-	    System.out.println("Fetching products for category: " + category);
-		System.out.println("Sort by : " + sort);
-
-
+	    System.out.println("Fetching products for category: " + category + ", sort: " + sort + ", search: " + search);
 	    ProductBiz<?> productBiz = productBizFactory.getBiz(category.toLowerCase());
 	    if (productBiz == null) {
 	        System.err.println("No ProductBiz found for category: " + category);
-	        return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Invalid category: " + category));
+	        return ResponseEntity.badRequest().body("Invalid category: " + category);
 	    }
 
-
-	    List<?> products = productBiz.getProductsByCategory(category, sort);
+	    List<?> products = productBiz.getProductsByCategory(category, sort, search);
 	    if (products.isEmpty()) {
-	        System.out.println("No products found for category: " + category);
-	        return ResponseEntity.notFound().build();
+	        return ResponseEntity.noContent().build();
 	    }
 	    return ResponseEntity.ok(products);
 	}
@@ -686,6 +692,28 @@ public class CustomerController {
 
 		return selectres;
 	}
+	
+	@PostMapping("/comparison")
+	@ResponseBody
+	public ResponseEntity<?> comparison(@RequestBody Map<String, List<String>> selectvalue){
+		List<String> values = selectvalue.get("values");
+		List<QuotecomparisonDto> res = quoteBiz.Quotecomprison(values);
+		Map<Integer, List<QuotecomparisonDto>> groupedData = res.stream()
+		        .collect(Collectors.groupingBy(QuotecomparisonDto::getQuote_no));
+		System.out.println(groupedData);
+		return ResponseEntity.ok(groupedData);
+	}
+	
+	@PostMapping("/deletequote")
+	@ResponseBody
+	public ResponseEntity<?> deletequote(@RequestBody Map<String, List<Integer>> selectvalue){
+		List<Integer> values = selectvalue.get("values");
+		int res2=quoteBiz.quotedetaildelete(values);
+		int res=quoteBiz.quotedelete(values);
+		
+		return ResponseEntity.ok(null);
+	}
+
 
 	@GetMapping("/productDetail")
 	public String productDetail(Model model, @RequestParam("product_code") int product_code) {
@@ -693,6 +721,28 @@ public class CustomerController {
 		model.addAttribute("product", dto);
 
 		return "popup_product_info";
+	}
+
+
+	@GetMapping("/loadquotelist")
+	public String getQuoteDiv(Model model,HttpSession session) {
+		Integer member_no = (Integer) session.getAttribute("member_no");
+		List<QuoteDto> res =quoteBiz.SelectQuote(member_no);
+		model.addAttribute("quote", res);
+	    return "fragmentcartquotelist :: cart_view"; // 특정 타임리프 fragment 반환
+	}
+	
+	@PostMapping("/updatequotedetailamount")
+	@ResponseBody
+	public ResponseEntity<?> updateQuote(@RequestBody List<Map<String, Object>> updatedData) {
+	    for (Map<String, Object> data : updatedData) {
+	        Integer quoteNo = Integer.parseInt((String) data.get("quoteNo"));
+	        Integer amount = Integer.parseInt((String) data.get("amount"));
+	        Integer productcode = Integer.parseInt((String)  data.get("productcode"));
+	        quoteBiz.updatedetailamount(quoteNo,productcode, amount );
+	       
+	    }
+	    return ResponseEntity.ok().body("저장되었습니다");
 	}
 
 }

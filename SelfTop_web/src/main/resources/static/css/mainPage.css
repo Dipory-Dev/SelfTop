@@ -71,6 +71,11 @@ main{
     gap:1px;
 }
 
+.a-product-name:hover{
+    color:#008ADA;
+    transition:0.1s;
+}
+
 .quantity-controls-wrapper {
     display: flex;
     flex-direction: column;
@@ -225,7 +230,6 @@ main{
 .content-box{
 	width: 1300px;
 	height: 600px;
-    border: 1px solid black;
     margin-top: 10px;
 }
 
@@ -486,6 +490,30 @@ footer {
     margin: 5px 0;
 }
 
+li{
+    float: left;
+    list-style: none;
+    border: 1px solid #ccc;
+}
+
+.sortBtn:hover{
+    background-color: #C7E6FF;
+    transition:0.3s;
+}
+
+.sortBtn.active{
+    background-color: #C7E6FF;
+}
+
+.sortBtn{
+    text-decoration: none;
+    padding: 10px;
+    display: inline-block;
+    color: black;
+    background-color: white;
+    transition: background-color 0.3s;
+  }
+
 /*-----호환성체크 모달 코드-----*/
 *{
 
@@ -495,7 +523,7 @@ footer {
 .modal {
     display: none;
     position: fixed;
-    z-index: 1100;
+    z-index: 1000;
     left: 0;
     right:0;
     top: 0;
@@ -507,29 +535,29 @@ footer {
 
 .modal-content {
     background-color: #fff;
-    margin: 10% auto;
+    margin: 80px auto;
     margin-top:5%;
     padding: 20px;
-    width: 1300px;
-    height:1300px;
+    width: 1200px;
+    height:1000px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .uparrow-1,
 .downarrow-3{
-    margin-left:70px;
-
+    margin-left:45px;
+    margin-top:10px;
 }
 
 .downarrow-1,
 .uparrow-2{
-    margin-left:200px;
+    margin-left:170px;
 }
 
 .downarrow-2,
 .uparrow-3{
-    margin-left:240px;
+    margin-left:235px;
 }
 
 .modal-header {
@@ -546,23 +574,16 @@ footer {
 
 .modal-body {
     padding: 20px;
-    height:1100px;
-    width:1230px;
+    height:940px;
+    width:1000px;
     margin-top:15px;
-    margin-left:18px;
-}
-
-li{
-    margin-top:2px;
-    float: left;
-    list-style: none;
-    border: 1px solid #ccc;
-    padding: 2px;
+    margin-left:60px;
 }
 
 .body-top{
-    width:1200px;
-    height:140px;
+    width:1000px;
+    height:145px;
+    font-size:15px;
 }
 
 .body-mid{
@@ -570,13 +591,16 @@ li{
     justify-content: center;
     flex-wrap: wrap;
     gap: 20px;
-    height:600px;
+    height:570px;
 }
 
 .container {
     display: inline;
     justify-content: center;
-    gap: 20px;
+    gap: 10px;
+    width: 850px;
+    height: 400px;
+    margin-top:20px;
 }
 
 .pair {
@@ -584,41 +608,43 @@ li{
     align-items: center;
     flex-basis: calc(50% - 20px);
     max-width: calc(50% - 20px);
-    margin-left: 30px;
+    margin-left: 15px;
     margin-right: 90px;
     flex-shrink: 0;
-}
-
-.arrow-1,
-.arrow-2{
-    border:solid 1px red;
 }
 
 .first-section,
 .second-section,
 .third-section{
     width: 900px;
-    height: 180px;
+    height: 100px;
     display: flex;
     align-items: center;
+    gap:5px;
 }
 
 .second-section{
-    margin-left: 20px;
-
+    margin-left: 10px;
+    gap:5px;
 }
 
-.first-section,
-.third-section{
-    gap:8px;
+.arrows{
+    font-size:30px;
+    font-weight: bold;
+    color:black;
+}
+
+#GPU-pair,
+#power-pair{
+    margin-left:-12px;
 }
 
 .modal-component {
     background-color: #C7E6FF;
     border-radius: 10px;
     padding: 10px;
-    width: 110px;
-    height: 110px;
+    width: 75px;
+    height: 75px;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-right: 10px;
@@ -630,11 +656,11 @@ li{
 }
 
 #mainboard{
-    margin-left:140px;
+    margin-left:150px;
 }
 
 #mainboard-case{
-    margin-left:1px;
+    margin-left:10px;
 }
 
 #case{
@@ -647,13 +673,14 @@ li{
 }
 
 .modal-icon {
-    width: 90px;
-    height: 90px;
+    width: 65px;
+    height: 65px;
 }
 
 .modal-component > p{
-    font-size:20px;
+    font-size:13px;
     font-weight: bold;
+    margin-bottom:1px;
 }
 
 .connector{
@@ -662,16 +689,15 @@ li{
 }
 
 .body-bottom{
-    margin-top:130px;
+    margin-top:10px;
     width:1200px;
-    height:170px;
-
+    height:120px;
+    border:none;
+    font-size:15px;
 }
 
 .btn-area{
-    margin-top:20px;
     padding: 10px 20px;
-    margin: 5px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -679,23 +705,9 @@ li{
 }
 
 .modal-footer{
-    margin-top:10px;
-    margin-left:1120px;
-}
+    margin-left:1000px;
+    margin-top:-90px;
 
-.btn-submit:hover{
-    transition: 0.6s;
-    background-color:#006bb3;
-}
-
-.btn-submit {
-    background-color: #008ADA;
-    color: white;
-    padding: 10px 20px;
-    margin: 5px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
 }
 
 .btn-close:hover{
@@ -707,10 +719,10 @@ li{
     background-color: #999;
     color: white;
     padding: 10px 20px;
-    margin: 5px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    margin-left:18px;
 }
 
 .connector > svg:first-child {
@@ -732,8 +744,9 @@ li{
 
 .compatibility{
     text-align: center;
-    padding-top: 15px;
-    font-size: 25px;
+    padding-top: 9px;
+    font-size: 33px;
+    font-weight: bold;
 }
 
 /*----------------------------*/

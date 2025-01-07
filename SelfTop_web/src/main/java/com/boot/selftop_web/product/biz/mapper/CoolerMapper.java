@@ -41,7 +41,20 @@ public interface CoolerMapper {
             "   </foreach>" +
             "</if>" +
             "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.THUMBNAIL, p.ETC" +
-            "</script>")
-    List<CoolerDto> findFilteredCoolers(@Param("filters") Map<String, List<String>> filters);
+            "<if test='sort != null'>" +  // 정렬 조건 추가
+            "ORDER BY " +
+            "   <choose>" +
+            "       <when test='sort == \"bynewest\"'>MAX(p.upload_date) DESC</when>" +
+            "       <when test='sort == \"bylowprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price" +
+            "       </when>" +
+            "       <when test='sort == \"byhighprice\"'>" +
+            "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price DESC" +
+            "       </when>" +
+            "       <otherwise>p.PRODUCT_NAME</otherwise>" +
+            "   </choose>" +
+            "</if>" +
+    		"</script>")
+    List<CoolerDto> findFilteredCoolers(@Param("filters") Map<String, List<String>> filters, @Param("sort") String sort);
     
 }

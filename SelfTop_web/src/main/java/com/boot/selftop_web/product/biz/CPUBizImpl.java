@@ -51,17 +51,16 @@ public class CPUBizImpl implements ProductBiz<CPUDto> {
     
     //main에서 cpu선택하면 모든 cpu가져오기
     @Override
-    public List<CPUDto> getProductsByCategory(String category, String sort) {
-        List<CPUDto> results = productMapper.findAllDetailedCpuProducts(category, sort);
-        return results;
+    public List<CPUDto> getProductsByCategory(String category, String sort, String searchTerm) {
+        return productMapper.findAllDetailedCpuProducts(category, sort, searchTerm == null ? "" : searchTerm.trim());
     }
     
     @Override
-    public List<CPUDto> filterProducts(Map<String, List<String>> filters) {
+    public List<CPUDto> filterProducts(Map<String, List<String>> filters, String sort) {
         try {
-            return cpuMapper.findFilteredCPUs(filters);
+            return cpuMapper.findFilteredCPUs(filters, sort);
         } catch (Exception e) {
-            System.err.println("Error filtering CPUs with filters: " + filters + "\nError: " + e.getMessage());
+            System.err.println("Error filtering CPUs with filters: " + filters + " and sort: " + sort + "\nError: " + e.getMessage());
             e.printStackTrace(); // 스택 추적을 통해 더 자세한 오류 정보 제공
             throw new RuntimeException("Error processing CPU filter", e);
         }
