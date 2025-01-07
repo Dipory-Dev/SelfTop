@@ -7,12 +7,19 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import com.boot.selftop_web.order.model.dto.OrderBoardDto;
+import com.boot.selftop_web.order.model.dto.OrderDetailDto;
+import com.boot.selftop_web.quote.model.dto.CartDTO;
+import com.boot.selftop_web.quote.model.dto.CartDetailDto;
 
 @Mapper
 public interface OrderBoardMapper {
 	@Select("SELECT * from vieworderboard WHERE order_no =#{ordernum} ")
 	public List<OrderBoardDto> vieworderboard(@Param("ordernum") int ordernum);
 	
+	@Select("SELECT * FROM ORDER_BOARD WHERE CUSTOMER_NO = #{member_no} ORDER BY ORDER_NO desc")
+	List<OrderBoardDto> selectOrderBoard(@Param("member_no") int member_no);
 
+	@Select("select * from ORDER_DETAIL where ORDER_NO = #{order_no}")
+	List<OrderDetailDto> selectOrderDetail(@Param("order_no")int quote_no);
 
 }
