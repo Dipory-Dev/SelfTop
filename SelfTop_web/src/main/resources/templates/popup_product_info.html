@@ -14,10 +14,11 @@
     <main id="tablesection">
         <div class="var">
             <button class="product-detail" onclick="moveDetail();">제품 상세정보</button>
-            <button class="product-review" onclick="moveReview();">제품 후기(23)개</button>
+            <button class="product-review" onclick="loadReviews('${product.product_code}');">제품 후기(22)개</button> <!--${product.product_code}-->
         </div>   
-        <div class="content">
+        <div class="content" id="content">
             <div class="image-placeholder">
+                
                 <img th:src="${product.content_img}">
             </div>
         </div>
