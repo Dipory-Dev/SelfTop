@@ -6,5 +6,5 @@ import com.boot.selftop_web.order.model.dto.OrderBoardDto;
 
 public interface OrderBoardBiz {
 	public List<OrderBoardDto> vieworderboard(int ordernum);
-
+	boolean updateOrder(int order_no);
 }

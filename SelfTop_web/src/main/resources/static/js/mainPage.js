@@ -1,7 +1,9 @@
 //견적 담을 장바구니
 let currentCart = {};
-
-let currentFilters = {};//필터링 된 상태에서 정렬기능 구현을 위해 현재 정렬된 정보를 담기
+//필터링 된 상태에서 정렬기능 구현을 위해 현재 정렬된 정보를 담기
+let currentFilters = {};
+// 검색어를 저장할 변수
+let currentSearchTerm = '';
 
 document.addEventListener("DOMContentLoaded", () => {
 	const searchInput = document.getElementById('search-input');
@@ -40,14 +42,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 	function searchProducts() {
-	    const searchInput = document.getElementById('search-input');
-	    const searchTerm = searchInput.value.trim().toLowerCase();  // 검색어를 소문자로 변환하고 공백을 제거
-	    const activeComponent = document.querySelector('.component.active');
-	    if (activeComponent && searchTerm) {
-	        const componentCategory = activeComponent.dataset.component;
-	        fetchProducts(componentCategory, selectedSort, searchTerm); // 검색어를 추가하여 fetchProducts 호출
-	    }
-	}
+        const searchInput = document.getElementById('search-input');
+        const searchTerm = searchInput.value.trim().toLowerCase();
+        currentSearchTerm = searchTerm;  // 검색어 저장
+        const activeComponent = document.querySelector('.component.active');
+        if (activeComponent && searchTerm) {
+            const componentCategory = activeComponent.dataset.component;
+            fetchProducts(componentCategory, selectedSort, searchTerm);
+        }
+    }
 
 	// placeholder 업데이트 함수
     function updatePlaceholder(componentName) {
@@ -57,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	searchInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
             searchProducts();
-            event.preventDefault(); // 폼 제출 방지
+            event.preventDefault();
         }
     });
 
@@ -557,10 +560,9 @@ document.addEventListener("DOMContentLoaded", () => {
             sortButtons.forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
             selectedSort = this.dataset.sort;
-
             const activeComponent = document.querySelector('.component.active');
             if (activeComponent) {
-                fetchFilteredProducts(activeComponent.dataset.component, currentFilters, selectedSort);
+                fetchProducts(activeComponent.dataset.component, selectedSort, currentSearchTerm);
             }
         });
     });
@@ -570,7 +572,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	function fetchProducts(component, sort, search = '') {
 	    let url = `/products/${component}?sort=${sort}`;
 	    if (search) {
-	        url += `&search=${encodeURIComponent(search)}`; // 검색어 파라미터 추가
+	        url += `&search=${encodeURIComponent(search)}`; // 검색어를 URL에 추가
 	    }
 
 	    fetch(url)
@@ -927,7 +929,7 @@ function deleteCompo(event) {
 //초기화 버튼 클릭 시 기능하는 함수
 function resetCart(){
 
-    //모든 컴포넌트 초기화
+    /*//모든 컴포넌트 초기화
     const components = document.querySelectorAll('.component');
     components.forEach(component =>{
 
@@ -960,7 +962,7 @@ function resetCart(){
     const selectedPartDiv = document.querySelector('.selected-part');
     if (selectedPartDiv) {
         selectedPartDiv.innerHTML = '현재 견적 카트:<br>';
-    }
+    }*/
 
 	//모두 초기화 시킨 후 CPU가 선택되있는 상태로 만듬
 	 window.location.reload();
