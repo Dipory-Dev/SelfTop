@@ -133,7 +133,46 @@ function stockinsertpopup(){
 	
 }
 
+//배송 시작 함수
+function startDelivery(orderNo) {
+    fetch(`/seller/startDelivery`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ orderNo: orderNo })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('배송을 시작했습니다');
+            location.reload(); // 페이지를 새로고침하여 변경된 상태를 보여줌
+        } else {
+            alert('오류 발생: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('오류가 발생했습니다.');
+    });
+}
+
 document.addEventListener('click', function(event) {
+	
+	//배송 시작 버튼 기능
+	if (event.target.classList.contains('delivery_go')) {
+        const orderRow = event.target.closest('tr');
+        const orderNo = orderRow.querySelector('td:first-child').textContent;
+        const orderStatus = orderRow.querySelector('td:nth-child(8)').textContent;
+
+        if (orderStatus === '배송중') {
+            alert('이미 배송을 시작했습니다.');
+            return;
+        }
+
+        startDelivery(orderNo);
+    }
+	
 	if (event.target.id === 'registerModalBtn') {
 	        const modelNameInput = document.getElementById('model-name-input');
 	        const selectedOption = Array.from(document.getElementById('model-names').options).find(option => option.value === modelNameInput.value);

@@ -10,9 +10,15 @@ public class OrderBoardDto {
 	private String name;
 	private String phone;
 	
+	private String delivery_no;
+    private String order_status;
+	
 	public OrderBoardDto() {}
+	
+	
+	
 	public OrderBoardDto(int order_no, int seller_no, int customer_no, String address, String request, String reason,
-			String name, String phone) {
+			String name, String phone, String delivery_no, String order_status) {
 		super();
 		this.order_no = order_no;
 		this.seller_no = seller_no;
@@ -22,7 +28,10 @@ public class OrderBoardDto {
 		this.reason = reason;
 		this.name = name;
 		this.phone = phone;
+		this.delivery_no = delivery_no;
+		this.order_status = order_status;
 	}
+
 	public int getOrder_no() {
 		return order_no;
 	}
@@ -71,7 +80,17 @@ public class OrderBoardDto {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-
+	public String getDelivery_no() {
+		return delivery_no;
+	}
+	public void setDelivery_no(String delivery_no) {
+		this.delivery_no = delivery_no;
+	}
+	public String getOrder_status() {
+		return order_status;
+	}
+	public void setOrder_status(String order_status) {
+		this.order_status = order_status;
+	}
 	
-
 }

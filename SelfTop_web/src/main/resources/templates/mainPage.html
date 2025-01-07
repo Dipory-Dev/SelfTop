@@ -33,165 +33,163 @@
         	</div>
 	    </div>
 	    <div class="content">
-		    <div class="category_list">
-			<ul>
+			<ul class="category_list">
 				<li><a class="sortBtn" href="#" data-sort="bypopular">인기상품순</a></li>
 				<li><a class="sortBtn" href="#" data-sort="bynewest">신상품순</a></li>
 				<li><a class="sortBtn" href="#" data-sort="bylowprice">낮은 가격순</a></li>
 				<li><a class="sortBtn" href="#" data-sort="byhighprice">높은 가격순</a></li>
 				<li><a class="sortBtn" href="#" data-sort="byname">상품명순</a></li>
 			</ul>
-				<div class="content-box">
-				
-				</div>
-		    	<div class="side-panel">
-	            	<div class="panel-header">
-	            		<div>
-							<select class="saved-quote" id="saved-quote" th:onchange="fetchQuoteDetail(this.value)">
-								<option value="none" selected>견적을 선택해주세요.</option>
-								<option th:each="cart : ${cartList}"
-										th:value="${cart.quote_no}"
-										th:text="${cart.quote_name}">
-								</option>
-							</select>
-		            			<button id="current-cart" >현재 견적 카트</button>
-	            				<input type="text" id="quote-name" placeholder="견적 이름을 작성해주세요" />
-	            		</div>
-	        		</div>
-	        		<div class="components">
-	        			<div>
-	        				<div class="component" data-component="CPU">
-								<div class="component-header">
-									<p>CPU</p>
-									<input type="button" class="delete-button" value="X" name="delete-button" onclick="deleteCompo(event);">
-									<hr>
-								</div>
-								<div class="component-body">
-									<div id="product-detail" class="cpu-name"></div>
-									<div id="product-price">
-										<div class="quantity-controls-wrapper">
-											<!-- 수량 조절 버튼 및 가격 표시가 여기에 추가. -->
-										</div>
+			<div class="content-box">
+			
+			</div>
+	    	<div class="side-panel">
+            	<div class="panel-header">
+            		<div>
+						<select class="saved-quote" id="saved-quote" th:onchange="fetchQuoteDetail(this.value)">
+							<option value="none" selected>견적을 선택해주세요.</option>
+							<option th:each="cart : ${cartList}"
+									th:value="${cart.quote_no}"
+									th:text="${cart.quote_name}">
+							</option>
+						</select>
+	            			<button id="current-cart" >현재 견적 카트</button>
+            				<input type="text" id="quote-name" placeholder="견적 이름을 작성해주세요" />
+            		</div>
+        		</div>
+        		<div class="components">
+        			<div>
+        				<div class="component" data-component="CPU">
+							<div class="component-header">
+								<p>CPU</p>
+								<input type="button" class="delete-button" value="X" name="delete-button" onclick="deleteCompo(event);">
+								<hr>
+							</div>
+							<div class="component-body">
+								<div id="product-detail" class="cpu-name"></div>
+								<div id="product-price">
+									<div class="quantity-controls-wrapper">
+										<!-- 수량 조절 버튼 및 가격 표시가 여기에 추가. -->
 									</div>
 								</div>
-		        				
-	        				</div>
-	            			<div class="component" data-component="RAM">
-		            			<div class="component-header">
-									<p>메모리</p>
-									<input type="button" class="delete-button" value="X" name="delete-button" onclick="deleteCompo(event);">
-									<hr>
-								</div>
-		        				<div class="component-body">
-									<div id="product-detail" class="ram-name"></div>
-									<div id="product-price" class="ram-price"></div>
-								</div>
-	            			</div>
-	            			<div class="component" data-component="SSD">
-	            				<div class="component-header">
-									<p>SSD</p>
-									<input type="button" class="delete-button" value="X" name="delete-button" onclick="deleteCompo(event);">
-									<hr>
-								</div>
-		        				<div class="component-body">
-									<div id="product-detail" class="ssd-name"></div>
-									<div id="product-price" class="ssd-price"></div>
-								</div>
-	            			</div>
-	            			<div class="component" data-component="파워">
-								<div class="component-header">
-									<p>파워</p>
-									<input type="button" class="delete-button" value="X" name="delete-button" onclick="deleteCompo(event);">
-									<hr>
-								</div>
-		        				<div class="component-body">
-									<div id="product-detail" class="power-name"></div>
-									<div id="product-price" class="power-price"></div>
-								</div>
 							</div>
-	            			<div class="component" data-component="쿨러">
-								<div class="component-header">
-									<p>쿨러</p>
-									<input type="button" class="delete-button" value="X" name="delete-button" onclick="deleteCompo(event);">
-									<hr>
-								</div>
-		        				<div class="component-body">
-									<div id="product-detail" class="cooler-name"></div>
-									
-									<div id="product-price" class="cooler-price"></div>
-								</div>
+	        				
+        				</div>
+            			<div class="component" data-component="RAM">
+	            			<div class="component-header">
+								<p>메모리</p>
+								<input type="button" class="delete-button" value="X" name="delete-button" onclick="deleteCompo(event);">
+								<hr>
 							</div>
-	        			</div>
-	        			<div>
-	        				<div class="component" data-component="메인보드">
-								<div class="component-header">
-									<p>메인보드</p>
-									<input type="button" class="delete-button" value="X" name="delete-button" onclick="deleteCompo(event);">
-									<hr>
-								</div>
-		        				<div class="component-body">
-									<div id="product-detail" class="mainboard-name"></div>
-									<div id="product-price" class="mainboard-price"></div>
-								</div>
+	        				<div class="component-body">
+								<div id="product-detail" class="ram-name"></div>
+								<div id="product-price" class="ram-price"></div>
 							</div>
-	            			<div class="component" data-component="그래픽카드">
-								<div class="component-header">
-									<p>그래픽카드</p>
-									<input type="button" class="delete-button" value="X" name="delete-button" onclick="deleteCompo(event);">
-									<hr>
-								</div>
-		        				<div class="component-body">
-									<div id="product-detail" class="graphicCard-name"></div>
-									<div id="product-price" class="graphicCard-price"></div>
-								</div>
+            			</div>
+            			<div class="component" data-component="SSD">
+            				<div class="component-header">
+								<p>SSD</p>
+								<input type="button" class="delete-button" value="X" name="delete-button" onclick="deleteCompo(event);">
+								<hr>
 							</div>
-	            			<div class="component" data-component="HDD">
-								<div class="component-header">
-									<p>HDD</p>
-									<input type="button" class="delete-button" value="X" name="delete-button" onclick="deleteCompo(event);">
-									<hr>
-								</div>
-		        				<div class="component-body">
-									<div id="product-detail" class="hdd-name"></div>
-									<div id="product-price" class="hdd-price"></div>
-								</div>
+	        				<div class="component-body">
+								<div id="product-detail" class="ssd-name"></div>
+								<div id="product-price" class="ssd-price"></div>
 							</div>
-	            			<div class="component" data-component="케이스">
-								<div class="component-header">
-									<p>케이스</p>
-									<input type="button" class="delete-button" value="X" name="delete-button" onclick="deleteCompo(event);">
-									<hr>
-								</div>
-		        				<div class="component-body">
-									<div id="product-detail" class="case-name"></div>
-									<div id="product-price" class="case-price"></div>
-								</div>
+            			</div>
+            			<div class="component" data-component="파워">
+							<div class="component-header">
+								<p>파워</p>
+								<input type="button" class="delete-button" value="X" name="delete-button" onclick="deleteCompo(event);">
+								<hr>
 							</div>
-							<div class="select-option">
-								<div>
-									<label><input type="radio" name="assembly" value="requested" /> (*별도 20,000원) 조립신청</label>
-								</div>
-								<div>
-									<label><input type="radio" name="assembly" value="not_requested" checked /> 조립미신청</label>
-								</div>
+	        				<div class="component-body">
+								<div id="product-detail" class="power-name"></div>
+								<div id="product-price" class="power-price"></div>
 							</div>
-	            			
-	        			</div>
-	        		</div>
-	        		<div class="total">
-	            		<span>총 견적 금액 : </span><span class="total-price">0원</span>
-	        		</div>
-	        		<div class="actions">
-						<button class="button compatibility-check-btn" id="openModalBtn">호환성 체크</button>
-	            		<button class="button save-cart-btn" id="save-quote">견적 저장</button>
-						<button class="button reset-btn" onclick="resetCart();">초기화</button>
-	            		<button class="button purchase-btn" onclick="goPayPage()">구매하기</button>
-	        		</div>
-					<div class="footer-message"><p>✔ 구매 및 견적 저장 전, <span>호환성 체크를 권장합니다. </span></p></div>
-	        	</div>
-	        	<button id="toggle-button" class="toggle-button">≡</button>
-		    </div>
-		</div>
+						</div>
+            			<div class="component" data-component="쿨러">
+							<div class="component-header">
+								<p>쿨러</p>
+								<input type="button" class="delete-button" value="X" name="delete-button" onclick="deleteCompo(event);">
+								<hr>
+							</div>
+	        				<div class="component-body">
+								<div id="product-detail" class="cooler-name"></div>
+								
+								<div id="product-price" class="cooler-price"></div>
+							</div>
+						</div>
+        			</div>
+        			<div>
+        				<div class="component" data-component="메인보드">
+							<div class="component-header">
+								<p>메인보드</p>
+								<input type="button" class="delete-button" value="X" name="delete-button" onclick="deleteCompo(event);">
+								<hr>
+							</div>
+	        				<div class="component-body">
+								<div id="product-detail" class="mainboard-name"></div>
+								<div id="product-price" class="mainboard-price"></div>
+							</div>
+						</div>
+            			<div class="component" data-component="그래픽카드">
+							<div class="component-header">
+								<p>그래픽카드</p>
+								<input type="button" class="delete-button" value="X" name="delete-button" onclick="deleteCompo(event);">
+								<hr>
+							</div>
+	        				<div class="component-body">
+								<div id="product-detail" class="graphicCard-name"></div>
+								<div id="product-price" class="graphicCard-price"></div>
+							</div>
+						</div>
+            			<div class="component" data-component="HDD">
+							<div class="component-header">
+								<p>HDD</p>
+								<input type="button" class="delete-button" value="X" name="delete-button" onclick="deleteCompo(event);">
+								<hr>
+							</div>
+	        				<div class="component-body">
+								<div id="product-detail" class="hdd-name"></div>
+								<div id="product-price" class="hdd-price"></div>
+							</div>
+						</div>
+            			<div class="component" data-component="케이스">
+							<div class="component-header">
+								<p>케이스</p>
+								<input type="button" class="delete-button" value="X" name="delete-button" onclick="deleteCompo(event);">
+								<hr>
+							</div>
+	        				<div class="component-body">
+								<div id="product-detail" class="case-name"></div>
+								<div id="product-price" class="case-price"></div>
+							</div>
+						</div>
+						<div class="select-option">
+							<div>
+								<label><input type="radio" name="assembly" value="requested" /> (*별도 20,000원) 조립신청</label>
+							</div>
+							<div>
+								<label><input type="radio" name="assembly" value="not_requested" checked /> 조립미신청</label>
+							</div>
+						</div>
+            			
+        			</div>
+        		</div>
+        		<div class="total">
+            		<span>총 견적 금액 : </span><span class="total-price">0원</span>
+        		</div>
+        		<div class="actions">
+					<button class="button compatibility-check-btn" id="openModalBtn">호환성 체크</button>
+            		<button class="button save-cart-btn" id="save-quote">견적 저장</button>
+					<button class="button reset-btn" onclick="resetCart();">초기화</button>
+            		<button class="button purchase-btn" onclick="goPayPage()">구매하기</button>
+        		</div>
+				<div class="footer-message"><p>✔ 구매 및 견적 저장 전, <span>호환성 체크를 권장합니다. </span></p></div>
+        	</div>
+        	<button id="toggle-button" class="toggle-button">≡</button>
+	    </div>
 	</div>
     </main>
     <footer>

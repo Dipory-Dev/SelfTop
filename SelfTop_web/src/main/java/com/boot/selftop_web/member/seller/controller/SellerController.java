@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
 
 @Controller
@@ -110,6 +111,29 @@ public class SellerController {
 			return "sellerstock :: tbody";
 		}
 	}
+	
+	@Autowired
+    private OrderBoardBiz orderBoardBiz;
+	
+	@PostMapping("/startDelivery")
+    public ResponseEntity<?> startDelivery(@RequestBody Map<String, Integer> payload, HttpSession session) {
+        Integer orderNo = payload.get("orderNo");
+        if (session.getAttribute("member_no") == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "로그인이 필요합니다."));
+        }
+
+        try {
+            boolean updated = orderBoardBiz.updateOrder(orderNo);
+            if (updated) {
+                return ResponseEntity.ok(Map.of("success", true, "message", "배송 시작 업데이트 성공"));
+            } else {
+                return ResponseEntity.ok(Map.of("success", false, "message", "이미 배송을 시작했습니다."));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "서버 오류 발생: " + e.getMessage()));
+        }
+    }
+	
 
 	@GetMapping("/stockmenu")
 	public String changesellerorderpage(HttpSession session, Model model) {
