@@ -74,13 +74,16 @@ body {
 }
 
 .var button:hover{
-background-color: #ccc;
-transition: 0.6s;
+    background-color: #C7E6FF;
+    transition: 0.6s;
 }
 
-.var button.active{
-background-color: #ccc;
+.product-detail.active{
+    background-color:#C7E6FF;
+}
 
+.product-review.active{
+    background-color:#C7E6FF;
 }
 
 .var button{
