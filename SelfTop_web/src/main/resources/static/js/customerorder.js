@@ -37,3 +37,33 @@ function sendordernum(element) {
 	document.getElementById('orderForm').submit();
 
 }
+
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('confirm_button')) {
+        const orderNum = e.target.getAttribute('data-order-num');
+        confirmOrder(orderNum);
+    }
+});
+
+function confirmOrder(orderNum) {
+    fetch(`/confirmOrderStatus`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ order_no: orderNum })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('배송이 완료되었습니다.');
+            location.reload(); // 페이지를 새로고침하여 변경된 상태를 보여줌
+        } else {
+            alert('오류 발생: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('오류가 발생했습니다.');
+    });
+}

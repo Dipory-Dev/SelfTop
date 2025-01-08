@@ -28,4 +28,10 @@ public interface OrderBoardMapper {
 
     @Select("SELECT order_status FROM ORDER_BOARD WHERE order_no = #{order_no}")
     String checkOrderStatus(@Param("order_no") int order_no);
+    
+    @Select("SELECT delivery_no FROM order_board WHERE order_no = #{order_no}")
+    String getDeliveryNoByOrderNo(@Param("order_no") int order_no);
+    
+    @Update("UPDATE ORDER_BOARD SET order_status = '배송완료' WHERE order_no = #{order_no}")
+    int updateOrderStatusToComplete(@Param("order_no") int order_no);
 }

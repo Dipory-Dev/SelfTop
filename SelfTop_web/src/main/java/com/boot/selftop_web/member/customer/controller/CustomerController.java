@@ -448,8 +448,23 @@ public class CustomerController {
 		return "customerorder :: tbody";
 
 	}
+
+	@PostMapping("/confirmOrderStatus")
+    @ResponseBody
+    public ResponseEntity<?> confirmOrderStatus(@RequestBody Map<String, Object> payload) {
+        int orderNum = Integer.parseInt(payload.get("order_no").toString());
+        boolean updated = orderboardBiz.completeOrder(orderNum);
+        if (updated) {
+            return ResponseEntity.ok(Map.of("success", true));
+        } else {
+            return ResponseEntity.badRequest().body(Map.of("message", "상태 업데이트 실패"));
+        }
+    }
+
+	//orderdetail페이지에서 활용하는 메소드
 	@PostMapping("/orderdetail")
-	public String customerorderdetail(HttpSession session, Model model,@RequestParam("order_num") String orderNum,
+	public String customerorderdetail(HttpSession session, Model model,
+			@RequestParam("order_num") String orderNum,
 			@RequestParam("orderprice") String orderprice,
 			@RequestParam("orderdate") String orderdate,
 			@RequestParam("orderstatus") String orderstatus,
@@ -462,6 +477,8 @@ public class CustomerController {
 		List<SellerOrderDto> res = customerBiz.customerpurchaselist(member_no,Integer.parseInt(orderNum));
 		List<OrderBoardDto> customerinfo = orderboardBiz.vieworderboard(Integer.parseInt(orderNum));
 
+		String deliveryNo = orderboardBiz.getDeliveryNo(Integer.parseInt(orderNum));
+
 		model.addAttribute("membername", session.getAttribute("name"));
 		model.addAttribute("orderinfo",res);
 		model.addAttribute("ordernum",orderNum);
@@ -470,6 +487,7 @@ public class CustomerController {
 		model.addAttribute("product_code", product_code);
 		model.addAttribute("orderdate",orderdate);
 		model.addAttribute("customerinfo", customerinfo.get(0));
+		model.addAttribute("deliveryNo", deliveryNo);// 송장번호도 모델에 추가
 
 		return "customerorderdetail";
 	}
