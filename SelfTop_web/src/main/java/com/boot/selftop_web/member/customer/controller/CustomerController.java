@@ -897,7 +897,7 @@ public class CustomerController {
 	        @RequestParam("product_code") int productCode,
 	        @RequestParam(value="category", required=false) String category,
 	        Model model) {
-
+				
         ProductInfoDto dto = productInfoBiz.selectOne(productCode);
         model.addAttribute("product", dto);
 
