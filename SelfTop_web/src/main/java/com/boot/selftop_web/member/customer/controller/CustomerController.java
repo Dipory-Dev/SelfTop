@@ -212,7 +212,7 @@ public class CustomerController {
 
 		return "mainPage";
 	}
-	
+
 	@GetMapping("/mainPage")
 	public String showMainPage(@RequestParam("category") String category, @RequestParam("search") String search, Model model) {
 	    ProductBiz<?> productBiz = productBizFactory.getBiz(category);
