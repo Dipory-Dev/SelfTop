@@ -620,7 +620,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         ${product.price ? `${product.price}원` : '품절'}
                         <div><span class="stars">★★★★★</span></div>
                         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px;">
-                            <button class="btn add-to-cart" data-product-code="${product.product_code}" data-product-name="${product.product_name}" data-product-price="${product.price}">담기</button>
+                            <button class="btn add-to-cart" data-seller-no="${product.seller_no}" data-product-code="${product.product_code}" data-product-name="${product.product_name}" data-product-price="${product.price}">담기</button>
                             <button class="btn buy-now">바로구매</button>
                         </div>
                     </div>
@@ -665,13 +665,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 const productName = button.getAttribute('data-product-name'); // 상품명 가져오기
                 const productPrice = button.getAttribute('data-product-price'); // 가격 가져오기
                 const productCode = button.getAttribute('data-product-code');
+                const sellerNo = button.getAttribute('data-seller-no');
 
                 if(productPrice==0){
                     alert("품절된 상품은 담을 수 없습니다.");
                     return;
                 }
 
-                addToCart(productName, productPrice, productCode);
+                addToCart(productName, productPrice, productCode, sellerNo);
             });
         });
     }
@@ -681,6 +682,8 @@ document.addEventListener("DOMContentLoaded", () => {
         window.open(`/productDetail?product_code=${product_code}&category=${category}`, "제품상세이미지팝업", "width=1000, height=1500, left=100, top=50, scrollbars=1");
     };
 
+
+    // 견적 리스트 선택 시 부품 불러오는 곳
     function fetchQuoteDetail(quote_no) {
         if (quote_no === "none") {
             alert("견적을 선택해주세요.");
@@ -718,7 +721,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         component.classList.add('active');
 
                         // 장바구니에 추가
-                        addToCart(categoryData.product_name, categoryData.price, categoryData.product_code);
+                        addToCart(categoryData.product_name, categoryData.price, categoryData.product_code, categoryData.seller_no);
                     }
                 }
 
@@ -781,7 +784,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 넣는 함수
-    function addToCart(productName, productPrice, productCode) {
+    function addToCart(productName, productPrice, productCode, sellerNo) {
         const activeComponent = document.querySelector('.component.active');
 
         if (activeComponent) {
@@ -803,6 +806,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 product_code: productCode,
                 name: productName,
                 price: parseInt(productPrice),
+                seller_no: sellerNo,
                 quantity: 1, // 기본 수량 :1
             };
 
