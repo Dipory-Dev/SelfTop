@@ -9,9 +9,9 @@ public class ReviewDto {
     private int rating;
     private int productCode;
     private int memberNo;
-    private String memberName; 
+    private String memberName;
     private Date reviewDate;
-    
+
 
     public int getReviewNo() {
         return reviewNo;
@@ -76,7 +76,4 @@ public class ReviewDto {
 	public void setReviewDate(Date reviewDate) {
 		this.reviewDate = reviewDate;
 	}
-
-
-    
 }

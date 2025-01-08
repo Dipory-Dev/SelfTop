@@ -14,7 +14,6 @@ import com.boot.selftop_web.review.model.dto.ReviewDto;
 @Mapper
 public interface ReviewMapper {
 	
-	
 	//모든 리뷰 가져오기
 	@Select("SELECT REVIEW_NO, REVIEW_IMG,CONTENT, RATING, PRODUCT_CODE, MEMBER_NO, CREATED_DATE FROM REVIEW")
     List<ReviewDto> getAllReviews();
