@@ -11,7 +11,6 @@ function loadquotedetail(quoteNo) {
 				cell.style.fontWeight = "normal";
 			});
 			 const clickedElement = document.querySelector(`[data-quote-no="${quoteNo}"]`);
-			console.log(clickedElement);
 			     if (clickedElement) {
 			       clickedElement.style.fontWeight = "bold";
 				   
@@ -76,9 +75,76 @@ document.addEventListener("DOMContentLoaded", () => {
 	const closeModalButton = document.getElementById('close-modal');
 	const compareButton = document.getElementById('compare-button');
 	const tableContainer = document.getElementById('table-container');
+	//견적비교 모달 선언부
 	const modal = document.getElementById('compare-modal');
 	const deleteButton = document.getElementById('deletebutton');
-	const changeButton = document.getElementById('changeamount')
+	const changeButton = document.getElementById('changeamount');
+	//호환성체크 모달 선언부
+	const compatibilitymodal = document.getElementById('modal');
+	const openModal = document.getElementById('openModalBtn');
+	const closeModalBtn = document.getElementById('closeModalBtn');
+	const firstmodalpage = compatibilitymodal.innerHTML;
+
+	function resetModal() {
+		compatibilitymodal.innerHTML = firstmodalpage;
+
+		// 모달 초기화 후 필요한 리스너 재등록
+		const closeModalBtn = document.getElementById('closeModalBtn'); // 새롭게 생성된 닫기 버튼 재참조
+		closeModalBtn.addEventListener('click', () => {
+			compatibilitymodal.style.display = 'none';
+			resetModal();
+		});
+	}
+	
+	
+	
+	//호환성 체크
+	openModal.addEventListener('click', () => {
+		const compatibilityitem = document.querySelectorAll('#detailview .orderproduct');
+		const data = Array.from(compatibilityitem).map((item) => {
+			const category = item.querySelector('.category p').textContent.trim();
+			if (!["테스트"].includes(category)) {
+				const productElement = item.querySelector('.amount-input');
+				if (productElement) {
+					const productcode = productElement.dataset.productcode;
+					return { category: category, productcode: productcode };
+				} else {
+					return ' ';
+				}
+
+			}
+			return ' ';
+		}).filter((item) => item !== ' ');;
+		if (data.length === 0) {
+			alert("견적을 선택해주세요");
+			return;
+		}
+		fetch('/compatibility', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		})
+			.then((response) => response.json())
+			.then((result) => {
+				compatibilityviewchange(result);
+			})
+			.catch((error) => {
+				console.error('Error during submission:', error);
+			});
+		compatibilitymodal.style.display = 'block';
+	});
+	
+
+	closeModalBtn.addEventListener('click', () => {
+	    compatibilitymodal.style.display = 'none';
+		resetModal();
+		
+	});
+
+	
+
 
 	//견적삭제
 
@@ -190,6 +256,14 @@ document.addEventListener("DOMContentLoaded", () => {
 	        tableContainer.innerHTML = ''; // 테이블 초기화
 	    }
 	});
+	
+	// 호환성모달 외부 클릭 시 닫기
+		window.addEventListener('click', (event) => {
+		    if (event.target === compatibilitymodal) {
+		        compatibilitymodal.style.display = 'none';
+				resetModal();
+		    }
+		});
 
 	// 비교하기 버튼 클릭 이벤트
 	compareButton.addEventListener('click', () => {
@@ -208,14 +282,11 @@ document.addEventListener("DOMContentLoaded", () => {
 					body: JSON.stringify({ values: checkQuotesvalue }),
 		}).then((response) => response.json())
 			.then((data) => {
-				
 				const transdata =transformData(organizeDataByQuoteName(data))
 				tableContainer.innerHTML = ''; // 초기화
 
 				   checkedQuotes.forEach(quote => {
-						console.log("선택밸류"  + quote.value);
 				       const index = transdata.findIndex(item => item.cartName === quote.value); // 체크된 인덱스
-					   console.log("인덱스" +index);
 				       const tableHTML =  createTable(transdata[index]); // 테이블 생성
 				       tableContainer.innerHTML += tableHTML; // 추가
 			})
@@ -327,7 +398,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function createTable(data) {
     const  { cartName, quoteName, components } = data;
-    const { CPU, 메인보드, RAM, 그래픽카드, SSD, HDD, 파워, 케이스 , 쿨러 } = components;arguments
+    const { CPU, 메인보드, RAM, 그래픽카드, SSD, HDD, 파워, 케이스 , 쿨러 } = components;
 	const totalPrice =
 	       (CPU ? CPU.price : 0) +
 	       (메인보드 ? 메인보드.price : 0) +
@@ -475,3 +546,98 @@ function refreshQuotelist() {
 	});
 }	
 
+function compatibilityviewchange(data){
+	const cpuram = document.querySelector('.CPUtoRAM');
+	const cpuboard = document.querySelector('.CPUtoMainboard');
+	const ramboard = document.querySelector('.MemorytoMainboard');
+	const caseboard = document.querySelector('.CasetoMainboard');
+	const casegpu = document.querySelector('.CasetoGPU');
+	const casepower = document.querySelector('.CasetoPower');
+	const powerconsumption = document.querySelector('.power-consumption');
+	const powercurrent = document.querySelector('.power-current');
+	const powerrecommended = document.querySelector('.power-recommended');
+	const wattvalue=data.wattvalue;
+	const powersize = data.powersize;
+	//호환성  O X 구분
+	const cpuramcircle = document.querySelector('#cpu-ram-compatibility');
+	const cpuboardcircle = document.querySelector('#cpu-mainboard-compatibility');
+	const ramboardcircle = document.querySelector('#ram-mainboard-compatibility');
+	const caseboardcircle = document.querySelector('#mainboard-case-compatibility');
+	const casegpucircle = document.querySelector('#graphicCard-case-compatibility');
+	const casepowercircle = document.querySelector('#power-case-compatibility');
+
+	
+	if (data.cpuramcompatibility) {
+		cpuram.parentElement.innerHTML = cpuram.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 가능합니다.");
+		cpuramcircle.innerHTML="𐤏";
+	} else if (data.cpuramcompatibility  === false) {
+		cpuram.parentElement.innerHTML = cpuram.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 불가능합니다.");
+		cpuramcircle.innerHTML="✕";
+	} else {
+		
+	}
+	
+	if (data.cpuboardcompatibility) {
+		cpuboard.parentElement.innerHTML = cpuboard.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 가능합니다.");
+		cpuboardcircle.innerHTML="𐤏";
+	} else if (data.cpuboardcompatibility  === false ) {
+		cpuboard.parentElement.innerHTML = cpuboard.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 불가능합니다.");
+		cpuboardcircle.innerHTML="✕";
+	} else {
+		
+	}
+	
+	if (data.boardmemorycompatibility){
+		ramboard.parentElement.innerHTML =ramboard.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 가능합니다.");
+		ramboardcircle.innerHTML="𐤏";
+	}else if(data.boardmemorycompatibility === false){
+		ramboard.parentElement.innerHTML = ramboard.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 불가능합니다.");
+		ramboardcircle.innerHTML="✕"
+	}else{
+		
+	}
+		
+
+	if (data.boardcasecompatibility) {
+		caseboard.parentElement.innerHTML =caseboard.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 가능합니다.");
+		caseboardcircle.innerHTML="𐤏";
+	} else if (data.boardcasecompatibility  === false) {
+		caseboard.parentElement.innerHTML =caseboard.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 뷸가능합니다.");
+		caseboardcircle.innerHTML="✕";
+	} else {
+		
+	}
+
+	if (data.casegpucompatibility) {
+		casegpu.parentElement.innerHTML =casegpu.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 가능합니다.");
+		casegpucircle.innerHTML="𐤏";
+	} else if (data.casegpucompatibility  === false) {
+		casegpu.parentElement.innerHTML =casegpu.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 불가능합니다.");
+		casegpucircle.innerHTML="✕";
+	} else {
+		
+	}
+	if (data.casepowerompatibility) {
+		casepower.parentElement.innerHTML =casepower.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 가능합니다.");
+		casepowercircle.innerHTML="𐤏";
+	} else if (data.casepowerompatibility === false) {
+		casepower.parentElement.innerHTML =casepower.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 불가능합니다.");
+		casepowercircle.innerHTML="✕"
+	} else {
+		
+	}
+	const compatibilityElements = document.querySelectorAll(".compatibility");
+	   // 각 요소의 내용을 검사
+	   compatibilityElements.forEach((element) => {
+	       const content = element.textContent.trim();
+	       if (content === "✕") {
+	           element.style.color = "red";
+	       } else if (content === "𐤏") {
+	           element.style.color = "blue";
+	       }
+	   });
+	powerconsumption.innerHTML=wattvalue;
+	powercurrent.innerHTML = powersize === 0 ? "없습니다." : powersize + "W";
+	powerrecommended.innerHTML=wattvalue + 100 + "W";
+	
+}

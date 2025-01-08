@@ -66,9 +66,77 @@ public class QuoteBizImpl implements QuoteBiz{
 		return mapper.selectProduct(product_code);
 	}
 
+
 	@Override
 	public ProductStatusDto selectProductStatus(int product_code) {
 		return mapper.selectProductStatus(product_code);
+	}
+
+
+	@Override
+	public String cpuddr(int productcode) {
+		// TODO Auto-generated method stub
+		return mapper.cpuddr(productcode);
+	}
+	@Override
+	public String ramddr(int productcode) {
+		// TODO Auto-generated method stub
+		return mapper.ramddr(productcode);
+	}
+	@Override
+	public String cpusocket(int productcode) {
+		// TODO Auto-generated method stub
+		return mapper.cpusocket(productcode);
+	}
+	@Override
+	public String boardsocket(int productcode) {
+		// TODO Auto-generated method stub
+		return mapper.boardsocket(productcode);
+	}
+	@Override
+	public String boardmemoryslot(int productcode) {
+		// TODO Auto-generated method stub
+		return mapper.boardmemoryslot(productcode);
+	}
+	@Override
+	public String caseformfactor(int productcode) {
+		// TODO Auto-generated method stub
+		return mapper.caseformfactor(productcode);
+	}
+	@Override
+	public String boardformfactor(int productcode) {
+		// TODO Auto-generated method stub
+		return mapper.boardformfactor(productcode);
+	}
+	@Override
+	public int vgalength(int productcode) {
+		// TODO Auto-generated method stub
+		return mapper.vgalength(productcode);
+	}
+	@Override
+	public int casevgalength(int productcode) {
+		// TODO Auto-generated method stub
+		return mapper.casevgalength(productcode);
+	}
+	@Override
+	public String casepowersize(int productcode) {
+		// TODO Auto-generated method stub
+		return mapper.casepowersize(productcode);
+	}
+	@Override
+	public String powersize(int productcode) {
+		// TODO Auto-generated method stub
+		return mapper.powersize(productcode);
+	}
+	@Override
+	public int wattvalue(int productcode, String category) {
+		// TODO Auto-generated method stub
+		return mapper.wattvalue(productcode,category);
+	}
+	@Override
+	public int powerwatt(int productcode) {
+		// TODO Auto-generated method stub
+		return mapper.powerwatt(productcode);
 	}
 
 }

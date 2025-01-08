@@ -90,5 +90,44 @@ public interface QuoteMapper {
 
 	@Update("UPDATE quote_detail SET amount = #{amount} WHERE quote_no=#{quoteno} AND product_code=#{productcode}")
 	int updatedetailamount(@Param("quoteno")int quoteno,@Param("productcode") int productcode,@Param("amount") int amount);
+	
+//cpu ram 비교	
+	@Select("SELECT ddr from cpu where product_code=#{productcode} ")
+	String cpuddr(@Param("productcode") int productcode);
+	@Select("SELECT ddr from ram where product_code=#{productcode} ")
+	String ramddr(@Param("productcode") int productcode);
+// cpu board 비교	
+	@Select("SELECT socket from cpu where product_code=#{productcode} ")
+	String cpusocket(@Param("productcode") int productcode);
+	@Select("SELECT socket from mainboard where product_code=#{productcode} ")
+	String boardsocket(@Param("productcode") int productcode);
+//	memroy board비교
+	@Select("SELECT ddr from mainboard where product_code=#{productcode} ")
+	String boardmemoryslot(@Param("productcode") int productcode);
+
+	
+// case board 비교	
+	@Select("SELECT formfactor from case_board where product_code=#{productcode} ")
+	String caseformfactor(@Param("productcode") int productcode);
+	@Select("SELECT formfactor from mainboard where product_code=#{productcode} ")
+	String boardformfactor(@Param("productcode") int productcode);
+	
+//	case gpu비교
+	@Select("SELECT length from gpu where product_code=#{productcode} ")
+	int vgalength(@Param("productcode") int productcode);
+	@Select("SELECT VGA_length from case_board where product_code=#{productcode} ")
+	int casevgalength(@Param("productcode") int productcode);
+	
+// case power 비교	
+	@Select("SELECT power_size from case_board where product_code=#{productcode} ")
+	String casepowersize(@Param("productcode") int productcode);
+	@Select("SELECT formfactor from power where product_code=#{productcode} ")
+	String powersize(@Param("productcode") int productcode);
+
+	@Select("SELECT watt from ${category} where product_code = #{productcode}")
+	int wattvalue(@Param("productcode")int productcode,@Param("category") String category);
+
+	@Select("Select supply from power where product_code =  #{productcode} ")
+	int powerwatt(@Param("productcode")int productcode);
 
 }

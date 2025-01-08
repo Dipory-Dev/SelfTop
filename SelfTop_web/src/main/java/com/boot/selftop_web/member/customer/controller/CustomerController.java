@@ -745,4 +745,174 @@ public class CustomerController {
 	    return ResponseEntity.ok().body("저장되었습니다");
 	}
 
+	@PostMapping("/compatibility")
+	@ResponseBody
+	public ResponseEntity<?> compatibilityQuote(@RequestBody List<Map<String, Object>> quotedata) {
+	
+		return ResponseEntity.ok().body(createcompatibility(quotedata));
+	}
+	
+	public Map<String,Object> createcompatibility(List<Map<String, Object>> quotedata){
+		System.out.println(quotedata + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		boolean cpuramcompatibility = false;
+		boolean cpuboardcompatibility = false;
+		boolean boardmemorycompatibility = false;
+		boolean boardcasecompatibility = false;
+		boolean casegpucompatibility = false;
+		boolean casepowerompatibility = false;
+
+		// 각 부품에 대한 존재 여부
+		boolean hascpu = false;
+		boolean hasram = false;
+		boolean hasmainboard = false;
+		boolean hasgpu = false;
+		boolean hascase = false;
+		boolean haspower = false;
+
+		int cpuproductno = 0;
+		int ramproductno = 0;
+		int caseproductno = 0;
+		int powerproductno = 0;
+		int gpuproductno = 0;
+		int boardproductno = 0;
+//		파워용량합산
+		int wattvalue = 0;
+		int powerwatt = 0;
+		Map<String, Object> valueres = new HashMap<>();
+
+		// 부품 카테고리 처리
+		for (Map<String, Object> data : quotedata) {
+			String category = (String) data.get("category");
+			// 부품 존재 여부 체크
+			switch (category) {
+			case "CPU":
+				hascpu = true; // CPU가 존재
+
+				cpuproductno = Integer.parseInt((String) data.get("productcode"));
+				wattvalue = wattvalue + quoteBiz.wattvalue(cpuproductno, "cpu");
+				break;
+
+			case "RAM":
+				hasram = true; // RAM이 존재
+				ramproductno = Integer.parseInt((String) data.get("productcode"));
+				wattvalue = wattvalue + quoteBiz.wattvalue(ramproductno, "ram");
+				break;
+
+			case "메인보드":
+				hasmainboard = true; // 메인보드가 존재
+				boardproductno = Integer.parseInt((String) data.get("productcode"));
+				wattvalue = wattvalue + quoteBiz.wattvalue(boardproductno, "mainboard");
+				break;
+
+			case "그래픽카드":
+				hasgpu = true; // 그래픽카드가 존재
+				gpuproductno = Integer.parseInt((String) data.get("productcode"));
+				wattvalue = wattvalue + quoteBiz.wattvalue(gpuproductno, "gpu");
+				break;
+
+			case "케이스":
+				hascase = true; // 케이스가 존재
+				caseproductno = Integer.parseInt((String) data.get("productcode"));
+
+				break;
+
+			case "파워":
+				haspower = true; // 파워가 존재
+				powerproductno = Integer.parseInt((String) data.get("productcode"));
+				powerwatt = quoteBiz.powerwatt(powerproductno);
+
+				break;
+			case "SSD":
+				wattvalue = wattvalue + quoteBiz.wattvalue(Integer.parseInt((String) data.get("productcode")), "SSD");
+				break;
+			case "HDD":
+				wattvalue = wattvalue + quoteBiz.wattvalue(Integer.parseInt((String) data.get("productcode")), "HDD");
+				break;
+			case "쿨러":
+				wattvalue = wattvalue
+						+ quoteBiz.wattvalue(Integer.parseInt((String) data.get("productcode")), "cooler");
+				break;
+
+			default:
+				break;
+			}
+		}
+
+//		cpu와 메모리
+		if (hascpu && hasram) {
+			if (quoteBiz.cpuddr(cpuproductno).toLowerCase().trim()
+					.equals(quoteBiz.ramddr(ramproductno).toLowerCase().trim())) {
+				cpuramcompatibility = true;
+			}
+			valueres.put("cpuramcompatibility", cpuramcompatibility);
+		}
+//		cpu와 보드
+		if (hascpu && hasmainboard) {
+			if (quoteBiz.boardsocket(boardproductno).toLowerCase().trim()
+					.equals(quoteBiz.cpusocket(cpuproductno).toLowerCase().trim())) {
+				cpuboardcompatibility = true;
+
+			}
+
+			valueres.put("cpuboardcompatibility", cpuboardcompatibility);
+		}
+//		ram과 board
+		if (hasram && hasmainboard) {
+			if (quoteBiz.ramddr(ramproductno).toLowerCase().trim()
+					.equals(quoteBiz.boardmemoryslot(boardproductno).toLowerCase().trim())) {
+
+				boardmemorycompatibility = true;
+			}
+			valueres.put("boardmemorycompatibility", boardmemorycompatibility);
+		}
+
+//		case와 board
+		if (hascase && hasmainboard) {
+			String caseform = quoteBiz.caseformfactor(caseproductno).toLowerCase().trim();
+			String boardform = quoteBiz.boardformfactor(boardproductno).toLowerCase().trim();
+			String[] caseArray = caseform.split(", ");
+
+			// 배열을 리스트로 변환
+			List<String> caseformlist = Arrays.asList(caseArray);
+
+			if (caseformlist.contains(boardform)) {
+				boardcasecompatibility = true;
+
+			}
+			valueres.put("boardcasecompatibility", boardcasecompatibility);
+
+		}
+//		case와 그래픽
+		if (hascase && hasgpu) {
+			if (quoteBiz.vgalength(gpuproductno) < quoteBiz.casevgalength(caseproductno)) {
+				casegpucompatibility = true;
+
+			}
+			valueres.put("casegpucompatibility", casegpucompatibility);
+		}
+//		case와 power
+		if (hascase && haspower) {
+			String caseform = quoteBiz.caseformfactor(caseproductno).toLowerCase().trim();
+//			String casepowerform = quoteBiz.casepowersize(caseproductno).toLowerCase().trim();
+			String powerform = quoteBiz.powersize(powerproductno).toLowerCase().trim();
+			String[] caseArray = caseform.split(", ");
+
+			// 배열을 리스트로 변환
+			List<String> caseformlist = Arrays.asList(caseArray);
+
+			if (caseformlist.contains(powerform)) {
+				casepowerompatibility = true;
+			}
+			valueres.put("casepowerompatibility", casepowerompatibility);
+		}
+
+		valueres.put("wattvalue", wattvalue);
+		valueres.put("powersize", powerwatt);
+		System.out.println(valueres);
+		
+		return valueres;
+		
+	}
+	
+
 }
