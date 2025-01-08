@@ -2,6 +2,7 @@ package com.boot.selftop_web.review.biz;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.boot.selftop_web.review.biz.mapper.ReviewMapper;
@@ -10,6 +11,7 @@ import com.boot.selftop_web.review.model.dto.ReviewDto;
 @Service
 public class ReviewBizImpl implements ReviewBiz {
 
+	@Autowired
     private final ReviewMapper reviewMapper;
 
     public ReviewBizImpl(ReviewMapper reviewMapper) {
@@ -23,7 +25,10 @@ public class ReviewBizImpl implements ReviewBiz {
 
     @Override
     public List<ReviewDto> getReviewsByProductCode(int productCode) {
-        return reviewMapper.getReviewsByProductCode(productCode);
+    	List<ReviewDto> reviews = reviewMapper.getReviewsByProductCode(productCode);
+        
+        return reviews;
+        
     }
 
 	@Override

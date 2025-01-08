@@ -36,6 +36,8 @@ import com.boot.selftop_web.quote.biz.QuoteBiz;
 import com.boot.selftop_web.quote.model.dto.QuoteDetailDto;
 import com.boot.selftop_web.quote.model.dto.QuoteDto;
 import com.boot.selftop_web.quote.model.dto.QuotecomparisonDto;
+import com.boot.selftop_web.review.biz.ReviewBiz;
+import com.boot.selftop_web.review.model.dto.ReviewDto;
 
 import com.boot.selftop_web.member.customer.model.dto.CustomerorderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
@@ -71,6 +73,9 @@ public class CustomerController {
 
 	@Autowired
 	private QuoteBiz quoteBiz;
+	
+	@Autowired
+	private ReviewBiz reviewBiz;
 	
 	@GetMapping("/loginform")
     public String LoginSection(HttpSession session) {
@@ -787,21 +792,22 @@ public class CustomerController {
 	}
 
 
+	//제품 상세페이지 (상세이미지 & 리뷰)
 	@GetMapping("/productDetail")
-	public String productDetail(Model model, @RequestParam("product_code") int product_code) {
-		ProductInfoDto dto = productInfoBiz.selectOne(product_code);
-		model.addAttribute("product", dto);
+	public String popupProductDetail(
+	        @RequestParam("product_code") int productCode,
+	        @RequestParam(value="category", required=false) String category,
+	        Model model) {
+		
+        ProductInfoDto dto = productInfoBiz.selectOne(productCode);
+        model.addAttribute("product", dto);
 
-		return "popup_product_info";
-	}
+        
+        List<ReviewDto> reviewList = reviewBiz.getReviewsByProductCode(productCode);
+        model.addAttribute("reviewList", reviewList); 
 
-
-	@GetMapping("/loadquotelist")
-	public String getQuoteDiv(Model model,HttpSession session) {
-		Integer member_no = (Integer) session.getAttribute("member_no");
-		List<QuoteDto> res =quoteBiz.SelectQuote(member_no);
-		model.addAttribute("quote", res);
-	    return "fragmentcartquotelist :: cart_view"; // 특정 타임리프 fragment 반환
+	    
+	    return "popup_product_info";
 	}
 	
 	@PostMapping("/updatequotedetailamount")
