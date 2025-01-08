@@ -50,7 +50,7 @@ public class OrderController {
 			result.put("msg", "로그인이 필요한 서비스입니다.");
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
 		}else {
-			
+			result.put("url", "/paysuccess");
 			result.put("msg", "주문 내역이 저장되었습니다.");
 			return ResponseEntity.ok(result);
 		}
