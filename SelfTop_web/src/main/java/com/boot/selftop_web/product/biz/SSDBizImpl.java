@@ -53,9 +53,9 @@ public class SSDBizImpl implements ProductBiz<SSDDto> {
     }
 
 	@Override
-	public List<SSDDto> filterProducts(Map<String, List<String>> filters, String sort) {
+	public List<SSDDto> filterProducts(Map<String, List<String>> filters, String sort, String search) {
 		try {
-            return ssdMapper.findFilteredSSDs(filters, sort);
+            return ssdMapper.findFilteredSSDs(filters, sort, search);
         } catch (Exception e) {
             System.err.println("Error filtering SSDs with filters: " + filters + "\nError: " + e.getMessage());
             e.printStackTrace(); // 스택 추적을 통해 더 자세한 오류 정보 제공

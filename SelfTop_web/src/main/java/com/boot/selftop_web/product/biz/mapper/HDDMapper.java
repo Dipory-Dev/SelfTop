@@ -22,6 +22,10 @@ public interface HDDMapper {
             "JOIN HDD h ON p.PRODUCT_CODE = h.PRODUCT_CODE " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
             "WHERE p.CATEGORY = 'HDD' " +
+            "<if test='search != null and search != \"\"'>" +
+            " AND (LOWER(p.PRODUCT_NAME) LIKE '%' || LOWER(#{search}) || '%' " +
+            " OR LOWER(p.ETC) LIKE '%' || LOWER(#{search}) || '%')" +
+            "</if>"+
             "<if test='filters.Company != null'>" +
             "   AND p.COMPANY IN " +
             "   <foreach item='company' collection='filters.Company' open='(' separator=',' close=')'>" +
@@ -55,6 +59,6 @@ public interface HDDMapper {
             "   </choose>" +
             "</if>" +
     		"</script>")
-List<HDDDto> findFilteredHDDs(@Param("filters") Map<String, List<String>> filters, @Param("sort") String sort);
+List<HDDDto> findFilteredHDDs(@Param("filters") Map<String, List<String>> filters, @Param("sort") String sort, @Param("search") String search);
     
 }
