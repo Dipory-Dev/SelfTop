@@ -54,9 +54,9 @@ public class CoolerBizImpl implements ProductBiz<CoolerDto>{
     }
 
 	@Override
-	public List<CoolerDto> filterProducts(Map<String, List<String>> filters, String sort) {
+	public List<CoolerDto> filterProducts(Map<String, List<String>> filters, String sort, String search) {
 		try {
-            return coolerMapper.findFilteredCoolers(filters, sort);
+            return coolerMapper.findFilteredCoolers(filters, sort, search);
         } catch (Exception e) {
             System.err.println("Error filtering Coolers with filters: " + filters + "\nError: " + e.getMessage());
             e.printStackTrace(); // 스택 추적을 통해 더 자세한 오류 정보 제공
