@@ -38,19 +38,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	/* 검색 기능 */
 	searchButton.addEventListener('click', () => {
-        searchProducts();
-    });
-
-	function searchProducts() {
-        const searchInput = document.getElementById('search-input');
-        const searchTerm = searchInput.value.trim().toLowerCase();
-        currentSearchTerm = searchTerm;  // 검색어 저장
-        const activeComponent = document.querySelector('.component.active');
-        if (activeComponent && searchTerm) {
-            const componentCategory = activeComponent.dataset.component;
-            fetchProducts(componentCategory, selectedSort, searchTerm);
-        }
-    }
+	    const searchTerm = searchInput.value.trim().toLowerCase();
+	    currentSearchTerm = searchTerm;  // 검색어 저장
+	    const activeComponent = document.querySelector('.component.active');
+	    if (activeComponent) {
+	        const componentCategory = activeComponent.dataset.component;
+	        if (Object.keys(currentFilters).length > 0 || searchTerm) {
+	            fetchFilteredProducts(componentCategory, currentFilters, selectedSort, searchTerm);
+	        } else {
+	            fetchProducts(componentCategory, selectedSort, searchTerm);
+	        }
+	    }
+	});
 
 	// placeholder 업데이트 함수
     function updatePlaceholder(componentName) {
@@ -504,29 +503,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// 필터링된 제품을 불러오는 함수
 	function filterProducts(component) {
-        const filters = {};
-        document.querySelectorAll('.top-box.large input[type="checkbox"]:checked').forEach(checkbox => {
-            const key = checkbox.name;
-            const value = checkbox.value;
-            if (!filters[key]) {
-                filters[key] = [];
-            }
-            filters[key].push(value);
-        });
+	    const filters = {};
+	    document.querySelectorAll('.top-box.large input[type="checkbox"]:checked').forEach(checkbox => {
+	        const key = checkbox.name;
+	        const value = checkbox.value;
+	        if (!filters[key]) {
+	            filters[key] = [];
+	        }
+	        filters[key].push(value);
+	    });
 
-        currentFilters = filters;
-        fetchFilteredProducts(component, filters, selectedSort);
-    }
+	    currentFilters = filters;
+	    fetchFilteredProducts(component, filters, selectedSort, currentSearchTerm);
+	}
 
 	// 서버에 필터링 요청을 보내는 함수
-	function fetchFilteredProducts(component, filters, sort) {
-	    console.log('Sending filters to server:', JSON.stringify(filters), 'with sort:', sort); // 필터 및 정렬 데이터 로깅
-	    fetch(`/api/products/filter/${component}?sort=${sort}`, { // 서버 URL에 정렬 매개변수 추가
-	        method: 'POST',
-	        headers: {
-	            'Content-Type': 'application/json'
-	        },
-	        body: JSON.stringify(filters) // filters 객체를 직접 보내도록 수정
+	function fetchFilteredProducts(component, filters, sort, search) {
+		const query = new URLSearchParams({ sort, search }).toString();
+		const url = `/api/products/filter/${component}?${query}`;
+		
+	    console.log('Sending filters to server:', JSON.stringify(filters), 'with sort:', sort, 'and search:', search); // 필터 및 정렬 데이터 로깅
+		fetch(url, {
+		        method: 'POST',
+		        headers: {
+		            'Content-Type': 'application/json'
+		        },
+		        body: JSON.stringify(filters)
 	    })
 	    .then(response => {
 	        if (!response.ok) {
@@ -555,17 +557,21 @@ document.addEventListener("DOMContentLoaded", () => {
 	/* 제품 정렬 기능 */
     // 정렬 목록 클릭 이벤트
 	sortButtons.forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();
-            sortButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            selectedSort = this.dataset.sort;
-            const activeComponent = document.querySelector('.component.active');
-            if (activeComponent) {
-                fetchProducts(activeComponent.dataset.component, selectedSort, currentSearchTerm);
-            }
-        });
-    });
+	    button.addEventListener('click', (event) => {
+	        event.preventDefault();
+	        sortButtons.forEach(btn => btn.classList.remove('active'));
+	        button.classList.add('active');
+	        selectedSort = button.dataset.sort;
+	        const activeComponent = document.querySelector('.component.active');
+	        if (activeComponent) {
+	            if (Object.keys(currentFilters).length > 0 || currentSearchTerm) {
+	                fetchFilteredProducts(activeComponent.dataset.component, currentFilters, selectedSort, currentSearchTerm);
+	            } else {
+	                fetchProducts(activeComponent.dataset.component, selectedSort, currentSearchTerm);
+	            }
+	        }
+	    });
+	});
 
 
 	// 제품 목록 출력

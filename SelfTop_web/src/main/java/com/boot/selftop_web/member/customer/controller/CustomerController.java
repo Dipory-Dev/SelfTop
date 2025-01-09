@@ -693,15 +693,20 @@ public class CustomerController {
 
 	//필터에 선택된 체크박스에 따라 데이터를 넘겨줌
 	@PostMapping("/api/products/filter/{category}")
-	public ResponseEntity<?> filterProducts(@PathVariable String category, @RequestBody Map<String, List<String>> filters, @RequestParam(value = "sort", defaultValue = "bypopular") String sort) {
-	    System.out.println("Received filters: " + filters + " with sort: " + sort);
+	public ResponseEntity<?> filterProducts(
+			@PathVariable String category,
+			@RequestBody Map<String, List<String>> filters,
+			@RequestParam(value = "sort", defaultValue = "byname") String sort,
+			@RequestParam(value = "search", required = false) String search) {
+
+		System.out.println("Received filters: " + filters + ", sort: " + sort + ", search: " + search);
 	    ProductBiz<?> productBiz = productBizFactory.getBiz(category);
 	    if (productBiz == null) {
 	        return ResponseEntity.badRequest().body("Invalid category: " + category);
 	    }
 
 	    try {
-	        List<?> filteredProducts = productBiz.filterProducts(filters, sort); // 필터 및 정렬 매개변수를 비즈니스 로직에 전달
+	        List<?> filteredProducts = productBiz.filterProducts(filters, sort, search); // 필터 및 정렬 매개변수를 비즈니스 로직에 전달
 	        if (filteredProducts.isEmpty()) {
 	            return ResponseEntity.noContent().build();
 	        }

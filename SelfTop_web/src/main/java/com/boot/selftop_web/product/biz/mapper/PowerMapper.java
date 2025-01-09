@@ -22,6 +22,10 @@ public interface PowerMapper {
             "JOIN POWER c ON p.PRODUCT_CODE = c.PRODUCT_CODE " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
             "WHERE p.CATEGORY = '파워' " +
+            "<if test='search != null and search != \"\"'>" +
+            " AND (LOWER(p.PRODUCT_NAME) LIKE '%' || LOWER(#{search}) || '%' " +
+            " OR LOWER(p.ETC) LIKE '%' || LOWER(#{search}) || '%')" +
+            "</if>"+
             "<if test='filters.Company != null'>" +
             "   AND p.COMPANY IN " +
             "   <foreach item='company' collection='filters.Company' open='(' separator=',' close=')'>" +
@@ -61,5 +65,5 @@ public interface PowerMapper {
             "   </choose>" +
             "</if>" +
     		"</script>")
-    List<PowerDto> findFilteredPowers(@Param("filters") Map<String, List<String>> filters, @Param("sort") String sort);
+    List<PowerDto> findFilteredPowers(@Param("filters") Map<String, List<String>> filters, @Param("sort") String sort, @Param("search") String search);
 }

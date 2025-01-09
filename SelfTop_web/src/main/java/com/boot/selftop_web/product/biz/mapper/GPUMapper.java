@@ -22,6 +22,10 @@ public interface GPUMapper {
             "JOIN GPU g ON p.PRODUCT_CODE = g.PRODUCT_CODE " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
             "WHERE p.CATEGORY = '그래픽카드' " +
+            "<if test='search != null and search != \"\"'>" +
+            " AND (LOWER(p.PRODUCT_NAME) LIKE '%' || LOWER(#{search}) || '%' " +
+            " OR LOWER(p.ETC) LIKE '%' || LOWER(#{search}) || '%')" +
+            "</if>"+
             "<if test='filters.Company != null'>" +
             "   AND p.COMPANY IN " +
             "   <foreach item='company' collection='filters.Company' open='(' separator=',' close=')'>" +
@@ -61,6 +65,6 @@ public interface GPUMapper {
             "   </choose>" +
             "</if>" +
     		"</script>")
-    List<GPUDto> findFilteredGPUs(@Param("filters") Map<String, List<String>> filters, @Param("sort") String sort);
+    List<GPUDto> findFilteredGPUs(@Param("filters") Map<String, List<String>> filters, @Param("sort") String sort, @Param("search") String search);
     
 }
