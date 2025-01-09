@@ -266,6 +266,51 @@ document.addEventListener('click', function(event) {
 
 		});
 	}
+	
+	if(event.target.id ==='cancelorder'){
+		let cancelconfirm;
+		const ordernum =document.getElementById('ordernum').textContent;
+		if(event.target.classList.contains('btn-approve') && event.target.classList.contains('btn') ){
+			cancelconfirm =true;
+		}
+		if(event.target.classList.contains('btn-reject') && event.target.classList.contains('btn') ){
+			cancelconfirm=false;
+		}
+		fetch("/seller/cancelordercheck", {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({cancelordercheck :cancelconfirm,ordernum : ordernum } )
+				})
+				.then((response) => {
+					if (!response.ok) {
+						// HTTP 상태 코드가 200~299가 아닐 경우 오류 처리
+						return response.text().then((message) => {
+							throw new Error(message);
+						});
+					}
+					return response.text();
+				})
+				.then((result) => {
+					if(cancelconfirm){
+						alert("취소요청을 승인하였습니다");
+					}
+					if(!cancelconfirm){
+						alert("취소요청을 거절하였습니다.");
+					}
+					modal.style.display = 'none';
+					location.reload(true);
+				})
+				.catch((error) => {
+					console.error('처리 중 오류가 발생하였습니다:', error.message);
+					alert('취소 요청에 실패하였습니다: ' + error.message);
+				});
+		
+		
+		
+	}
+
 	if (event.target.id === 'openModalBtn') {
 		const modal = document.getElementById('stockmodal');
 		const openModalBtn = document.getElementById('openModalBtn');
@@ -325,11 +370,11 @@ function updateModelNames(products) {
 
 
 // 모달 외부 클릭 이벤트
-/*window.addEventListener('click', (event) => {
+window.addEventListener('click', (event) => {
 	if (event.target === modal) {
 		modal.style.display = 'none';
 	}
-}); */
+}); 
 
 //닫기버튼 항상이벤트에 등록
 

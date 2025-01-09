@@ -29,4 +29,8 @@ public interface SellerBiz {
 
 	// 판매자 제품 등록
     int registerProductStatus(ProductStatusDto productStatus);
+    
+    //취소요청 처리
+    int cancelaccept(int ordernum);
+    int cancelreject(int ordernum);
 }

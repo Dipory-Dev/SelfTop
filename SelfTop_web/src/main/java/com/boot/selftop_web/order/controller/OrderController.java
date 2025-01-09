@@ -44,7 +44,7 @@ public class OrderController {
 
 	        // param1에 member_no와 address, request, assemblyStatus 추가
 	        param1.put("member_no", member_no);
-	        
+
 	        for (Map.Entry<String, Object> entry : items.entrySet()) {
 	            if (entry.getKey().equals("address") || entry.getKey().equals("request") || entry.getKey().equals("assemblyStatus")) {
 	                param1.put(entry.getKey(), entry.getValue());
@@ -62,7 +62,7 @@ public class OrderController {
 
 	        // 성공 메시지 반환
 	        Map<String, Object> result = new HashMap<>();
-	        
+
 	        // 로그인 체크
 		    if (member_no == null) {
 		        result.put("url", "/loginform");

@@ -32,7 +32,7 @@
             const productInfo = JSON.parse(localStorage.getItem('selectedProduct'));
             currentOrder['product_code'] = productInfo.product_code;
             currentOrder['seller_no'] = productInfo.seller_no;
-            
+
             if (productInfo) {
                 // 가져온 데이터가 존재할 경우, 각 요소에 값 삽입
                 const productImage = document.querySelector('.product-image');
@@ -57,11 +57,12 @@
             }
         });
 
-        /*document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function() {
             // localStorage에서 저장된 주문 데이터 가져오기
-            const orderData = JSON.parse(localStorage.getItem('orderData'));
+            const orderData = JSON.parse(localStorage.getItem('CartDetails'));
+            console.log(orderData);
 
-            if (orderData) {
+            if (orderData && orderData.length > 0) {
                 // 테이블의 tbody를 가져옵니다.
                 const tbody = document.querySelector('#order-table tbody');
 
@@ -76,9 +77,9 @@
                     const productNameCell = document.createElement('td');
                     productNameCell.innerHTML = `
                         <div class="product-container">
-                            <img class="product-image" src="path_to_image.jpg" alt="${item.name}">
+                            <img class="product-image" src="${item.image}" alt="${item.name}">
                             <div class="product-details">
-                                <p class="product-type">${item.name}</p>
+                                <p class="product-type">${item.category}</p>
                                 <p class="product-name">${item.name}</p>
                             </div>
                         </div>
@@ -87,7 +88,7 @@
                     // 상품 가격
                     const productPriceCell = document.createElement('td');
                     productPriceCell.classList.add('product-price');
-                    productPriceCell.innerText = item.price;
+                    productPriceCell.innerText = `${item.price.toLocaleString()}원`;
 
                     // 수량
                     const quantityCell = document.createElement('td');
@@ -96,12 +97,13 @@
                         <p class="quantity-input">${item.quantity}</p>
                     `;
 
-                    // 주문 금액
+                    // 주문 금액 (상품 가격 * 수량)
                     const orderPriceCell = document.createElement('td');
                     orderPriceCell.classList.add('order-price');
-                    orderPriceCell.innerText = item.totalPrice;
+                    const totalPrice = item.price * item.quantity;
+                    orderPriceCell.innerText = `${totalPrice.toLocaleString()}원`;
 
-                    // 배송 금액
+                    // 배송 금액 (임의로 설정)
                     const shippingFeeCell = document.createElement('td');
                     shippingFeeCell.classList.add('shipping-fee');
                     shippingFeeCell.innerText = '5,000원\n(조립미신청)';
@@ -116,8 +118,17 @@
                     // tbody에 행 추가
                     tbody.appendChild(row);
                 });
+            } else {
+                // 주문 데이터가 없을 경우 메시지 표시
+                const tbody = document.querySelector('#order-table tbody');
+                const row = document.createElement('tr');
+                const cell = document.createElement('td');
+                cell.colSpan = 5;
+                cell.innerText = "장바구니에 담긴 상품이 없습니다.";
+                row.appendChild(cell);
+                tbody.appendChild(row);
             }
-        });*/
+        });
 
         let newQuantity;
         function updateQuantity(button, change) {
@@ -237,7 +248,7 @@
 	            const zipNo = document.getElementById('zipNo').value;
 	            const address1 = document.getElementById('address1').value;
 	            const address2 = document.getElementById('address2').value;
-	            
+
 	            currentOrder['address'] = address1 + ' ' + address2;
             	currentOrder['request'] = document.getElementById("request").value;
                 currentOrder['assemblyStatus'] = '조립 미신청';
@@ -303,7 +314,7 @@
 	                            console.error('저장 오류:', error);
 	                            alert('주문 내역 저장 중 오류가 발생했습니다.');
 	                        });
-	                } 
+	                }
 	                else {
 	                    alert("결제에 실패하였습니다. 다시 시도해주세요.");
 	                    window.location.href = "http://localhost:8080/payfail";

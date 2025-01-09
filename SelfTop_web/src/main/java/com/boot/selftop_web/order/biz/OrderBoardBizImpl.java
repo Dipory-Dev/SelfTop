@@ -55,5 +55,20 @@ public class OrderBoardBizImpl implements OrderBoardBiz{
 	public ProductDto selectProduct(int product_code) {
 		return null;
 	}
+	
+	@Override
+    public String getDeliveryNo(int order_no) {
+        return mapper.getDeliveryNoByOrderNo(order_no);
+    }
+	
+	public boolean completeOrder(int order_no) {
+        return mapper.updateOrderStatusToComplete(order_no) > 0;
+    }
+
+	@Override
+	public int requestcancelorder(int orderno, String reason) {
+		// TODO Auto-generated method stub
+		return mapper.requestcancelorder(orderno,reason);
+	}
 
 }

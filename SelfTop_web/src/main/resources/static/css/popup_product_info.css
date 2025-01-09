@@ -1,5 +1,5 @@
+/* 기본 스타일 */
 *{
-
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -15,7 +15,9 @@ body {
     box-sizing: border-box;
     display: flex;
     text-align: center;
-    position:sticky;
+    position: sticky;
+    top: 0; /* 헤더가 항상 상단에 고정되도록 설정 */
+    z-index: 1000; /* 헤더가 다른 요소들보다 위에 표시되도록 설정 */
 }
 
 .header-title{
@@ -27,29 +29,6 @@ body {
     text-align: center;
 }
 
-
-.header-product-info{
-    font-size: 16px;
-    width:500px;
-    font-weight: normal;
-    color: #666;
-    display: inline;
-    margin-left:25px;
-    margin-top:7px;
-    text-align: center;
-    
-}
-
-.header-review{
-    height:40px;
-    border:2px solid green;
-    font-size: 14px;
-    font-weight: normal;
-    color: #666;
-    display: inline;
-
-}
-
 .var {
     display: flex;
     padding: 0;  
@@ -58,9 +37,8 @@ body {
     align-items: center;
     border:1px solid #ddd;
     height: 45px; 
-  
-  }
-  
+}
+
 .var button{
     background: white;
     height:100%;
@@ -70,7 +48,8 @@ body {
     padding: 0;
     cursor: pointer;
     position: relative;
-    
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
 }
 
 .var button:hover{
@@ -78,23 +57,14 @@ body {
     transition: 0.6s;
 }
 
-.product-detail.active{
-    background-color:#C7E6FF;
-}
-
+.product-detail.active,
 .product-review.active{
     background-color:#C7E6FF;
 }
 
-.var button{
-border-left: 1px solid #ccc;
-border-right: 1px solid #ccc;
-}
-
 .var .menuselect {
-font-weight: bold;
+    font-weight: bold;
 } 
-
 
 .content {
     padding-top:25px;
@@ -116,10 +86,8 @@ font-weight: bold;
     font-size: 18px;
     color: #666;
     margin-bottom: 10px;
-    min-height: calc(100vh-30px);
+    min-height: calc(100vh - 30px);
 }
-
-
 
 .footer {
     width: 100%;
@@ -127,12 +95,14 @@ font-weight: bold;
     color: gray;
     padding: 10px 0;
     border-top: 1px solid #ddd;
-    position:sticky;
+    position: sticky;
+    bottom: 0; /* 푸터가 항상 하단에 고정되도록 설정 */
+    background-color: #f8f8f8; /* 배경색 추가 */
 }
 
 .close-button{
     position:absolute;
-    margin-left:90%;
+    right: 20px; /* 오른쪽 정렬 */
     background-color: #999;
     color: white;
     border: none;
@@ -142,11 +112,137 @@ font-weight: bold;
     height:28px;
     font-size: 14px;
     text-align: center;
-
 }
 
 .close-button:hover{
     transition: 0.6s;
     background-color: #7a7a7a;
+}
 
+/*----- 제품 후기 부분 -----*/
+.review-section {
+    display: none; /* 팝업 업로드 시 리뷰 섹션 숨김 */
+    margin-top: 20px;
+}
+
+.fade {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.fade.show {
+    display: block;
+    opacity: 1;
+}
+
+/* 테이블 스타일 */
+.review-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.review-table th, .review-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.review-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.review-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.review-table img {
+    max-width: 100px;
+    height: auto;
+    display: block;
+}
+
+/* 별점 스타일 */
+.stars {
+    display: inline-block;
+    position: relative;
+    font-size: 16px;
+    color: #ccc; /* 기본 별 색상 */
+}
+
+.stars::before {
+    content: '★★★★★';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #f5a623; /* 채워진 별 색상 */
+}
+
+.stars[data-rating="1"]::before { width: 20%; }
+.stars[data-rating="2"]::before { width: 40%; }
+.stars[data-rating="3"]::before { width: 60%; }
+.stars[data-rating="4"]::before { width: 80%; }
+.stars[data-rating="5"]::before { width: 100%; }
+
+/* 작성자 이름 스타일 */
+.registered-user {
+    color: #333;
+    font-weight: bold;
+}
+
+.anonymous-user {
+    color: #999;
+    font-style: italic;
+}
+
+/* 반응형 디자인 */
+@media screen and (max-width: 768px) {
+    .review-table thead {
+        display: none;
+    }
+
+    .review-table, .review-table tbody, .review-table tr, .review-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .review-table tr {
+        margin-bottom: 15px;
+    }
+
+    .review-table td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+
+    .review-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 45%;
+        padding-left: 15px;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    /* 별점 스타일 */
+    .stars {
+        font-size: 14px;
+    }
+
+    /* 작성자 이름 스타일 */
+    .registered-user {
+        font-size: 14px;
+    }
+
+    .anonymous-user {
+        font-size: 14px;
+    }
 }

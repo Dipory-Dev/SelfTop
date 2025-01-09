@@ -93,4 +93,16 @@ public class SellerBizImpl implements SellerBiz {
 		return sellerMapper.updateAddress(dto, address);
 	}
 
+	@Override
+	public int cancelaccept(int ordernum) {
+		// TODO Auto-generated method stub
+		return sellerMapper.cancelaccept(ordernum);
+	}
+
+	@Override
+	public int cancelreject(int ordernum) {
+		// TODO Auto-generated method stub
+		return sellerMapper.cancelreject(ordernum);
+	}
+
 }
