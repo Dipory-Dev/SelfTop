@@ -65,4 +65,10 @@ public class OrderBoardBizImpl implements OrderBoardBiz{
         return mapper.updateOrderStatusToComplete(order_no) > 0;
     }
 
+	@Override
+	public int requestcancelorder(int orderno, String reason) {
+		// TODO Auto-generated method stub
+		return mapper.requestcancelorder(orderno,reason);
+	}
+
 }

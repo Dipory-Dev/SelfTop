@@ -76,7 +76,7 @@ public class CustomerController {
 	
 	@Autowired
 	private ReviewBiz reviewBiz;
-	
+
 	@GetMapping("/loginform")
     public String LoginSection(HttpSession session) {
 		if(session.getAttribute("member_no") != null) {
@@ -200,10 +200,12 @@ public class CustomerController {
 	@GetMapping("/main")
 	public String SelfTopMain(HttpSession session, Model model) {
 		Integer member_no = (Integer) session.getAttribute("member_no");
+		String username= (String) session.getAttribute("name");
 		if (member_no != null) {
 			List<CartDTO> cartList = quoteBiz.selectCart(member_no);
 			System.out.println(cartList);
 			model.addAttribute("cartList", cartList);
+			model.addAttribute("username",username);
 		}
 
 		return "mainPage";
@@ -240,6 +242,8 @@ public class CustomerController {
 			productData.put("price", productStatus.getPrice());
 			productData.put("seller_no", productStatus.getSeller_no());
 			productData.put("amount", amount);
+			productData.put("product_code", p_code);
+
 
 			res.put(productInfo.getCategory(), productData);
 		}
@@ -394,17 +398,15 @@ public class CustomerController {
 		    String status = order.getOrder_status();
 
 		    // 주문 상태별로 카운트 증가
-		    if ("입금대기".equals(status.replaceAll("\\s+", ""))) {
+		    if ("취소요청".equals(status.replaceAll("\\s+", ""))) {
 		    	waitdepositcount++;
-		    } else if ("결제완료".equals(status.replaceAll("\\s+", ""))) {
+		    } else if ("취소거절".equals(status.replaceAll("\\s+", ""))) {
 		    	completepaycount++;
 		    }else if ("배송중".equals(status.replaceAll("\\s+", ""))) {
 		    	shippingcount++;
 		    }else if ("배송완료".equals(status.replaceAll("\\s+", ""))) {
 		    	endshippingcount++;
-		    }else if ("취소".equals(status.replaceAll("\\s+", ""))) {
-		    	canclecount++;
-		    }else if ("테스트중".equals(status.replaceAll("\\s+", ""))) {
+		    }else if ("취소완료".equals(status.replaceAll("\\s+", ""))) {
 		    	canclecount++;
 		    }
 		}
@@ -488,7 +490,7 @@ public class CustomerController {
 		model.addAttribute("orderinfo",res);
 		model.addAttribute("ordernum",orderNum);
 		model.addAttribute("orderprice",orderprice);
-		model.addAttribute("orderstatus",orderstatus);
+		model.addAttribute("orderstatus",res.get(0).getOrder_status());
 		model.addAttribute("product_code", product_code);
 		model.addAttribute("orderdate",orderdate);
 		model.addAttribute("customerinfo", customerinfo.get(0));
@@ -798,15 +800,15 @@ public class CustomerController {
 	        @RequestParam("product_code") int productCode,
 	        @RequestParam(value="category", required=false) String category,
 	        Model model) {
-		
+
         ProductInfoDto dto = productInfoBiz.selectOne(productCode);
         model.addAttribute("product", dto);
 
-        
-        List<ReviewDto> reviewList = reviewBiz.getReviewsByProductCode(productCode);
-        model.addAttribute("reviewList", reviewList); 
 
-	    
+        List<ReviewDto> reviewList = reviewBiz.getReviewsByProductCode(productCode);
+        model.addAttribute("reviewList", reviewList);
+
+
 	    return "popup_product_info";
 	}
 	
@@ -992,5 +994,20 @@ public class CustomerController {
 		
 	}
 	
+	@PostMapping("/cancelorder")
+	public ResponseEntity<String> cancelOrder(@RequestBody Map<String, String> request) {
+		int ordernum = Integer.parseInt((String) request.get("ordernum")) ;
+		String cancelreason = (String) request.get("cancelreason");
+		int res = orderboardBiz.requestcancelorder(ordernum, cancelreason);
+
+		 if(res >0) {
+			 return ResponseEntity.ok("취소 요청이 처리되었습니다.");
+		 }else {
+			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("취소 요청에 실패하였습니다.");
+		 }
+
+
+    }
+
 
 }

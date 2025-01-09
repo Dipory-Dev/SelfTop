@@ -21,4 +21,10 @@ public interface SellerMapper {
     @Update("UPDATE seller SET address = #{address} WHERE member_no = #{dto.member_no}")
     int updateAddress(@Param("dto") SellerDto dto, @Param("address") String address);
 
+    @Update("UPDATE order_board SET order_status='취소완료'  WHERE order_no = #{order_num}")
+	int cancelaccept(@Param("ordernum")int ordernum);
+
+    @Update("UPDATE order_board SET order_status='취소거절'  WHERE order_no = #{order_num}")
+	int cancelreject(@Param("ordernum")int ordernum);
+
 }

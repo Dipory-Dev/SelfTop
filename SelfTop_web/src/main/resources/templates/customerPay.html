@@ -32,7 +32,7 @@
             const productInfo = JSON.parse(localStorage.getItem('selectedProduct'));
             currentOrder['product_code'] = productInfo.product_code;
             currentOrder['seller_no'] = productInfo.seller_no;
-            
+
             if (productInfo) {
                 // 가져온 데이터가 존재할 경우, 각 요소에 값 삽입
                 const productImage = document.querySelector('.product-image');
@@ -237,7 +237,7 @@
 	            const zipNo = document.getElementById('zipNo').value;
 	            const address1 = document.getElementById('address1').value;
 	            const address2 = document.getElementById('address2').value;
-	            
+
 	            currentOrder['address'] = address1 + ' ' + address2;
             	currentOrder['request'] = document.getElementById("request").value;
                 currentOrder['assemblyStatus'] = '조립 미신청';
@@ -303,7 +303,7 @@
 	                            console.error('저장 오류:', error);
 	                            alert('주문 내역 저장 중 오류가 발생했습니다.');
 	                        });
-	                } 
+	                }
 	                else {
 	                    alert("결제에 실패하였습니다. 다시 시도해주세요.");
 	                    window.location.href = "http://localhost:8080/payfail";
