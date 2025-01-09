@@ -419,7 +419,7 @@ h5{
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 .saved-quote select {
@@ -429,14 +429,14 @@ h5{
     border: none;
     outline: none;
     background: transparent;
-    -webkit-appearance: none; 
+    -webkit-appearance: none;
     appearance: none;
     cursor: pointer;
-    z-index: 1; 
+    z-index: 1;
 }
 
 .saved-quote::after {
-    content: "▼"; 
+    content: "▼";
     position: absolute;
     right: 10px;
     top: 50%;
@@ -464,7 +464,7 @@ h5{
     border-color: #008ADA;
     outline: none;
     border: solid 3px #008ADA;
-}  
+}
 
 #quote-name:hover {
     cursor: pointer;
@@ -515,13 +515,13 @@ h5{
     margin: 5px 20px 10px 315px;
     font-size: 18px;
     justify-content: space-between;
-    
+
 }
 
 .select-option{
     margin-top:20px;
     margin-left:10px;
-    
+
 }
 
 .total{
