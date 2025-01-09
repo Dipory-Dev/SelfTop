@@ -165,9 +165,27 @@ public interface ProductMapper {
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
             "ps_min.STOCK, " +
-            "ps_min.SELLER_NO " +
+            "ps_min.SELLER_NO, " +
+
+            // 가중평점 계산
+            "COUNT(r.REVIEW_NO) AS review_count, " +
+            "AVG(r.RATING) AS average_rating, " +
+            "( " +
+            "    (COUNT(r.REVIEW_NO) * AVG(r.RATING)) + " +
+            "    (30 * (" +
+            "        SELECT AVG(r_sub.RATING) " +
+            "        FROM REVIEW r_sub " +
+            "        JOIN PRODUCT p_sub ON r_sub.PRODUCT_CODE = p_sub.PRODUCT_CODE " +
+            "        WHERE p_sub.CATEGORY = #{category}" +
+            "    )) " +
+            ") / (COUNT(r.REVIEW_NO) + 30) AS weighted_rating " +
+
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+
+            // 리뷰 테이블과 조인
+            "LEFT JOIN REVIEW r ON p.PRODUCT_CODE = r.PRODUCT_CODE " +
+
             "LEFT JOIN (" +
             "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
             "    FROM PRODUCT_STATUS ps_inner " +
@@ -191,6 +209,12 @@ public interface ProductMapper {
             "       <when test='sort == \"byhighprice\"'>" +
             "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price DESC" +
             "       </when>" +
+
+            // 인기 순으로 정렬
+            "       <when test='sort == \"bypopular\"'>" +
+            "           COALESCE(weighted_rating, 0) DESC, p.PRODUCT_NAME" +
+            "       </when>" +
+
             "       <otherwise>p.PRODUCT_NAME</otherwise>" +
             "   </choose>" +
             "</if>" +
@@ -202,9 +226,27 @@ public interface ProductMapper {
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
             "ps_min.STOCK, " +
-            "ps_min.SELLER_NO " +
+            "ps_min.SELLER_NO, " +
+
+            // 가중평점 계산
+            "COUNT(r.REVIEW_NO) AS review_count, " +
+            "AVG(r.RATING) AS average_rating, " +
+            "( " +
+            "    (COUNT(r.REVIEW_NO) * AVG(r.RATING)) + " +
+            "    (30 * (" +
+            "        SELECT AVG(r_sub.RATING) " +
+            "        FROM REVIEW r_sub " +
+            "        JOIN PRODUCT p_sub ON r_sub.PRODUCT_CODE = p_sub.PRODUCT_CODE " +
+            "        WHERE p_sub.CATEGORY = #{category}" +
+            "    )) " +
+            ") / (COUNT(r.REVIEW_NO) + 30) AS weighted_rating " +
+
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+
+            // 리뷰 테이블과 조인
+            "LEFT JOIN REVIEW r ON p.PRODUCT_CODE = r.PRODUCT_CODE " +
+
             "LEFT JOIN (" +
             "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
             "    FROM PRODUCT_STATUS ps_inner " +
@@ -228,6 +270,12 @@ public interface ProductMapper {
             "       <when test='sort == \"byhighprice\"'>" +
             "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price DESC" +
             "       </when>" +
+
+            // 인기 순으로 정렬
+            "       <when test='sort == \"bypopular\"'>" +
+            "           COALESCE(weighted_rating, 0) DESC, p.PRODUCT_NAME" +
+            "       </when>" +
+
             "       <otherwise>p.PRODUCT_NAME</otherwise>" +
             "   </choose>" +
             "</if>" +
@@ -238,9 +286,27 @@ public interface ProductMapper {
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
             "ps_min.STOCK, " +
-            "ps_min.SELLER_NO " +
+            "ps_min.SELLER_NO, " +
+
+            // 가중평점 계산
+            "COUNT(r.REVIEW_NO) AS review_count, " +
+            "AVG(r.RATING) AS average_rating, " +
+            "( " +
+            "    (COUNT(r.REVIEW_NO) * AVG(r.RATING)) + " +
+            "    (30 * (" +
+            "        SELECT AVG(r_sub.RATING) " +
+            "        FROM REVIEW r_sub " +
+            "        JOIN PRODUCT p_sub ON r_sub.PRODUCT_CODE = p_sub.PRODUCT_CODE " +
+            "        WHERE p_sub.CATEGORY = #{category}" +
+            "    )) " +
+            ") / (COUNT(r.REVIEW_NO) + 30) AS weighted_rating " +
+
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+
+            // 리뷰 테이블과 조인
+            "LEFT JOIN REVIEW r ON p.PRODUCT_CODE = r.PRODUCT_CODE " +
+
             "LEFT JOIN (" +
             "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
             "    FROM PRODUCT_STATUS ps_inner " +
@@ -264,6 +330,12 @@ public interface ProductMapper {
             "       <when test='sort == \"byhighprice\"'>" +
             "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price DESC" +
             "       </when>" +
+
+            // 인기 순으로 정렬
+            "       <when test='sort == \"bypopular\"'>" +
+            "           COALESCE(weighted_rating, 0) DESC, p.PRODUCT_NAME" +
+            "       </when>" +
+
             "       <otherwise>p.PRODUCT_NAME</otherwise>" +
             "   </choose>" +
             "</if>" +
@@ -274,9 +346,27 @@ public interface ProductMapper {
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
             "ps_min.STOCK, " +
-            "ps_min.SELLER_NO " +
+            "ps_min.SELLER_NO, " +
+
+            // 가중평점 계산
+            "COUNT(r.REVIEW_NO) AS review_count, " +
+            "AVG(r.RATING) AS average_rating, " +
+            "( " +
+            "    (COUNT(r.REVIEW_NO) * AVG(r.RATING)) + " +
+            "    (30 * (" +
+            "        SELECT AVG(r_sub.RATING) " +
+            "        FROM REVIEW r_sub " +
+            "        JOIN PRODUCT p_sub ON r_sub.PRODUCT_CODE = p_sub.PRODUCT_CODE " +
+            "        WHERE p_sub.CATEGORY = #{category}" +
+            "    )) " +
+            ") / (COUNT(r.REVIEW_NO) + 30) AS weighted_rating " +
+
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+
+            // 리뷰 테이블과 조인
+            "LEFT JOIN REVIEW r ON p.PRODUCT_CODE = r.PRODUCT_CODE " +
+
             "LEFT JOIN (" +
             "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
             "    FROM PRODUCT_STATUS ps_inner " +
@@ -300,6 +390,12 @@ public interface ProductMapper {
             "       <when test='sort == \"byhighprice\"'>" +
             "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price DESC" +
             "       </when>" +
+
+            // 인기 순으로 정렬
+            "       <when test='sort == \"bypopular\"'>" +
+            "           COALESCE(weighted_rating, 0) DESC, p.PRODUCT_NAME" +
+            "       </when>" +
+
             "       <otherwise>p.PRODUCT_NAME</otherwise>" +
             "   </choose>" +
             "</if>" +
@@ -310,9 +406,27 @@ public interface ProductMapper {
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
             "ps_min.STOCK, " +
-            "ps_min.SELLER_NO " +
+            "ps_min.SELLER_NO, " +
+
+            // 가중평점 계산
+            "COUNT(r.REVIEW_NO) AS review_count, " +
+            "AVG(r.RATING) AS average_rating, " +
+            "( " +
+            "    (COUNT(r.REVIEW_NO) * AVG(r.RATING)) + " +
+            "    (30 * (" +
+            "        SELECT AVG(r_sub.RATING) " +
+            "        FROM REVIEW r_sub " +
+            "        JOIN PRODUCT p_sub ON r_sub.PRODUCT_CODE = p_sub.PRODUCT_CODE " +
+            "        WHERE p_sub.CATEGORY = #{category}" +
+            "    )) " +
+            ") / (COUNT(r.REVIEW_NO) + 30) AS weighted_rating " +
+
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+
+            // 리뷰 테이블과 조인
+            "LEFT JOIN REVIEW r ON p.PRODUCT_CODE = r.PRODUCT_CODE " +
+
             "LEFT JOIN (" +
             "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
             "    FROM PRODUCT_STATUS ps_inner " +
@@ -336,6 +450,12 @@ public interface ProductMapper {
             "       <when test='sort == \"byhighprice\"'>" +
             "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price DESC" +
             "       </when>" +
+
+            // 인기 순으로 정렬
+            "       <when test='sort == \"bypopular\"'>" +
+            "           COALESCE(weighted_rating, 0) DESC, p.PRODUCT_NAME" +
+            "       </when>" +
+
             "       <otherwise>p.PRODUCT_NAME</otherwise>" +
             "   </choose>" +
             "</if>" +
@@ -346,9 +466,27 @@ public interface ProductMapper {
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
             "ps_min.STOCK, " +
-            "ps_min.SELLER_NO " +
+            "ps_min.SELLER_NO, " +
+
+            // 가중평점 계산
+            "COUNT(r.REVIEW_NO) AS review_count, " +
+            "AVG(r.RATING) AS average_rating, " +
+            "( " +
+            "    (COUNT(r.REVIEW_NO) * AVG(r.RATING)) + " +
+            "    (30 * (" +
+            "        SELECT AVG(r_sub.RATING) " +
+            "        FROM REVIEW r_sub " +
+            "        JOIN PRODUCT p_sub ON r_sub.PRODUCT_CODE = p_sub.PRODUCT_CODE " +
+            "        WHERE p_sub.CATEGORY = #{category}" +
+            "    )) " +
+            ") / (COUNT(r.REVIEW_NO) + 30) AS weighted_rating " +
+
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+
+            // 리뷰 테이블과 조인
+            "LEFT JOIN REVIEW r ON p.PRODUCT_CODE = r.PRODUCT_CODE " +
+
             "LEFT JOIN (" +
             "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
             "    FROM PRODUCT_STATUS ps_inner " +
@@ -372,6 +510,12 @@ public interface ProductMapper {
             "       <when test='sort == \"byhighprice\"'>" +
             "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price DESC" +
             "       </when>" +
+
+            // 인기 순으로 정렬
+            "       <when test='sort == \"bypopular\"'>" +
+            "           COALESCE(weighted_rating, 0) DESC, p.PRODUCT_NAME" +
+            "       </when>" +
+
             "       <otherwise>p.PRODUCT_NAME</otherwise>" +
             "   </choose>" +
             "</if>" +
@@ -382,9 +526,27 @@ public interface ProductMapper {
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
             "ps_min.STOCK, " +
-            "ps_min.SELLER_NO " +
+            "ps_min.SELLER_NO, " +
+
+            // 가중평점 계산
+            "COUNT(r.REVIEW_NO) AS review_count, " +
+            "AVG(r.RATING) AS average_rating, " +
+            "( " +
+            "    (COUNT(r.REVIEW_NO) * AVG(r.RATING)) + " +
+            "    (30 * (" +
+            "        SELECT AVG(r_sub.RATING) " +
+            "        FROM REVIEW r_sub " +
+            "        JOIN PRODUCT p_sub ON r_sub.PRODUCT_CODE = p_sub.PRODUCT_CODE " +
+            "        WHERE p_sub.CATEGORY = #{category}" +
+            "    )) " +
+            ") / (COUNT(r.REVIEW_NO) + 30) AS weighted_rating " +
+
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+
+            // 리뷰 테이블과 조인
+            "LEFT JOIN REVIEW r ON p.PRODUCT_CODE = r.PRODUCT_CODE " +
+
             "LEFT JOIN (" +
             "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
             "    FROM PRODUCT_STATUS ps_inner " +
@@ -408,6 +570,12 @@ public interface ProductMapper {
             "       <when test='sort == \"byhighprice\"'>" +
             "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price DESC" +
             "       </when>" +
+
+            // 인기 순으로 정렬
+            "       <when test='sort == \"bypopular\"'>" +
+            "           COALESCE(weighted_rating, 0) DESC, p.PRODUCT_NAME" +
+            "       </when>" +
+
             "       <otherwise>p.PRODUCT_NAME</otherwise>" +
             "   </choose>" +
             "</if>" +
@@ -418,9 +586,27 @@ public interface ProductMapper {
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
             "ps_min.STOCK, " +
-            "ps_min.SELLER_NO " +
+            "ps_min.SELLER_NO, " +
+
+            // 가중평점 계산
+            "COUNT(r.REVIEW_NO) AS review_count, " +
+            "AVG(r.RATING) AS average_rating, " +
+            "( " +
+            "    (COUNT(r.REVIEW_NO) * AVG(r.RATING)) + " +
+            "    (30 * (" +
+            "        SELECT AVG(r_sub.RATING) " +
+            "        FROM REVIEW r_sub " +
+            "        JOIN PRODUCT p_sub ON r_sub.PRODUCT_CODE = p_sub.PRODUCT_CODE " +
+            "        WHERE p_sub.CATEGORY = #{category}" +
+            "    )) " +
+            ") / (COUNT(r.REVIEW_NO) + 30) AS weighted_rating " +
+
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+
+            // 리뷰 테이블과 조인
+            "LEFT JOIN REVIEW r ON p.PRODUCT_CODE = r.PRODUCT_CODE " +
+
             "LEFT JOIN (" +
             "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
             "    FROM PRODUCT_STATUS ps_inner " +
@@ -444,6 +630,12 @@ public interface ProductMapper {
             "       <when test='sort == \"byhighprice\"'>" +
             "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price DESC" +
             "       </when>" +
+
+            // 인기 순으로 정렬
+            "       <when test='sort == \"bypopular\"'>" +
+            "           COALESCE(weighted_rating, 0) DESC, p.PRODUCT_NAME" +
+            "       </when>" +
+
             "       <otherwise>p.PRODUCT_NAME</otherwise>" +
             "   </choose>" +
             "</if>" +
@@ -454,9 +646,27 @@ public interface ProductMapper {
             "SELECT p.PRODUCT_CODE, p.PRODUCT_NAME, p.ETC, p.THUMBNAIL, " +
             "MIN(ps.PRICE) AS price, " +
             "ps_min.STOCK, " +
-            "ps_min.SELLER_NO " +
+            "ps_min.SELLER_NO, " +
+
+            // 가중평점 계산
+            "COUNT(r.REVIEW_NO) AS review_count, " +
+            "AVG(r.RATING) AS average_rating, " +
+            "( " +
+            "    (COUNT(r.REVIEW_NO) * AVG(r.RATING)) + " +
+            "    (30 * (" +
+            "        SELECT AVG(r_sub.RATING) " +
+            "        FROM REVIEW r_sub " +
+            "        JOIN PRODUCT p_sub ON r_sub.PRODUCT_CODE = p_sub.PRODUCT_CODE " +
+            "        WHERE p_sub.CATEGORY = #{category}" +
+            "    )) " +
+            ") / (COUNT(r.REVIEW_NO) + 30) AS weighted_rating " +
+
             "FROM PRODUCT p " +
             "LEFT JOIN PRODUCT_STATUS ps ON p.PRODUCT_CODE = ps.PRODUCT_CODE " +
+
+            // 리뷰 테이블과 조인
+            "LEFT JOIN REVIEW r ON p.PRODUCT_CODE = r.PRODUCT_CODE " +
+
             "LEFT JOIN (" +
             "    SELECT ps_inner.PRODUCT_CODE, ps_inner.STOCK, ps_inner.SELLER_NO " +
             "    FROM PRODUCT_STATUS ps_inner " +
@@ -480,6 +690,12 @@ public interface ProductMapper {
             "       <when test='sort == \"byhighprice\"'>" +
             "           CASE WHEN MIN(ps.PRICE) IS NULL THEN 1 ELSE 0 END, price DESC" +
             "       </when>" +
+
+            // 인기 순으로 정렬
+            "       <when test='sort == \"bypopular\"'>" +
+            "           COALESCE(weighted_rating, 0) DESC, p.PRODUCT_NAME" +
+            "       </when>" +
+
             "       <otherwise>p.PRODUCT_NAME</otherwise>" +
             "   </choose>" +
             "</if>" +

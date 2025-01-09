@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const quoteNameInput = document.getElementById("quote-name");
     const contentBox = document.querySelector('.content-box');
     const sortButtons = document.querySelectorAll('.sortBtn');
-    let selectedSort = 'byname';
+    let selectedSort = 'bypopular';
 
 	const categoryCountElement = document.getElementById('category-count');
 	const topBoxSmall = document.querySelector('.top-box.small');

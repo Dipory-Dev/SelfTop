@@ -691,7 +691,7 @@ public class CustomerController {
 
 	//필터에 선택된 체크박스에 따라 데이터를 넘겨줌
 	@PostMapping("/api/products/filter/{category}")
-	public ResponseEntity<?> filterProducts(@PathVariable String category, @RequestBody Map<String, List<String>> filters, @RequestParam(value = "sort", defaultValue = "byname") String sort) {
+	public ResponseEntity<?> filterProducts(@PathVariable String category, @RequestBody Map<String, List<String>> filters, @RequestParam(value = "sort", defaultValue = "bypopular") String sort) {
 	    System.out.println("Received filters: " + filters + " with sort: " + sort);
 	    ProductBiz<?> productBiz = productBizFactory.getBiz(category);
 	    if (productBiz == null) {
@@ -717,7 +717,7 @@ public class CustomerController {
 	@GetMapping("/products/{category}")
 	public ResponseEntity<?> getProductsByCategory(
 	        @PathVariable String category,
-	        @RequestParam(value = "sort", defaultValue = "byname") String sort,
+	        @RequestParam(value = "sort", defaultValue = "bypopular") String sort,
 	        @RequestParam(value = "search", required = false) String search) {
 
 	    System.out.println("Fetching products for category: " + category + ", sort: " + sort + ", search: " + search);
