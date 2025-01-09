@@ -1075,39 +1075,58 @@ function resetCart(){
 	 window.location.reload();
 }
 
-// 구매하기 버튼 클릭 시 호출되는 함수
+// 구매하기 버튼 클릭 이벤트
 function goPayPage() {
-    // 각 컴포넌트의 정보를 저장할 배열
-    const orderData = [];
-
-    // 각 컴포넌트 정보를 가져오기
-    const components = document.querySelectorAll('.component');
+    const components = document.querySelectorAll('.component'); // 모든 컴포넌트 선택
+    const cartDetails = []; // 장바구니에 담을 데이터 배열
 
     components.forEach(component => {
-        const productName = component.querySelector('#product-detail').innerText; // 컴포넌트 이름
-        const productPrice = component.querySelector('#product-price').innerText; // 가격
-        const quantityInput = component.querySelector('#product-price'); // 수량 입력
-        const quantity = quantityInput ? quantityInput.value : 1; // 수량 기본값 1로 설정
+        const category = component.getAttribute('data-component'); // 카테고리 추출
+        const nameElement = component.querySelector('.component-body .cpu-name, .ram-name, .ssd-name, .power-name, .cooler-name, .mainboard-name, .graphicCard-name, .hdd-name, .case-name');
+        const name = nameElement ? nameElement.innerText.trim() : 'N/A'; // 이름 추출
 
-        // 컴포넌트 정보 객체 생성
+        const priceElement = component.querySelector('#product-price');
+        const price = priceElement ? parseInt(priceElement.innerText.replace(/[^0-9]/g, '')) : 0; // 가격 추출
+
+        const quantityElement = component.querySelector('.quantity-controls-wrapper input[type="number"]');
+        const quantity = quantityElement ? parseInt(quantityElement.value) : 1; // 수량 추출 (기본값: 1)
+
+        const imageElement = component.querySelector('.component-body img');
+        const image = imageElement ? imageElement.src : ''; // 이미지 경로 추출
+
+        const stockElement = component.getAttribute('data-stock'); // 재고 정보 (예시)
+        const productCodeElement = component.getAttribute('data-product-code'); // 제품 코드 (예시)
+        const sellerNoElement = component.getAttribute('data-seller-no'); // 판매자 번호 (예시)
+
+        // 각 제품의 정보를 객체로 저장
         const productInfo = {
-			category: component,
-            name: productName,
-            price: productPrice,
-            quantity: quantity
+            category,
+            name,
+            price,
+            quantity,
+            image,
+            stock: stockElement || '정보 없음', // 재고 정보
+            product_code: productCodeElement || '정보 없음', // 제품 코드
+            seller_no: sellerNoElement || '정보 없음', // 판매자 번호
         };
 
-        // 배열에 추가
-        orderData.push(productInfo);
+        cartDetails.push(productInfo); // 배열에 추가
     });
 
+    // 선택된 제품이 없을 경우 경고 메시지 표시
+    if (cartDetails.length === 0) {
+        alert("선택된 제품이 없습니다. 장바구니를 확인해주세요.");
+        return;
+    }
+
     // localStorage에 저장
-    localStorage.setItem('orderData', JSON.stringify(orderData));
+    localStorage.setItem('CartDetails', JSON.stringify(cartDetails));
 
-    // 결제 페이지로 이동
-    window.location.href = '/pay';  // 결제 페이지 URL로 이동
+    // 결제 페이지로 이동 (주석 해제 시 활성화)
+    window.location.href = '/pay'; // 결제 페이지 URL로 이동
+
+    console.log(cartDetails); // 가져온 데이터 확인
 }
-
 
 //토글 버튼 눌러서 사이드 패널 보여주기
 function toggleSidePanel() {
