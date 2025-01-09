@@ -31,6 +31,7 @@ header {
 .header-content p {
     margin-right: 12%;
     font-size: 20px;
+    cursor: pointer;
     display: flex;
     align-items: center;
 }

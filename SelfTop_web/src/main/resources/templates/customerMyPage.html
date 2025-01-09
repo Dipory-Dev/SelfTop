@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SELFTOP</title>
-<link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
-<link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+<title>Customer_MyPage</title>
 <link rel="stylesheet" href="/css/customerMyPage.css">
 <script type="text/javascript">
 	document.addEventListener("DOMContentLoaded", function () {
@@ -14,24 +12,19 @@
 		if (message) {
 			alert(message);
 		}
-
-		//로고 누르면 메인페이지
-		document.getElementById('logo').addEventListener('click', function() {
-		    window.location.href = '/main';
-		});
 	});
 </script>
 </head>
 <body>
     <header>
         <div class="header-content">
-            <img src="/img/logo.png" id="logo" style="cursor: pointer;">
+            <img src="/img/logo.png">
            	<p>
           		<span th:text="${customer.name} + 님"></span>&nbsp|
           		<a href="mypage">
           			<img src="/img/human-icon.png" class="human-icon">
           		</a>
-          		<a href="cartpage">
+          		<a href="cart">
           			<img src="/img/cart-icon.png" class="cart-icon">
           		</a>
           		<a href="logout">
