@@ -56,4 +56,10 @@ public class OrderBoardBizImpl implements OrderBoardBiz{
 		return null;
 	}
 
+	@Override
+	public int requestcancelorder(int orderno, String reason) {
+		// TODO Auto-generated method stub
+		return mapper.requestcancelorder(orderno,reason);
+	}
+
 }

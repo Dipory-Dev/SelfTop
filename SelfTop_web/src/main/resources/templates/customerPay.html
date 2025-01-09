@@ -233,7 +233,11 @@
 	            const zipNo = document.getElementById('zipNo').value;
 	            const address1 = document.getElementById('address1').value;
 	            const address2 = document.getElementById('address2').value;
-
+	            currentOrder['address'] = address1 + ' ' + address2;
+            	currentOrder['request'] = document.getElementById("request").value;
+                currentOrder['assemblyStatus'] = '조립 미신청';
+                const currentordergetdata = encodeURIComponent(JSON.stringify(currentOrder));
+				console.log(currentordergetdata);
 	            // 필수 입력 항목 확인
 	            if (!name || !phone || !zipNo || !address1 || !address2) {
 	                alert("성함, 연락처, 배송주소를 모두 입력해주세요.");
@@ -246,7 +250,7 @@
 	                const paymentResult = await widgets.requestPayment({
 	                    orderId: "ORDER_ID_1234", // 고유 주문 번호
 	                    orderName: "그래픽 카드 구매", // 주문 이름
-	                    successUrl: "http://localhost:8080/paysuccess", // 결제 성공 시 리다이렉트 URL
+	                    successUrl: `http://localhost:8080/api/order?orderdata=${currentordergetdata}`, // 결제 성공 시 리다이렉트 URL
 	                    failUrl: "http://localhost:8080/payfail", // 결제 실패 시 리다이렉트 URL
 	                    customerName: name,
 	                    customerMobilePhone: phone,
@@ -255,7 +259,7 @@
 	                System.out.println("결제 결과:", paymentResult);
 
 	                // 결제 승인 처리 (결제 성공 시)
-	                if (paymentResult.status === "SUCCESS") {
+	             /*    if (paymentResult.status === "SUCCESS") {
 	                	// currentOrder에 추가
 	                    currentOrder['address'] = address1 + ' ' + address2;
 	                	currentOrder['request'] = document.getElementById("request").value;
@@ -292,10 +296,11 @@
 	                            console.error('저장 오류:', error);
 	                            alert('주문 내역 저장 중 오류가 발생했습니다.');
 	                        });
-	                } else {
+	                } 
+	                else {
 	                    alert("결제에 실패하였습니다. 다시 시도해주세요.");
 	                    window.location.href = "http://localhost:8080/payfail";
-	                }
+	                } */
 	            } catch (error) {
 	                console.error("결제 처리 중 오류 발생:", error);
 	                alert("결제 처리 중 오류가 발생했습니다. 다시 시도해주세요.");

@@ -14,4 +14,5 @@ public interface OrderBoardBiz {
 	
 	ProductDto selectProduct(int product_code);
 	boolean updateOrder(int order_no);
+	int requestcancelorder(int orderno,String reason);
 }

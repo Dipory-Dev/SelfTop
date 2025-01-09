@@ -28,4 +28,7 @@ public interface OrderBoardMapper {
 
     @Select("SELECT order_status FROM ORDER_BOARD WHERE order_no = #{order_no}")
     String checkOrderStatus(@Param("order_no") int order_no);
+
+    @Update("UPDATE order_board SET order_status = '취소요청', reason = #{reason} WHERE order_no = #{orderno} ")
+	public int requestcancelorder(@Param("orderno")int orderno,@Param("reason") String reason);
 }

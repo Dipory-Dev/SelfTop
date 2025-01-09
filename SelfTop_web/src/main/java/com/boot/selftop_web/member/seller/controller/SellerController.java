@@ -452,4 +452,27 @@ public class SellerController {
 
 	    return ResponseEntity.badRequest().body(Map.of("message", "지원하지 않는 작업입니다."));
 	}
+	@PostMapping("/cancelordercheck")
+	public ResponseEntity<String> cancelordercheck(@RequestBody Map<String, String> request) {
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		System.out.println(request);
+		int ordernum = Integer.parseInt((String) request.get("ordernum")) ;
+		boolean cancelorder = Boolean.parseBoolean((String) request.get("cancelordercheck"));
+		int res=0;
+		if (cancelorder == true) {
+			res = sellerBiz.cancelaccept(ordernum);
+		}
+		else {
+			res =sellerBiz.cancelreject(ordernum);
+		}
+		
+		if(res>0) {
+			return ResponseEntity.ok("취소 요청이 처리되었습니다.");
+		}else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("취소 요청에 실패하였습니다.");
+		}
+		 
+        
+        
+    }
 }

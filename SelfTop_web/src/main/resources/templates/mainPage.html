@@ -11,7 +11,17 @@
 	 <header>
         <div class="header-content">
             <img src="/img/logo.png">
-           	<p>로그인</p>
+           	<p th:unless= "${username != null}"><a href="loginform">로그인</a></p> 
+           	<p th:if="${username != null}">
+           		<span th:text="${username}+ 님"></span>&nbsp|
+           		<a href="mypage">
+           			<img src="/img/human-icon.png" class="human-icon">
+           		</a>
+           		<a href="cartpage"> <img src="/img/cart-icon.png" class="cart-icon"></a>
+           		<a href="/logout">
+           			<img src="/img/lock-icon.png" class="lock-icon">
+           		</a>
+           	</p>
         </div>
     </header>
     <main>
