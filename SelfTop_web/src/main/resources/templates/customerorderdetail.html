@@ -32,10 +32,10 @@
 	</header>
 	<main>
 	 <!-- 취소요청모달 -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">주문 취소</div>
-            <div class="modal-body">
+    <div id="cancelmodal" class="cancelmodal">
+        <div class="cancelmodal-content">
+            <div class="cancelmodal-header">주문 취소</div>
+            <div class="cancelmodal-body">
                 <table class="table">
                     <tr class="tr-name">
                         <th>이름</th>
@@ -46,14 +46,20 @@
                             <textarea class = "reason" placeholder="취소 사유를 작성해주세요.(ex. 단순 변심, 옵션 추가 후 재구매 등)"></textarea>
                         </td>
 
+
                     </tr>
+
+
+
+
+
 
                 </table>
                 <p class="foot-message"> 추후에 판매자로부터 직접 연락을 받으실 수 있습니다.</p>
             </div>
-            <div class="modal-footer">
-                <button id="submitModalBtn" class="btn btn-submit">등록</button>
-                <button id="closeModalBtn" class="btn btn-close">닫기</button>
+            <div class="cancelmodal-footer">
+                <button id="cancelsubmitModalBtn" class="btn btn-submit">등록</button>
+                <button id="cancelcloseModalBtn" class="btn btn-close">닫기</button>
             </div>
         </div>
     </div>
@@ -72,9 +78,9 @@
 						주문 <br> 상세정보
 					</h2>
 				</div>
-				<div>
-					<h2>취소요청</h2>
-					<h2>주문 <br> 상세정보</h2>
+				<div class = "cancelsection">
+					<h2 style="cursor:pointer" id="cancelorder" th:data-userid="${customerinfo.name}"
+						th:data-ordernum="${ordernum}">취소요청</h2>
 				</div>
 			</div>
 			<div class="order_no">
@@ -211,10 +217,13 @@
 							<p class="foot-message"> *10MB 이하 jpg, jpeg, png, gif 파일 1장만 첨부 가능</p>
 						</div>
 						<div class="modal-footer">
-							<button id="closeModalBtn" class="btn btn-close">닫기</button>
-							<input type="submit" value="저장" id="submitModalBtn" class="btn btn-submit">
+							<button id="closeModalBtn" type="button" class="btn btn-close">닫기</button>
+							<input type="submit" value="저장" id="submitModalBtn"
+								class="btn btn-submit">
+
 						</div>
 					</form>
+
 				</div>
 			</div>
 		</div>

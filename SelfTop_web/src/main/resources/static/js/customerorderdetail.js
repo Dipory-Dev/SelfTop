@@ -1,23 +1,24 @@
 // 모달 제어 스크립트
 document.addEventListener("DOMContentLoaded", () => {
-const modal = document.getElementById('modal');
-const openModal = document.getElementById("cancelorder");
-const closeModalBtn = document.getElementById('closeModalBtn');
-const submitModalBtn = document.getElementById('submitModalBtn');
+const cancelmodal = document.getElementById('cancelmodal');
+const cancelopenModal = document.getElementById("cancelorder");
+const cancelcloseModalBtn = document.getElementById('cancelcloseModalBtn');
+const cancelsubmitModalBtn = document.getElementById('cancelsubmitModalBtn');
 
-const cancelordernum = openModal.getAttribute("data-ordernum");
-const cancelusername = openModal.getAttribute("data-userid");
+const cancelordernum = cancelopenModal.getAttribute("data-ordernum");
+const cancelusername = cancelopenModal.getAttribute("data-userid");
 const cancelmodalusername = document.querySelector(".username");
-openModal.addEventListener('click', () => {
+
+cancelopenModal.addEventListener('click', () => {
 	cancelmodalusername.innerHTML = cancelusername;
-    modal.style.display = 'block';
+    cancelmodal.style.display = 'block';
 });
 
-closeModalBtn.addEventListener('click', () => {
-    modal.style.display = 'none';
+cancelcloseModalBtn.addEventListener('click', () => {
+    cancelmodal.style.display = 'none';
 });
 
-submitModalBtn.addEventListener('click',()=>{
+cancelsubmitModalBtn.addEventListener('click',()=>{
 	const reason = document.querySelector(".reason");
 	const cancelreason = reason.value;
 	fetch('/cancelorder', {
@@ -50,8 +51,8 @@ submitModalBtn.addEventListener('click',()=>{
 
 // 모달 외부 클릭 시 닫기
 window.addEventListener('click', (event) => {
-    if (event.target === modal) {
-        modal.style.display = 'none';
+    if (event.target === cancelmodal) {
+        cancelmodal.style.display = 'none';
     }
 });
 });
@@ -150,4 +151,5 @@ window.onload = function() {
 function goBack() {
     window.history.back();
 }
+
 
