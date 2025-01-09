@@ -18,13 +18,13 @@
 	 <header>
         <div class="header-content">
             <img src="/img/logo.png" id="logo" style="cursor: pointer;">
-           	<p th:unless= "${username != null}"><a href="loginform"><img src="/img/lock-icon.png" class="lock-icon"></a></p> 
+           	<p th:unless= "${username != null}"><a href="loginform"><img src="/img/lock-icon.png" class="lock-icon"></a></p>
            	<p th:if="${username != null}">
            		<span th:text="${username}+ 님"></span>&nbsp|
            		<a href="mypage">
            			<img src="/img/human-icon.png" class="human-icon">
            		</a>
-           		<a href="cartpage"> 
+           		<a href="cartpage">
            			<img src="/img/cart-icon.png" class="cart-icon">
            		</a>
            		<a href="/logout">
