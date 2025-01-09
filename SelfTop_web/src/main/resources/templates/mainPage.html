@@ -11,7 +11,7 @@
 	 <header>
         <div class="header-content">
             <img src="/img/logo.png">
-           	<p th:unless= "${username != null}"><a href="loginform">로그인</a></p> 
+           	<p th:unless= "${username != null}"><a href="loginform"><img src="/img/lock-icon.png" class="lock-icon"></a></p> 
            	<p th:if="${username != null}">
            		<span th:text="${username}+ 님"></span>&nbsp|
            		<a href="mypage">
