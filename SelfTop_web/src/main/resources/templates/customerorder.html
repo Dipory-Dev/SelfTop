@@ -91,6 +91,7 @@
 						<input type="hidden" name="orderprice" id="orderprice" />
 						<input type="hidden" name="orderdate" id="orderdate" />
 						<input type="hidden" name="orderstatus" id="orderstatus" />
+						<input type="hidden" name="product_code" id="product_code">
 					</form>
 					<p th:text="${dto.product_name}"
 						th:attr="data-order-num=${dto.order_num}, data-price=${dto.price}, data-order-status=${dto.order_status}, data-order-date=${#dates.format(dto.order_date, 'MM/dd')}"

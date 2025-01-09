@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.List;
 
 
-import java.util.Collections;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,31 +28,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.boot.selftop_web.member.customer.biz.CustomerBiz;
-import com.boot.selftop_web.member.customer.biz.CustomerBizImpl;
 import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
 import com.boot.selftop_web.product.biz.ProductBiz;
 import com.boot.selftop_web.product.biz.ProductBizFactory;
 import com.boot.selftop_web.product.biz.mapper.ProductMapper;
-import com.boot.selftop_web.product.model.dto.ProductDto;
 import com.boot.selftop_web.quote.biz.QuoteBiz;
 import com.boot.selftop_web.quote.model.dto.QuoteDetailDto;
 import com.boot.selftop_web.quote.model.dto.QuoteDto;
 import com.boot.selftop_web.quote.model.dto.QuotecomparisonDto;
 
-import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
-
 import com.boot.selftop_web.member.customer.model.dto.CustomerorderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
-import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
 import com.boot.selftop_web.order.biz.OrderBoardBiz;
 import com.boot.selftop_web.order.model.dto.OrderBoardDto;
-import com.boot.selftop_web.order.model.dto.OrderDetailDto;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.springframework.util.StringUtils;
+
+import java.io.File;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/")
@@ -362,15 +361,17 @@ public class CustomerController {
 
 			if (exportres == null) {
 				CustomerorderDto neworder = new CustomerorderDto(copyres.getThumbnail(), copyres.getOrder_Date(),
-						copyres.getProduct_name(), copyres.getPrice() * copyres.getAmount(), copyres.getOrder_no(),
+						copyres.getProduct_name(), copyres.getProduct_code(), copyres.getPrice() * copyres.getAmount(), copyres.getOrder_no(),
 						copyres.getOrder_status(), member_no, 0
 
 				);
 				orderres.add(neworder);
+				System.out.println("neworder : " + neworder);
 			} else {
 				exportres.setItem(exportres.getItem() + 1);
 				exportres.setPrice(exportres.getPrice() + (copyres.getPrice() * copyres.getAmount()));
 			}
+
 		}
 
 
@@ -432,7 +433,7 @@ public class CustomerController {
 
 			if (exportres == null) {
 				CustomerorderDto neworder = new CustomerorderDto(copyres.getThumbnail(), copyres.getOrder_Date(),
-						copyres.getProduct_name(), copyres.getPrice() * copyres.getAmount(), copyres.getOrder_no(),
+						copyres.getProduct_name(), copyres.getProduct_code(), copyres.getPrice() * copyres.getAmount(), copyres.getOrder_no(),
 						copyres.getOrder_status(), member_no, 0
 
 				);
@@ -451,7 +452,8 @@ public class CustomerController {
 	public String customerorderdetail(HttpSession session, Model model,@RequestParam("order_num") String orderNum,
 			@RequestParam("orderprice") String orderprice,
 			@RequestParam("orderdate") String orderdate,
-			@RequestParam("orderstatus") String orderstatus) {
+			@RequestParam("orderstatus") String orderstatus,
+		    @RequestParam("product_code") String product_code) {
 		if (session.getAttribute("member_no") == null) {
 			return "redirect:/loginform";
 		}
@@ -460,20 +462,72 @@ public class CustomerController {
 		List<SellerOrderDto> res = customerBiz.customerpurchaselist(member_no,Integer.parseInt(orderNum));
 		List<OrderBoardDto> customerinfo = orderboardBiz.vieworderboard(Integer.parseInt(orderNum));
 
-
-
-
 		model.addAttribute("membername", session.getAttribute("name"));
 		model.addAttribute("orderinfo",res);
 		model.addAttribute("ordernum",orderNum);
 		model.addAttribute("orderprice",orderprice);
 		model.addAttribute("orderstatus",orderstatus);
+		model.addAttribute("product_code", product_code);
 		model.addAttribute("orderdate",orderdate);
 		model.addAttribute("customerinfo", customerinfo.get(0));
 
-
 		return "customerorderdetail";
 	}
+
+
+	@PostMapping("/reviewreg")
+	public String reviewReg(Model model, HttpSession session,
+							@RequestParam("review_img") MultipartFile review_img,
+							@RequestParam("rating") int rating,
+							@RequestParam("product_code") int productCode,
+							@RequestParam("content") String content) {
+		// 세션에서 회원 번호 가져오기
+		int member_no = (Integer) session.getAttribute("member_no");
+		System.out.println("회원 번호: " + member_no);
+
+		// 현재 프로젝트 경로를 기준으로 저장 경로 설정
+		String projectPath = System.getProperty("user.dir");
+		String uploadDir = projectPath + "/src/main/resources/review_img"; // 저장 폴더
+		String fileName = member_no + review_img.getOriginalFilename(); // 파일명
+		String filePath = uploadDir + File.separator + fileName;
+
+
+		if (review_img.isEmpty()){
+			fileName = "no_img.jpg";
+		} else {
+			try {
+				File saveFile = new File(filePath);
+				// 디렉토리가 없으면 생성
+				if (!saveFile.getParentFile().exists()) {
+					saveFile.getParentFile().mkdirs();
+				}
+				review_img.transferTo(saveFile); // 파일을 저장
+			} catch (IOException e) {
+				e.printStackTrace();
+				model.addAttribute("message", "파일 업로드에 실패했습니다.");
+			}
+		}
+
+		// DB에 저장할 경로 (/src/main부터)
+		String dbPath = "/src/main/resources/review_img/" + fileName;
+
+		// 파일 경로와 리뷰 데이터 로깅
+		System.out.println("Review Image Path: " + filePath);
+		System.out.println("Rating: " + rating);
+		System.out.println("Product Code: " + productCode);
+		System.out.println("Review Content: " + content);
+
+		// DB 저장
+		int res = customerBiz.insertReview(dbPath, content, rating, productCode, member_no);
+		if (res > 0) {
+			System.out.println("upload success");
+		} else {
+			System.out.println("upload fail");
+		}
+		return "redirect:order";
+	}
+
+
 
 	//카카오 로그인 기능이 처리되는 페이지
 	@RequestMapping(value = "/loginform/getKakaoAuthUrl")
