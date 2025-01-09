@@ -13,6 +13,12 @@ public interface OrderBoardBiz {
 	List<OrderDetailDto> selectOrderDetail(int order_no);
 	
 	ProductDto selectProduct(int product_code);
-	boolean updateOrder(int order_no);
+
+	boolean updateOrder(int order_no); // 주문 상태 업데이트 (배송중 상태로)
+    boolean completeOrder(int order_no); // 주문 상태를 배송완료로 업데이트
+
+	String getDeliveryNo(int order_no); // 주문 번호에 해당하는 송장 번호 가져오기
+
+	//boolean updateOrder(int order_no);
 	int requestcancelorder(int orderno,String reason);
 }

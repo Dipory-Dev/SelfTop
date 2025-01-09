@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Select;
 public interface OrderMapper {
     
 	// OrderBoard 저장
-    @Insert("INSERT INTO ORDER_BOARD VALUES (SEQ_ORDER.nextval, #{member_no}, #{address}, #{request}, CURRENT_DATE, NULL, '결제완료', NULL, #{assembly})")
+    @Insert("INSERT INTO ORDER_BOARD VALUES (SEQ_ORDER.nextval, #{member_no}, CURRENT_DATE, #{address}, #{request}, '결제완료', NULL, NULL, #{assembly})")
     int insertOrderBoard(@Param("member_no") int member_no, @Param("address") String address, @Param("request") String request, @Param("assembly") String assembly);
 
     @Select("select SEQ_ORDER.currval from dual")

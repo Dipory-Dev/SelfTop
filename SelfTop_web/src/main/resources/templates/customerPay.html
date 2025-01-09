@@ -30,6 +30,8 @@
         document.addEventListener("DOMContentLoaded", function() {
             // localStorage에서 저장된 'selectedProduct' 가져오기
             const productInfo = JSON.parse(localStorage.getItem('selectedProduct'));
+            currentOrder['product_code'] = productInfo.product_code;
+            currentOrder['seller_no'] = productInfo.seller_no;
 
             if (productInfo) {
                 // 가져온 데이터가 존재할 경우, 각 요소에 값 삽입
@@ -117,6 +119,7 @@
             }
         });*/
 
+        let newQuantity;
         function updateQuantity(button, change) {
         	
         	// localStorage에서 저장된 'selectedProduct' 가져오기
@@ -124,7 +127,7 @@
         	
             const quantityTag = button.parentElement.querySelector('.quantity-input');
             let currentQuantity = parseInt(quantityTag.textContent); // 현재 수량
-            let newQuantity = currentQuantity + change; // 변경된 수량
+            newQuantity = currentQuantity + change; // 변경된 수량
             if (newQuantity < 1) newQuantity = 1; // 최소 수량 제한
             if (newQuantity > productInfo.stock) {
             	alert("재고수를 초과하였습니다!");
@@ -171,6 +174,7 @@
      	// 전역에서 widgets 객체를 선언
         let widgets;
         let isPaymentInProgress = false;
+        let baseAmount;
      	// 선택상품 총금액과 최종 결제금액 업데이트 함수
         function updatePayment(price, quantity) {
             const totalAmount = price * quantity; // 선택상품 총금액
@@ -182,7 +186,7 @@
             document.querySelector('.pay-price').textContent = `${finalAmount.toLocaleString()}원`; // 최종 결제금액
      	
          	// baseAmount 업데이트
-            const baseAmount = finalAmount; // 최종 결제 금액을 baseAmount로 설정
+            baseAmount = finalAmount; // 최종 결제 금액을 baseAmount로 설정
             updatePaymentUI(baseAmount); // 결제 UI 업데이트
      	}
 
@@ -233,9 +237,13 @@
 	            const zipNo = document.getElementById('zipNo').value;
 	            const address1 = document.getElementById('address1').value;
 	            const address2 = document.getElementById('address2').value;
+
 	            currentOrder['address'] = address1 + ' ' + address2;
             	currentOrder['request'] = document.getElementById("request").value;
                 currentOrder['assemblyStatus'] = '조립 미신청';
+                currentOrder['amount'] = newQuantity;
+                currentOrder['order_price'] = baseAmount;
+
                 const currentordergetdata = encodeURIComponent(JSON.stringify(currentOrder));
 				console.log(currentordergetdata);
 	            // 필수 입력 항목 확인
@@ -296,8 +304,7 @@
 	                            console.error('저장 오류:', error);
 	                            alert('주문 내역 저장 중 오류가 발생했습니다.');
 	                        });
-	                } 
-	                else {
+	                } else {
 	                    alert("결제에 실패하였습니다. 다시 시도해주세요.");
 	                    window.location.href = "http://localhost:8080/payfail";
 	                } */

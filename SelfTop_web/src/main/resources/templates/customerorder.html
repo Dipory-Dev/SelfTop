@@ -68,49 +68,47 @@
 		<div class="search">
 			<div class="searchbox">
 				<input type="date" id="start-date" /> <span>~</span> 
-				<input type="date" id="end-date" />
+				<input style="margin-right: 8px" type="date" id="end-date" />
 				<button class="searchbutton" onclick=Search()>조회</button>
-				 <button class="searchbutton" onclick=Reset()>초기화</button>
+				<button class="searchbutton" onclick=Reset()>초기화</button>
 			</div>
 		</div>
 		<div id = "orderview" th:fragment="tbody">
 			<div class="customer-order-data" th:each="dto : ${customerorder}">
 				<div class="imagedate">
 					<div class="inform">
-						<span th:text="${#dates.format(dto.order_date, 'MM/dd')}"></span>
-						| <span th:text="${dto.order_num}"></span>
+						주문날짜: <span th:text="${#dates.format(dto.order_date, 'YY/MM/dd')}"></span>
+						| 주문번호: <span th:text="${dto.order_num}"></span>
 					</div>
 					<div class="image">
 						<img th:src=${dto.thumbnail}></img>
 					</div>
 				</div>
 				<div class="productlink">
-					<form id="orderForm" action="/orderdetail" method="post"
-						style="display: none;">
+					<form id="orderForm" action="/orderdetail" method="post" style="display: none;">
 						<input type="hidden" name="order_num" id="order_num" />
 						<input type="hidden" name="orderprice" id="orderprice" />
 						<input type="hidden" name="orderdate" id="orderdate" />
 						<input type="hidden" name="orderstatus" id="orderstatus" />
+						<input type="hidden" name="product_code" id="product_code">
 					</form>
 					<p th:text="${dto.product_name}"
-						th:attr="data-order-num=${dto.order_num}, data-price=${dto.price}, data-order-status=${dto.order_status}, data-order-date=${#dates.format(dto.order_date, 'MM/dd')}"
-						th:onclick="|sendordernum(this);|"></p>
-					<p th:if="${dto.item != 0}"
-						th:text="외 + ' '+ ${dto.item} + ' ' + 건"
-						th:onclick="'sendordernum(' + ${dto.order_num} + ');'"></p>
-
+				       th:attr="data-order-num=${dto.order_num}, data-price=${dto.price}, data-order-status=${dto.order_status}, data-order-date=${#dates.format(dto.order_date, 'MM/dd')}"
+				       th:onclick="|sendordernum(this);|"></p>
+				    <p th:if="${dto.item != 0}"
+				       th:text="|외 ${dto.item} 건|"
+				       th:onclick="sendordernum(${dto.order_num});"></p>
 				</div>
 				<div class="pricestatus">
 					<div>
-						<p th:text="${dto.order_status}"></p>
-					</div>
+				        <p><span style="font-weight: bold;" th:text="${dto.order_status}"></span></p>
+				        <button class="confirm_button" th:if="${dto.order_status == '배송중'}" th:data-order-num="${dto.order_num}">구매확정</button>
+				    </div>
 					<div>
-						<p th:text="${dto.price} + 원"></p>
+						<p><span style="margin: 0;" th:text="${dto.price}"></span><span style="margin: 0; font-weight: bold;"> 원</span></p>
 					</div>
 				</div>
-
 			</div>
-
 		</div>
 		<div class="info-section">
 			<h2>주문/결제 안내 </h2>
@@ -125,7 +123,6 @@
 					확인이 가능합니다.</li>
 			</ul>
 		</div>
-
 		<div class="info-section">
 			<h2>배송 안내 </h2>
 			<br>
@@ -139,9 +136,6 @@
 					반품 및 교환이 불가합니다.</li>
 			</ul>
 		</div>
-
-
-
 	</main>
 
 	<footer>

@@ -133,15 +133,23 @@ span {
 .btn-modify:hover{
     background: #006bb3;
 }
+
 .order_status{
 	display:flex;
 	gap: 10px;
+	padding: 10px 0;
 }
+
 .order_status div{
-	flex :1;
+	flex: 1;
 }
 .order_status div h2 {
   text-align: center; 
+}
+
+.order_status div h2:nth-of-type(2) {
+  color: #008ADA;
+  padding-top: 5px;
 }
 
 .order_status div:first-child{
@@ -151,21 +159,65 @@ span {
 .order_status div:last-child{
 	margin-left:10px;
 }
+
+.customer-order-data div{
+	border:1px solid;
+}
+
 .imagedate{
-	flex:1;	
+	flex:1.5;	
 }
 .productlink{
-	flex:5;
+	flex:3;
 }
 .productlink p{
 	cursor:pointer;
 	text-decoration : underline
 }
+
+
+.imagedate .inform {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    text-align: center;
+}
+
+.inform{
+	background-color: #EAEAEA;
+	font-size: 18px;
+	padding: 5px 0;
+}
+
+.imagedate .image{
+	display: flex; 
+    justify-content: center; 
+    align-items: center; 
+}
+
+.imagedate .image img {
+    max-width: 100%;
+    height: auto;
+    width: 120px;
+}
+
+.productlink{
+    display: flex; 
+    flex-direction: row;
+    justify-content: center; 
+    align-items: center; 
+    text-align: center; 
+}
+
+.productlink p {
+    font-size: 18px;
+    font-weight: bold;
+}
+
 .pricestatus{
 	display:flex;
 	flex-direction: column;
 	flex:1;
-	
 }
 
 .pricestatus>div{
@@ -178,79 +230,72 @@ span {
 	
 }
 
-.imagedate .inform {
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-    text-align: center;
-}
-
-.imagedate .image{
-	display: flex; 
-    justify-content: center; 
-    align-items: center; 
-}
-
-
-
-.productlink{
-    display: flex; 
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center; 
-    text-align: center; 
-
-}
-
-
 .pricestatus>div>p{
-	text-align: center; 
+	text-align: center;
+	font-size: 18px;
 }
-
 
 .search{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border:none;
-  border-top:1px solid #ccc;
-  border-bottom:1px solid#ccc;
-  height: 42px;
-
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	border:none;
+	border-top:1px solid #ccc;
+	border-bottom:1px solid#ccc;
+	height: 42px;
+	padding: 10px 0;
 }
-
 
 .searchbox{
-	margin-left: auto;
-	margin-right:4.7%;
-	padding:5px;
+	padding-left: 30px;
 	margin-right:4.7%;
 }
 
-
-
 .searchbutton{
+	margin: 10px 5px;
 	background-color:#008ADA;
 	color:#FFFFFF;
 	border-radius:3px;
 	border:none;
-	height:25px;
+	border-radius: 5px;
+    padding: 6px 16px;
 	cursor:pointer;
+	display: inline-block;
+	font-size: 14px;
+	transition: background-color 0.3s
 }
 
-
-.customer-order-data div{
-	border:1px solid;
-	
+.searchbutton:hover {
+    background-color: #006bb3;
 }
+
+.confirm_button{
+	margin: 10px 5px;
+	background-color:#008ADA;
+	color:#FFFFFF;
+	border-radius:3px;
+	border:none;
+	border-radius: 5px;
+    padding: 6px 12px;
+	cursor:pointer;
+	display: inline-block;
+	font-size: 14px;
+	transition: background-color 0.3s
+}
+
+.confirm_button:hover {
+    background-color: #006bb3;
+}
+
 .customer-order-data {
 	display:flex;
+	width:100%;
 }
 
 .info-section {
 	margin-left:50px;
 	margin-top:30px;
-	margin-bottom:30px;
+	padding-bottom:25px;
 }
 footer {
     background-color: #E8E8E8;

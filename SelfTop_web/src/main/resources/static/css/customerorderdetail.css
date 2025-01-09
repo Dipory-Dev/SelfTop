@@ -67,21 +67,6 @@ header {
     transform: scale(1.5);
 }
 
-body {
-    padding-top: 90px;
-    min-height: 100vh;
-}
-
-main{
-    flex: 1;
-    align-items: center;
-    width: 1300px;
-    margin: 0 auto;
-    min-height: calc(100vh - 120px);
-    border-right: 1px solid #ccc;
-    border-left: 1px solid #ccc;
-}
-
 #title {
 	width: 1300px;
 	height: 75px;
@@ -113,6 +98,29 @@ main{
 	font-size: 24px;
 }
 
+body {
+    padding-top: 90px;
+    min-height: 100vh;
+}
+
+main{
+    flex: 1;
+    align-items: center;
+    width: 1300px;
+    margin: 0 auto;
+    min-height: calc(100vh - 120px);
+    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+}
+
+.order_cancel {
+    color: #666;
+    text-align: center;
+    margin: 10px 0;
+}
+
+
+
 span {
 	margin: 0 5px;
 	color: #555;
@@ -140,30 +148,37 @@ span {
 .order_status div{
 	flex :1;
 }
-.order_status div h2 {
-  text-align: center; 
+.order_status div h2, h3 {
+  text-align: center;
 }
 
 .order_status div:first-child{
-	margin-left:5px;
 	border-right: 1px solid #ccc;
 }
-.order_status div:last-child{
-	margin-left:10px;
+
+.order_no, .order_date, .delivery_status{
+	color: #666;
+	text-align: center;
+	margin: 10px 0;
 }
 
 .namezone{
-	border: 1px solid;
-
-}
-.namezone h2{
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
 	text-align:center;
+}
+
+.namezone h2{
+	margin: 25px 0;
 }
 
 .orderprice{
 	display:flex;
-	
+	text-align: center;
+}
 
+.cancelsection{
+	border-top:1px solid #ccc;
 }
 
 .cancelsection{
@@ -182,15 +197,119 @@ span {
 	background-color:#EAEAEA;
 }
 
-.orderprice div{
-	flex: 1;
+.orderprice > div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
+
+.orderprice_title, .orderprice_data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.orderprice_title{
+	background-color:#EAEAEA;
+	height: 60px;
+	border-bottom: 1px solid black;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.delivery_price{
+	border-right: 1px solid black;
+	border-left: 1px solid black;
+}
+
+.orderprice_data{
+	margin: 30px 0;
+	font-size: 19px;
+}
+
 .deliveryinform{
-	display:flex;
-	flex-direction: column;
+	width: 100%;
+	border-collapse: collapse;
 }
 .deliveryinform div{
 	display:flex;
+}
+
+.deliveryinfo_title{
+	background-color:#EAEAEA;
+	width: 25%;
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+	padding-top: 20px;
+    padding-bottom: 20px;
+    vertical-align: middle;
+}
+
+.deliveryinfo_data{
+	width: 75%;
+	border-bottom: 1px solid black;
+	padding-left: 30px;
+	padding-right: 30px;
+	vertical-align: middle;
+}
+
+.productinform {
+    width: 100%;
+    margin: auto;
+}
+
+.productorder_table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.productorder_table th{
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #ccc;
+    vertical-align: middle;
+}
+
+.productorder_title{
+	font-size: 20px;
+	background-color: #EAEAEA;
+}
+
+.productorder_table th.same-delivery {
+    text-align: center;
+    vertical-align: middle;
+    border-right: none;
+    border-left: none;
+    border-top: none;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.productorder_table tr:not(:first-child) th.same-delivery {
+    border-bottom: none;
+}
+
+.previous{
+	border-top: 1px solid black;
+	text-align: center;
+}
+
+.previous button {
+    margin: 40px 0;
+    background-color: #008ADA;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 20px 40px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 18px;
+    transition: background-color 0.3s;
+}
+
+.previous button:hover {
+    background-color: #006bb3;
 }
 
 footer {
@@ -222,7 +341,10 @@ footer {
     margin: 5px 0;
 }
 
-/* 취소요청 모달*/
+
+
+/*모달*/
+
 *{
 
     font-family: Arial, Helvetica, sans-serif;
@@ -238,7 +360,7 @@ footer {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.5);
-    
+
 }
 
 .modal-content {
@@ -275,11 +397,175 @@ footer {
     text-decoration-line: underline;
 }
 
+.form-body {
+    width: 100%;
+    height:400px;
+    border-collapse: collapse;
+    font-size:13px;
+    padding: 8px;
+}
+
+.form-user-name{
+    width:180px;
+    height:25px;
+    display: inline-block;
+    margin-left:30px;
+    margin-bottom:10px;
+    margin-top:20px;
+    color:#008ADA
+}
+
+.form-write-review{
+    text-align: center;
+}
+
+.star_rating {
+    width:180px;
+    height:30px;
+    margin-bottom:10px;
+    box-sizing: border-box;
+    display: inline-flex;
+    float: left;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-left:30px;
+}
+
+.star {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+    display: inline-block;
+    background: url('https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FE2bww%2FbtsviSSBz4Q%2F5UYnwSWgTlFt6CEFZ1L3Q0%2Fimg.png') no-repeat;
+    background-size: 100%;
+    box-sizing: border-box;
+}
+
+.star_rating .star.on {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+    display: inline-block;
+    background: url('https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fb2d6gV%2FbtsvbDoal87%2FXH5b17uLeEJcBP3RV3FyDk%2Fimg.png') no-repeat;
+    background-size: 100%;
+    box-sizing: border-box;
+}
+
+textarea{
+    width:500px;
+    height:290px;
+    resize:none;
+    font-style: normal;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top:10px;
+    margin-bottom:5px;
+}
+
+.form-file-upload{
+    margin-top:10px;
+    margin-left:35px;
+}
+
+.modal-footer {
+    text-align: right;
+
+    margin-top:-10px;
+}
+
+.foot-message{
+    font-size:13px;
+}
+
+.btn {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+}
+
+.btn-submit:hover{
+    transition: 0.6s;
+    background-color:#006bb3;
+}
+
+.btn-submit {
+    background-color: #008ADA;
+    color: white;
+}
+
+.btn-close:hover{
+    transition: 0.6s;
+    background-color: #7a7a7a;
+
+}
+
+.btn-close {
+    background-color: #999;
+    color: white;
+}
+
+
+
+/* 취소요청 모달*/
+*{
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.cancelmodal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+
+}
+
+.cancelmodal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 600px;
+    height:600px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cancelmodal-header {
+    background-color: #008ADA;
+    color: white;
+    padding: 20px;
+    margin-top: -20px;
+    margin-left: -20px;
+    margin-right:-20px;
+    text-align: center;
+    font-size: 18px;
+    font-weight:bolder;
+}
+
+.cancelmodal-body {
+    padding: 20px;
+    height:430px;
+    margin-top:15px;
+}
+
+.openModal:hover{
+
+    text-decoration-line: underline;
+}
+
 .table {
     width: 100%;
     height:400px;
     border-collapse: collapse;
-    
+
     font-size:13px;
 }
 
@@ -311,7 +597,7 @@ textarea{
 }
 
 
-.modal-footer {
+.cancelmodal-footer {
     text-align: right;
     margin-top: 5px;
     margin-right:14px;
@@ -327,8 +613,7 @@ textarea{
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    
-    
+
 }
 
 .btn-submit:hover{

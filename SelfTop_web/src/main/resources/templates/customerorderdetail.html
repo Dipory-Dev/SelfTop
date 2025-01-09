@@ -15,7 +15,6 @@
 		}
 	});
 </script>
-<script type="text/javascript" src="/js/customerorderdetail.js"></script>
 </head>
 <body>
 	<header>
@@ -33,10 +32,10 @@
 	</header>
 	<main>
 	 <!-- 취소요청모달 -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">주문 취소</div>
-            <div class="modal-body">
+    <div id="cancelmodal" class="cancelmodal">
+        <div class="cancelmodal-content">
+            <div class="cancelmodal-header">주문 취소</div>
+            <div class="cancelmodal-body">
                 <table class="table">
                     <tr class="tr-name">
                         <th>이름</th>
@@ -46,19 +45,25 @@
                         <td colspan='2'>
                             <textarea class = "reason" placeholder="취소 사유를 작성해주세요.(ex. 단순 변심, 옵션 추가 후 재구매 등)"></textarea>
                         </td>
-                        
+
+
                     </tr>
-                    
+
+
+
+
+
+
                 </table>
                 <p class="foot-message"> 추후에 판매자로부터 직접 연락을 받으실 수 있습니다.</p>
             </div>
-            <div class="modal-footer">
-                <button id="submitModalBtn" class="btn btn-submit">등록</button>
-                <button id="closeModalBtn" class="btn btn-close">닫기</button>
+            <div class="cancelmodal-footer">
+                <button id="cancelsubmitModalBtn" class="btn btn-submit">등록</button>
+                <button id="cancelcloseModalBtn" class="btn btn-close">닫기</button>
             </div>
         </div>
     </div>
-    
+
     <!-- -------------------취소요청모달 종료------------------------->
 		<div id="title">
 			<a href="mypage"> <span id="mypage-tab">마이페이지</span>
@@ -68,54 +73,62 @@
 		</div>
 		<div class="order_status">
 			<div>
-				<div>
+				<div class="order_cancel">
 					<h2>
 						주문 <br> 상세정보
 					</h2>
 				</div>
 				<div class = "cancelsection">
-					<h2 id="cancelorder" th:data-userid="${customerinfo.name}"
+					<h2 style="cursor:pointer" id="cancelorder" th:data-userid="${customerinfo.name}"
 						th:data-ordernum="${ordernum}">취소요청</h2>
 				</div>
 			</div>
-			<div>
+			<div class="order_no">
 				<h2>주문번호</h2>
-				<h2 th:text=${ordernum}></h2>
+				<br>
+				<h3 th:text=${ordernum} style="color: #008ADA;"></h3>
 			</div>
-			<div>
+			<div class="order_date">
 				<h2>주문날짜</h2>
-				<h2 th:text=${orderdate}></h2>
+				<br>
+				<h3 th:text=${orderdate} style="color: #008ADA;"></h3>
 			</div>
-			<div>
+			<div class="delivery_status">
 				<h2>상태</h2>
-				<h2 th:text=${orderstatus}></h2>
+				<br>
+				<h3 th:text=${orderstatus} style="color: #008ADA;"></h3>
 			</div>
 		</div>
 		<div class="namezone">
-			<h2>송장번호</h2>
+		    <h2 th:if="${orderstatus == '배송완료'}">배송이 완료된 건입니다.</h2>
+		    <h2 th:if="${orderstatus != '배송완료'}">
+		        송장번호 :
+		        <span th:if="${deliveryNo != null}" th:text="${deliveryNo}"></span>
+		        <span th:if="${deliveryNo == null}">배송 시작 대기중</span>
+		    </h2>
 		</div>
 		<div class="orderprice">
-			<div class="productprice">
-				<div class="grayzone">
+			<div class="product_price">
+				<div class="orderprice_title">
 					<p>상품금액</p>
 				</div>
-				<div >
+				<div class="orderprice_data">
 					<p th:text="${orderprice} + 원"></p>
 				</div>
 			</div>
-			<div class="deliveryprice">
-				<div class="grayzone">
+			<div class="delivery_price">
+				<div class="orderprice_title">
 					<p>배송비</p>
 				</div>
-				<div >
+				<div class="orderprice_data">
 					<p>5000원</p>
 				</div>
 			</div>
-			<div class="totalprice">
-				<div class="grayzone">
+			<div class="total_price">
+				<div class="orderprice_title">
 					<p>결제금액</p>
 				</div>
-				<div>
+				<div class="orderprice_data">
 					<p th:text="${orderprice} +5000 +원"></p>
 				</div>
 			</div>
@@ -123,65 +136,98 @@
 		<div class="namezone">
 			<h2>배송지 정보</h2>
 		</div>
-		<div class="deliveryinform">
-			<div>
-				<div class="grayzone">
-					<h3>성함</h3>
-				</div>
-				<div>
-					<h4 th:text="${customerinfo.name}"></h4>
-				</div>
-			</div>
-			<div>
-				<div class="grayzone">
-					<h3>연락처</h3>
-				</div>
-				<div>
-					<h4 th:text="${customerinfo.phone}"></h4>
-				</div>
-			</div>
-			<div>
-				<div class="grayzone">
-					<h3>배송주소</h3>
-				</div>
-				<div>
-					<h4 th:text="${customerinfo.address}"></h4>
-				</div>
-			</div>
-			<div>
-				<div class="grayzone">
-					<h3>요청사항</h3>
-				</div>
-				<div>
-					<h4 th:text="${customerinfo.request}"></h4>
-				</div>
-			</div>
-		</div>
+		<table class="deliveryinform">
+		    <tr>
+		        <th class="deliveryinfo_title">성함</th>
+		        <td class="deliveryinfo_data"><h4 th:text="${customerinfo.name}"></h4></td>
+		    </tr>
+		    <tr>
+		        <th class="deliveryinfo_title">연락처</th>
+		        <td class="deliveryinfo_data"><h4 th:text="${customerinfo.phone}"></h4></td>
+		    </tr>
+		    <tr>
+		        <th class="deliveryinfo_title">배송주소</th>
+		        <td class="deliveryinfo_data"><h4 th:text="${customerinfo.address}"></h4></td>
+		    </tr>
+		    <tr>
+		        <th class="deliveryinfo_title">요청사항</th>
+		        <td class="deliveryinfo_data"><h4 th:text="${customerinfo.request}"></h4></td>
+		    </tr>
+		</table>
 		<div class="namezone">
 			<h2>주문 상품 정보</h2>
 		</div>
 		<div class="productinform">
 			<table class="productorder_table">
-				<tr>
-					<th>후기작성</th>
-					<th>상품 이름</th>
-					<th>금액</th>
-					<th>수량</th>
-					<th>배송비/판매자</th>
+				<tr class="productorder_title">
+					<th style="width: 10%;">후기작성</th>
+					<th style="width: 50%;">상품 이름</th>
+					<th style="width: 15%;">금액</th>
+					<th style="width: 10%;">수량</th>
+					<th style="width: 15%;">배송비</th>
 				</tr>
 				<tr th:each="dto : ${orderinfo}">
-					<th th:text="${dto.customer_no}"></th>
+					<th>
+						<button class="openModalBtn btn" th:data-product-code="${dto.product_code}">후기작성</button>
+					</th>
 					<th th:text="${dto.product_name}"></th>
 					<th th:text="${dto.price} * ${dto.amount} +원"></th>
-					<th th:text="${dto.amount}"></th>
-					<th th:text="${dto.seller_no} + '배송비:5000원'"></th>
+					<th th:text="${dto.amount} +개"></th>
+					<th class="same-delivery">5000원</th>
 				</tr>
-
 			</table>
 		</div>
+		<div class="previous">
+			<button onclick="goBack()">이전페이지</button>
+		</div>
+		<!-- 후기 등록 모달 -->
+		<div id="modal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">후기 등록</div>
+				<div class="modal-body">
+					<form method="post" action="reviewreg" enctype="multipart/form-data">
+						<div class="form-body">
+							<div class="body-top">
+								<div class="form-user-name" th:text="${membername}"></div>
+								<div class="form-rate" name="reviewForm" method="post" >
+									<div class ="star_rating">
+										​<span class="star on" value="1"> </span>
+										​​<span class="star" value="2"> </span>
+										​​<span class="star" value="3"> </span>
+										​​<span class="star" value="4"> </span>
+										​​<span class="star" value="5"> </span>
+									</div>
 
+									<!--별점 정보 전달-->
+									<input type="hidden" name="rating" value="5">
+									<input type="hidden" name="product_code" value="">
+								</div>
+							</div>
 
+							<div class="form-write-review">
 
+								<textarea name="content" placeholder=" 후기를 작성해주세요 ! " required></textarea>
+
+							</div>
+
+						</div>
+						<div class ="form-file-upload">
+							<input name="review_img" type="file" id="imageInput" accept="image/jpeg,.txt,png,gif">
+
+							<p class="foot-message"> *10MB 이하 jpg, jpeg, png, gif 파일 1장만 첨부 가능</p>
+						</div>
+						<div class="modal-footer">
+							<button id="closeModalBtn" type="button" class="btn btn-close">닫기</button>
+							<input type="submit" value="저장" id="submitModalBtn"
+								class="btn btn-submit">
+
+						</div>
+					</form>
+
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/js/customerorderdetail.js"></script>
 	</main>
 
 	<footer>
