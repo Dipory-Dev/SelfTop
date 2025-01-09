@@ -341,7 +341,7 @@ footer {
     margin: 5px 0;
 }
 
-<<<<<<< HEAD
+
 
 /*모달*/
 
@@ -507,15 +507,14 @@ textarea{
 }
 
 
-=======
->>>>>>> 239f3d1 (제품취소기능 추가 및 메이넾이지 헤더수정)
+
 /* 취소요청 모달*/
 *{
 
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.modal {
+.cancelmodal {
     display: none;
     position: fixed;
     z-index: 1000;
@@ -525,14 +524,10 @@ textarea{
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.5);
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> 239f3d1 (제품취소기능 추가 및 메이넾이지 헤더수정)
 }
 
-.modal-content {
+.cancelmodal-content {
     background-color: #fff;
     margin: 10% auto;
     padding: 20px;
@@ -543,7 +538,7 @@ textarea{
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.modal-header {
+.cancelmodal-header {
     background-color: #008ADA;
     color: white;
     padding: 20px;
@@ -555,7 +550,7 @@ textarea{
     font-weight:bolder;
 }
 
-.modal-body {
+.cancelmodal-body {
     padding: 20px;
     height:430px;
     margin-top:15px;
@@ -570,11 +565,7 @@ textarea{
     width: 100%;
     height:400px;
     border-collapse: collapse;
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> 239f3d1 (제품취소기능 추가 및 메이넾이지 헤더수정)
     font-size:13px;
 }
 
@@ -606,7 +597,7 @@ textarea{
 }
 
 
-.modal-footer {
+.cancelmodal-footer {
     text-align: right;
     margin-top: 5px;
     margin-right:14px;
@@ -622,13 +613,7 @@ textarea{
     border: none;
     border-radius: 4px;
     cursor: pointer;
-<<<<<<< HEAD
 
-
-=======
-    
-    
->>>>>>> 239f3d1 (제품취소기능 추가 및 메이넾이지 헤더수정)
 }
 
 .btn-submit:hover{
