@@ -38,4 +38,6 @@ public interface CustomerBiz {
 	public List<SellerOrderDto> searchcustomerorderlist(String startdate,String enddate,int member_no);
 	
 	public  List<SellerOrderDto> customerpurchaselist(int member_no,int order_no);
+
+	public  int insertReview(String filePath, String content, int rating, int product_code, int member_no);
 }

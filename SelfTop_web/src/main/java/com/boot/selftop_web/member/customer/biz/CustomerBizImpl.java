@@ -153,4 +153,9 @@ public class CustomerBizImpl implements CustomerBiz {
 		// TODO Auto-generated method stub
 		return mapper.customerpurchaselist(member_no, order_no);
 	}
+
+	@Override
+	public int insertReview(String review_img, String content, int rating, int product_code, int member_no) {
+		return mapper.insertReview(review_img, content, rating, product_code, member_no);
+	}
 }

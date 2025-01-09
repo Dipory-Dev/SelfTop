@@ -7,6 +7,7 @@ public class SellerOrderDto {
     private String category;
     private String thumbnail;
     private String product_name;
+	private int product_code;
     private int amount;
     private int price;
     private String order_status;
@@ -38,6 +39,15 @@ public class SellerOrderDto {
 	public void setProduct_name(String product_name) {
 		this.product_name = product_name;
 	}
+
+	public int getProduct_code() {
+		return product_code;
+	}
+
+	public void setProduct_code(int product_code) {
+		this.product_code = product_code;
+	}
+
 	public int getAmount() {
 		return amount;
 	}
@@ -74,20 +84,21 @@ public class SellerOrderDto {
 	public void setOrder_no(int order_no) {
 		this.order_no = order_no;
 	}
-	public SellerOrderDto(Date order_Date, String category, String thumbnail, String product_name, int amount,
-			int price, String order_status, int customer_no, int seller_no, int order_no) {
-		super();
-		this.order_Date = order_Date;
-		this.category = category;
-		this.thumbnail = thumbnail;
-		this.product_name = product_name;
-		this.amount = amount;
-		this.price = price;
-		this.order_status = order_status;
-		this.customer_no = customer_no;
-		this.seller_no = seller_no;
-		this.order_no = order_no;
-	}
 
-   
+	@Override
+	public String toString() {
+		return "SellerOrderDto{" +
+				"order_Date=" + order_Date +
+				", category='" + category + '\'' +
+				", thumbnail='" + thumbnail + '\'' +
+				", product_name='" + product_name + '\'' +
+				", product_code=" + product_code +
+				", amount=" + amount +
+				", price=" + price +
+				", order_status='" + order_status + '\'' +
+				", customer_no=" + customer_no +
+				", seller_no=" + seller_no +
+				", order_no=" + order_no +
+				'}';
+	}
 }

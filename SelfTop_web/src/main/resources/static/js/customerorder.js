@@ -32,6 +32,7 @@ function sendordernum(element) {
 	document.getElementById('orderprice').value = price;
 	document.getElementById('orderstatus').value = orderStatus;
 	document.getElementById('orderdate').value = orderDate;
+	document.getElementById('product_code').value = product_code;
 	// 폼 제출
 	document.getElementById('orderForm').submit();
 

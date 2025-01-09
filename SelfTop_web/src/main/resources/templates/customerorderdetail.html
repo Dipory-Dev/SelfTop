@@ -15,7 +15,6 @@
 		}
 	});
 </script>
-<script type="text/javascript" src="/js/customerorderdetail.js"></script>
 </head>
 <body>
 	<header>
@@ -32,6 +31,34 @@
 		</div>
 	</header>
 	<main>
+	 <!-- 취소요청모달 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">주문 취소</div>
+            <div class="modal-body">
+                <table class="table">
+                    <tr class="tr-name">
+                        <th>이름</th>
+                        <td class="username">${이름 or 아이디}</td>
+                    </tr>
+                    <tr class="tr-cancel-reason">
+                        <td colspan='2'>
+                            <textarea class = "reason" placeholder="취소 사유를 작성해주세요.(ex. 단순 변심, 옵션 추가 후 재구매 등)"></textarea>
+                        </td>
+
+                    </tr>
+
+                </table>
+                <p class="foot-message"> 추후에 판매자로부터 직접 연락을 받으실 수 있습니다.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="submitModalBtn" class="btn btn-submit">등록</button>
+                <button id="closeModalBtn" class="btn btn-close">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- -------------------취소요청모달 종료------------------------->
 		<div id="title">
 			<a href="mypage"> <span id="mypage-tab">마이페이지</span>
 			</a>| <a href="order"> <span id="order-tab" class="selected">주문
@@ -134,7 +161,9 @@
 					<th style="width: 15%;">배송비</th>
 				</tr>
 				<tr th:each="dto : ${orderinfo}">
-					<th th:text="${dto.customer_no}"></th>
+					<th>
+						<button class="openModalBtn btn" th:data-product-code="${dto.product_code}">후기작성</button>
+					</th>
 					<th th:text="${dto.product_name}"></th>
 					<th th:text="${dto.price} * ${dto.amount} +원"></th>
 					<th th:text="${dto.amount} +개"></th>
@@ -145,6 +174,51 @@
 		<div class="previous">
 			<button onclick="goBack()">이전페이지</button>
 		</div>
+		<!-- 후기 등록 모달 -->
+		<div id="modal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">후기 등록</div>
+				<div class="modal-body">
+					<form method="post" action="reviewreg" enctype="multipart/form-data">
+						<div class="form-body">
+							<div class="body-top">
+								<div class="form-user-name" th:text="${membername}"></div>
+								<div class="form-rate" name="reviewForm" method="post" >
+									<div class ="star_rating">
+										​<span class="star on" value="1"> </span>
+										​​<span class="star" value="2"> </span>
+										​​<span class="star" value="3"> </span>
+										​​<span class="star" value="4"> </span>
+										​​<span class="star" value="5"> </span>
+									</div>
+
+									<!--별점 정보 전달-->
+									<input type="hidden" name="rating" value="5">
+									<input type="hidden" name="product_code" value="">
+								</div>
+							</div>
+
+							<div class="form-write-review">
+
+								<textarea name="content" placeholder=" 후기를 작성해주세요 ! " required></textarea>
+
+							</div>
+
+						</div>
+						<div class ="form-file-upload">
+							<input name="review_img" type="file" id="imageInput" accept="image/jpeg,.txt,png,gif">
+
+							<p class="foot-message"> *10MB 이하 jpg, jpeg, png, gif 파일 1장만 첨부 가능</p>
+						</div>
+						<div class="modal-footer">
+							<button id="closeModalBtn" class="btn btn-close">닫기</button>
+							<input type="submit" value="저장" id="submitModalBtn" class="btn btn-submit">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/js/customerorderdetail.js"></script>
 	</main>
 
 	<footer>

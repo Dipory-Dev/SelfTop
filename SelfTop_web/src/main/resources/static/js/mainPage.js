@@ -640,14 +640,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 const productPrice = productDiv.querySelector('.product-price').childNodes[0].textContent.trim().replace('원', '');
                 const productThumbnail = productDiv.querySelector('img').src;
 				const productStock = productDiv.querySelector('.product-stock').textContent.trim();
-
+				const productCode = button.closest('.product-box').querySelector('.add-to-cart').getAttribute('data-product-code');
+				const sellerNo = button.closest('.product-box').querySelector('.add-to-cart').getAttribute('data-seller-no');
+				
                 const productInfo = {
                     thumbnail: productThumbnail,
                     category: component,
                     name: productName,
                     price: productPrice,
                     quantity: 1,
-					stock: productStock
+					stock: productStock,
+					product_code: productCode,
+					seller_no: sellerNo
                 };
                 localStorage.setItem('selectedProduct', JSON.stringify(productInfo));
 

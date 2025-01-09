@@ -35,6 +35,46 @@ header {
     cursor: pointer;
 }
 
+.header-content p {
+    margin-right: 12%;
+    display: flex;
+    align-items: center;
+}
+
+.header-content p span {
+	font-size: 20px;
+    cursor: pointer;
+    color:black;
+}
+
+.header-content p img {
+    width: 30px;
+    height: 30px;
+    transition: transform 0.3s ease;
+}
+
+.header-content p .human-icon {
+	width: 40px;
+	height: 40px;
+    margin-left: 10px;
+}
+
+.header-content p .cart-icon {
+    margin-left: 10px;
+}
+
+.header-content p .lock-icon {
+    margin-left: 20px;
+}
+
+.header-content p span:hover {
+    text-decoration: underline;
+}
+
+.header-content p img:hover {
+    transform: scale(1.5);
+}
+
 .header-content p:hover {
     text-decoration: underline;
 }
