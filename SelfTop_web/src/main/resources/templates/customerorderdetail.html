@@ -45,9 +45,15 @@
                         <td colspan='2'>
                             <textarea class = "reason" placeholder="취소 사유를 작성해주세요.(ex. 단순 변심, 옵션 추가 후 재구매 등)"></textarea>
                         </td>
+<<<<<<< HEAD
 
                     </tr>
 
+=======
+                        
+                    </tr>
+                    
+>>>>>>> 239f3d1 (제품취소기능 추가 및 메이넾이지 헤더수정)
                 </table>
                 <p class="foot-message"> 추후에 판매자로부터 직접 연락을 받으실 수 있습니다.</p>
             </div>
@@ -57,7 +63,11 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 239f3d1 (제품취소기능 추가 및 메이넾이지 헤더수정)
     <!-- -------------------취소요청모달 종료------------------------->
 		<div id="title">
 			<a href="mypage"> <span id="mypage-tab">마이페이지</span>
@@ -72,9 +82,9 @@
 						주문 <br> 상세정보
 					</h2>
 				</div>
-				<div>
-					<h2>취소요청</h2>
-					<h2>주문 <br> 상세정보</h2>
+				<div class = "cancelsection">
+					<h2 id="cancelorder" th:data-userid="${customerinfo.name}"
+						th:data-ordernum="${ordernum}">취소요청</h2>
 				</div>
 			</div>
 			<div class="order_no">

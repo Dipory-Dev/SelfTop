@@ -243,6 +243,7 @@
                 currentOrder['assemblyStatus'] = '조립 미신청';
                 currentOrder['amount'] = newQuantity;
                 currentOrder['order_price'] = baseAmount;
+
                 const currentordergetdata = encodeURIComponent(JSON.stringify(currentOrder));
 				console.log(currentordergetdata);
 	            // 필수 입력 항목 확인
@@ -303,7 +304,11 @@
 	                            console.error('저장 오류:', error);
 	                            alert('주문 내역 저장 중 오류가 발생했습니다.');
 	                        });
+<<<<<<< HEAD
 	                }
+=======
+	                } 
+>>>>>>> 239f3d1 (제품취소기능 추가 및 메이넾이지 헤더수정)
 	                else {
 	                    alert("결제에 실패하였습니다. 다시 시도해주세요.");
 	                    window.location.href = "http://localhost:8080/payfail";

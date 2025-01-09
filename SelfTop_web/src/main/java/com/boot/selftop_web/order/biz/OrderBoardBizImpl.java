@@ -71,4 +71,6 @@ public class OrderBoardBizImpl implements OrderBoardBiz{
 		return mapper.requestcancelorder(orderno,reason);
 	}
 
+	
+
 }

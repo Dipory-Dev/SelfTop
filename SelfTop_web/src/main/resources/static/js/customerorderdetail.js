@@ -55,6 +55,7 @@ window.addEventListener('click', (event) => {
     }
 });
 });
+
 // 모달 제어 스크립트
 const modal = document.getElementById('modal');
 const closeModalBtn = document.getElementById('closeModalBtn');
@@ -150,4 +151,5 @@ window.onload = function() {
 function goBack() {
     window.history.back();
 }
+
 
