@@ -171,7 +171,7 @@ span {
     display: flex;
     flex-direction: column;
     position: relative;
-   
+
 }
 
 .namesection{
@@ -194,8 +194,8 @@ span {
     border-left: #ddd 0.7px solid;
     border-right: #ddd 0.7px solid;
     border-bottom: #ddd 0.7px solid;
-    height: 655px; 
-    position: relative; 
+    height: 655px;
+    position: relative;
 }
 
 .bottombutton {
@@ -206,10 +206,10 @@ span {
     height: 15px;
     padding: 10px;
     border-top: 1px solid #ddd;
-    position: absolute; 
+    position: absolute;
     bottom: 0;
-    left: 0; 
-    background-color: #fff; 
+    left: 0;
+    background-color: #fff;
 }
 
 .detailbottombutton{
@@ -220,7 +220,7 @@ span {
     height: 38px;
     align-items: center;
     border-top: 1px solid #ddd;
-    background-color: #fff; 
+    background-color: #fff;
     margin-top: 190px;
 }
 
@@ -230,7 +230,7 @@ span {
 }
 
 .selectcartlist table tr {
-    border-bottom: 1px solid #ddd; 
+    border-bottom: 1px solid #ddd;
     
 }
 
@@ -249,10 +249,10 @@ span {
 
 .selectcartlist table td {
     padding: 10px;
-    text-align: center; 
+    text-align: center;
     border : 1px solid #ddd;
     height:35px;
-    
+
 }
 
 .cartbutton{
@@ -265,7 +265,7 @@ span {
 	cursor:pointer;
     font-size:12px;
     margin-top:4px;
-    
+
 }
 
 .cartbutton:hover{
@@ -297,7 +297,7 @@ span {
 }
 
 .viewcartproduct .orderproduct,#assemblecheck  {
-   
+
     border:1px solid #ddd;
     display: flex;
     justify-content: space-between;
@@ -429,7 +429,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 #assemblecheck{
 	display:flex;
-	height: 80px; 
+	height: 80px;
 	max-height:80px;
 	margin:3px;
 }
@@ -534,8 +534,8 @@ input[type="number"]::-webkit-outer-spin-button {
 
 #table-container table {
     border-collapse: collapse;
-    width: 100%; 
-    max-width: 400px; 
+    width: 100%;
+    max-width: 400px;
     border: 1px solid #ddd;
     font-size: 14px;
     height:680px;
