@@ -75,10 +75,10 @@ public interface CaseMapper {
             "   </foreach>" +
             "</if>" +
             "<if test='filters.Power_Size != null'>" +
-            "   AND c.POWER_SIZE IN " +
+            "   AND c.POWER_SIZE LIKE '%' || " +
             "   <foreach item='powerSize' collection='filters.Power_Size' open='(' separator=',' close=')'>" +
             "       #{powerSize}" +
-            "   </foreach>" +
+            "   </foreach> || '%'" +
             "</if>" +
             "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.THUMBNAIL, p.ETC" +
             "<if test='sort != null'>" +  // 정렬 조건 추가
