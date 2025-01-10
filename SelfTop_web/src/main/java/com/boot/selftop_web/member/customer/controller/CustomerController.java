@@ -12,8 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-
+import java.util.Locale;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +56,7 @@ import java.util.stream.Collectors;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.NumberFormat;
 
 @Controller
 @RequestMapping("/")
@@ -509,6 +509,7 @@ public class CustomerController {
 		List<Integer> productCodes = reviewsearchres.stream()
 			    .map(reviewsearchDto::getProduct_code)  // OrderDTO에서 productCode만 추출
 			    .collect(Collectors.toList());
+
 		model.addAttribute("productcodes",productCodes);
 		try {
 			model.addAttribute("review",new ObjectMapper().writeValueAsString(reviewsearchres));
@@ -519,7 +520,8 @@ public class CustomerController {
 		model.addAttribute("membername", session.getAttribute("name"));
 		model.addAttribute("orderinfo",res);
 		model.addAttribute("ordernum",orderNum);
-		model.addAttribute("orderprice",orderprice);
+		model.addAttribute("orderprice", NumberFormat.getInstance(Locale.KOREA).format(Integer.parseInt(orderprice)));
+		model.addAttribute("allprice", NumberFormat.getInstance(Locale.KOREA).format(Integer.parseInt(orderprice)+ 5000));
 		model.addAttribute("orderstatus",res.get(0).getOrder_status());
 		model.addAttribute("product_code", product_code);
 		model.addAttribute("orderdate",orderdate);
@@ -862,11 +864,17 @@ public class CustomerController {
 
 	@GetMapping("/quotedetail")
 	@ResponseBody
-	public List<QuoteDetailDto> cartpagedetail(@RequestParam("quote_no") int quoteNo) {
-		List<QuoteDetailDto> selectres=quoteBiz.QuoteDetailinfo(quoteNo);
+	public Map<String, Object> cartpagedetail(@RequestParam("quote_no") int quoteNo) {
+		List<QuoteDetailDto> selectres = quoteBiz.QuoteDetailinfo(quoteNo);
+		char res = quoteBiz.assemblecheck(quoteNo);
+		System.out.println(res);
 
+		Map<String, Object> responseMap = new HashMap<>();
+		responseMap.put("products", selectres);  
+	    responseMap.put("assemblecheck", String.valueOf(res)); 
+	    System.out.println(responseMap);
 
-		return selectres;
+		return responseMap;
 	}
 	
 	@PostMapping("/comparison")
@@ -1115,5 +1123,12 @@ public class CustomerController {
 
 
     }
+	@GetMapping("/loadquotelist")
+	public String getQuoteDiv(Model model,HttpSession session) {
+		Integer member_no = (Integer) session.getAttribute("member_no");
+		List<QuoteDto> res =quoteBiz.SelectQuote(member_no);
+		model.addAttribute("quote", res);
+	    return "fragmentcartquotelist :: cart_view"; // 특정 타임리프 fragment 반환
+	}
 
 }

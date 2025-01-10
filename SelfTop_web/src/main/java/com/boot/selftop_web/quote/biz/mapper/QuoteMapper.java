@@ -130,4 +130,7 @@ public interface QuoteMapper {
 	@Select("Select supply from power where product_code =  #{productcode} ")
 	int powerwatt(@Param("productcode")int productcode);
 
+	@Select("Select assembly from quote where quote_no = #{quoteno}")
+	char assemblecheck(@Param("quoteno")int quoteno);
+
 }
