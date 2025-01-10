@@ -21,6 +21,10 @@ body{
   bottom: 0; 
 }
 
+.search-box::placeholder {
+    color: #999;
+}
+
 .search-container {
     display: flex;
     align-items: center;
@@ -28,7 +32,7 @@ body{
     border-radius: 25px;
     overflow: hidden;
     background-color: #fff;
-    width: 830px;
+    width: 1000px;
     margin: 20px 0;
 }
 
@@ -53,57 +57,6 @@ body{
     height: 40px;
     cursor: pointer;
     outline: none;
-}
-
-.search-box::placeholder {
-    color: #999;
-}
-
-.category-select {
-    border: none;
-    padding: 10px 15px;
-    margin-left: 10px;
-    color: #333;
-    font-size: 16px;
-    cursor: pointer;
-    outline: none;
-    appearance: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    flex-grow: 1;
-    background-color: transparent;
-    z-index: 2;
-}
-
-/* 셀렉트 박스 화살표 커스텀 스타일 */
-.category-select::-ms-expand {
-    display: none; /* IE에서 기본 화살표 제거 */
-}
-
-.category-select::after {
-    content: "\25BC";
-    position: absolute;
-    right: 15px;
-    top: 0;
-    bottom: 0;
-    background-color: #fff;
-    pointer-events: none; /* 화살표 부분 클릭 방지 */
-}
-
-.select-arrow {
-    position: absolute;
-    right: 15px;
-    color: #333;
-    pointer-events: none; /* 화살표 부분 클릭 방지 */
-    font-size: 16px;
-    z-index: 1;
-}
-
-.select-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    border-right: 2px solid #008ADA;
 }
 
 .buttonicon {
