@@ -13,23 +13,13 @@ document.addEventListener("DOMContentLoaded", function() {
 	divselect();
 		
 	//검색기능 - 데이터를 mainPage로 넘김
-	const form = document.querySelector("form");
-    const searchInput = document.getElementById("search-input");
-
-    form.addEventListener("submit", function(event) {
-        event.preventDefault(); // 폼 기본 전송 방지
-        const category = document.querySelector(".category-select").value;
-        const search = searchInput.value;
-        // mainPage로 GET 요청을 보냄
-        window.location.href = `/main?category=${encodeURIComponent(category)}&search=${encodeURIComponent(search)}`;
-    });
-
-    // 엔터 키를 누를 때 폼 제출
-    searchInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            form.submit();
-        }
-    });
+	const form = document.querySelector(".search-container form");
+	form.addEventListener("submit", function(event) {
+    	event.preventDefault(); // 기본 이벤트를 방지
+    	const category = document.querySelector(".category-select").value;
+    	const search = document.querySelector(".search-box").value;
+    	window.location.href = `/mainPage?category=${encodeURIComponent(category)}&search=${encodeURIComponent(search)}`;
+	});
 });
 
 function movemain(){
