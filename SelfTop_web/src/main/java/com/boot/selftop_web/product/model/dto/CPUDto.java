@@ -17,6 +17,7 @@ public class CPUDto extends ProductStatusDto implements ProductDto {
     private String content_img;
     private String etc;
 
+    private double avg_rating;
 
     private String socket;
     private String ddr;
@@ -34,7 +35,7 @@ public class CPUDto extends ProductStatusDto implements ProductDto {
     
 
     public CPUDto(int product_code, String category, String product_name, String company, Date upload_date,
-			String thumbnail, String content_img, String etc, String socket, String ddr, String generation, String spec,
+			String thumbnail, String content_img, String etc, double avg_rating, String socket, String ddr, String generation, String spec,
 			String inner_vga, String package_type, String cooler_status, int core, int watt) {
 		super();
 		this.product_code = product_code;
@@ -45,6 +46,7 @@ public class CPUDto extends ProductStatusDto implements ProductDto {
 		this.thumbnail = thumbnail;
 		this.content_img = content_img;
 		this.etc = etc;
+        this.avg_rating = avg_rating;
 		this.socket = socket;
 		this.ddr = ddr;
 		this.generation = generation;
@@ -56,9 +58,15 @@ public class CPUDto extends ProductStatusDto implements ProductDto {
 		this.watt = watt;
 	}
 
+    public double getAvg_rating() {
+        return avg_rating;
+    }
 
+    public void setAvg_rating(double avg_rating) {
+        this.avg_rating = avg_rating;
+    }
 
-	public int getProduct_code() {
+    public int getProduct_code() {
         return product_code;
     }
 
@@ -195,7 +203,7 @@ public class CPUDto extends ProductStatusDto implements ProductDto {
     }
 
 
-	@Override
+    @Override
     public String toString() {
         return "CPUDto{" +
                 "product_code=" + product_code +
@@ -206,6 +214,7 @@ public class CPUDto extends ProductStatusDto implements ProductDto {
                 ", thumbnail='" + thumbnail + '\'' +
                 ", content_img='" + content_img + '\'' +
                 ", etc='" + etc + '\'' +
+                ", avg_rating=" + avg_rating +
                 ", socket='" + socket + '\'' +
                 ", ddr='" + ddr + '\'' +
                 ", generation='" + generation + '\'' +

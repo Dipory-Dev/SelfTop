@@ -39,8 +39,6 @@ import com.boot.selftop_web.quote.model.dto.QuotecomparisonDto;
 import com.boot.selftop_web.review.biz.ReviewBiz;
 import com.boot.selftop_web.review.model.dto.ReviewDto;
 
-import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
-
 import com.boot.selftop_web.member.customer.model.dto.CustomerorderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
 import com.boot.selftop_web.order.biz.OrderBoardBiz;
@@ -52,8 +50,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -596,9 +592,27 @@ public class CustomerController {
 
 	@GetMapping("/api/cpu/attributes")
 	public ResponseEntity<Map<String, List<String>>> getCpuAttributes() {
+		List<String> ddrLs = productMapper.findAllcpuDdr();
+		List<String> ddrres = new ArrayList<>();
+		for (String ddr : ddrLs) {
+			if (ddr != null && ddr.contains(",")) {
+				for (String f : ddr.split(",")) {
+					if (!ddrres.contains(f.trim())) {
+						ddrres.add(f.trim());
+					}
+				}
+			} else {
+				if (ddr != null && !ddr.trim().isEmpty()) {
+					ddrres.add(ddr.trim());
+				} else {
+					ddrres.add(ddr);
+				}
+			}
+		}
+
 	    Map<String, List<String>> attributes = new HashMap<>();
 	    attributes.put("Socket", productMapper.findAllcpuSocket());
-	    attributes.put("DDR", productMapper.findAllcpuDdr());
+	    attributes.put("DDR", ddrres);
         attributes.put("Generation", productMapper.findAllcpuGeneration());
 	    attributes.put("Spec", productMapper.findAllcpuSpec());
 	    attributes.put("Inner_VGA", productMapper.findAllcpuInnerVga());
@@ -682,11 +696,48 @@ public class CustomerController {
 	@GetMapping("/api/case/attributes")
 	public ResponseEntity<Map<String, List<String>>> getCaseAttributes() {
 	    Map<String, List<String>> attributes = new HashMap<>();
+
+		List<String> formfactorLs = productMapper.findAllcaseFormfactor();
+		List<String> fres = new ArrayList<>();
+		for (String fftor : formfactorLs) {
+			if (fftor != null && fftor.contains(",")) {
+				for (String f : fftor.split(",")) {
+					if (!fres.contains(f.trim())) {
+						fres.add(f.trim());
+					}
+				}
+			} else {
+				if (fftor != null && !fftor.trim().isEmpty()) {
+					fres.add(fftor.trim());
+				} else {
+					fres.add(fftor);
+				}
+			}
+		}
+
+		List<String> powersizeLs = productMapper.findAllcasePower_Size();
+		List<String> psres = new ArrayList<>();
+		for (String psize : powersizeLs) {
+			if (psize != null && psize.contains(",")) {
+				for (String f : psize.split(",")) {
+					if (!psres.contains(f.trim())) {
+						psres.add(f.trim());
+					}
+				}
+			} else {
+				if (psize != null && !psize.trim().isEmpty()) {
+					psres.add(psize.trim());
+				} else {
+					psres.add(psize);
+				}
+			}
+		}
+
 	    attributes.put("Power_Status", productMapper.findAllcasePower_Status());
-	    attributes.put("Formfactor", productMapper.findAllcaseFormfactor());
+		attributes.put("Formfactor", fres);
 	    attributes.put("Tower_Size", productMapper.findAllcaseTower_Size());
 	    attributes.put("VGA_Length", productMapper.findAllcaseVga_Length());
-	    attributes.put("Power_Size", productMapper.findAllcasePower_Size());
+	    attributes.put("Power_Size", psres);
 	    attributes.put("Company", productMapper.findAllcaseCompany());
 	    return ResponseEntity.ok(attributes);
 	}
@@ -696,10 +747,10 @@ public class CustomerController {
 	public ResponseEntity<?> filterProducts(
 			@PathVariable String category,
 			@RequestBody Map<String, List<String>> filters,
+//			filters = {Formfactor=[e-atx, atx, m-atx, m-itx, atx, m-atx, m-itx]}
 			@RequestParam(value = "sort", defaultValue = "byname") String sort,
 			@RequestParam(value = "search", required = false) String search) {
 
-		System.out.println("Received filters: " + filters + ", sort: " + sort + ", search: " + search);
 	    ProductBiz<?> productBiz = productBizFactory.getBiz(category);
 	    if (productBiz == null) {
 	        return ResponseEntity.badRequest().body("Invalid category: " + category);
@@ -738,6 +789,7 @@ public class CustomerController {
 	    if (products.isEmpty()) {
 	        return ResponseEntity.noContent().build();
 	    }
+
 	    return ResponseEntity.ok(products);
 	}
 

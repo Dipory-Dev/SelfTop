@@ -57,10 +57,10 @@ public interface CaseMapper {
             "   </foreach>" +
             "</if>" +
             "<if test='filters.Formfactor != null'>" +
-            "   AND c.FORMFACTOR IN " +
+            "   AND c.FORMFACTOR LIKE '%' || " +
             "   <foreach item='formfactor' collection='filters.Formfactor' open='(' separator=',' close=')'>" +
             "       #{formfactor}" +
-            "   </foreach>" +
+            "   </foreach> || '%'" +
             "</if>" +
             "<if test='filters.Tower_Size != null'>" +
             "   AND c.TOWER_SIZE IN " +

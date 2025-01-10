@@ -17,6 +17,8 @@ public class RAMDto extends ProductStatusDto implements ProductDto {
     private String content_img;
     private String etc;
 
+    private double avg_rating;
+
     private String ddr;
     private int storage;
     private String device;
@@ -25,7 +27,7 @@ public class RAMDto extends ProductStatusDto implements ProductDto {
 
     public RAMDto() {}
 
-    public RAMDto(int product_code, String category, String product_name, String company, Date upload_date, String thumbnail, String content_img, String etc, String ddr, int storage, String device, String heatsync, int watt) {
+    public RAMDto(int product_code, String category, String product_name, String company, Date upload_date, String thumbnail, String content_img, String etc, double avg_rating, String ddr, int storage, String device, String heatsync, int watt) {
         this.product_code = product_code;
         this.category = category;
         this.product_name = product_name;
@@ -34,6 +36,7 @@ public class RAMDto extends ProductStatusDto implements ProductDto {
         this.thumbnail = thumbnail;
         this.content_img = content_img;
         this.etc = etc;
+        this.avg_rating = avg_rating;
         this.ddr = ddr;
         this.storage = storage;
         this.device = device;
@@ -145,6 +148,15 @@ public class RAMDto extends ProductStatusDto implements ProductDto {
         this.watt = watt;
     }
 
+    public double getAvg_rating() {
+        return avg_rating;
+    }
+
+    public void setAvg_rating(double avg_rating) {
+        this.avg_rating = avg_rating;
+    }
+
+
     @Override
     public String toString() {
         return "RAMDto{" +
@@ -156,6 +168,7 @@ public class RAMDto extends ProductStatusDto implements ProductDto {
                 ", thumbnail='" + thumbnail + '\'' +
                 ", content_img='" + content_img + '\'' +
                 ", etc='" + etc + '\'' +
+                ", avg_rating=" + avg_rating +
                 ", ddr='" + ddr + '\'' +
                 ", storage=" + storage +
                 ", device='" + device + '\'' +

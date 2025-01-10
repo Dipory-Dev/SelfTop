@@ -17,13 +17,15 @@ public class HDDDto extends ProductStatusDto implements ProductDto {
     private String content_img;
     private String etc;
 
+    private double avg_rating;
+
     private String device;
     private int storage;
     private int watt;
 
     public HDDDto() {}
 
-    public HDDDto(int product_code, String category, String product_name, String company, Date upload_date, String thumbnail, String content_img, String etc, String device, int storage, int watt) {
+    public HDDDto(int product_code, String category, String product_name, String company, Date upload_date, String thumbnail, String content_img, String etc, double avg_rating, String device, int storage, int watt) {
         this.product_code = product_code;
         this.category = category;
         this.product_name = product_name;
@@ -32,6 +34,7 @@ public class HDDDto extends ProductStatusDto implements ProductDto {
         this.thumbnail = thumbnail;
         this.content_img = content_img;
         this.etc = etc;
+        this.avg_rating = avg_rating;
         this.device = device;
         this.storage = storage;
         this.watt = watt;
@@ -125,6 +128,14 @@ public class HDDDto extends ProductStatusDto implements ProductDto {
         this.watt = watt;
     }
 
+    public double getAvg_rating() {
+        return avg_rating;
+    }
+
+    public void setAvg_rating(double avg_rating) {
+        this.avg_rating = avg_rating;
+    }
+
     @Override
     public String toString() {
         return "HDDDto{" +
@@ -136,6 +147,7 @@ public class HDDDto extends ProductStatusDto implements ProductDto {
                 ", thumbnail='" + thumbnail + '\'' +
                 ", content_img='" + content_img + '\'' +
                 ", etc='" + etc + '\'' +
+                ", avg_rating=" + avg_rating +
                 ", device='" + device + '\'' +
                 ", storage=" + storage +
                 ", watt=" + watt +

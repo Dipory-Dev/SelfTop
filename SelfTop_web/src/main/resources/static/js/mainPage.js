@@ -618,13 +618,16 @@ document.addEventListener("DOMContentLoaded", () => {
                                     ${product.product_name}
                                 </a>
                             </div>
-							<div class="product-stock">${product.stock}</div>
+							<input type="hidden" class="product-stock" value="${product.stock}">
                             <div style="color: #666; font-size: 0.9em; width: 1000px;">${product.etc}</div>
                         </div>
                     </div>
                     <div class="product-price" style="text-align: right; margin-left: 10px; font-weight: bold; color: #333;">
                         ${product.price ? `${product.price}원` : '품절'}
-                        <div><span class="stars">★★★★★</span></div>
+                        <div>
+                            <span style="color:rgb(245, 166, 35);" class="stars">★</span>
+                            <span class="stars">${(product.avg_rating).toFixed(1)}</span>
+                        </div>
                         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px;">
                             <button class="btn add-to-cart" data-seller-no="${product.seller_no}" data-product-code="${product.product_code}" data-product-name="${product.product_name}" data-product-price="${product.price}">담기</button>
                             <button class="btn buy-now">바로구매</button>
