@@ -59,6 +59,12 @@ document.addEventListener("DOMContentLoaded", () => {
         // 기본적으로 CPU 컴포넌트 활성화
         activateDefaultComponent();
     }
+	
+	//intro에서 검색한 데이터를 처리하고 보여주는 함수
+	const urlParams = new URLSearchParams(window.location.search);
+	const categoryFromUrl = urlParams.get('category');
+	const searchFromUrl = urlParams.get('search');
+	
 
 	document.body.addEventListener('click', function(event) {
 	    const target = event.target;
