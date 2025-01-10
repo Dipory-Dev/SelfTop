@@ -6,11 +6,11 @@
 }
 
 html, body {
-    height: 100%; 
+    height: 100%;
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
 }
 
 header {
@@ -78,7 +78,7 @@ body {
 }
 
 main{
-    flex: 1; 
+    flex: 1;
     width: 1300px;
     margin: 0 auto;
 }
@@ -148,7 +148,7 @@ span {
     display: flex;
     align-items: stretch;
     gap: 10px;
-    height: calc(100vh - 120px); 
+    height: calc(100vh - 120px);
 }
 
 .viewcartproduct{
@@ -158,7 +158,7 @@ span {
     padding: 5px;
     border:#ddd 1px solid;
     box-sizing: border-box;
-    overflow-y: auto; 
+    overflow-y: auto;
     width:500px;
     height: calc(100vh - 120px);
     max-height: calc(100vh - 220px);
@@ -167,9 +167,9 @@ span {
 .viewcartproduct-container {
     display: flex;
     flex-direction: column;
-    flex: 1; 
-    width: 100%; 
-    box-sizing: border-box; 
+    flex: 1;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .selectcartlist {
@@ -199,8 +199,8 @@ span {
 	flex-grow: 1;
     border: 1px solid #ddd;
     height: calc(100vh - 120px);
-    max-height: calc(100vh - 220px); 
-    overflow-y: auto; 
+    max-height: calc(100vh - 220px);
+    overflow-y: auto;
     width:620px;
 }
 
@@ -216,17 +216,17 @@ span {
     bottom: 0;
     left: 0;
     background-color: #fff;
-    
+
 }
 
 .detailbottombutton{
     display: flex;
-    justify-content: flex-end; 
+    justify-content: flex-end;
     gap: 10px;
     padding: 10px;
     background-color: #fff;
     height: 60px;
-    
+
 }
 
 .selectcartlist table {
@@ -296,21 +296,21 @@ span {
 }
 
 .viewcartproduct{
-	flex: 1; 
-    width: 670px; 
+	flex: 1;
+    width: 670px;
     height: 690px;
     padding: 5px;
     box-sizing: border-box;
-    overflow-y: auto; 
+    overflow-y: auto;
 }
 
 .detailbottombutton{
 	display: flex;
-    justify-content: flex-end; 
+    justify-content: flex-end;
     padding: 10px;
     background-color: #fff;
-    position: relative; 
-    margin-top: auto; 
+    position: relative;
+    margin-top: auto;
     width: 660px;
 }
 
@@ -320,7 +320,7 @@ span {
     justify-content: space-between;
     align-items: center;
     flex:1;
-   
+
 }
 
 .viewcartproduct .orderproduct > div,#assemblecheck  > div  {
@@ -442,14 +442,14 @@ input[type="number"]::-webkit-outer-spin-button {
 	max-height:80px;
 	margin:3px;
     height:65px;
-	
+
 }
 
 #assemblecheck {
     display: flex;
-    justify-content: flex-end; 
+    justify-content: flex-end;
     align-items: center;
-    gap: 10px; 
+    gap: 10px;
     margin-top:13px;
 }
 
@@ -492,9 +492,9 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .check {
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
+    display: flex;
+    align-items: center;
+    gap: 10px;
     margin-top:10px;
 }
 
@@ -517,23 +517,23 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .modal-check-quote{
-    display: flex; 
-    flex-direction: column; 
-    gap: 15px; 
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .modal-check-quote .check {
-    display: flex; 
-    flex-wrap: wrap; 
-    align-items: center; 
-    gap: 10px; 
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
 }
 
 .modal-check-quote label {
     display: flex;
     align-items: center;
-    cursor: pointer; 
-    gap: 5px; 
+    cursor: pointer;
+    gap: 5px;
 }
 
 #table-container {
