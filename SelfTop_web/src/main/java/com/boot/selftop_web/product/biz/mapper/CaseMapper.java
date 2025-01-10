@@ -12,8 +12,8 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface CaseMapper {
-    @Insert("INSERT INTO CASE_BOARD (PRODUCT_CODE, POWER_STATUS, FORMFACTOR, TOWER_SIZE, VGA_LENGTH) " +
-            "VALUES (#{product_code}, #{power_status}, #{formfactor}, #{tower_size}, #{vga_length})")
+    @Insert("INSERT INTO CASE_BOARD (PRODUCT_CODE, POWER_STATUS, FORMFACTOR, TOWER_SIZE, VGA_LENGTH,power_size) " +
+            "VALUES (#{product_code}, #{power_status}, #{formfactor}, #{tower_size}, #{vga_length},#{power_size})")
     int insertCase_board(CaseDto dto);
     
     @Select("<script>" + 

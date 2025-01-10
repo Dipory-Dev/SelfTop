@@ -38,7 +38,10 @@ import com.boot.selftop_web.quote.model.dto.QuoteDto;
 import com.boot.selftop_web.quote.model.dto.QuotecomparisonDto;
 import com.boot.selftop_web.review.biz.ReviewBiz;
 import com.boot.selftop_web.review.model.dto.ReviewDto;
-
+import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
+import com.boot.selftop_web.review.model.dto.reviewsearchDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.boot.selftop_web.member.customer.model.dto.CustomerorderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
 import com.boot.selftop_web.order.biz.OrderBoardBiz;
@@ -481,9 +484,19 @@ public class CustomerController {
 		Integer member_no = (Integer) session.getAttribute("member_no");
 		List<SellerOrderDto> res = customerBiz.customerpurchaselist(member_no,Integer.parseInt(orderNum));
 		List<OrderBoardDto> customerinfo = orderboardBiz.vieworderboard(Integer.parseInt(orderNum));
-
+		List<reviewsearchDto> reviewsearchres=orderboardBiz.reviewsearchres(member_no);
+		//int searchreviewnum=0;
 		String deliveryNo = orderboardBiz.getDeliveryNo(Integer.parseInt(orderNum));
-
+		List<Integer> productCodes = reviewsearchres.stream()
+			    .map(reviewsearchDto::getProduct_code)  // OrderDTO에서 productCode만 추출
+			    .collect(Collectors.toList());
+		model.addAttribute("productcodes",productCodes);
+		try {
+			model.addAttribute("review",new ObjectMapper().writeValueAsString(reviewsearchres));
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		model.addAttribute("membername", session.getAttribute("name"));
 		model.addAttribute("orderinfo",res);
 		model.addAttribute("ordernum",orderNum);
@@ -503,11 +516,13 @@ public class CustomerController {
 							@RequestParam("review_img") MultipartFile review_img,
 							@RequestParam("rating") int rating,
 							@RequestParam("product_code") int productCode,
-							@RequestParam("content") String content) {
+							@RequestParam("content") String content,
+							@RequestParam("reviewcondition")String reviewcondition){
 		// 세션에서 회원 번호 가져오기
 		int member_no = (Integer) session.getAttribute("member_no");
+		boolean condition = Boolean.parseBoolean(reviewcondition);
 		System.out.println("회원 번호: " + member_no);
-
+		int res=0;
 		// 현재 프로젝트 경로를 기준으로 저장 경로 설정
 		String projectPath = System.getProperty("user.dir");
 		String uploadDir = projectPath + "/src/main/resources/review_img"; // 저장 폴더
@@ -541,7 +556,12 @@ public class CustomerController {
 		System.out.println("Review Content: " + content);
 
 		// DB 저장
-		int res = customerBiz.insertReview(dbPath, content, rating, productCode, member_no);
+		if(condition) {
+			res =customerBiz.updateReviewimage(filePath, content, rating, productCode, member_no);
+		}else {
+			res = customerBiz.insertReview(dbPath, content, rating, productCode, member_no);
+		}
+
 		if (res > 0) {
 			System.out.println("upload success");
 		} else {
@@ -1007,13 +1027,12 @@ public class CustomerController {
 
 //		case와 board
 		if (hascase && hasmainboard) {
-			String caseform = quoteBiz.caseformfactor(caseproductno).toLowerCase().trim();
+			String caseform = quoteBiz.caseformfactor(caseproductno).toLowerCase().replace(" ","").trim();
 			String boardform = quoteBiz.boardformfactor(boardproductno).toLowerCase().trim();
-			String[] caseArray = caseform.split(", ");
+			String[] caseArray = caseform.split(",");
 
 			// 배열을 리스트로 변환
 			List<String> caseformlist = Arrays.asList(caseArray);
-
 			if (caseformlist.contains(boardform)) {
 				boardcasecompatibility = true;
 
@@ -1031,15 +1050,26 @@ public class CustomerController {
 		}
 //		case와 power
 		if (hascase && haspower) {
-			String caseform = quoteBiz.caseformfactor(caseproductno).toLowerCase().trim();
+			String caseform = quoteBiz.casepowersize(caseproductno).toLowerCase().toLowerCase().replace(" ","").trim();
 //			String casepowerform = quoteBiz.casepowersize(caseproductno).toLowerCase().trim();
-			String powerform = quoteBiz.powersize(powerproductno).toLowerCase().trim();
-			String[] caseArray = caseform.split(", ");
-
+			String powerform = quoteBiz.powersize(powerproductno).toLowerCase().toLowerCase().replace(" ","").trim();
+			String[] caseArray = caseform.split(",");
+			String[] powerArray =powerform.split(",");
+			String powersize;
 			// 배열을 리스트로 변환
 			List<String> caseformlist = Arrays.asList(caseArray);
+			List<String> powerformlist = Arrays.asList(powerArray);
 
-			if (caseformlist.contains(powerform)) {
+			if(powerformlist.contains("atx")) {
+				powersize="atx";
+			}else if(powerformlist.contains("m-atx")) {
+				powersize="m-atx";
+			}else {
+				powersize="itx";
+			}
+			System.out.println(powersize);
+
+			if (caseformlist.contains(powersize)) {
 				casepowerompatibility = true;
 			}
 			valueres.put("casepowerompatibility", casepowerompatibility);
