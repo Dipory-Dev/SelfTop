@@ -710,17 +710,21 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("견적을 선택해주세요.");
             return;
         }
-
+    
+        // 사이드 패널 상태 확인
+        const sidePanel = document.querySelector('.side-panel');
+        const wasSidePanelActive = sidePanel?.classList.contains('active'); // 기존 활성화 상태 저장
+    
         // 기존 사이드 패널 정보 비우기
         resetQuote();
-
+    
         fetch(`/quote?quote_no=${quote_no}`)
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-
+    
                 updateComponents(data);
-
+    
                 // 기존에 활성화된 컴포넌트를 비활성화
                 const deactivateActiveComponent = () => {
                     const activeComponent = document.querySelector('.component.active');
@@ -729,28 +733,35 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 };
 
+                toggleButton.click('active');
+    
                 // 각 category에 대해 처리
                 for (const category in data) {
                     const categoryData = data[category];
                     const component = document.querySelector(`.component[data-component='${category}']`);
-
+    
                     if (component) {
                         // 이전 활성화 상태 제거
                         deactivateActiveComponent();
-
+    
                         // 현재 카테고리 활성화
                         component.classList.add('active');
-
+    
                         // 장바구니에 추가
                         addToCart(categoryData.product_name, categoryData.price, categoryData.product_code, categoryData.seller_no);
                     }
                 }
-
+    
                 // CPU 컴포넌트를 기본 활성화
                 const cpuComponent = document.querySelector('.component[data-component="CPU"]');
                 if (cpuComponent) {
                     deactivateActiveComponent(); // 마지막으로 기존 활성화 제거
                     cpuComponent.classList.add('active'); // CPU 활성화
+                }
+    
+                // 사이드 패널 상태 복원
+                if (sidePanel && wasSidePanelActive) {
+                    sidePanel.classList.add('active');
                 }
             })
             .catch(error => console.error('Error fetching quote details:', error));
@@ -1028,6 +1039,7 @@ function deleteCompo(event) {
 
     // 'active' 클래스 제거
     component.classList.remove('active');
+    
 
     // currentCart에서 해당 컴포넌트 제거
     const componentName = component.dataset.component;
