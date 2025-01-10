@@ -111,7 +111,7 @@
 				        <button class="confirm_button" th:if="${dto.order_status == '배송중'}" th:data-order-num="${dto.order_num}">구매확정</button>
 				    </div>
 					<div>
-						<p><span style="margin: 0;" th:text="${dto.price}"></span><span style="margin: 0; font-weight: bold;"> 원</span></p>
+						<p><span style="margin: 0;" th:data-price="${dto.price}" class = "pricedata" ></span><span style="margin: 0; font-weight: bold;"> 원</span></p>
 					</div>
 				</div>
 			</div>

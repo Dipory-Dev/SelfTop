@@ -55,5 +55,7 @@ public interface QuoteBiz {
 // 선택한 power watt 불러오기
 	int powerwatt(int productcode);
 	
+	char assemblecheck(int quoteno);
+	
 
 }
