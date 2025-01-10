@@ -5,17 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Customer_PaySuccess</title>
 <link rel="stylesheet" href="/css/paySuccess.css">
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		//로고 누르면 메인페이지
+		document.getElementById('logo').addEventListener('click', function() {
+		    window.location.href = '/main';
+		});
+	});
+	</script>
 </head>
 <body>
     <header>
         <div class="header-content">
-            <img src="/img/logo.png">
+            <img src="/img/logo.png" id="logo" style="cursor: pointer;">
            	<p>
            		<span th:text="${customer.name} + 님"></span>&nbsp|
            		<a href="mypage">
            			<img src="/img/human-icon.png" class="human-icon">
            		</a>
-           		<a href="cart">
+           		<a href="cartpage">
            			<img src="/img/cart-icon.png" class="cart-icon">
            		</a>
            		<a href="logout">

@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const radioButtons = document.querySelectorAll('input[name="assembly"]');
     const assemblyPrice = 20000; // 조립 신청 시 추가금액
     let isAssemblyRequested = false; // 현재 조립 신청 상태
-
+	
 	// mainPage처음 들어왔을때 CPU가 자동으로 선택되도록 설정
     const cpuComponent = document.querySelector('.component[data-component="CPU"]');
     if (cpuComponent) {
@@ -418,13 +418,7 @@ document.addEventListener("DOMContentLoaded", () => {
         topBoxLarge.innerHTML = attributesHtml;
     }
 
-    // 제품 정보를 콘텐츠 박스에 동적으로 표시하는 함수
-    function displayProducts(products, component) {
-        if (!products || products.length === 0) {
-            contentBox.innerHTML = `<p>No products found for ${component.toUpperCase()}.</p>`;
-            return;
-        }
-    }
+    
     //HDD의 필터를 html에 보여주는 기능
     function displayHddDetails() {
         let detailsHtml = `
@@ -596,6 +590,14 @@ document.addEventListener("DOMContentLoaded", () => {
 	            contentBox.innerHTML = `<p>Error loading products: ${error.message}</p>`;
 	        });
 	}
+	
+	// 제품 정보를 콘텐츠 박스에 동적으로 표시하는 함수
+	    function displayProducts(products, component) {
+	        if (!products || products.length === 0) {
+	            contentBox.innerHTML = `<p>No products found for ${component.toUpperCase()}.</p>`;
+	            return;
+	        }
+	    }
 
 	// 제품 정보를 콘텐츠 박스에 동적으로 표시하는 함수
 	function displayProducts(products, component) {

@@ -12,7 +12,7 @@
 <body>
 <header>
     <div class="header-content">
-        <img src="/img/logo.png">
+        <img src="/img/logo.png" id="logo" style="cursor: pointer;">
     </div>
 	<script type="text/javascript">
 		document.addEventListener("DOMContentLoaded", function () {
@@ -21,6 +21,11 @@
 			if (message && message.trim().length > 0) {
 				alert(message);
 			}
+			
+			//로고 누르면 메인페이지
+			document.getElementById('logo').addEventListener('click', function() {
+			    window.location.href = '/main';
+			});
 		});
 	</script>
 	<script th:inline="javascript">
@@ -51,8 +56,6 @@
             	</div>  
             	<input class="login_btn" type="submit" value="로그인"> 
             	<div class="regist">
-            		<h3>ID찾기 </h3>
-            		<h3>PW찾기 </h3>
             		<a href="/signup"><h3>회원가입</h3></a>
             		<a href="seller/signUp"><h3 class="sellerh3">판매자 회원가입</h3></a>
 					<img onclick="kakaoLogin()" class="SNS_btn" src="/img/kakao_login.png">

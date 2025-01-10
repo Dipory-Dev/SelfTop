@@ -1,3 +1,4 @@
+@charset "UTF-8";
 * {
 	margin: 0;
     padding: 0;
@@ -7,58 +8,57 @@
 
 header {
 	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1000;
     padding: 10px 20px;
     border-bottom: 1px solid #ccc;
-    z-index: 1000;
-    width: 100%;
-    top: 0;
-    left: 0;
-    background-color: white;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-.logo{
-    margin-left: 10%;
-    height: 70px;
-    cursor: pointer;
-}
-
-
 .header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-/*.header-content img {*/
-/*    width: 150px;*/
-/*    margin-left: 10%;*/
-/*    height: 70px;*/
-/*}*/
+.header-content img {
+    width: 150px;
+    margin-left: 10%;
+}
 
 .header-content p {
     margin-right: 12%;
+    font-size: 20px;
     display: flex;
     align-items: center;
 }
 
 .header-content p span {
 	font-size: 20px;
+    cursor: default;
+    color:black;
 }
 
-
-.lock-icon{
-    width: 22px;
-    height: 22px;
-    margin-left: 5px;
-    margin-top:5px;
-    transition: transform 0.3s ease;
-}
-
-.human-icon{
+.header-content p img {
     width: 30px;
     height: 30px;
-    margin-left: 5px;
-    margin-top:5px;
     transition: transform 0.3s ease;
+}
+
+.header-content p .human-icon {
+	width: 40px;
+	height: 40px;
+    margin-left: 10px;
+}
+
+.header-content p .cart-icon {
+    margin-left: 10px;
+}
+
+.header-content p .lock-icon {
+    margin-left: 20px;
 }
 
 .header-content p img:hover {
@@ -172,7 +172,7 @@ tr:hover{
 /*footer*/
 footer {
     background-color: #E8E8E8;
-    font-size: 12px;
+    font-size: 14px;
     height: 120px;
     width: 100%;
 }
@@ -185,10 +185,8 @@ footer {
 }
 
 .footer-content img {
-  width: 150px;
-  margin-left: 10%;
-  height: 70px;
-
+    max-height: 50px;
+    margin-left: 10%;
 }
 
 .footer-text {
@@ -198,4 +196,14 @@ footer {
 
 .footer-text p, .footer-text span {
     margin: 5px 0;
+}
+
+.footer-message{
+    font-size:16px;
+    text-align: center;
+}
+
+.footer-message> p{
+    font-size:18px;
+    font-weight:500;
 }

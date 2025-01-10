@@ -7,12 +7,19 @@
     <link rel="stylesheet" href="/css/customerSignUp.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="/js/customerSignUp.js"></script>
+	<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		//로고 누르면 메인페이지
+		document.getElementById('logo').addEventListener('click', function() {
+		    window.location.href = '/main';
+		});
+	});
+	</script>
 </head>
 <body>
     <header>
         <div class="header-content">
-            <img src="/img/logo.png">
-           	<p>로그인</p>
+            <img src="/img/logo.png" id="logo" style="cursor: pointer;">
         </div>
     </header>
 
