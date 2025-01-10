@@ -5,157 +5,58 @@ let currentFilters = {};
 // 검색어를 저장할 변수
 let currentSearchTerm = '';
 
-let cartInfo = [];
-let cartDetails = [];
-
 document.addEventListener("DOMContentLoaded", () => {
-    const searchInput = document.getElementById('search-input');
-    const searchButton = document.querySelector('.search-button');
+	const searchInput = document.getElementById('search-input');
+	const searchButton = document.querySelector('.search-button');
     const toggleButton = document.getElementById("toggle-button");
     const sidePanel = document.querySelector(".side-panel");
     const components = document.querySelectorAll('.component');
     const selectedPartDiv = document.querySelector('.selected-part');
     const currentCartButton = document.getElementById("current-cart");
-    const savedQuoteSelect = document.querySelector('.saved-quote');
+   //const savedQuoteSelect = document.querySelector('.saved-quote');
     const saveQuoteButton = document.getElementById("save-quote");
     const quoteNameInput = document.getElementById("quote-name");
     const contentBox = document.querySelector('.content-box');
     const sortButtons = document.querySelectorAll('.sortBtn');
     let selectedSort = 'bypopular';
 
-    const categoryCountElement = document.getElementById('category-count');
-    const topBoxSmall = document.querySelector('.top-box.small');
-    const topBoxLarge = document.querySelector('.top-box.large');
+	const categoryCountElement = document.getElementById('category-count');
+	const topBoxSmall = document.querySelector('.top-box.small');
+	const topBoxLarge = document.querySelector('.top-box.large');
     const radioButtons = document.querySelectorAll('input[name="assembly"]');
     const assemblyPrice = 20000; // 조립 신청 시 추가금액
     let isAssemblyRequested = false; // 현재 조립 신청 상태
-
+	
 	// mainPage처음 들어왔을때 CPU가 자동으로 선택되도록 설정
-    /*const cpuComponent = document.querySelector('.component[data-component="CPU"]');
+    const cpuComponent = document.querySelector('.component[data-component="CPU"]');
     if (cpuComponent) {
         cpuComponent.classList.add('active'); // 'active' 클래스를 추가하여 선택 표시
         fetchProducts('CPU'); // CPU 제품 목록을 가져오는 함수 호출
         displayCpuDetails(); // CPU 세부 정보 표시
         fetchCpuAttributes(); // CPU 속성 정보를 가져오는 함수 호출
-    }*/
-
-	//intro에서 검색한 데이터를 처리하고 보여주는 함수
-	const urlParams = new URLSearchParams(window.location.search);
-    const category = urlParams.get('category');
-    const search = urlParams.get('search');
-
-	// 검색어와 카테고리가 URL에 존재하는 경우
-	if (category && search) {
-        searchInput.value = search; // 검색어 표시
-        const activeComponent = document.querySelector(`.component[data-component="${category}"]`);
-
-        // 해당 카테고리를 활성화하고 제품 목록을 불러옴
-        if (activeComponent) {
-            activateComponent(activeComponent);
-            fetchProducts(category, "bypopular", search);
-        }
-
-    } else {
-        // 기본적으로 CPU 컴포넌트 활성화
-        activateDefaultComponent();
     }
 
-	document.body.addEventListener('click', function(event) {
-	    const target = event.target;
-	    if (target.matches('button, a, input[type="submit"], input[type="button"], input[type="checkbox"], input[type="radio"]')) {
-	        // 페이지 상태 초기화 함수
-	        window.history.replaceState(null, null, '/main'); // URL 리셋
-	        const searchInput = document.getElementById('search-input');
-	        if (searchInput) {
-	            searchInput.value = ''; // 검색 입력 상자 초기화
+	/* 검색 기능 */
+	searchButton.addEventListener('click', () => {
+	    const searchTerm = searchInput.value.trim().toLowerCase();
+	    currentSearchTerm = searchTerm;  // 검색어 저장
+	    const activeComponent = document.querySelector('.component.active');
+	    if (activeComponent) {
+	        const componentCategory = activeComponent.dataset.component;
+	        if (Object.keys(currentFilters).length > 0 || searchTerm) {
+	            fetchFilteredProducts(componentCategory, currentFilters, selectedSort, searchTerm);
+	        } else {
+	            fetchProducts(componentCategory, selectedSort, searchTerm);
 	        }
 	    }
 	});
 
-    // 기본 컴포넌트 활성화 함수
-	function activateDefaultComponent() {
-        const cpuComponent = document.querySelector('.component[data-component="CPU"]');
-        if (cpuComponent) {
-            activateComponent(cpuComponent);
-            fetchProducts('CPU', 'bypopular', '');
-            displayCpuDetails();
-            fetchCpuAttributes();
-        }
-    }
-
-   // 컴포넌트 활성화 함수
-   function activateComponent(component) {
-     components.forEach(comp => comp.classList.remove('active'));
-     component.classList.add('active');
-     displayComponentDetails(component.dataset.component);
- }
-
-   // 컴포넌트에 따른 상세 정보 표시 함수
-   function displayComponentDetails(componentName) {
-       switch (componentName) {
-           case 'CPU':
-               displayCpuDetails();
-               fetchCpuAttributes();
-               break;
-           case 'RAM':
-               displayRamDetails();
-               fetchRamAttributes();
-               break;
-           case '그래픽카드':
-               displayGpuDetails();
-               fetchGpuAttributes();
-               break;
-           case 'SSD':
-               displaySsdDetails();
-               fetchSsdAttributes();
-               break;
-           case '메인보드':
-               displayMainBoardDetails();
-               fetchMainBoardAttributes();
-               break;
-           case '쿨러':
-               displayCoolerDetails();
-               fetchCoolerAttributes();
-               break;
-           case '파워':
-               displayPowerDetails();
-               fetchPowerAttributes();
-               break;
-           case 'HDD':
-               displayHddDetails();
-               fetchHddAttributes();
-               break;
-           case '케이스':
-               displayCaseDetails();
-               fetchCaseAttributes();
-               break;
-           default:
-               console.log('No details available for this component');
-               break;
-       }
-   }
-
-    /* 검색 기능 */
-    searchButton.addEventListener('click', () => {
-        const searchTerm = searchInput.value.trim().toLowerCase();
-        currentSearchTerm = searchTerm;  // 검색어 저장
-        const activeComponent = document.querySelector('.component.active');
-        if (activeComponent) {
-            const componentCategory = activeComponent.dataset.component;
-            if (Object.keys(currentFilters).length > 0 || searchTerm) {
-                fetchFilteredProducts(componentCategory, currentFilters, selectedSort, searchTerm);
-            } else {
-                fetchProducts(componentCategory, selectedSort, searchTerm);
-            }
-        }
-    });
-
-    // placeholder 업데이트 함수
+	// placeholder 업데이트 함수
     function updatePlaceholder(componentName) {
         searchInput.placeholder = `현재 카테고리: ${componentName}   카테고리를 선택 후 검색해주세요! `;
     }
 
-    searchInput.addEventListener('keydown', (event) => {
+	searchInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
             searchProducts();
             event.preventDefault();
@@ -170,22 +71,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (!isAssemblyRequested) {
                     isAssemblyRequested = true;
                     currentCart['assembly_price'] = assemblyPrice;
-
-                    // cartInfo의 assembly를 '조립신청'으로 업데이트
-                    cartDetails.forEach(cartItem => {
-                        cartItem.assembly = '조립 신청';
-                    });
                 }
             } else if (radio.value === 'not_requested' && radio.checked) {
                 // 조립 미신청이 선택되었을 때
                 if (isAssemblyRequested) {
                     isAssemblyRequested = false;
                     delete currentCart['assembly_price'];
-
-                    // cartInfo의 assembly를 '조립신청'으로 업데이트
-                    cartDetails.forEach(cartItem => {
-                        cartItem.assembly = '조립 미신청';
-                    });
                 }
             }
             updateTotalPrice(); // 총 가격 즉시 업데이트
@@ -253,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 components.forEach(comp => comp.classList.remove('active'));
                 this.classList.add('active');
                 fetchProducts(this.dataset.component);
-                updatePlaceholder(this.dataset.component);
+				updatePlaceholder(this.dataset.component);
 
                 //사이드 패널 닫기
                 if(toggleButton){
@@ -527,7 +418,7 @@ document.addEventListener("DOMContentLoaded", () => {
         topBoxLarge.innerHTML = attributesHtml;
     }
 
-
+    
     //HDD의 필터를 html에 보여주는 기능
     function displayHddDetails() {
         let detailsHtml = `
@@ -594,8 +485,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* filter에 따라 content-box에 보여주는 아이템을 변화하는 기능 */
-    // 기존 코드에서 체크박스에 대한 이벤트 리스너 등록
-    topBoxLarge.addEventListener('change', function(event) {
+	// 기존 코드에서 체크박스에 대한 이벤트 리스너 등록
+	topBoxLarge.addEventListener('change', function(event) {
         if (event.target.type === 'checkbox') {
             const activeComponent = document.querySelector('.component.active');
             if (activeComponent) {
@@ -604,27 +495,27 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 필터링된 제품을 불러오는 함수
-    function filterProducts(component) {
-        const filters = {};
-        document.querySelectorAll('.top-box.large input[type="checkbox"]:checked').forEach(checkbox => {
-            const key = checkbox.name;
-            const value = checkbox.value;
-            if (!filters[key]) {
-                filters[key] = [];
-            }
-            filters[key].push(value);
-        });
+	// 필터링된 제품을 불러오는 함수
+	function filterProducts(component) {
+	    const filters = {};
+	    document.querySelectorAll('.top-box.large input[type="checkbox"]:checked').forEach(checkbox => {
+	        const key = checkbox.name;
+	        const value = checkbox.value;
+	        if (!filters[key]) {
+	            filters[key] = [];
+	        }
+	        filters[key].push(value);
+	    });
 
-        currentFilters = filters;
-        fetchFilteredProducts(component, filters, selectedSort, currentSearchTerm);
-    }
+	    currentFilters = filters;
+	    fetchFilteredProducts(component, filters, selectedSort, currentSearchTerm);
+	}
 
 	// 서버에 필터링 요청을 보내는 함수
 	function fetchFilteredProducts(component, filters, sort, search) {
 		const query = new URLSearchParams({ sort, search }).toString();
 		const url = `/api/products/filter/${component}?${query}`;
-
+		
 	    console.log('Sending filters to server:', JSON.stringify(filters), 'with sort:', sort, 'and search:', search); // 필터 및 정렬 데이터 로깅
 		fetch(url, {
 		        method: 'POST',
@@ -657,39 +548,56 @@ document.addEventListener("DOMContentLoaded", () => {
 	    });
 	}
 
-    /* 제품 정렬 기능 */
+	/* 제품 정렬 기능 */
     // 정렬 목록 클릭 이벤트
-    sortButtons.forEach(button => {
-        button.addEventListener('click', (event) => {
-            event.preventDefault();
-            sortButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            selectedSort = button.dataset.sort;
-            const activeComponent = document.querySelector('.component.active');
-            if (activeComponent) {
-                if (Object.keys(currentFilters).length > 0 || currentSearchTerm) {
-                    fetchFilteredProducts(activeComponent.dataset.component, currentFilters, selectedSort, currentSearchTerm);
-                } else {
-                    fetchProducts(activeComponent.dataset.component, selectedSort, currentSearchTerm);
-                }
-            }
-        });
-    });
+	sortButtons.forEach(button => {
+	    button.addEventListener('click', (event) => {
+	        event.preventDefault();
+	        sortButtons.forEach(btn => btn.classList.remove('active'));
+	        button.classList.add('active');
+	        selectedSort = button.dataset.sort;
+	        const activeComponent = document.querySelector('.component.active');
+	        if (activeComponent) {
+	            if (Object.keys(currentFilters).length > 0 || currentSearchTerm) {
+	                fetchFilteredProducts(activeComponent.dataset.component, currentFilters, selectedSort, currentSearchTerm);
+	            } else {
+	                fetchProducts(activeComponent.dataset.component, selectedSort, currentSearchTerm);
+	            }
+	        }
+	    });
+	});
 
 
 	// 제품 목록 출력
-	function fetchProducts(category, sort, search = '') {
-	    let url = `/products/${category}?sort=${sort}&search=${encodeURIComponent(search)}`;
+	function fetchProducts(component, sort, search = '') {
+	    let url = `/products/${component}?sort=${sort}`;
+	    if (search) {
+	        url += `&search=${encodeURIComponent(search)}`; // 검색어를 URL에 추가
+	    }
+
 	    fetch(url)
-	        .then(response => response.json())
+	        .then(response => {
+	            if (!response.ok) {
+	                throw new Error(`Failed to load ${component} products: ${response.statusText}`);
+	            }
+	            return response.json();
+	        })
 	        .then(products => {
-	            displayProducts(products, category);
+	            displayProducts(products, component);
 	        })
 	        .catch(error => {
 	            console.error('Error loading products:', error);
 	            contentBox.innerHTML = `<p>Error loading products: ${error.message}</p>`;
 	        });
 	}
+	
+	// 제품 정보를 콘텐츠 박스에 동적으로 표시하는 함수
+	    function displayProducts(products, component) {
+	        if (!products || products.length === 0) {
+	            contentBox.innerHTML = `<p>No products found for ${component.toUpperCase()}.</p>`;
+	            return;
+	        }
+	    }
 
 	// 제품 정보를 콘텐츠 박스에 동적으로 표시하는 함수
 	function displayProducts(products, component) {
@@ -712,19 +620,15 @@ document.addEventListener("DOMContentLoaded", () => {
                                     ${product.product_name}
                                 </a>
                             </div>
-							<input type="hidden" class="product-stock" value="${product.stock}">
+							<div class="product-stock">${product.stock}</div>
                             <div style="color: #666; font-size: 0.9em; width: 1000px;">${product.etc}</div>
                         </div>
                     </div>
                     <div class="product-price" style="text-align: right; margin-left: 10px; font-weight: bold; color: #333;">
-                        ${product.price ? `${product.price.toLocaleString()}원` : '품절'}
-                        <div>
-                            <span style="color:rgb(245, 166, 35);" class="stars">★</span>
-                            <span class="stars">${(product.avg_rating).toFixed(1)}</span>
-                        </div>
+                        ${product.price ? `${product.price}원` : '품절'}
+                        <div><span class="stars">★★★★★</span></div>
                         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px;">
-                            <button class="btn add-to-cart" data-seller-no="${product.seller_no}" data-product-code="${product.product_code}" data-product-name="${product.product_name}" data-product-price="${product.price}" 
-							 data-product-thumbnail="${product.thumbnail}" data-product-stock="${product.stock}">담기</button>
+                            <button class="btn add-to-cart" data-seller-no="${product.seller_no}" data-product-code="${product.product_code}" data-product-name="${product.product_name}" data-product-price="${product.price}">담기</button>
                             <button class="btn buy-now">바로구매</button>
                         </div>
                     </div>
@@ -732,18 +636,18 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
         });
 
-        htmlContent += `</div>`;
-        contentBox.innerHTML = htmlContent;
-        categoryCountElement.textContent = `${component.toUpperCase()}: ${products.length}개`; // 제품 개수 업데이트
+	    htmlContent += `</div>`;
+	    contentBox.innerHTML = htmlContent;
+		categoryCountElement.textContent = `${component.toUpperCase()}: ${products.length}개`; // 제품 개수 업데이트
 
         // 바로구매 버튼 클릭 이벤트
         contentBox.querySelectorAll('.buy-now').forEach(button => {
             button.addEventListener('click', (event) => {
                 const productDiv = event.target.closest('.product-box');
                 const productName = productDiv.querySelector('.product-info a').textContent.trim();
-                const productPrice = productDiv.querySelector('.product-price').childNodes[0].textContent.trim().replace('원','').replace(',','');
+                const productPrice = productDiv.querySelector('.product-price').childNodes[0].textContent.trim().replace('원', '');
                 const productThumbnail = productDiv.querySelector('img').src;
-				const productStock = productDiv.querySelector('.product-stock').value.trim();
+				const productStock = productDiv.querySelector('.product-stock').textContent.trim();
 				const productCode = button.closest('.product-box').querySelector('.add-to-cart').getAttribute('data-product-code');
 				const sellerNo = button.closest('.product-box').querySelector('.add-to-cart').getAttribute('data-seller-no');
 				
@@ -753,18 +657,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     name: productName,
                     price: productPrice,
                     quantity: 1,
-                    stock: productStock,
-                    product_code: productCode,
-                    seller_no: sellerNo,
-                    assembly: '조립 미신청',
+					stock: productStock,
+					product_code: productCode,
+					seller_no: sellerNo
                 };
                 localStorage.setItem('selectedProduct', JSON.stringify(productInfo));
 
-                if(productPrice=="품절") {
-                    alert("재고가 없어 결제할 수 없습니다!");
-                }else{
-                    location.href = '/pay';
-                }
+				if(productPrice=="품절") {
+					alert("재고가 없어 결제할 수 없습니다!");
+				}else{
+                	location.href = '/pay';
+				}
             });
         });
 
@@ -775,15 +678,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 const productPrice = button.getAttribute('data-product-price'); // 가격 가져오기
                 const productCode = button.getAttribute('data-product-code');
                 const sellerNo = button.getAttribute('data-seller-no');
-                const productThumbnail = button.getAttribute('data-product-thumbnail');
-                const productStock = button.getAttribute('data-product-stock');
 
                 if(productPrice==0){
                     alert("품절된 상품은 담을 수 없습니다.");
                     return;
                 }
 
-                addToCart(productName, productPrice, productCode, sellerNo, productThumbnail, productStock);
+                addToCart(productName, productPrice, productCode, sellerNo);
             });
         });
     }
@@ -800,10 +701,6 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("견적을 선택해주세요.");
             return;
         }
-
-        // 사이드 패널 상태 확인
-        const sidePanel = document.querySelector('.side-panel');
-        const wasSidePanelActive = sidePanel?.classList.contains('active'); // 기존 활성화 상태 저장
 
         // 기존 사이드 패널 정보 비우기
         resetQuote();
@@ -823,8 +720,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 };
 
-                toggleButton.click('active');
-
                 // 각 category에 대해 처리
                 for (const category in data) {
                     const categoryData = data[category];
@@ -838,7 +733,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         component.classList.add('active');
 
                         // 장바구니에 추가
-                        addToCart(categoryData.product_name, categoryData.price, categoryData.product_code, categoryData.seller_no, categoryData.thumbnail, categoryData.amount);
+                        addToCart(categoryData.product_name, categoryData.price, categoryData.product_code, categoryData.seller_no);
                     }
                 }
 
@@ -847,11 +742,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (cpuComponent) {
                     deactivateActiveComponent(); // 마지막으로 기존 활성화 제거
                     cpuComponent.classList.add('active'); // CPU 활성화
-                }
-
-                // 사이드 패널 상태 복원
-                if (sidePanel && wasSidePanelActive) {
-                    sidePanel.classList.add('active');
                 }
             })
             .catch(error => console.error('Error fetching quote details:', error));
@@ -906,7 +796,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 넣는 함수
-    function addToCart(productName, productPrice, productCode, sellerNo, productThumbnail, productStock) {
+    function addToCart(productName, productPrice, productCode, sellerNo) {
         const activeComponent = document.querySelector('.component.active');
 
         if (activeComponent) {
@@ -931,21 +821,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 seller_no: sellerNo,
                 quantity: 1, // 기본 수량 :1
             };
-
-            cartInfo = {
-                thumbnail: productThumbnail,
-                category: componentName,
-                name: productName,
-                price: parseInt(productPrice),
-                stock: productStock,
-                quantity: 1,
-                product_code: productCode,
-                seller_no: sellerNo,
-                assembly: isAssemblyRequested ? '조립 신청' : '조립 미신청',
-            };
-
-			// 배열에 추가
-			cartDetails.push(cartInfo);
 
             updateTotalPrice(); // 총합 업데이트
 
@@ -995,7 +870,7 @@ document.addEventListener("DOMContentLoaded", () => {
         increaseButton.classList.add('quantity-increase');
 
         const priceDisplay = document.createElement('div');
-        priceDisplay.textContent = `${productPrice.toLocaleString()}원`;
+        priceDisplay.textContent = `${productPrice}원`;
         priceDisplay.classList.add('price-display');
 
         container.appendChild(decreaseButton);
@@ -1072,16 +947,15 @@ document.addEventListener("DOMContentLoaded", () => {
         delete currentCart[component]; // 컴포넌트 제거
     };
 
-
+    /*
     savedQuoteSelect.addEventListener('change', () => {
-        const selectedOption = savedQuoteSelect.options[savedQuoteSelect.selectedIndex];
-        if (selectedOption.value === "none") {
-            quoteNameInput.value = "";
-        } else {
-            quoteNameInput.value = selectedOption.text;
+        const selectedOption = savedQuoteSelect.value;
+        // 선택된 견적 로드
+        if (selectedOption) {
+            loadQuote(savedQuotes[selectedOption]); // 예제에서 savedQuotes를 정의하고 사용해야 함
         }
     });
-
+    */
 
     currentCartButton.addEventListener('click', () => {
         console.log(currentCart);
@@ -1105,7 +979,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 조립 신청 금액 추가 함수
+     // 조립 신청 금액 추가 함수
     function addAssemblyPrice() {
         const totalPriceElement = document.querySelector('.total-price');
         let currentTotal = parseInt(totalPriceElement.textContent.replace(/[^0-9]/g, '')) || 0;
@@ -1117,7 +991,7 @@ document.addEventListener("DOMContentLoaded", () => {
     openModal.addEventListener('click', () => {
         //modal.style.display = 'block';
 
-        // 모달 열리면 사이드 패널 닫히는 동작
+       // 모달 열리면 사이드 패널 닫히는 동작
         if (toggleButton) {
             toggleButton.click();
         }
@@ -1145,8 +1019,6 @@ function deleteCompo(event) {
 
     // 'active' 클래스 제거
     component.classList.remove('active');
-
-
 
     // currentCart에서 해당 컴포넌트 제거
     const componentName = component.dataset.component;
@@ -1207,12 +1079,47 @@ function resetCart(){
         selectedPartDiv.innerHTML = '현재 견적 카트:<br>';
     }*/
 
-    //모두 초기화 시킨 후 CPU가 선택되있는 상태로 만듬
-    window.location.reload();
+	//모두 초기화 시킨 후 CPU가 선택되있는 상태로 만듬
+	 window.location.reload();
 }
 
 // 구매하기 버튼 클릭 이벤트
 function goPayPage() {
+    const components = document.querySelectorAll('.component'); // 모든 컴포넌트 선택
+    const cartDetails = []; // 장바구니에 담을 데이터 배열
+
+    components.forEach(component => {
+        const category = component.getAttribute('data-component'); // 카테고리 추출
+        const nameElement = component.querySelector('.component-body .cpu-name, .ram-name, .ssd-name, .power-name, .cooler-name, .mainboard-name, .graphicCard-name, .hdd-name, .case-name');
+        const name = nameElement ? nameElement.innerText.trim() : 'N/A'; // 이름 추출
+
+        const priceElement = component.querySelector('#product-price');
+        const price = priceElement ? parseInt(priceElement.innerText.replace(/[^0-9]/g, '')) : 0; // 가격 추출
+
+        const quantityElement = component.querySelector('.quantity-controls-wrapper input[type="number"]');
+        const quantity = quantityElement ? parseInt(quantityElement.value) : 1; // 수량 추출 (기본값: 1)
+
+        const imageElement = component.querySelector('.component-body img');
+        const image = imageElement ? imageElement.src : ''; // 이미지 경로 추출
+
+        const stockElement = component.getAttribute('data-stock'); // 재고 정보 (예시)
+        const productCodeElement = component.getAttribute('data-product-code'); // 제품 코드 (예시)
+        const sellerNoElement = component.getAttribute('data-seller-no'); // 판매자 번호 (예시)
+
+        // 각 제품의 정보를 객체로 저장
+        const productInfo = {
+            category,
+            name,
+            price,
+            quantity,
+            image,
+            stock: stockElement || '정보 없음', // 재고 정보
+            product_code: productCodeElement || '정보 없음', // 제품 코드
+            seller_no: sellerNoElement || '정보 없음', // 판매자 번호
+        };
+
+        cartDetails.push(productInfo); // 배열에 추가
+    });
 
     // 선택된 제품이 없을 경우 경고 메시지 표시
     if (cartDetails.length === 0) {
@@ -1240,80 +1147,80 @@ function toggleSidePanel() {
 /*-----호환성체크 모달----- */
 // 모달 제어 스크립트
 //호환성체크 모달 선언부
-const compatibilitymodal = document.getElementById('modal');
-const openModal = document.getElementById('openModalBtn');
-const closeModalBtn = document.getElementById('closeModalBtn');
-const firstmodalpage = compatibilitymodal.innerHTML;
+	const compatibilitymodal = document.getElementById('modal');
+	const openModal = document.getElementById('openModalBtn');
+	const closeModalBtn = document.getElementById('closeModalBtn');
+	const firstmodalpage = compatibilitymodal.innerHTML;
 
-function resetModal() {
-    compatibilitymodal.innerHTML = firstmodalpage;
+	function resetModal() {
+		compatibilitymodal.innerHTML = firstmodalpage;
 
-    // 모달 초기화 후 필요한 리스너 재등록
-    const closeModalBtn = document.getElementById('closeModalBtn'); // 새롭게 생성된 닫기 버튼 재참조
-    closeModalBtn.addEventListener('click', () => {
-        compatibilitymodal.style.display = 'none';
-        resetModal();
-    });
-}
-
-
-
-//호환성 체크
+		// 모달 초기화 후 필요한 리스너 재등록
+		const closeModalBtn = document.getElementById('closeModalBtn'); // 새롭게 생성된 닫기 버튼 재참조
+		closeModalBtn.addEventListener('click', () => {
+			compatibilitymodal.style.display = 'none';
+			resetModal();
+		});
+	}
+	
+	
+	
+	//호환성 체크
 openModal.addEventListener('click', () => {
-    const compatibilityitem = document.querySelectorAll('.component');
-    const data = Array.from(compatibilityitem).map((item) => {
-        const category = item.querySelector('.component-header p').textContent.trim();
-        if (!["테스트"].includes(category)) {
-            const productElement = item.querySelector('.cartproductcode');
-            if (productElement) {
-                const productcode = productElement.dataset.productcode;
-                if(category === "메모리"){
-                    return {category : "RAM",productcode :productcode};
-                }else{
-                    return { category: category, productcode: productcode };
-                }
+	const compatibilityitem = document.querySelectorAll('.component');
+	const data = Array.from(compatibilityitem).map((item) => {
+		const category = item.querySelector('.component-header p').textContent.trim();
+		if (!["테스트"].includes(category)) {
+			const productElement = item.querySelector('.cartproductcode');
+			if (productElement) {
+				const productcode = productElement.dataset.productcode;
+				if(category === "메모리"){
+					return {category : "RAM",productcode :productcode};
+				}else{
+					return { category: category, productcode: productcode };
+				}
+				
+			} else {
+				return ' ';
+			}
 
-            } else {
-                return ' ';
-            }
+		}
+		return ' ';
+	}).filter((item) => item !== ' ');;
+	if (data.length === 0) {
+		alert("부품을 담아주세요.");
+		return;
+	}
 
-        }
-        return ' ';
-    }).filter((item) => item !== ' ');;
-    if (data.length === 0) {
-        alert("부품을 담아주세요.");
-        return;
-    }
-
-    fetch('/compatibility', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-        .then((response) => response.json())
-        .then((result) => {
-            compatibilityviewchange(result);
-        })
-        .catch((error) => {
-            console.error('Error during submission:', error);
-        });
-    compatibilitymodal.style.display = 'block';
+	fetch('/compatibility', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(data)
+	})
+		.then((response) => response.json())
+		.then((result) => {
+			compatibilityviewchange(result);
+		})
+		.catch((error) => {
+			console.error('Error during submission:', error);
+		});
+	compatibilitymodal.style.display = 'block';
 });
+	
 
-
-closeModalBtn.addEventListener('click', () => {
-    compatibilitymodal.style.display = 'none';
-    resetModal();
-
-});
+	closeModalBtn.addEventListener('click', () => {
+	    compatibilitymodal.style.display = 'none';
+		resetModal();
+		
+	});
 
 // 모달 외부 클릭 시 닫기
 window.addEventListener('click', (event) => {
     if (event.target === modal) {
         modal.style.display = 'none';
-        resetModal();
+		resetModal();
     }
 });
 
@@ -1332,98 +1239,98 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function compatibilityviewchange(data){
-    const cpuram = document.querySelector('.CPUtoRAM');
-    const cpuboard = document.querySelector('.CPUtoMainboard');
-    const ramboard = document.querySelector('.MemorytoMainboard');
-    const caseboard = document.querySelector('.CasetoMainboard');
-    const casegpu = document.querySelector('.CasetoGPU');
-    const casepower = document.querySelector('.CasetoPower');
-    const powerconsumption = document.querySelector('.power-consumption');
-    const powercurrent = document.querySelector('.power-current');
-    const powerrecommended = document.querySelector('.power-recommended');
-    const wattvalue=data.wattvalue;
-    const powersize = data.powersize;
-    //호환성  O X 구분
-    const cpuramcircle = document.querySelector('#cpu-ram-compatibility');
-    const cpuboardcircle = document.querySelector('#cpu-mainboard-compatibility');
-    const ramboardcircle = document.querySelector('#ram-mainboard-compatibility');
-    const caseboardcircle = document.querySelector('#mainboard-case-compatibility');
-    const casegpucircle = document.querySelector('#graphicCard-case-compatibility');
-    const casepowercircle = document.querySelector('#power-case-compatibility');
+	const cpuram = document.querySelector('.CPUtoRAM');
+	const cpuboard = document.querySelector('.CPUtoMainboard');
+	const ramboard = document.querySelector('.MemorytoMainboard');
+	const caseboard = document.querySelector('.CasetoMainboard');
+	const casegpu = document.querySelector('.CasetoGPU');
+	const casepower = document.querySelector('.CasetoPower');
+	const powerconsumption = document.querySelector('.power-consumption');
+	const powercurrent = document.querySelector('.power-current');
+	const powerrecommended = document.querySelector('.power-recommended');
+	const wattvalue=data.wattvalue;
+	const powersize = data.powersize;
+	//호환성  O X 구분
+	const cpuramcircle = document.querySelector('#cpu-ram-compatibility');
+	const cpuboardcircle = document.querySelector('#cpu-mainboard-compatibility');
+	const ramboardcircle = document.querySelector('#ram-mainboard-compatibility');
+	const caseboardcircle = document.querySelector('#mainboard-case-compatibility');
+	const casegpucircle = document.querySelector('#graphicCard-case-compatibility');
+	const casepowercircle = document.querySelector('#power-case-compatibility');
 
+	
+	if (data.cpuramcompatibility) {
+		cpuram.parentElement.innerHTML = cpuram.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 가능합니다.");
+		cpuramcircle.innerHTML="𐤏";
+	} else if (data.cpuramcompatibility  === false) {
+		cpuram.parentElement.innerHTML = cpuram.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 불가능합니다.");
+		cpuramcircle.innerHTML="✕";
+	} else {
+		
+	}
+	
+	if (data.cpuboardcompatibility) {
+		cpuboard.parentElement.innerHTML = cpuboard.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 가능합니다.");
+		cpuboardcircle.innerHTML="𐤏";
+	} else if (data.cpuboardcompatibility  === false ) {
+		cpuboard.parentElement.innerHTML = cpuboard.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 불가능합니다.");
+		cpuboardcircle.innerHTML="✕";
+	} else {
+		
+	}
+	
+	if (data.boardmemorycompatibility){
+		ramboard.parentElement.innerHTML =ramboard.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 가능합니다.");
+		ramboardcircle.innerHTML="𐤏";
+	}else if(data.boardmemorycompatibility === false){
+		ramboard.parentElement.innerHTML = ramboard.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 불가능합니다.");
+		ramboardcircle.innerHTML="✕"
+	}else{
+		
+	}
+		
 
-    if (data.cpuramcompatibility) {
-        cpuram.parentElement.innerHTML = cpuram.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 가능합니다.");
-        cpuramcircle.innerHTML="𐤏";
-    } else if (data.cpuramcompatibility  === false) {
-        cpuram.parentElement.innerHTML = cpuram.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 불가능합니다.");
-        cpuramcircle.innerHTML="✕";
-    } else {
+	if (data.boardcasecompatibility) {
+		caseboard.parentElement.innerHTML =caseboard.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 가능합니다.");
+		caseboardcircle.innerHTML="𐤏";
+	} else if (data.boardcasecompatibility  === false) {
+		caseboard.parentElement.innerHTML =caseboard.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 뷸가능합니다.");
+		caseboardcircle.innerHTML="✕";
+	} else {
+		
+	}
 
-    }
-
-    if (data.cpuboardcompatibility) {
-        cpuboard.parentElement.innerHTML = cpuboard.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 가능합니다.");
-        cpuboardcircle.innerHTML="𐤏";
-    } else if (data.cpuboardcompatibility  === false ) {
-        cpuboard.parentElement.innerHTML = cpuboard.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 불가능합니다.");
-        cpuboardcircle.innerHTML="✕";
-    } else {
-
-    }
-
-    if (data.boardmemorycompatibility){
-        ramboard.parentElement.innerHTML =ramboard.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 가능합니다.");
-        ramboardcircle.innerHTML="𐤏";
-    }else if(data.boardmemorycompatibility === false){
-        ramboard.parentElement.innerHTML = ramboard.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 불가능합니다.");
-        ramboardcircle.innerHTML="✕"
-    }else{
-
-    }
-
-
-    if (data.boardcasecompatibility) {
-        caseboard.parentElement.innerHTML =caseboard.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 가능합니다.");
-        caseboardcircle.innerHTML="𐤏";
-    } else if (data.boardcasecompatibility  === false) {
-        caseboard.parentElement.innerHTML =caseboard.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 뷸가능합니다.");
-        caseboardcircle.innerHTML="✕";
-    } else {
-
-    }
-
-    if (data.casegpucompatibility) {
-        casegpu.parentElement.innerHTML =casegpu.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 가능합니다.");
-        casegpucircle.innerHTML="𐤏";
-    } else if (data.casegpucompatibility  === false) {
-        casegpu.parentElement.innerHTML =casegpu.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 불가능합니다.");
-        casegpucircle.innerHTML="✕";
-    } else {
-
-    }
-    if (data.casepowerompatibility) {
-        casepower.parentElement.innerHTML =casepower.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 가능합니다.");
-        casepowercircle.innerHTML="𐤏";
-    } else if (data.casepowerompatibility === false) {
-        casepower.parentElement.innerHTML =casepower.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 불가능합니다.");
-        casepowercircle.innerHTML="✕"
-    } else {
-
-    }
-    const compatibilityElements = document.querySelectorAll(".compatibility");
-    // 각 요소의 내용을 검사
-    compatibilityElements.forEach((element) => {
-        const content = element.textContent.trim();
-        if (content === "✕") {
-            element.style.color = "red";
-        } else if (content === "𐤏") {
-            element.style.color = "blue";
-        }
-    });
-    powerconsumption.innerHTML=wattvalue;
-    powercurrent.innerHTML = powersize === 0 ? "없습니다." : powersize + "W";
-    powerrecommended.innerHTML=wattvalue + 100 + "W";
-
+	if (data.casegpucompatibility) {
+		casegpu.parentElement.innerHTML =casegpu.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 가능합니다.");
+		casegpucircle.innerHTML="𐤏";
+	} else if (data.casegpucompatibility  === false) {
+		casegpu.parentElement.innerHTML =casegpu.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 불가능합니다.");
+		casegpucircle.innerHTML="✕";
+	} else {
+		
+	}
+	if (data.casepowerompatibility) {
+		casepower.parentElement.innerHTML =casepower.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 가능합니다.");
+		casepowercircle.innerHTML="𐤏";
+	} else if (data.casepowerompatibility === false) {
+		casepower.parentElement.innerHTML =casepower.parentElement.innerHTML.replace("비교할 부품이 없습니다.", "호환이 불가능합니다.");
+		casepowercircle.innerHTML="✕"
+	} else {
+		
+	}
+	const compatibilityElements = document.querySelectorAll(".compatibility");
+	   // 각 요소의 내용을 검사
+	   compatibilityElements.forEach((element) => {
+	       const content = element.textContent.trim();
+	       if (content === "✕") {
+	           element.style.color = "red";
+	       } else if (content === "𐤏") {
+	           element.style.color = "blue";
+	       }
+	   });
+	powerconsumption.innerHTML=wattvalue;
+	powercurrent.innerHTML = powersize === 0 ? "없습니다." : powersize + "W";
+	powerrecommended.innerHTML=wattvalue + 100 + "W";
+	
 }
 /*-------------------------*/

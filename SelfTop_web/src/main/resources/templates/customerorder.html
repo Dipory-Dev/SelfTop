@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SELFTOP</title>
-<link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
-<link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+<title>Customer_order</title>
 <link rel="stylesheet" href="/css/customerorder.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
@@ -31,7 +29,7 @@
 				<span th:text="${membername} + 님"></span>&nbsp| 
 				<a href="mypage"> <img src="/img/human-icon.png" class="human-icon">
 				</a> 
-				<a href="cartpage"> <img src="/img/cart-icon.png" class="cart-icon">
+				<a href="cart"> <img src="/img/cart-icon.png" class="cart-icon">
 				</a> 
 				<a href="logout"> <img src="/img/lock-icon.png"
 					class="lock-icon">
@@ -113,7 +111,7 @@
 				        <button class="confirm_button" th:if="${dto.order_status == '배송중'}" th:data-order-num="${dto.order_num}">구매확정</button>
 				    </div>
 					<div>
-						<p><span style="margin: 0;" th:data-price="${dto.price}" class = "pricedata" ></span><span style="margin: 0; font-weight: bold;"> 원</span></p>
+						<p><span style="margin: 0;" th:text="${dto.price}"></span><span style="margin: 0; font-weight: bold;"> 원</span></p>
 					</div>
 				</div>
 			</div>
