@@ -229,6 +229,24 @@ public class CustomerController {
 
 	    return "mainPage";
 	}
+	
+	@GetMapping("/mainPage")
+	public String showMainPage(@RequestParam("category") String category, @RequestParam("search") String search, Model model) {
+	    ProductBiz<?> productBiz = productBizFactory.getBiz(category);
+	    if (productBiz == null) {
+	        model.addAttribute("error", "Invalid category: " + category);
+	        return "errorPage";
+	    }
+
+	    try {
+	        List<?> products = productBiz.filterProducts(Collections.emptyMap(), "byname", search);
+	        model.addAttribute("products", products);
+	        return "mainPage";
+	    } catch (Exception e) {
+	        model.addAttribute("error", "Error processing request");
+	        return "errorPage";
+	    }
+	}
 
 	@GetMapping("/mainPage")
 	public String showMainPage(@RequestParam("category") String category, @RequestParam("search") String search, Model model) {
