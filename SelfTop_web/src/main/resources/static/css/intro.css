@@ -21,6 +21,10 @@ body{
   bottom: 0; 
 }
 
+.search-box::placeholder {
+    color: #999;
+}
+
 .search-container {
     display: flex;
     align-items: center;
