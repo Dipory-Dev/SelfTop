@@ -22,10 +22,11 @@ public class CaseDto extends ProductStatusDto implements ProductDto{
     private String formfactor;
     private String tower_size;
     private int vga_length;
+    private String power_size;
 
     public CaseDto() {}
 
-    public CaseDto(int product_code, String category, String product_name, String company, Date upload_date, String thumbnail, String content_img, String etc, String power_status, String formfactor, String tower_size, int vga_length) {
+    public CaseDto(int product_code, String category, String product_name, String company, Date upload_date, String thumbnail, String content_img, String etc, String power_status, String formfactor, String tower_size, int vga_length,String power_size) {
         this.product_code = product_code;
         this.category = category;
         this.product_name = product_name;
@@ -38,6 +39,7 @@ public class CaseDto extends ProductStatusDto implements ProductDto{
         this.formfactor = formfactor;
         this.tower_size = tower_size;
         this.vga_length = vga_length;
+        this.power_size= power_size;
     }
 
     public int getProduct_code() {
@@ -136,21 +138,23 @@ public class CaseDto extends ProductStatusDto implements ProductDto{
         this.vga_length = vga_length;
     }
 
-    @Override
-    public String toString() {
-        return "CaseDto{" +
-                "product_code=" + product_code +
-                ", category='" + category + '\'' +
-                ", product_name='" + product_name + '\'' +
-                ", company='" + company + '\'' +
-                ", upload_date=" + upload_date +
-                ", thumbnail='" + thumbnail + '\'' +
-                ", content_img='" + content_img + '\'' +
-                ", etc='" + etc + '\'' +
-                ", power_status='" + power_status + '\'' +
-                ", formfactor='" + formfactor + '\'' +
-                ", tower_size='" + tower_size + '\'' +
-                ", vga_length=" + vga_length +
-                '}';
-    }
+
+	public String getPower_size() {
+		return power_size;
+	}
+
+	public void setPower_size(String powerformfactor) {
+		this.power_size = powerformfactor;
+	}
+
+	@Override
+	public String toString() {
+		return "CaseDto [product_code=" + product_code + ", category=" + category + ", product_name=" + product_name
+				+ ", company=" + company + ", upload_date=" + upload_date + ", thumbnail=" + thumbnail
+				+ ", content_img=" + content_img + ", etc=" + etc + ", power_status=" + power_status + ", formfactor="
+				+ formfactor + ", tower_size=" + tower_size + ", vga_length=" + vga_length + ", powerformfactor="
+				+ power_size + "]";
+	}
+	
+	
 }

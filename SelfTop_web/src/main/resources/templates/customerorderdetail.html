@@ -43,7 +43,7 @@
                     </tr>
                     <tr class="tr-cancel-reason">
                         <td colspan='2'>
-                            <textarea class = "reason" placeholder="취소 사유를 작성해주세요.(ex. 단순 변심, 옵션 추가 후 재구매 등)"></textarea>
+                            <textarea class = "reason" placeholder="취소 사유를 작성해주세요.(ex. 단순 변심, 옵션 추가 후 재구매 등)" ></textarea>
                         </td>
                     </tr>
                 </table>
@@ -71,8 +71,8 @@
 					</h2>
 				</div>
 				<div class = "cancelsection">
-					<h2 style="cursor:pointer" id="cancelorder" th:data-userid="${customerinfo.name}"
-						th:data-ordernum="${ordernum}">취소요청</h2>
+					<button style="cursor:pointer" id="cancelorder" th:data-userid="${customerinfo.name}"
+						th:data-ordernum="${ordernum}">취소요청</button>
 				</div>
 			</div>
 			<div class="order_no">
@@ -88,7 +88,7 @@
 			<div class="delivery_status">
 				<h2>상태</h2>
 				<br>
-				<h3 th:text=${orderstatus} style="color: #008ADA;"></h3>
+				<h3 id="deliveryinfo" th:text=${orderstatus} style="color: #008ADA;"></h3>
 			</div>
 		</div>
 		<div class="namezone">
@@ -160,7 +160,8 @@
 				</tr>
 				<tr th:each="dto : ${orderinfo}">
 					<th>
-						<button class="openModalBtn btn" th:data-product-code="${dto.product_code}">후기작성</button>
+				 		<button th:unless="${productcodes.contains(dto.product_code)}"class="openModalBtn btn" th:data-product-code="${dto.product_code}"  data-reviewedit="false">후기작성</button> 					
+						<button th:if="${productcodes.contains(dto.product_code)}" class="openModalBtn btn" th:data-product-code="${dto.product_code}" data-reviewedit="true" th:data-reviewlist="${review}">후기수정</button>						
 					</th>
 					<th th:text="${dto.product_name}"></th>
 					<th th:text="${dto.price} * ${dto.amount} +원"></th>
@@ -184,15 +185,16 @@
 								<div class="form-rate" name="reviewForm" method="post" >
 									<div class ="star_rating">
 										​<span class="star on" value="1"> </span>
-										​​<span class="star" value="2"> </span>
-										​​<span class="star" value="3"> </span>
-										​​<span class="star" value="4"> </span>
-										​​<span class="star" value="5"> </span>
+										​​<span class="star on" value="2"> </span>
+										​​<span class="star on" value="3"> </span>
+										​​<span class="star on" value="4"> </span>
+										​​<span class="star on" value="5"> </span>
 									</div>
 
 									<!--별점 정보 전달-->
 									<input type="hidden" name="rating" value="5">
 									<input type="hidden" name="product_code" value="">
+									<input type="hidden" name="reviewcondition" value="">
 								</div>
 							</div>
 
@@ -209,15 +211,18 @@
 							<p class="foot-message"> *10MB 이하 jpg, jpeg, png, gif 파일 1장만 첨부 가능</p>
 						</div>
 						<div class="modal-footer">
-							<button id="closeModalBtn" type="button" class="btn btn-close">닫기</button>
+
 							<input type="submit" value="저장" id="submitModalBtn"
 								class="btn btn-submit">
+
+							<button id="closeModalBtn" type="button" class="btn btn-close">닫기</button>
+
 						</div>
 					</form>
 				</div>
 			</div>
 		</div>
-		<script type="text/javascript" src="/js/customerorderdetail.js"></script>
+		<script  type="text/javascript" src="/js/customerorderdetail.js"></script>
 	</main>
 
 	<footer>

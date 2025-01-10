@@ -36,19 +36,7 @@ public interface ReviewMapper {
 		""")
 		List<ReviewDto> getReviewsByProductCode(@Param("productCode") int productCode);
     
-	//리뷰 삽입하기
-    @Insert("INSERT INTO REVIEW (REVIEW_NO, REVIEW_IMG,CONTENT, RATING, PRODUCT_CODE, MEMBER_NO) " +
-            "VALUES (#{reviewNo}, #{reviewImg}, #{video}, #{content}, #{rating}, #{productCode}, #{memberNo})")
-    void insertReview(ReviewDto review);
-    
-    //리뷰 수정하기
-    @Update("UPDATE REVIEW SET CONTENT = #{content}, RATING = #{rating}, REVIEW_IMG = #{reviewImg}, VIDEO =#{video} " +
-            "WHERE REVIEW_NO = #{reviewNo}")
-    void updateReview(ReviewDto review);
 
-    //리뷰 삭제하기
-    @Delete("DELETE FROM REVIEW WHERE REVIEW_NO = #{reviewNo}")
-    void deleteReview(@Param("reviewNo") Long reviewNo);
     
     
 }

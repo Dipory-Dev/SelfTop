@@ -10,6 +10,8 @@ import com.boot.selftop_web.order.biz.mapper.OrderBoardMapper;
 import com.boot.selftop_web.order.model.dto.OrderBoardDto;
 import com.boot.selftop_web.order.model.dto.OrderDetailDto;
 import com.boot.selftop_web.product.model.dto.ProductDto;
+import com.boot.selftop_web.review.model.dto.ReviewDto;
+import com.boot.selftop_web.review.model.dto.reviewsearchDto;
 
 @Service
 public class OrderBoardBizImpl implements OrderBoardBiz{
@@ -69,5 +71,17 @@ public class OrderBoardBizImpl implements OrderBoardBiz{
 	public int requestcancelorder(int orderno, String reason) {
 		// TODO Auto-generated method stub
 		return mapper.requestcancelorder(orderno,reason);
+	}
+
+	@Override
+	public List<reviewsearchDto> reviewsearchres(int memberno) {
+		// TODO Auto-generated method stub
+		return mapper.reviewsearchres(memberno);
+	}
+
+	@Override
+	public int searchreviewnum(int memberno) {
+		// TODO Auto-generated method stub
+		return mapper.searchreviewnum(memberno);
 	}
 }

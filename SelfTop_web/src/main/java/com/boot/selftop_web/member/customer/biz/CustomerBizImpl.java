@@ -158,4 +158,10 @@ public class CustomerBizImpl implements CustomerBiz {
 	public int insertReview(String review_img, String content, int rating, int product_code, int member_no) {
 		return mapper.insertReview(review_img, content, rating, product_code, member_no);
 	}
+
+	@Override
+	public int updateReviewimage(String filePath, String content, int rating, int product_code, int member_no) {
+		// TODO Auto-generated method stub
+		return mapper.upadteReview(filePath, content, rating, product_code, member_no);
+	}
 }

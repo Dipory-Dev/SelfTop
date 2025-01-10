@@ -8,8 +8,12 @@ const cancelsubmitModalBtn = document.getElementById('cancelsubmitModalBtn');
 const cancelordernum = cancelopenModal.getAttribute("data-ordernum");
 const cancelusername = cancelopenModal.getAttribute("data-userid");
 const cancelmodalusername = document.querySelector(".username");
-
+const deliveryinfo = document.getElementById("deliveryinfo");
 cancelopenModal.addEventListener('click', () => {
+	if (["취소요청","취소완료","취소거절"].includes(deliveryinfo.textContent)){
+		alert("이미 취소처리가 진행중인 주문입니다");
+		return;
+	}
 	cancelmodalusername.innerHTML = cancelusername;
     cancelmodal.style.display = 'block';
 });
@@ -21,6 +25,9 @@ cancelcloseModalBtn.addEventListener('click', () => {
 cancelsubmitModalBtn.addEventListener('click',()=>{
 	const reason = document.querySelector(".reason");
 	const cancelreason = reason.value;
+	if(!cancelreason){
+		alert("내용을 입력해주세요.");
+	}else{
 	fetch('/cancelorder', {
 			method: 'POST',
 			headers: {
@@ -46,7 +53,7 @@ cancelsubmitModalBtn.addEventListener('click',()=>{
 			console.error('처리 중 오류가 발생하였습니다:', error.message);
 			alert('취소 요청에 실패하였습니다: ' + error.message);
 		});
-
+}
 });
 
 // 모달 외부 클릭 시 닫기
@@ -62,12 +69,34 @@ const closeModalBtn = document.getElementById('closeModalBtn');
 const openModalBtns = document.querySelectorAll('.openModalBtn'); // 모든 버튼 가져오기
 
 openModalBtns.forEach(button => {
+	const textarea = modal.querySelector('textarea[name="content"]');
+	const rating = modal.querySelector('input[name="rating"]');
+	const reviewcondition =modal.querySelector('input[name="reviewcondition"');
+	const star = modal.querySelector('.star_rating');
     button.addEventListener('click', function() { // this로 클릭한 버튼 참조
-        modal.style.display = 'block';
-
+		const reviewedit = this.getAttribute('data-reviewedit');	
+		const product_code_str = parseInt(this.getAttribute('data-product-code'),10);
+		if (reviewedit === "true"){
+			const reviewlist =JSON.parse(this.getAttribute('data-reviewlist'));
+			const selectreview = reviewlist.find(reviewlist => reviewlist.product_code === product_code_str);
+			rating.value=selectreview.rating;
+			star.querySelectorAll('.star').forEach((starrating,index)=> {
+				if (index <= (rating.value-1)) {
+					$(starrating).addClass('on');
+				} else {
+					$(starrating).removeClass('on');
+				}
+			});
+			textarea.value=selectreview.content;
+			reviewcondition.value=reviewedit;
+			
+		}else{
+			reviewcondition.value=reviewedit;
+		}
+		
+		 modal.style.display = 'block';
         // 클릭한 버튼에서 data-product-code 값을 가져오기
-        const product_code_str = this.getAttribute('data-product-code');
-
+       
         // string 값을 int로 변환
         const product_code = parseInt(product_code_str, 10);  // 10진수로 변환
 
@@ -78,13 +107,22 @@ openModalBtns.forEach(button => {
 });
 
 closeModalBtn.addEventListener('click', () => {
+	const textarea = modal.querySelector('textarea[name="content"]');
+	const rating = modal.querySelector('input[name="rating"]');
+	textarea.value = '';
     modal.style.display = 'none';
+	rating.value='5';
+	
 });
 
 // 모달 외부 클릭 시 닫기
 window.addEventListener('click', (event) => {
+	const textarea = modal.querySelector('textarea[name="content"]');
     if (event.target === modal) {
+		const rating = modal.querySelector('input[name="rating"]');
         modal.style.display = 'none';
+		textarea.value = '';
+		rating.value='5';
     }
 });
 
@@ -125,15 +163,17 @@ imageInput.addEventListener('change', function (event) {
 
 // 별점 기능
 $('.star_rating > .star').click(function() {
-    let b = $(this).hasClass("on");
+	const clickedIndex = $(this).index();  // 클릭된 별의 인덱스를 얻음
 
-    $(this).parent().children('span').removeClass('on');
-    $(this).addClass('on').prevAll('span').addClass('on');
-
-    if (b) {
-        $(this).removeClass("on");
-    }
-
+	// 현재 상태에서 클릭된 별보다 더 높은 별들에 'on' 클래스를 추가하고 그 이하의 별들은 제거
+	$(this).parent().children('span').each(function(index) {
+		if (index <= clickedIndex) {
+			$(this).addClass('on');
+		} else {
+			$(this).removeClass('on');
+		}
+	});
+	
     // 선택된 별점의 개수 구하기
     let s = $(".form-rate .star_rating .on").length;
 
