@@ -295,9 +295,11 @@ span {
     border: 1px solid #ddd;
     width: 100%;
 }
-
-.viewcartproduct .orderproduct,#assemblecheck  {
-
+.detailbottombutton{
+	flex:1;
+}
+.viewcartproduct .orderproduct {
+   /* border-bottom: 1px solid #ddd; */
     border:1px solid #ddd;
     display: flex;
     justify-content: space-between;
