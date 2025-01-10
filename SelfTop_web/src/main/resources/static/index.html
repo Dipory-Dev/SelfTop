@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head lang="ko">
+        <link rel="stylesheet" href="/css/intropage.css">
         <meta charset="UTF-8">
+        <script type="text/javascript" src="/js/intro.js"></script>
         <title>SELFTOP</title>
 		<link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
 		<link rel="icon" href="/img/favicon.ico" type="image/x-icon">
-        <link rel="stylesheet" href="/css/intro.css">
-        <script type="text/javascript" src="/js/intro.js"></script>
+    </head>
+    <body>
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", function () {
                 const params = new URLSearchParams(window.location.search);
@@ -16,32 +18,15 @@
                 }
             });
         </script>
-    </head>
-    <body>
         <div class="intro">
-            <img src="/img/logo.png" style="margin-right: 40px">
-            <h2>당신만의 컴퓨터, 여기서 시작하세요!</h2>
+            <img src="/img/logo.png">
+            <h2>당신만의 컴퓨터, 여기서 시작하세요</h2>
         </div>
-        <form action="/mainPage" method="GET">
-	       <div class="search-container">
-			    <div class="select-wrapper">
-			        <select class="category-select">
-			            <option value="CPU">CPU</option>
-			            <option value="메인보드">메인보드</option>
-			            <option value="RAM">메모리</option>
-			            <option value="그래픽카드">그래픽카드&nbsp&nbsp&nbsp&nbsp</option>
-			            <option value="SSD">SSD</option>
-			            <option value="HDD">HDD</option>
-			            <option value="쿨러">쿨러</option>
-			            <option value="파워">파워</option>
-			            <option value="케이스">케이스</option>
-			        </select>
-			        <span class="select-arrow">▼</span>
-			    </div>
-	            <input type="text" class="search-box" placeholder="카테고리를 선택 후 검색해주세요!" id="search-input">
-	            <button type="submit" class="search-button"></button>
-	       </div>
-        </form>
+        <div class="searchsection">
+            <input type="text" placeholder="상품 검색" class="search">
+            <button type="submit" class="searchbutton" onclick="search()"><img src="img/search-icon.png" class="searchicon" ></button>
+        </div>
+
         <div  id ="not_member">
             <div onclick="movemain()" class="buttondiv">
                 <img src="img/monitor-icom.png"  class="buttonicon">
@@ -52,6 +37,7 @@
                 <p>로그인</p>
             </div>
         </div>
+
         <div  id="member">
             <div onclick="movemain()" class="buttondiv">
                 <img src="img/monitor-icom.png"  class="buttonicon">
