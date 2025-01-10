@@ -19,13 +19,29 @@
     </head>
     <body>
         <div class="intro">
-            <img src="/img/logo.png">
+            <img src="/img/logo.png" style="margin-right: 40px">
             <h2>당신만의 컴퓨터, 여기서 시작하세요!</h2>
         </div>
-        <div class="search-container">
-            <input type="text" class="search-box" placeholder="카테고리를 선택 후 검색해주세요!" id="search-input">
-            <button type="submit" class="search-button"></button>
-        </div>
+        <form action="/mainPage" method="GET">
+	       <div class="search-container">
+			    <div class="select-wrapper">
+			        <select class="category-select">
+			            <option value="CPU">CPU</option>
+			            <option value="메인보드">메인보드</option>
+			            <option value="RAM">메모리</option>
+			            <option value="그래픽카드">그래픽카드</option>
+			            <option value="SSD">SSD</option>
+			            <option value="HDD">HDD</option>
+			            <option value="쿨러">쿨러</option>
+			            <option value="파워">파워</option>
+			            <option value="케이스">케이스</option>
+			        </select>
+			        <span class="select-arrow">▼</span>
+			    </div>
+	            <input type="text" class="search-box" placeholder="카테고리를 선택 후 검색해주세요!" id="search-input">
+	            <button type="submit" class="search-button"></button>
+	       </div>
+        </form>
         <div  id ="not_member">
             <div onclick="movemain()" class="buttondiv">
                 <img src="img/monitor-icom.png"  class="buttonicon">

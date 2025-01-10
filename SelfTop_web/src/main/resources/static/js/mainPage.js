@@ -35,6 +35,12 @@ document.addEventListener("DOMContentLoaded", () => {
         displayCpuDetails(); // CPU 세부 정보 표시
         fetchCpuAttributes(); // CPU 속성 정보를 가져오는 함수 호출
     }
+	
+	//intro에서 검색한 데이터를 처리하고 보여주는 함수
+	const urlParams = new URLSearchParams(window.location.search);
+	const categoryFromUrl = urlParams.get('category');
+	const searchFromUrl = urlParams.get('search');
+	
 
 	/* 검색 기능 */
 	searchButton.addEventListener('click', () => {
