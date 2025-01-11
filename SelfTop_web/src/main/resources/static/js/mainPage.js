@@ -30,26 +30,110 @@ document.addEventListener("DOMContentLoaded", () => {
     const assemblyPrice = 20000; // 조립 신청 시 추가금액
     let isAssemblyRequested = false; // 현재 조립 신청 상태
 
-    // mainPage처음 들어왔을때 CPU가 자동으로 선택되도록 설정
-    const cpuComponent = document.querySelector('.component[data-component="CPU"]');
+	// mainPage처음 들어왔을때 CPU가 자동으로 선택되도록 설정
+    /*const cpuComponent = document.querySelector('.component[data-component="CPU"]');
     if (cpuComponent) {
         cpuComponent.classList.add('active'); // 'active' 클래스를 추가하여 선택 표시
         fetchProducts('CPU'); // CPU 제품 목록을 가져오는 함수 호출
         displayCpuDetails(); // CPU 세부 정보 표시
         fetchCpuAttributes(); // CPU 속성 정보를 가져오는 함수 호출
-    }
-	
+    }*/
+
 	//intro에서 검색한 데이터를 처리하고 보여주는 함수
 	const urlParams = new URLSearchParams(window.location.search);
-	const categoryFromUrl = urlParams.get('category');
-	const searchFromUrl = urlParams.get('search');
-	
+    const category = urlParams.get('category');
+    const search = urlParams.get('search');
 
-    //intro에서 검색한 데이터를 처리하고 보여주는 함수
-    const urlParams = new URLSearchParams(window.location.search);
-    const categoryFromUrl = urlParams.get('category');
-    const searchFromUrl = urlParams.get('search');
+	// 검색어와 카테고리가 URL에 존재하는 경우
+	if (category && search) {
+        searchInput.value = search; // 검색어 표시
+        const activeComponent = document.querySelector(`.component[data-component="${category}"]`);
 
+        // 해당 카테고리를 활성화하고 제품 목록을 불러옴
+        if (activeComponent) {
+            activateComponent(activeComponent);
+            fetchProducts(category, "bypopular", search);
+        }
+
+    } else {
+        // 기본적으로 CPU 컴포넌트 활성화
+        activateDefaultComponent();
+    }
+
+	document.body.addEventListener('click', function(event) {
+	    const target = event.target;
+	    if (target.matches('button, a, input[type="submit"], input[type="button"], input[type="checkbox"], input[type="radio"]')) {
+	        // 페이지 상태 초기화 함수
+	        window.history.replaceState(null, null, '/main'); // URL 리셋
+	        const searchInput = document.getElementById('search-input');
+	        if (searchInput) {
+	            searchInput.value = ''; // 검색 입력 상자 초기화
+	        }
+	    }
+	});
+
+    // 기본 컴포넌트 활성화 함수
+	function activateDefaultComponent() {
+        const cpuComponent = document.querySelector('.component[data-component="CPU"]');
+        if (cpuComponent) {
+            activateComponent(cpuComponent);
+            fetchProducts('CPU', 'bypopular', '');
+            displayCpuDetails();
+            fetchCpuAttributes();
+        }
+    }
+
+   // 컴포넌트 활성화 함수
+   function activateComponent(component) {
+     components.forEach(comp => comp.classList.remove('active'));
+     component.classList.add('active');
+     displayComponentDetails(component.dataset.component);
+ }
+
+   // 컴포넌트에 따른 상세 정보 표시 함수
+   function displayComponentDetails(componentName) {
+       switch (componentName) {
+           case 'CPU':
+               displayCpuDetails();
+               fetchCpuAttributes();
+               break;
+           case 'RAM':
+               displayRamDetails();
+               fetchRamAttributes();
+               break;
+           case '그래픽카드':
+               displayGpuDetails();
+               fetchGpuAttributes();
+               break;
+           case 'SSD':
+               displaySsdDetails();
+               fetchSsdAttributes();
+               break;
+           case '메인보드':
+               displayMainBoardDetails();
+               fetchMainBoardAttributes();
+               break;
+           case '쿨러':
+               displayCoolerDetails();
+               fetchCoolerAttributes();
+               break;
+           case '파워':
+               displayPowerDetails();
+               fetchPowerAttributes();
+               break;
+           case 'HDD':
+               displayHddDetails();
+               fetchHddAttributes();
+               break;
+           case '케이스':
+               displayCaseDetails();
+               fetchCaseAttributes();
+               break;
+           default:
+               console.log('No details available for this component');
+               break;
+       }
+   }
 
     /* 검색 기능 */
     searchButton.addEventListener('click', () => {
@@ -593,36 +677,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    // 제품 목록 출력
-    function fetchProducts(component, sort, search = '') {
-        let url = `/products/${component}?sort=${sort}`;
-        if (search) {
-            url += `&search=${encodeURIComponent(search)}`; // 검색어를 URL에 추가
-        }
-
-        fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to load ${component} products: ${response.statusText}`);
-                }
-                return response.json();
-            })
-            .then(products => {
-                displayProducts(products, component);
-            })
-            .catch(error => {
-                console.error('Error loading products:', error);
-                contentBox.innerHTML = `<p>Error loading products: ${error.message}</p>`;
-            });
-    }
-
-    // 제품 정보를 콘텐츠 박스에 동적으로 표시하는 함수
-    function displayProducts(products, component) {
-        if (!products || products.length === 0) {
-            contentBox.innerHTML = `<p>No products found for ${component.toUpperCase()}.</p>`;
-            return;
-        }
-    }
+	// 제품 목록 출력
+	function fetchProducts(category, sort, search = '') {
+	    let url = `/products/${category}?sort=${sort}&search=${encodeURIComponent(search)}`;
+	    fetch(url)
+	        .then(response => response.json())
+	        .then(products => {
+	            displayProducts(products, category);
+	        })
+	        .catch(error => {
+	            console.error('Error loading products:', error);
+	            contentBox.innerHTML = `<p>Error loading products: ${error.message}</p>`;
+	        });
+	}
 
     // 제품 정보를 콘텐츠 박스에 동적으로 표시하는 함수
     function displayProducts(products, component) {

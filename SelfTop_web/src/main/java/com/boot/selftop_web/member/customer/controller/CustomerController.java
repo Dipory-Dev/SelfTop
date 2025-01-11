@@ -200,35 +200,31 @@ public class CustomerController {
 	}
 
 	@GetMapping("/main")
-	public String SelfTopMain(HttpSession session, Model model) {
-		Integer member_no = (Integer) session.getAttribute("member_no");
-		String username= (String) session.getAttribute("name");
-		if (member_no != null) {
-			List<CartDTO> cartList = quoteBiz.selectCart(member_no);
-			System.out.println(cartList);
-			model.addAttribute("cartList", cartList);
-			model.addAttribute("username",username);
-		}
-
-		return "mainPage";
-	}
-	
-	@GetMapping("/mainPage")
-	public String showMainPage(@RequestParam("category") String category, @RequestParam("search") String search, Model model) {
-	    ProductBiz<?> productBiz = productBizFactory.getBiz(category);
-	    if (productBiz == null) {
-	        model.addAttribute("error", "Invalid category: " + category);
-	        return "errorPage";
+	public String SelfTopMain(HttpSession session, Model model,
+	                          @RequestParam(required = false) String category,
+	                          @RequestParam(required = false) String search) {
+	    Integer member_no = (Integer) session.getAttribute("member_no");
+	    String username = (String) session.getAttribute("name");
+	    if (member_no != null) {
+	        List<CartDTO> cartList = quoteBiz.selectCart(member_no);
+	        model.addAttribute("cartList", cartList);
+	        model.addAttribute("username", username);
 	    }
 
-	    try {
-	        List<?> products = productBiz.filterProducts(Collections.emptyMap(), "byname", search);
-	        model.addAttribute("products", products);
-	        return "mainPage";
-	    } catch (Exception e) {
-	        model.addAttribute("error", "Error processing request");
-	        return "errorPage";
+	    if (category != null && search != null) {
+	        ProductBiz<?> productBiz = productBizFactory.getBiz(category.toLowerCase());
+	        if (productBiz == null) {
+	            System.err.println("No ProductBiz found for category: " + category);
+	            model.addAttribute("error", "Invalid category: " + category);
+	        } else {
+	            List<?> products = productBiz.getProductsByCategory(category, "bypopular", search);
+	            model.addAttribute("products", products);
+	            model.addAttribute("category", category);
+	            model.addAttribute("searchTerm", search);
+	        }
 	    }
+
+	    return "mainPage";
 	}
 
 	@GetMapping("/mainPage")
