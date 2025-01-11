@@ -206,7 +206,7 @@ public class CustomerController {
 	                          @RequestParam(required = false) String search) {
 	    Integer member_no = (Integer) session.getAttribute("member_no");
 	    String username = (String) session.getAttribute("name");
-	    
+
 	    if (member_no != null) {
 	        List<CartDTO> cartList = quoteBiz.selectCart(member_no);
 	        model.addAttribute("cartList", cartList);
@@ -236,7 +236,7 @@ public class CustomerController {
 
 	    return "mainPage";
 	}
-	
+
 	@GetMapping("/mainPage")
 	public String showMainPage(@RequestParam("category") String category, @RequestParam("search") String search, Model model) {
 	    ProductBiz<?> productBiz = productBizFactory.getBiz(category);
@@ -878,7 +878,7 @@ public class CustomerController {
 		}
 
 		model.addAttribute("membername", session.getAttribute("name"));
-		
+
 		Integer member_no = (Integer) session.getAttribute("member_no");
 		List<QuoteDto> res =quoteBiz.SelectQuote(member_no); //견적리스트
 		List<QuoteDetailDto> dummycategory = Arrays.asList(
@@ -1184,7 +1184,7 @@ public class CustomerController {
 	public String noPage() {
 		return "404";
 	}
-	
+
 	@RequestMapping(value="/addressPopup")
 	public ModelAndView addressPopup(HttpServletRequest request, @RequestParam HashMap<String, String> p, Locale locale) {
 
