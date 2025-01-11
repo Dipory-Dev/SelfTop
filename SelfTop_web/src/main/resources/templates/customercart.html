@@ -79,7 +79,7 @@
 					<tbody id="cart_view">
 						<tr th:each="dto : ${quote}">
 							<td ><input type="checkbox" name="selectquote_no" th:value="${dto.quote_no}" /></td>
-							<td th:text="${#dates.format(dto.quote_date, 'YY/MM/dd')}"></td>
+							<td th:text="${#dates.format(dto.quote_date, 'yy/MM/dd')}"></td>
 							<td th:text=${dto.quote_name} th:data-quote-no="${dto.quote_no} "
 								th:onclick="'loadquotedetail(' + ${dto.quote_no} +')'"
 								class="quotename"></td>

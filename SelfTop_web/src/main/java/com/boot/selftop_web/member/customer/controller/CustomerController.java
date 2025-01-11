@@ -869,7 +869,6 @@ public class CustomerController {
 			);
 
 			model.addAttribute("quotedetail", dummycategory);
-
 		model.addAttribute("quote", res);
 
 		return "customercart";

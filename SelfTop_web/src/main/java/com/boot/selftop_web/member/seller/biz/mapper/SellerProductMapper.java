@@ -25,7 +25,7 @@ public interface SellerProductMapper {
 
 	@Select("<script>" +
 	        "SELECT * FROM viewsellerorder " +
-	        "WHERE customer_no= #{member_no} " +
+	        "WHERE seller_no= #{member_no} " +
 	        "<if test='startdate != null and !startdate.isEmpty()'>" +
 	        "   AND order_date &gt;= #{startdate} " +
 	        "</if>" +
