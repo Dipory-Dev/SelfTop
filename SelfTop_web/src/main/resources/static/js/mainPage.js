@@ -1105,6 +1105,7 @@ function deleteCompo(event) {
     component.classList.remove('active');
 
 
+
     // currentCart에서 해당 컴포넌트 제거
     const componentName = component.dataset.component;
     if (currentCart[componentName]) {
