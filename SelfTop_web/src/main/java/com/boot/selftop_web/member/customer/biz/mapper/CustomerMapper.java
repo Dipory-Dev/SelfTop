@@ -66,6 +66,9 @@ public interface CustomerMapper {
 	        "</script>")
     List<SellerOrderDto> searchcustomerorderlist(@Param("startdate")String startdate,@Param("enddate") String enddate,@Param("member_no") int member_no);
 
-   @Insert("insert into review values (seq_review.nextval, #{review_img}, #{content}, #{rating}, #{product_code}, #{member_no})")
+   @Insert("insert into review values (seq_review.nextval, #{review_img}, #{content}, #{rating}, #{product_code}, #{member_no},current_date)")
     int insertReview(@Param("review_img")String review_img, @Param("content")String content, @Param("rating")int rating, @Param("product_code")int product_code, @Param("member_no")int member_no);
+
+   @Update("update review set review_img=#{filePath},content=#{content},rating=#{rating}  where product_code=#{product_code} and member_no=#{member_no} ")
+	int upadteReview(@Param("filePath")String filePath,@Param("content") String content,@Param("rating") int rating,@Param("product_code") int product_code,@Param("member_no") int member_no);
 }

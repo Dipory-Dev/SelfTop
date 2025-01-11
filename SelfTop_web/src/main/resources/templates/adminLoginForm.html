@@ -4,11 +4,19 @@
     <meta charset="UTF-8">
     <title>Admin Login</title>
     <link rel="stylesheet" type="text/css" href="/css/admin.css">
+    <script>
+	document.addEventListener('DOMContentLoaded', function() {
+		//로고 누르면 메인페이지
+		document.getElementById('logo').addEventListener('click', function() {
+		    window.location.href = '/main';
+		});
+	});
+	</script>
 </head>
 <body>
 <header>
     <div class="header-content">
-        <img src="/img/logo.png">
+        <img src="/img/logo.png" id="logo" style="cursor: pointer;">
     </div>
 </header>
     <main>

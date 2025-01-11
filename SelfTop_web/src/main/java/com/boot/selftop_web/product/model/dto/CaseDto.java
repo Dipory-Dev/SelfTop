@@ -17,16 +17,19 @@ public class CaseDto extends ProductStatusDto implements ProductDto{
     private String content_img;
     private String etc;
 
+    private double avg_rating;
 
     private String power_status;
     private String formfactor;
     private String tower_size;
     private int vga_length;
+    private String power_size;
 
     public CaseDto() {}
 
-    public CaseDto(int product_code, String category, String product_name, String company, Date upload_date, String thumbnail, String content_img, String etc, String power_status, String formfactor, String tower_size, int vga_length) {
-        this.product_code = product_code;
+    public CaseDto(int product_code, int seller_no, int stock, int price, Date reg_date, int product_code1, String category, String product_name, String company, Date upload_date, String thumbnail, String content_img, String etc, double avg_rating, String power_status, String formfactor, String tower_size, int vga_length, String power_size) {
+        super(product_code, seller_no, stock, price, reg_date);
+        this.product_code = product_code1;
         this.category = category;
         this.product_name = product_name;
         this.company = company;
@@ -34,10 +37,20 @@ public class CaseDto extends ProductStatusDto implements ProductDto{
         this.thumbnail = thumbnail;
         this.content_img = content_img;
         this.etc = etc;
+        this.avg_rating = avg_rating;
         this.power_status = power_status;
         this.formfactor = formfactor;
         this.tower_size = tower_size;
         this.vga_length = vga_length;
+        this.power_size= power_size;
+    }
+
+    public double getAvg_rating() {
+        return avg_rating;
+    }
+
+    public void setAvg_rating(double avg_rating) {
+        this.avg_rating = avg_rating;
     }
 
     public int getProduct_code() {
@@ -136,21 +149,23 @@ public class CaseDto extends ProductStatusDto implements ProductDto{
         this.vga_length = vga_length;
     }
 
-    @Override
-    public String toString() {
-        return "CaseDto{" +
-                "product_code=" + product_code +
-                ", category='" + category + '\'' +
-                ", product_name='" + product_name + '\'' +
-                ", company='" + company + '\'' +
-                ", upload_date=" + upload_date +
-                ", thumbnail='" + thumbnail + '\'' +
-                ", content_img='" + content_img + '\'' +
-                ", etc='" + etc + '\'' +
-                ", power_status='" + power_status + '\'' +
-                ", formfactor='" + formfactor + '\'' +
-                ", tower_size='" + tower_size + '\'' +
-                ", vga_length=" + vga_length +
-                '}';
-    }
+
+	public String getPower_size() {
+		return power_size;
+	}
+
+	public void setPower_size(String powerformfactor) {
+		this.power_size = powerformfactor;
+	}
+
+	@Override
+	public String toString() {
+		return "CaseDto [product_code=" + product_code + ", category=" + category + ", product_name=" + product_name
+				+ ", company=" + company + ", upload_date=" + upload_date + ", thumbnail=" + thumbnail
+				+ ", content_img=" + content_img + ", etc=" + etc + ", power_status=" + power_status + ", formfactor="
+				+ formfactor + ", tower_size=" + tower_size + ", vga_length=" + vga_length + ", powerformfactor="
+				+ power_size + "]";
+	}
+
+
 }

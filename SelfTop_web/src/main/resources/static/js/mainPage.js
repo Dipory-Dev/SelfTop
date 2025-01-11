@@ -5,6 +5,9 @@ let currentFilters = {};
 // 검색어를 저장할 변수
 let currentSearchTerm = '';
 
+let cartInfo = [];
+let cartDetails = [];
+
 document.addEventListener("DOMContentLoaded", () => {
 	const searchInput = document.getElementById('search-input');
 	const searchButton = document.querySelector('.search-button');
@@ -18,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const quoteNameInput = document.getElementById("quote-name");
     const contentBox = document.querySelector('.content-box');
     const sortButtons = document.querySelectorAll('.sortBtn');
-    let selectedSort = 'byname';
+    let selectedSort = 'bypopular';
 
 	const categoryCountElement = document.getElementById('category-count');
 	const topBoxSmall = document.querySelector('.top-box.small');
@@ -38,19 +41,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	/* 검색 기능 */
 	searchButton.addEventListener('click', () => {
-        searchProducts();
-    });
-
-	function searchProducts() {
-        const searchInput = document.getElementById('search-input');
-        const searchTerm = searchInput.value.trim().toLowerCase();
-        currentSearchTerm = searchTerm;  // 검색어 저장
-        const activeComponent = document.querySelector('.component.active');
-        if (activeComponent && searchTerm) {
-            const componentCategory = activeComponent.dataset.component;
-            fetchProducts(componentCategory, selectedSort, searchTerm);
-        }
-    }
+	    const searchTerm = searchInput.value.trim().toLowerCase();
+	    currentSearchTerm = searchTerm;  // 검색어 저장
+	    const activeComponent = document.querySelector('.component.active');
+	    if (activeComponent) {
+	        const componentCategory = activeComponent.dataset.component;
+	        if (Object.keys(currentFilters).length > 0 || searchTerm) {
+	            fetchFilteredProducts(componentCategory, currentFilters, selectedSort, searchTerm);
+	        } else {
+	            fetchProducts(componentCategory, selectedSort, searchTerm);
+	        }
+	    }
+	});
 
 	// placeholder 업데이트 함수
     function updatePlaceholder(componentName) {
@@ -72,12 +74,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (!isAssemblyRequested) {
                     isAssemblyRequested = true;
                     currentCart['assembly_price'] = assemblyPrice;
+
+					// cartInfo의 assembly를 '조립신청'으로 업데이트
+	                cartDetails.forEach(cartItem => {
+	                    cartItem.assembly = '조립 신청';
+	                });
                 }
             } else if (radio.value === 'not_requested' && radio.checked) {
                 // 조립 미신청이 선택되었을 때
                 if (isAssemblyRequested) {
                     isAssemblyRequested = false;
                     delete currentCart['assembly_price'];
+
+					// cartInfo의 assembly를 '조립신청'으로 업데이트
+	                cartDetails.forEach(cartItem => {
+	                    cartItem.assembly = '조립 미신청';
+	                });
                 }
             }
             updateTotalPrice(); // 총 가격 즉시 업데이트
@@ -419,13 +431,7 @@ document.addEventListener("DOMContentLoaded", () => {
         topBoxLarge.innerHTML = attributesHtml;
     }
 
-    // 제품 정보를 콘텐츠 박스에 동적으로 표시하는 함수
-    function displayProducts(products, component) {
-        if (!products || products.length === 0) {
-            contentBox.innerHTML = `<p>No products found for ${component.toUpperCase()}.</p>`;
-            return;
-        }
-    }
+
     //HDD의 필터를 html에 보여주는 기능
     function displayHddDetails() {
         let detailsHtml = `
@@ -504,29 +510,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// 필터링된 제품을 불러오는 함수
 	function filterProducts(component) {
-        const filters = {};
-        document.querySelectorAll('.top-box.large input[type="checkbox"]:checked').forEach(checkbox => {
-            const key = checkbox.name;
-            const value = checkbox.value;
-            if (!filters[key]) {
-                filters[key] = [];
-            }
-            filters[key].push(value);
-        });
+	    const filters = {};
+	    document.querySelectorAll('.top-box.large input[type="checkbox"]:checked').forEach(checkbox => {
+	        const key = checkbox.name;
+	        const value = checkbox.value;
+	        if (!filters[key]) {
+	            filters[key] = [];
+	        }
+	        filters[key].push(value);
+	    });
 
-        currentFilters = filters;
-        fetchFilteredProducts(component, filters, selectedSort);
-    }
+	    currentFilters = filters;
+	    fetchFilteredProducts(component, filters, selectedSort, currentSearchTerm);
+	}
 
 	// 서버에 필터링 요청을 보내는 함수
-	function fetchFilteredProducts(component, filters, sort) {
-	    console.log('Sending filters to server:', JSON.stringify(filters), 'with sort:', sort); // 필터 및 정렬 데이터 로깅
-	    fetch(`/api/products/filter/${component}?sort=${sort}`, { // 서버 URL에 정렬 매개변수 추가
-	        method: 'POST',
-	        headers: {
-	            'Content-Type': 'application/json'
-	        },
-	        body: JSON.stringify(filters) // filters 객체를 직접 보내도록 수정
+	function fetchFilteredProducts(component, filters, sort, search) {
+		const query = new URLSearchParams({ sort, search }).toString();
+		const url = `/api/products/filter/${component}?${query}`;
+
+	    console.log('Sending filters to server:', JSON.stringify(filters), 'with sort:', sort, 'and search:', search); // 필터 및 정렬 데이터 로깅
+		fetch(url, {
+		        method: 'POST',
+		        headers: {
+		            'Content-Type': 'application/json'
+		        },
+		        body: JSON.stringify(filters)
 	    })
 	    .then(response => {
 	        if (!response.ok) {
@@ -555,17 +564,21 @@ document.addEventListener("DOMContentLoaded", () => {
 	/* 제품 정렬 기능 */
     // 정렬 목록 클릭 이벤트
 	sortButtons.forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();
-            sortButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            selectedSort = this.dataset.sort;
-            const activeComponent = document.querySelector('.component.active');
-            if (activeComponent) {
-                fetchProducts(activeComponent.dataset.component, selectedSort, currentSearchTerm);
-            }
-        });
-    });
+	    button.addEventListener('click', (event) => {
+	        event.preventDefault();
+	        sortButtons.forEach(btn => btn.classList.remove('active'));
+	        button.classList.add('active');
+	        selectedSort = button.dataset.sort;
+	        const activeComponent = document.querySelector('.component.active');
+	        if (activeComponent) {
+	            if (Object.keys(currentFilters).length > 0 || currentSearchTerm) {
+	                fetchFilteredProducts(activeComponent.dataset.component, currentFilters, selectedSort, currentSearchTerm);
+	            } else {
+	                fetchProducts(activeComponent.dataset.component, selectedSort, currentSearchTerm);
+	            }
+	        }
+	    });
+	});
 
 
 	// 제품 목록 출력
@@ -592,6 +605,14 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	// 제품 정보를 콘텐츠 박스에 동적으로 표시하는 함수
+	    function displayProducts(products, component) {
+	        if (!products || products.length === 0) {
+	            contentBox.innerHTML = `<p>No products found for ${component.toUpperCase()}.</p>`;
+	            return;
+	        }
+	    }
+
+	// 제품 정보를 콘텐츠 박스에 동적으로 표시하는 함수
 	function displayProducts(products, component) {
 		if (!products || products.length === 0) {
 	        contentBox.innerHTML = `<p>No products found for ${component.toUpperCase()}.</p>`;
@@ -612,15 +633,19 @@ document.addEventListener("DOMContentLoaded", () => {
                                     ${product.product_name}
                                 </a>
                             </div>
-							<div class="product-stock">${product.stock}</div>
+							<input type="hidden" class="product-stock" value="${product.stock}">
                             <div style="color: #666; font-size: 0.9em; width: 1000px;">${product.etc}</div>
                         </div>
                     </div>
                     <div class="product-price" style="text-align: right; margin-left: 10px; font-weight: bold; color: #333;">
                         ${product.price ? `${product.price}원` : '품절'}
-                        <div><span class="stars">★★★★★</span></div>
+                        <div>
+                            <span style="color:rgb(245, 166, 35);" class="stars">★</span>
+                            <span class="stars">${(product.avg_rating).toFixed(1)}</span>
+                        </div>
                         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px;">
-                            <button class="btn add-to-cart" data-seller-no="${product.seller_no}" data-product-code="${product.product_code}" data-product-name="${product.product_name}" data-product-price="${product.price}">담기</button>
+                            <button class="btn add-to-cart" data-seller-no="${product.seller_no}" data-product-code="${product.product_code}" data-product-name="${product.product_name}" data-product-price="${product.price}" 
+							 data-product-thumbnail="${product.thumbnail}" data-product-stock="${product.stock}">담기</button>
                             <button class="btn buy-now">바로구매</button>
                         </div>
                     </div>
@@ -651,7 +676,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     quantity: 1,
 					stock: productStock,
 					product_code: productCode,
-					seller_no: sellerNo
+					seller_no: sellerNo,
+					assembly: '조립 미신청',
                 };
                 localStorage.setItem('selectedProduct', JSON.stringify(productInfo));
 
@@ -670,13 +696,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 const productPrice = button.getAttribute('data-product-price'); // 가격 가져오기
                 const productCode = button.getAttribute('data-product-code');
                 const sellerNo = button.getAttribute('data-seller-no');
+				const productThumbnail = button.getAttribute('data-product-thumbnail');
+				const productStock = button.getAttribute('data-product-stock');
 
                 if(productPrice==0){
                     alert("품절된 상품은 담을 수 없습니다.");
                     return;
                 }
 
-                addToCart(productName, productPrice, productCode, sellerNo);
+                addToCart(productName, productPrice, productCode, sellerNo, productThumbnail, productStock);
             });
         });
     }
@@ -725,7 +753,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         component.classList.add('active');
 
                         // 장바구니에 추가
-                        addToCart(categoryData.product_name, categoryData.price, categoryData.product_code, categoryData.seller_no);
+                        addToCart(categoryData.product_name, categoryData.price, categoryData.product_code, categoryData.seller_no, categoryData.productThumbnail, categoryData.productQuantity);
                     }
                 }
 
@@ -788,7 +816,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 넣는 함수
-    function addToCart(productName, productPrice, productCode, sellerNo) {
+    function addToCart(productName, productPrice, productCode, sellerNo, productThumbnail, productStock) {
         const activeComponent = document.querySelector('.component.active');
 
         if (activeComponent) {
@@ -813,6 +841,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 seller_no: sellerNo,
                 quantity: 1, // 기본 수량 :1
             };
+
+			cartInfo = {
+				thumbnail: productThumbnail,
+			    category: componentName,
+			    name: productName,
+			    price: parseInt(productPrice),
+				stock: productStock,
+	            quantity: 1,
+				product_code: productCode,
+                seller_no: sellerNo,
+				assembly: isAssemblyRequested ? '조립 신청' : '조립 미신청',
+			};
+
+			cartDetails.push(cartInfo);
 
             updateTotalPrice(); // 총합 업데이트
 
@@ -1077,41 +1119,6 @@ function resetCart(){
 
 // 구매하기 버튼 클릭 이벤트
 function goPayPage() {
-    const components = document.querySelectorAll('.component'); // 모든 컴포넌트 선택
-    const cartDetails = []; // 장바구니에 담을 데이터 배열
-
-    components.forEach(component => {
-        const category = component.getAttribute('data-component'); // 카테고리 추출
-        const nameElement = component.querySelector('.component-body .cpu-name, .ram-name, .ssd-name, .power-name, .cooler-name, .mainboard-name, .graphicCard-name, .hdd-name, .case-name');
-        const name = nameElement ? nameElement.innerText.trim() : 'N/A'; // 이름 추출
-
-        const priceElement = component.querySelector('#product-price');
-        const price = priceElement ? parseInt(priceElement.innerText.replace(/[^0-9]/g, '')) : 0; // 가격 추출
-
-        const quantityElement = component.querySelector('.quantity-controls-wrapper input[type="number"]');
-        const quantity = quantityElement ? parseInt(quantityElement.value) : 1; // 수량 추출 (기본값: 1)
-
-        const imageElement = component.querySelector('.component-body img');
-        const image = imageElement ? imageElement.src : ''; // 이미지 경로 추출
-
-        const stockElement = component.getAttribute('data-stock'); // 재고 정보 (예시)
-        const productCodeElement = component.getAttribute('data-product-code'); // 제품 코드 (예시)
-        const sellerNoElement = component.getAttribute('data-seller-no'); // 판매자 번호 (예시)
-
-        // 각 제품의 정보를 객체로 저장
-        const productInfo = {
-            category,
-            name,
-            price,
-            quantity,
-            image,
-            stock: stockElement || '정보 없음', // 재고 정보
-            product_code: productCodeElement || '정보 없음', // 제품 코드
-            seller_no: sellerNoElement || '정보 없음', // 판매자 번호
-        };
-
-        cartDetails.push(productInfo); // 배열에 추가
-    });
 
     // 선택된 제품이 없을 경우 경고 메시지 표시
     if (cartDetails.length === 0) {

@@ -38,7 +38,10 @@ import com.boot.selftop_web.quote.model.dto.QuoteDto;
 import com.boot.selftop_web.quote.model.dto.QuotecomparisonDto;
 import com.boot.selftop_web.review.biz.ReviewBiz;
 import com.boot.selftop_web.review.model.dto.ReviewDto;
-
+import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
+import com.boot.selftop_web.review.model.dto.reviewsearchDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.boot.selftop_web.member.customer.model.dto.CustomerorderDto;
 import com.boot.selftop_web.member.seller.model.dto.SellerOrderDto;
 import com.boot.selftop_web.order.biz.OrderBoardBiz;
@@ -50,8 +53,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -483,9 +484,19 @@ public class CustomerController {
 		Integer member_no = (Integer) session.getAttribute("member_no");
 		List<SellerOrderDto> res = customerBiz.customerpurchaselist(member_no,Integer.parseInt(orderNum));
 		List<OrderBoardDto> customerinfo = orderboardBiz.vieworderboard(Integer.parseInt(orderNum));
-
+		List<reviewsearchDto> reviewsearchres=orderboardBiz.reviewsearchres(member_no);
+		//int searchreviewnum=0;
 		String deliveryNo = orderboardBiz.getDeliveryNo(Integer.parseInt(orderNum));
-
+		List<Integer> productCodes = reviewsearchres.stream()
+			    .map(reviewsearchDto::getProduct_code)  // OrderDTO에서 productCode만 추출
+			    .collect(Collectors.toList());
+		model.addAttribute("productcodes",productCodes);
+		try {
+			model.addAttribute("review",new ObjectMapper().writeValueAsString(reviewsearchres));
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		model.addAttribute("membername", session.getAttribute("name"));
 		model.addAttribute("orderinfo",res);
 		model.addAttribute("ordernum",orderNum);
@@ -505,11 +516,13 @@ public class CustomerController {
 							@RequestParam("review_img") MultipartFile review_img,
 							@RequestParam("rating") int rating,
 							@RequestParam("product_code") int productCode,
-							@RequestParam("content") String content) {
+							@RequestParam("content") String content,
+							@RequestParam("reviewcondition")String reviewcondition){
 		// 세션에서 회원 번호 가져오기
 		int member_no = (Integer) session.getAttribute("member_no");
+		boolean condition = Boolean.parseBoolean(reviewcondition);
 		System.out.println("회원 번호: " + member_no);
-
+		int res=0;
 		// 현재 프로젝트 경로를 기준으로 저장 경로 설정
 		String projectPath = System.getProperty("user.dir");
 		String uploadDir = projectPath + "/src/main/resources/review_img"; // 저장 폴더
@@ -543,7 +556,12 @@ public class CustomerController {
 		System.out.println("Review Content: " + content);
 
 		// DB 저장
-		int res = customerBiz.insertReview(dbPath, content, rating, productCode, member_no);
+		if(condition) {
+			res =customerBiz.updateReviewimage(filePath, content, rating, productCode, member_no);
+		}else {
+			res = customerBiz.insertReview(dbPath, content, rating, productCode, member_no);
+		}
+
 		if (res > 0) {
 			System.out.println("upload success");
 		} else {
@@ -594,9 +612,27 @@ public class CustomerController {
 
 	@GetMapping("/api/cpu/attributes")
 	public ResponseEntity<Map<String, List<String>>> getCpuAttributes() {
+		List<String> ddrLs = productMapper.findAllcpuDdr();
+		List<String> ddrres = new ArrayList<>();
+		for (String ddr : ddrLs) {
+			if (ddr != null && ddr.contains(",")) {
+				for (String f : ddr.split(",")) {
+					if (!ddrres.contains(f.trim())) {
+						ddrres.add(f.trim());
+					}
+				}
+			} else {
+				if (ddr != null && !ddr.trim().isEmpty()) {
+					ddrres.add(ddr.trim());
+				} else {
+					ddrres.add(ddr);
+				}
+			}
+		}
+
 	    Map<String, List<String>> attributes = new HashMap<>();
 	    attributes.put("Socket", productMapper.findAllcpuSocket());
-	    attributes.put("DDR", productMapper.findAllcpuDdr());
+	    attributes.put("DDR", ddrres);
         attributes.put("Generation", productMapper.findAllcpuGeneration());
 	    attributes.put("Spec", productMapper.findAllcpuSpec());
 	    attributes.put("Inner_VGA", productMapper.findAllcpuInnerVga());
@@ -680,26 +716,68 @@ public class CustomerController {
 	@GetMapping("/api/case/attributes")
 	public ResponseEntity<Map<String, List<String>>> getCaseAttributes() {
 	    Map<String, List<String>> attributes = new HashMap<>();
+
+		List<String> formfactorLs = productMapper.findAllcaseFormfactor();
+		List<String> fres = new ArrayList<>();
+		for (String fftor : formfactorLs) {
+			if (fftor != null && fftor.contains(",")) {
+				for (String f : fftor.split(",")) {
+					if (!fres.contains(f.trim())) {
+						fres.add(f.trim());
+					}
+				}
+			} else {
+				if (fftor != null && !fftor.trim().isEmpty()) {
+					fres.add(fftor.trim());
+				} else {
+					fres.add(fftor);
+				}
+			}
+		}
+
+		List<String> powersizeLs = productMapper.findAllcasePower_Size();
+		List<String> psres = new ArrayList<>();
+		for (String psize : powersizeLs) {
+			if (psize != null && psize.contains(",")) {
+				for (String f : psize.split(",")) {
+					if (!psres.contains(f.trim())) {
+						psres.add(f.trim());
+					}
+				}
+			} else {
+				if (psize != null && !psize.trim().isEmpty()) {
+					psres.add(psize.trim());
+				} else {
+					psres.add(psize);
+				}
+			}
+		}
+
 	    attributes.put("Power_Status", productMapper.findAllcasePower_Status());
-	    attributes.put("Formfactor", productMapper.findAllcaseFormfactor());
+		attributes.put("Formfactor", fres);
 	    attributes.put("Tower_Size", productMapper.findAllcaseTower_Size());
 	    attributes.put("VGA_Length", productMapper.findAllcaseVga_Length());
-	    attributes.put("Power_Size", productMapper.findAllcasePower_Size());
+	    attributes.put("Power_Size", psres);
 	    attributes.put("Company", productMapper.findAllcaseCompany());
 	    return ResponseEntity.ok(attributes);
 	}
 
 	//필터에 선택된 체크박스에 따라 데이터를 넘겨줌
 	@PostMapping("/api/products/filter/{category}")
-	public ResponseEntity<?> filterProducts(@PathVariable String category, @RequestBody Map<String, List<String>> filters, @RequestParam(value = "sort", defaultValue = "byname") String sort) {
-	    System.out.println("Received filters: " + filters + " with sort: " + sort);
+	public ResponseEntity<?> filterProducts(
+			@PathVariable String category,
+			@RequestBody Map<String, List<String>> filters,
+//			filters = {Formfactor=[e-atx, atx, m-atx, m-itx, atx, m-atx, m-itx]}
+			@RequestParam(value = "sort", defaultValue = "byname") String sort,
+			@RequestParam(value = "search", required = false) String search) {
+
 	    ProductBiz<?> productBiz = productBizFactory.getBiz(category);
 	    if (productBiz == null) {
 	        return ResponseEntity.badRequest().body("Invalid category: " + category);
 	    }
 
 	    try {
-	        List<?> filteredProducts = productBiz.filterProducts(filters, sort); // 필터 및 정렬 매개변수를 비즈니스 로직에 전달
+	        List<?> filteredProducts = productBiz.filterProducts(filters, sort, search); // 필터 및 정렬 매개변수를 비즈니스 로직에 전달
 	        if (filteredProducts.isEmpty()) {
 	            return ResponseEntity.noContent().build();
 	        }
@@ -717,7 +795,7 @@ public class CustomerController {
 	@GetMapping("/products/{category}")
 	public ResponseEntity<?> getProductsByCategory(
 	        @PathVariable String category,
-	        @RequestParam(value = "sort", defaultValue = "byname") String sort,
+	        @RequestParam(value = "sort", defaultValue = "bypopular") String sort,
 	        @RequestParam(value = "search", required = false) String search) {
 
 	    System.out.println("Fetching products for category: " + category + ", sort: " + sort + ", search: " + search);
@@ -731,6 +809,7 @@ public class CustomerController {
 	    if (products.isEmpty()) {
 	        return ResponseEntity.noContent().build();
 	    }
+
 	    return ResponseEntity.ok(products);
 	}
 
@@ -948,13 +1027,12 @@ public class CustomerController {
 
 //		case와 board
 		if (hascase && hasmainboard) {
-			String caseform = quoteBiz.caseformfactor(caseproductno).toLowerCase().trim();
+			String caseform = quoteBiz.caseformfactor(caseproductno).toLowerCase().replace(" ","").trim();
 			String boardform = quoteBiz.boardformfactor(boardproductno).toLowerCase().trim();
-			String[] caseArray = caseform.split(", ");
+			String[] caseArray = caseform.split(",");
 
 			// 배열을 리스트로 변환
 			List<String> caseformlist = Arrays.asList(caseArray);
-
 			if (caseformlist.contains(boardform)) {
 				boardcasecompatibility = true;
 
@@ -972,15 +1050,26 @@ public class CustomerController {
 		}
 //		case와 power
 		if (hascase && haspower) {
-			String caseform = quoteBiz.caseformfactor(caseproductno).toLowerCase().trim();
+			String caseform = quoteBiz.casepowersize(caseproductno).toLowerCase().toLowerCase().replace(" ","").trim();
 //			String casepowerform = quoteBiz.casepowersize(caseproductno).toLowerCase().trim();
-			String powerform = quoteBiz.powersize(powerproductno).toLowerCase().trim();
-			String[] caseArray = caseform.split(", ");
-
+			String powerform = quoteBiz.powersize(powerproductno).toLowerCase().toLowerCase().replace(" ","").trim();
+			String[] caseArray = caseform.split(",");
+			String[] powerArray =powerform.split(",");
+			String powersize;
 			// 배열을 리스트로 변환
 			List<String> caseformlist = Arrays.asList(caseArray);
+			List<String> powerformlist = Arrays.asList(powerArray);
 
-			if (caseformlist.contains(powerform)) {
+			if(powerformlist.contains("atx")) {
+				powersize="atx";
+			}else if(powerformlist.contains("m-atx")) {
+				powersize="m-atx";
+			}else {
+				powersize="itx";
+			}
+			System.out.println(powersize);
+
+			if (caseformlist.contains(powersize)) {
 				casepowerompatibility = true;
 			}
 			valueres.put("casepowerompatibility", casepowerompatibility);
@@ -1008,6 +1097,5 @@ public class CustomerController {
 
 
     }
-
 
 }

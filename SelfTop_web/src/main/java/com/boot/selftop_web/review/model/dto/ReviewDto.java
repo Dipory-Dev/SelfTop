@@ -1,5 +1,7 @@
 package com.boot.selftop_web.review.model.dto;
 
+import java.util.Date;
+
 public class ReviewDto {
     private int reviewNo;
     private String reviewImg;
@@ -7,8 +9,9 @@ public class ReviewDto {
     private int rating;
     private int productCode;
     private int memberNo;
-    private String memberName; 
-    
+    private String memberName;
+    private Date reviewDate;
+
 
     public int getReviewNo() {
         return reviewNo;
@@ -66,6 +69,11 @@ public class ReviewDto {
 		this.memberName = memberName;
 	}
 
+	public Date getReviewDate() {
+		return reviewDate;
+	}
 
-    
+	public void setReviewDate(Date reviewDate) {
+		this.reviewDate = reviewDate;
+	}
 }

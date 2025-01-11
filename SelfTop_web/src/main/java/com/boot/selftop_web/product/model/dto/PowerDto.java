@@ -17,13 +17,15 @@ public class PowerDto extends ProductStatusDto implements ProductDto {
     private String content_img;
     private String etc;
 
+    private double avg_rating;
+
     private int supply;
     private String plus80;
     private String formfactor;
 
     public PowerDto() {}
 
-    public PowerDto(int product_code, String category, String product_name, String company, Date upload_date, String thumbnail, String content_img, String etc, int supply, String plus80, String formfactor) {
+    public PowerDto(int product_code, String category, String product_name, String company, Date upload_date, String thumbnail, String content_img, String etc, double avg_rating, int supply, String plus80, String formfactor) {
         this.product_code = product_code;
         this.category = category;
         this.product_name = product_name;
@@ -32,6 +34,7 @@ public class PowerDto extends ProductStatusDto implements ProductDto {
         this.thumbnail = thumbnail;
         this.content_img = content_img;
         this.etc = etc;
+        this.avg_rating = avg_rating;
         this.supply = supply;
         this.plus80 = plus80;
         this.formfactor = formfactor;
@@ -125,6 +128,14 @@ public class PowerDto extends ProductStatusDto implements ProductDto {
         this.formfactor = formfactor;
     }
 
+    public double getAvg_rating() {
+        return avg_rating;
+    }
+
+    public void setAvg_rating(double avg_rating) {
+        this.avg_rating = avg_rating;
+    }
+
     @Override
     public String toString() {
         return "PowerDto{" +
@@ -136,6 +147,7 @@ public class PowerDto extends ProductStatusDto implements ProductDto {
                 ", thumbnail='" + thumbnail + '\'' +
                 ", content_img='" + content_img + '\'' +
                 ", etc='" + etc + '\'' +
+                ", avg_rating=" + avg_rating +
                 ", supply=" + supply +
                 ", plus80='" + plus80 + '\'' +
                 ", formfactor='" + formfactor + '\'' +

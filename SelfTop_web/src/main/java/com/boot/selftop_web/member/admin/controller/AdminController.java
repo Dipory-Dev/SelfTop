@@ -151,6 +151,7 @@ public class AdminController {
 
                 caseDto.setPower_status(request.getParameter("power_status"));
                 caseDto.setFormfactor(request.getParameter("formfactor"));
+                caseDto.setPower_size(request.getParameter("powerformfactor"));
                 caseDto.setTower_size(request.getParameter("tower_size"));
                 caseDto.setVga_length(Integer.parseInt(request.getParameter("vga_length")));
                 response = sendMSG(biz, caseDto);

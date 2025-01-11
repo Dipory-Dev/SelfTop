@@ -1,3 +1,6 @@
+let quoteInfo = [];
+let quoteDetails = [];
+
 function loadquotedetail(quoteNo) {
 	// AJAX 요청 보내기
 	$.ajax({
@@ -49,7 +52,8 @@ function loadquotedetail(quoteNo) {
 				<button type="button" class="amount-decrease">−</button>
 				<input type="number" class="amount-input" value="${detail.amount}" 
 				data-quote-no="${detail.quote_no}" 
-				data-productcode="${detail.product_code}"
+				data-productcode="${detail.product_code}" 
+				data-sellerno="${detail.seller_no}" 
 				data-price="${detail.price}" min="0" />
 				 <button type="button" class="amount-increase">+</button>
 				 </div>`;
@@ -640,4 +644,43 @@ function compatibilityviewchange(data){
 	powercurrent.innerHTML = powersize === 0 ? "없습니다." : powersize + "W";
 	powerrecommended.innerHTML=wattvalue + 100 + "W";
 	
+}
+
+// 결제하기 버튼 클릭 이벤트
+function goPay() {
+	
+	// 각 제품 정보를 담는 객체 생성
+    document.querySelectorAll(".orderproduct").forEach((product) => {
+		const productCode = product.querySelector(".amount-input")?.dataset.productcode;
+		//const sellerNo = product.querySelector(".amount-input")?.dataset.sellerNo;
+
+        quoteInfo = {
+            thumbnail: product.querySelector(".thumbnail img")?.src,
+            category: product.querySelector(".category p")?.innerText,
+            name: product.querySelector(".productname p")?.innerText,
+			price: parseInt(product.querySelector(".priceamount p")?.innerText.replace(/[^0-9]/g, "")) /
+			       parseInt(product.querySelector(".amount-input")?.value), // 총 가격을 수량으로 나눔
+            quantity: parseInt(product.querySelector(".amount-input")?.value),
+            product_code: productCode,
+            seller_no: 0, // 판매자 정보 필요
+            assembly: "조립 미신청", // 조립 여부는 기본값으로 설정
+        };
+		
+		// 배열에 추가
+		quoteDetails.push(quoteInfo);
+	});
+	
+	// 선택된 제품이 없을 경우 경고 메시지 표시
+    if (quoteDetails.length === 0) {
+        alert("선택된 제품이 없습니다. 견적함을 확인해주세요.");
+        return;
+    }
+
+    // localStorage에 저장
+    localStorage.setItem('QuoteDetails', JSON.stringify(quoteDetails));
+
+    // 결제 페이지로 이동 (주석 해제 시 활성화)
+    window.location.href = '/pay'; // 결제 페이지 URL로 이동
+
+    console.log(quoteDetails); // 가져온 데이터 확인
 }

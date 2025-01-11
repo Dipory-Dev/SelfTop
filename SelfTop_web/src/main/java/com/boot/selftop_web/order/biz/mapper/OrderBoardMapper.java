@@ -11,6 +11,8 @@ import com.boot.selftop_web.order.model.dto.OrderBoardDto;
 import com.boot.selftop_web.order.model.dto.OrderDetailDto;
 import com.boot.selftop_web.quote.model.dto.CartDTO;
 import com.boot.selftop_web.quote.model.dto.CartDetailDto;
+import com.boot.selftop_web.review.model.dto.ReviewDto;
+import com.boot.selftop_web.review.model.dto.reviewsearchDto;
 
 @Mapper
 public interface OrderBoardMapper {
@@ -37,4 +39,10 @@ public interface OrderBoardMapper {
 
     @Update("UPDATE order_board SET order_status = '취소요청', reason = #{reason} WHERE order_no = #{orderno} ")
 	public int requestcancelorder(@Param("orderno")int orderno,@Param("reason") String reason);
+
+    @Select("Select * from review where member_no = #{memberno}")
+	public List<reviewsearchDto> reviewsearchres(@Param("memberno") int memberno);
+
+    @Select("Select review_no from where member_no =#{memberno}")
+	public int searchreviewnum(int memberno);
 }

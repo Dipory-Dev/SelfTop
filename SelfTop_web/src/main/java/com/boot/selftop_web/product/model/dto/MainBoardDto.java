@@ -17,6 +17,8 @@ public class MainBoardDto extends ProductStatusDto implements ProductDto {
     private String content_img;
     private String etc;
 
+    private double avg_rating;
+
     private String socket;
     private String formfactor;
     private int memory_slot;
@@ -26,7 +28,7 @@ public class MainBoardDto extends ProductStatusDto implements ProductDto {
 
     public MainBoardDto() {}
 
-    public MainBoardDto(int product_code, String category, String product_name, String company, Date upload_date, String thumbnail, String content_img, String etc, String socket, String formfactor, int memory_slot, String ddr, int max_storage, int watt) {
+    public MainBoardDto(int product_code, String category, String product_name, String company, Date upload_date, String thumbnail, String content_img, String etc, double avg_rating, String socket, String formfactor, int memory_slot, String ddr, int max_storage, int watt) {
         this.product_code = product_code;
         this.category = category;
         this.product_name = product_name;
@@ -35,6 +37,7 @@ public class MainBoardDto extends ProductStatusDto implements ProductDto {
         this.thumbnail = thumbnail;
         this.content_img = content_img;
         this.etc = etc;
+        this.avg_rating = avg_rating;
         this.socket = socket;
         this.formfactor = formfactor;
         this.memory_slot = memory_slot;
@@ -155,6 +158,16 @@ public class MainBoardDto extends ProductStatusDto implements ProductDto {
         this.watt = watt;
     }
 
+
+    public double getAvg_rating() {
+        return avg_rating;
+    }
+
+    public void setAvg_rating(double avg_rating) {
+        this.avg_rating = avg_rating;
+    }
+
+
     @Override
     public String toString() {
         return "MainBoardDto{" +
@@ -166,6 +179,7 @@ public class MainBoardDto extends ProductStatusDto implements ProductDto {
                 ", thumbnail='" + thumbnail + '\'' +
                 ", content_img='" + content_img + '\'' +
                 ", etc='" + etc + '\'' +
+                ", avg_rating=" + avg_rating +
                 ", socket='" + socket + '\'' +
                 ", formfactor='" + formfactor + '\'' +
                 ", memory_slot=" + memory_slot +

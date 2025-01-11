@@ -13,17 +13,21 @@
 		if (message) {
 			alert(message);
 		}
+		//로고 누르면 메인페이지
+		document.getElementById('logo').addEventListener('click', function() {
+		    window.location.href = '/main';
+		});
 	});
 </script>
 </head>
 <body>
 	<header>
 		<div class="header-content">
-			<img src="/img/logo.png">
+            <img src="/img/logo.png" id="logo" style="cursor: pointer;">
 			<p>
 				<span th:text="${membername} + 님"></span>&nbsp| <a href="mypage">
 					<img src="/img/human-icon.png" class="human-icon">
-				</a> <a href="cart"> <img src="/img/cart-icon.png" class="cart-icon">
+				</a> <a href="cartpage"> <img src="/img/cart-icon.png" class="cart-icon">
 				</a> <a href="signup"> <img src="/img/lock-icon.png"
 					class="lock-icon">
 				</a>
@@ -32,10 +36,10 @@
 	</header>
 	<main>
 	 <!-- 취소요청모달 -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">주문 취소</div>
-            <div class="modal-body">
+    <div id="cancelmodal" class="cancelmodal">
+        <div class="cancelmodal-content">
+            <div class="cancelmodal-header">주문 취소</div>
+            <div class="cancelmodal-body">
                 <table class="table">
                     <tr class="tr-name">
                         <th>이름</th>
@@ -43,17 +47,15 @@
                     </tr>
                     <tr class="tr-cancel-reason">
                         <td colspan='2'>
-                            <textarea class = "reason" placeholder="취소 사유를 작성해주세요.(ex. 단순 변심, 옵션 추가 후 재구매 등)"></textarea>
+                            <textarea class = "reason" placeholder="취소 사유를 작성해주세요.(ex. 단순 변심, 옵션 추가 후 재구매 등)" ></textarea>
                         </td>
-
                     </tr>
-
                 </table>
                 <p class="foot-message"> 추후에 판매자로부터 직접 연락을 받으실 수 있습니다.</p>
             </div>
-            <div class="modal-footer">
-                <button id="submitModalBtn" class="btn btn-submit">등록</button>
-                <button id="closeModalBtn" class="btn btn-close">닫기</button>
+            <div class="cancelmodal-footer">
+                <button id="cancelsubmitModalBtn" class="btn btn-submit">등록</button>
+                <button id="cancelcloseModalBtn" class="btn btn-close">닫기</button>
             </div>
         </div>
     </div>
@@ -72,9 +74,9 @@
 						주문 <br> 상세정보
 					</h2>
 				</div>
-				<div>
-					<h2>취소요청</h2>
-					<h2>주문 <br> 상세정보</h2>
+				<div class = "cancelsection">
+					<button style="cursor:pointer" id="cancelorder" th:data-userid="${customerinfo.name}"
+						th:data-ordernum="${ordernum}">취소요청</button>
 				</div>
 			</div>
 			<div class="order_no">
@@ -90,7 +92,7 @@
 			<div class="delivery_status">
 				<h2>상태</h2>
 				<br>
-				<h3 th:text=${orderstatus} style="color: #008ADA;"></h3>
+				<h3 id="deliveryinfo" th:text=${orderstatus} style="color: #008ADA;"></h3>
 			</div>
 		</div>
 		<div class="namezone">
@@ -162,7 +164,8 @@
 				</tr>
 				<tr th:each="dto : ${orderinfo}">
 					<th>
-						<button class="openModalBtn btn" th:data-product-code="${dto.product_code}">후기작성</button>
+				 		<button th:unless="${productcodes.contains(dto.product_code)}"class="openModalBtn btn" th:data-product-code="${dto.product_code}"  data-reviewedit="false">후기작성</button> 					
+						<button th:if="${productcodes.contains(dto.product_code)}" class="openModalBtn btn" th:data-product-code="${dto.product_code}" data-reviewedit="true" th:data-reviewlist="${review}">후기수정</button>						
 					</th>
 					<th th:text="${dto.product_name}"></th>
 					<th th:text="${dto.price} * ${dto.amount} +원"></th>
@@ -186,15 +189,16 @@
 								<div class="form-rate" name="reviewForm" method="post" >
 									<div class ="star_rating">
 										​<span class="star on" value="1"> </span>
-										​​<span class="star" value="2"> </span>
-										​​<span class="star" value="3"> </span>
-										​​<span class="star" value="4"> </span>
-										​​<span class="star" value="5"> </span>
+										​​<span class="star on" value="2"> </span>
+										​​<span class="star on" value="3"> </span>
+										​​<span class="star on" value="4"> </span>
+										​​<span class="star on" value="5"> </span>
 									</div>
 
 									<!--별점 정보 전달-->
 									<input type="hidden" name="rating" value="5">
 									<input type="hidden" name="product_code" value="">
+									<input type="hidden" name="reviewcondition" value="">
 								</div>
 							</div>
 
@@ -211,14 +215,18 @@
 							<p class="foot-message"> *10MB 이하 jpg, jpeg, png, gif 파일 1장만 첨부 가능</p>
 						</div>
 						<div class="modal-footer">
-							<button id="closeModalBtn" class="btn btn-close">닫기</button>
-							<input type="submit" value="저장" id="submitModalBtn" class="btn btn-submit">
+
+							<input type="submit" value="저장" id="submitModalBtn"
+								class="btn btn-submit">
+
+							<button id="closeModalBtn" type="button" class="btn btn-close">닫기</button>
+
 						</div>
 					</form>
 				</div>
 			</div>
 		</div>
-		<script type="text/javascript" src="/js/customerorderdetail.js"></script>
+		<script  type="text/javascript" src="/js/customerorderdetail.js"></script>
 	</main>
 
 	<footer>
