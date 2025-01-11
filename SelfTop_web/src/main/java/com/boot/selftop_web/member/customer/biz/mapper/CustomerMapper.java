@@ -63,6 +63,7 @@ public interface CustomerMapper {
 	        "<if test='enddate != null and !enddate.isEmpty()'>" +
 	        "   AND order_date &lt;= #{enddate} " +
 	        "</if>" +
+	        "order by order_no" +
 	        "</script>")
     List<SellerOrderDto> searchcustomerorderlist(@Param("startdate")String startdate,@Param("enddate") String enddate,@Param("member_no") int member_no);
 

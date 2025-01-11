@@ -138,5 +138,10 @@ public class QuoteBizImpl implements QuoteBiz{
 		// TODO Auto-generated method stub
 		return mapper.powerwatt(productcode);
 	}
+	@Override
+	public char assemblecheck(int quoteno) {
+		// TODO Auto-generated method stub
+		return mapper.assemblecheck(quoteno);
+	}
 
 }

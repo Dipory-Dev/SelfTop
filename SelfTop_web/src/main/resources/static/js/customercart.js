@@ -28,9 +28,43 @@ function loadquotedetail(quoteNo) {
 				productNameDiv.empty();
 				priceAmountDiv.empty();
 			});
+			const productList = response.products;
+			const assemblecheck =response.assemblecheck;
+
+			const assemblesection=document.querySelector("#assemblecheck");
+
+			/*const assembleimg =assemblesection.querySelector(".thumbnail img")
+			assembleimg.src="https://i.namu.wiki/i/EuI1RmTmtF97hexALOiu-KCVgc4KskRdV_J25r6TL4XMUDKlNuUUXk9BcFoWAJdAEauBwc2vGjBfF0F6ba3sGw.webp";
+			assembleimg.style.display='block';
+
+			const assemblecontent = assemblesection.querySelector(".productname");
+			const ascontent = `<p>조립여부</p>`;
+			assemblecontent.innerHTML=ascontent.trim();*/
+
+			const assembleamount =assemblesection.querySelector(".priceamount");
+			if(assemblecheck == 'Y'){
+			assembleamount.innerHTML =`<p>20000 원</p>
+							<div class="detailamountcontrol">
+							<button type="button" class="amount-decrease">−</button>
+							<input type="number" class="amount-input" value="1" 
+							data-price="20000" min="0" max="1" />
+							 <button type="button" class="amount-increase">+</button>
+							 </div>`;
+			}
+
+			/*if(assemblecheck == 'N'){
+						assembleamount.innerHTML =`<p>20000 원</p>
+										<div class="detailamountcontrol">
+										<button type="button" class="amount-decrease">−</button>
+										<input type="number" class="amount-input" value="0"
+										data-price="20000" min="0" max="1" />
+										 <button type="button" class="amount-increase">+</button>
+										 </div>`;
+						}*/
+
 
 			// 서버로부터 받은 데이터에서 카테고리별로 업데이트
-			response.forEach(function(detail) {
+			productList.forEach(function(detail) {
 				// 카테고리 이름을 기준으로 해당 카테고리의 div를 선택
 				const categoryDiv = $('.category p').filter(function() {
 					return $(this).text() === detail.category; // 카테고리 이름으로 필터링
@@ -45,9 +79,10 @@ function loadquotedetail(quoteNo) {
 				imagediv.empty();  // 기존 내용 삭제
 				namediv.empty();
 				priceamountdiv.empty();
+				const amountandprice = detail.price * detail.amount;
 				const imagehtml = `<img src="${detail.thumbnail}">`;
 				const namehtml = `<p>${detail.product_name}</p>`;
-				const priceamounthtml = `<p>${detail.price * detail.amount}  원</p>
+				const priceamounthtml = `<p>${amountandprice.toLocaleString()}  원</p>
 				<div class="detailamountcontrol">
 				<button type="button" class="amount-decrease">−</button>
 				<input type="number" class="amount-input" value="${detail.amount}" 
@@ -100,7 +135,20 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 	}
 	
-	
+	//가격 보여주기처리
+	const pricerow = document.querySelectorAll(".quoteprice");
+	const quotedetailpricerow = document.querySelectorAll(".quoteprice");
+	pricerow.forEach(value => {
+		const pricevalue = parseInt(value.dataset.price, 10);
+		const convertprice = pricevalue.toLocaleString();
+
+		// 금액 업데이트
+
+		value.textContent = convertprice + "원";
+
+
+	});
+
 	
 	//호환성 체크
 	openModal.addEventListener('click', () => {
@@ -314,7 +362,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				const priceElement = event.target.closest('tr').querySelector('.quoteprice');
 				quantityInput.value = currentValue - 1;
 				const totalPrice = originalPrice * parseInt(quantityInput.value, 10);
-				priceElement.textContent = totalPrice + " 원";
+				priceElement.textContent = totalPrice.toLocaleString() + " 원";
 			}
 		}
 
@@ -327,7 +375,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			quantityInput.value = currentValue + 1;
 			const totalPrice = originalPrice * parseInt(quantityInput.value, 10);
 
-			priceElement.textContent = totalPrice + " 원";
+			priceElement.textContent = totalPrice.toLocaleString() + " 원";
 		  
 			
 		}
@@ -337,15 +385,12 @@ document.addEventListener("DOMContentLoaded", () => {
 			let currentValue = parseInt(quantityInput.value, 10);
 			if (currentValue > parseInt(quantityInput.min, 10)) {
 				const priceElement = target.closest('.priceamount').querySelector('p');
-				const price = parseInt(priceElement.textContent.replace(' 원', ''), 10);
-				const originalPrice = price / parseInt(quantityInput.value, 10); 
+				const originalPrice = parseInt(quantityInput.getAttribute('data-price'), 10);
 				quantityInput.value = currentValue - 1;				
-				if (parseInt(quantityInput.value, 10) === 0) {
-					totalPrice = originalPrice;
-				} else {
-					totalPrice = originalPrice * parseInt(quantityInput.value, 10);
-				}
-				priceElement.textContent = totalPrice + " 원";
+				totalPrice = originalPrice * parseInt(quantityInput.value, 10);
+
+
+				priceElement.textContent = totalPrice.toLocaleString() + " 원";
 			}
 		}
 
@@ -354,16 +399,12 @@ document.addEventListener("DOMContentLoaded", () => {
 			const quantityInput = target.parentElement.querySelector(".amount-input");
 			let currentValue = parseInt(quantityInput.value, 10);
 			const priceElement = target.closest('.priceamount').querySelector('p');
-			const price = parseInt(priceElement.textContent.replace(' 원', ''), 10);
-			if (parseInt(quantityInput.value, 10) === 0) {
-				originalPrice=price;
-			} else {
-				originalPrice = price / parseInt(quantityInput.value, 10);
-			}
+			const originalPrice = parseInt(quantityInput.getAttribute('data-price'), 10);
+
 			quantityInput.value = currentValue + 1;
 			const totalPrice = originalPrice * parseInt(quantityInput.value, 10); 
 			    
-			priceElement.textContent = totalPrice + " 원";
+			priceElement.textContent = totalPrice.toLocaleString() + " 원";
 		}
 	});
 
@@ -380,7 +421,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			} else {
 				totalPrice = originalPrice * value;
 			}
-			priceElement.textContent = totalPrice + " 원";
+			priceElement.textContent = totalPrice.toLocaleString() + " 원";
 		}
 		
 		if (event.target.classList.contains("amount-input")) {
@@ -395,7 +436,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			else{
 				totalPrice = originalPrice * value;
 			}
-			priceElement.textContent = totalPrice + " 원";
+			priceElement.textContent = totalPrice.toLocaleString() + " 원";
 		}
 	});
 });
@@ -648,11 +689,13 @@ function compatibilityviewchange(data){
 
 // 결제하기 버튼 클릭 이벤트
 function goPay() {
-	
+	const radioButtons = document.querySelectorAll('#assemblecheck input[type="radio"]');
+	let isAssemblyRequested = false; // 현재 조립 신청 상태
 	// 각 제품 정보를 담는 객체 생성
     document.querySelectorAll(".orderproduct").forEach((product) => {
 		const productCode = product.querySelector(".amount-input")?.dataset.productcode;
-		//const sellerNo = product.querySelector(".amount-input")?.dataset.sellerNo;
+		const sellerNo = product.querySelector(".amount-input")?.dataset.sellerNo;
+		// 조립 신청 여부 체크
 
         quoteInfo = {
             thumbnail: product.querySelector(".thumbnail img")?.src,
@@ -662,14 +705,41 @@ function goPay() {
 			       parseInt(product.querySelector(".amount-input")?.value), // 총 가격을 수량으로 나눔
             quantity: parseInt(product.querySelector(".amount-input")?.value),
             product_code: productCode,
-            seller_no: 0, // 판매자 정보 필요
+            seller_no: sellerNo, // 판매자 정보 필요
             assembly: "조립 미신청", // 조립 여부는 기본값으로 설정
         };
-		
+
 		// 배열에 추가
 		quoteDetails.push(quoteInfo);
+
+		radioButtons.forEach(radio => {
+	        radio.addEventListener('change', () => {
+	            if (radio.value === 'apply' && radio.checked) {
+	                // 조립 신청이 선택되었을 때
+	                if (!isAssemblyRequested) {
+	                    isAssemblyRequested = true;
+
+						// cartInfo의 assembly를 '조립신청'으로 업데이트
+		                quoteDetails.forEach(quoteItem => {
+		                    quoteItem.assembly = '조립 신청';
+		                });
+	                }
+	            } else if (radio.value === 'no-apply' && radio.checked) {
+	                // 조립 미신청이 선택되었을 때
+	                if (isAssemblyRequested) {
+	                    isAssemblyRequested = false;
+
+						// quoteInfo의 assembly를 '조립신청'으로 업데이트
+		                quoteDetails.forEach(quoteItem => {
+		                    quoteItem.assembly = '조립 미신청';
+		                });
+	                }
+	            }
+	        });
+	    });
+
 	});
-	
+
 	// 선택된 제품이 없을 경우 경고 메시지 표시
     if (quoteDetails.length === 0) {
         alert("선택된 제품이 없습니다. 견적함을 확인해주세요.");

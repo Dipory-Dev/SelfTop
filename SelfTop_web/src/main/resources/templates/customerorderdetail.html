@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Customer_order_detail</title>
+<title>SELFTOP</title>
+<link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/img/favicon.ico" type="image/x-icon">
 <link rel="stylesheet" href="/css/customerorderdetail.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
@@ -117,7 +119,7 @@
 					<p>배송비</p>
 				</div>
 				<div class="orderprice_data">
-					<p>5000원</p>
+					<p>5,000원</p>
 				</div>
 			</div>
 			<div class="total_price">
@@ -125,7 +127,7 @@
 					<p>결제금액</p>
 				</div>
 				<div class="orderprice_data">
-					<p th:text="${orderprice} +5000 +원"></p>
+					<p th:text="${allprice} +원"></p>
 				</div>
 			</div>
 		</div>
@@ -168,9 +170,9 @@
 						<button th:if="${productcodes.contains(dto.product_code)}" class="openModalBtn btn" th:data-product-code="${dto.product_code}" data-reviewedit="true" th:data-reviewlist="${review}">후기수정</button>						
 					</th>
 					<th th:text="${dto.product_name}"></th>
-					<th th:text="${dto.price} * ${dto.amount} +원"></th>
+					<th class = "pricevalue" th:data-price="${dto.price} * ${dto.amount}"></th>
 					<th th:text="${dto.amount} +개"></th>
-					<th class="same-delivery">5000원</th>
+					<th class="same-delivery">5,000원</th>
 				</tr>
 			</table>
 		</div>

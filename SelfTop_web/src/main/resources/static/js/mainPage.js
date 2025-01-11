@@ -39,6 +39,12 @@ document.addEventListener("DOMContentLoaded", () => {
         fetchCpuAttributes(); // CPU 속성 정보를 가져오는 함수 호출
     }
 
+	//intro에서 검색한 데이터를 처리하고 보여주는 함수
+	const urlParams = new URLSearchParams(window.location.search);
+	const categoryFromUrl = urlParams.get('category');
+	const searchFromUrl = urlParams.get('search');
+
+
 	/* 검색 기능 */
 	searchButton.addEventListener('click', () => {
 	    const searchTerm = searchInput.value.trim().toLowerCase();
@@ -664,7 +670,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const productName = productDiv.querySelector('.product-info a').textContent.trim();
                 const productPrice = productDiv.querySelector('.product-price').childNodes[0].textContent.trim().replace('원', '');
                 const productThumbnail = productDiv.querySelector('img').src;
-				const productStock = productDiv.querySelector('.product-stock').textContent.trim();
+				const productStock = productDiv.querySelector('.product-stock').value.trim();
 				const productCode = button.closest('.product-box').querySelector('.add-to-cart').getAttribute('data-product-code');
 				const sellerNo = button.closest('.product-box').querySelector('.add-to-cart').getAttribute('data-seller-no');
 				
@@ -722,6 +728,10 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        // 사이드 패널 상태 확인
+        const sidePanel = document.querySelector('.side-panel');
+        const wasSidePanelActive = sidePanel?.classList.contains('active'); // 기존 활성화 상태 저장
+
         // 기존 사이드 패널 정보 비우기
         resetQuote();
 
@@ -739,6 +749,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         activeComponent.classList.remove('active');
                     }
                 };
+
+                toggleButton.click('active');
 
                 // 각 category에 대해 처리
                 for (const category in data) {
@@ -762,6 +774,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (cpuComponent) {
                     deactivateActiveComponent(); // 마지막으로 기존 활성화 제거
                     cpuComponent.classList.add('active'); // CPU 활성화
+                }
+
+                // 사이드 패널 상태 복원
+                if (sidePanel && wasSidePanelActive) {
+                    sidePanel.classList.add('active');
                 }
             })
             .catch(error => console.error('Error fetching quote details:', error));
@@ -854,6 +871,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				assembly: isAssemblyRequested ? '조립 신청' : '조립 미신청',
 			};
 
+			// 배열에 추가
 			cartDetails.push(cartInfo);
 
             updateTotalPrice(); // 총합 업데이트
@@ -1053,6 +1071,8 @@ function deleteCompo(event) {
 
     // 'active' 클래스 제거
     component.classList.remove('active');
+
+
 
     // currentCart에서 해당 컴포넌트 제거
     const componentName = component.dataset.component;

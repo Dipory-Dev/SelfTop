@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Customer_cartPage</title>
+<title>SELFTOP</title>
+<link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/img/favicon.ico" type="image/x-icon">
 <link rel="stylesheet" href="/css/customercart.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="/js/customercart.js"></script>
@@ -57,7 +59,11 @@
         </div>
     </div>
     <!-- 메인 내역 -->
-		<h1>내가 담은 견적리스트를 확인해보세요!</h1>
+	 	<div class="main-header">
+			<p> 내가 담은 견적리스트를 확인해보세요! </p>
+
+		</div>
+		
 		<hr>
 		<div class="cartinfosection">
 			<div  id ="quotelist" class="selectcartlist">
@@ -87,7 +93,7 @@
 									<button type="button" class="quantity-increase">+</button>
 								</div>
 							</td>
-							<td class ="quoteprice" th:text="${dto.price * dto.quote_amount}   +원 " ></td>
+							<td class ="quoteprice" th:data-price="${dto.price * dto.quote_amount} " ></td>
 						</tr>
 					</tbody>
 
@@ -130,7 +136,16 @@
 					</div>
 
 				</div>
-
+				<div id="assemblecheck">
+				    <label>
+				        <input type="radio" name="assemble" value="apply" />
+				        <span>(*별도 20,000원) 조립신청</span>
+				    </label>
+				    <label>
+				        <input type="radio" name="assemble" value="no-apply" checked/>
+				        <span>조립미신청</span>
+				    </label>
+				</div>
 				<div class="detailbottombutton">
 					<button class="detailbutton" onclick="goPay()">결제</button>
 					<button id = "openModalBtn" class="detailbutton">호환성 체크</button>
