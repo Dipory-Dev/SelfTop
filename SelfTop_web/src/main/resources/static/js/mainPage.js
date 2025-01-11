@@ -54,12 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
             activateComponent(activeComponent);
             fetchProducts(category, "bypopular", search);
         }
-
-    } else {
-        // 기본적으로 CPU 컴포넌트 활성화
-        activateDefaultComponent();
-    }
-	
+		
 	document.body.addEventListener('click', function(event) {
 	    const target = event.target;
 	    if (target.matches('button, a, input[type="submit"], input[type="button"], input[type="checkbox"], input[type="radio"]')) {
@@ -71,6 +66,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	        }
 	    }
 	});
+
+    } else {
+        // 기본적으로 CPU 컴포넌트 활성화
+        activateDefaultComponent();
+    }
+	
 
     // 기본 컴포넌트 활성화 함수
 	function activateDefaultComponent() {
