@@ -72,6 +72,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	    }
 	});
 
+    } else {
+        // 기본적으로 CPU 컴포넌트 활성화
+        activateDefaultComponent();
+    }
+
+
     // 기본 컴포넌트 활성화 함수
 	function activateDefaultComponent() {
         const cpuComponent = document.querySelector('.component[data-component="CPU"]');
