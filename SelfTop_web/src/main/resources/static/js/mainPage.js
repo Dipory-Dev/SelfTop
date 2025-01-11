@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const components = document.querySelectorAll('.component');
     const selectedPartDiv = document.querySelector('.selected-part');
     const currentCartButton = document.getElementById("current-cart");
-    //const savedQuoteSelect = document.querySelector('.saved-quote');
+    const savedQuoteSelect = document.querySelector('.saved-quote');
     const saveQuoteButton = document.getElementById("save-quote");
     const quoteNameInput = document.getElementById("quote-name");
     const contentBox = document.querySelector('.content-box');
@@ -1031,15 +1031,16 @@ document.addEventListener("DOMContentLoaded", () => {
         delete currentCart[component]; // 컴포넌트 제거
     };
 
-    /*
+
     savedQuoteSelect.addEventListener('change', () => {
-        const selectedOption = savedQuoteSelect.value;
-        // 선택된 견적 로드
-        if (selectedOption) {
-            loadQuote(savedQuotes[selectedOption]); // 예제에서 savedQuotes를 정의하고 사용해야 함
+        const selectedOption = savedQuoteSelect.options[savedQuoteSelect.selectedIndex];
+        if (selectedOption.value === "none") {
+            quoteNameInput.value = "";
+        } else {
+            quoteNameInput.value = selectedOption.text;
         }
     });
-    */
+
 
     currentCartButton.addEventListener('click', () => {
         console.log(currentCart);
