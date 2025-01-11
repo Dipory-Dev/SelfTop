@@ -30,7 +30,7 @@ public class OrderController {
     private OrderBizImpl orderBizImpl;
 
     @GetMapping("/order")
-    public ResponseEntity<Map<String, Object>> receiveItems(@RequestParam("orderdata") String orderdata, HttpSession session) {
+    public ResponseEntity<Map<String, Object>> receiveItems(@RequestParam("orderData") String orderdata, HttpSession session) {
         Integer member_no = (Integer) session.getAttribute("member_no");
 
         Map<String, Object> param1 = new HashMap<>();
@@ -115,7 +115,7 @@ public class OrderController {
             e.printStackTrace();
             Map<String, Object> result = new HashMap<>();
             result.put("msg", "주문 처리 중 오류가 발생했습니다.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+            return ResponseEntity.status(HttpStatus.FOUND).header("Location", "/payfail").body(result);
         }
     }
 }

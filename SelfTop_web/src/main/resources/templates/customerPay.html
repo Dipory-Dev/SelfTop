@@ -204,7 +204,7 @@
 		         // 주문 데이터로 테이블 업데이트
 		         quoteInfo.forEach((item, index) => {
 		             // 제품 이름이 null이 아니면 테이블에 추가
-		             if (item.name !== null && item.name !== '') {
+		             if (item.name !== undefined && item.name !== '') {
 		                 const row = document.createElement('tr');
 
 		                 // 상품 이름
@@ -411,7 +411,7 @@
 		     updatecartPayment(totalAmount, finalAmount);
 		 }
 
-		 // 수량 조절 함수 (장바구니에서)
+		 // 수량 조절 함수 (견적함에서)
 		 function updateQuantityQuote(index, change) {
 		     // localStorage에서 저장된 주문 데이터 가져오기
 		     const quoteInfo = JSON.parse(localStorage.getItem('QuoteDetails'));
@@ -434,7 +434,7 @@
 		     }
 		 }
 	
-		 // 장바구니 테이블 갱신 함수
+		 // 견적함 테이블 갱신 함수
 		 function updateQuoteTable(quoteInfo) {
 		     const tbody = document.querySelector('#order-table tbody');
 		     tbody.innerHTML = ''; // 기존 내용 삭제
@@ -512,7 +512,7 @@
 		  	 // 선택상품 총금액과 최종 결제금액 업데이트
 		     const shippingAmount = 5000; // 배송비
 		     const finalAmount = totalAmount + shippingAmount;
-		     updatecartPayment(totalAmount, finalAmount);
+		     updatequotePayment(totalAmount, finalAmount);
 		 }
 
         // 배송금액 하나로 병합

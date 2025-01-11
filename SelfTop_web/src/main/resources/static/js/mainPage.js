@@ -670,7 +670,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const productName = productDiv.querySelector('.product-info a').textContent.trim();
                 const productPrice = productDiv.querySelector('.product-price').childNodes[0].textContent.trim().replace('원', '');
                 const productThumbnail = productDiv.querySelector('img').src;
-				const productStock = productDiv.querySelector('.product-stock').textContent.trim();
+				const productStock = productDiv.querySelector('.product-stock').value.trim();
 				const productCode = button.closest('.product-box').querySelector('.add-to-cart').getAttribute('data-product-code');
 				const sellerNo = button.closest('.product-box').querySelector('.add-to-cart').getAttribute('data-seller-no');
 				
@@ -765,7 +765,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         component.classList.add('active');
 
                         // 장바구니에 추가
-                        updateCart(categoryData.product_name, categoryData.price, categoryData.product_code, categoryData.seller_no, quote_no);
+                        addToCart(categoryData.product_name, categoryData.price, categoryData.product_code, categoryData.seller_no);
                     }
                 }
 
@@ -870,45 +870,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 seller_no: sellerNo,
 				assembly: isAssemblyRequested ? '조립 신청' : '조립 미신청',
 			};
+			
+			// 배열에 추가
+			cartDetails.push(cartInfo);
 
             updateTotalPrice(); // 총합 업데이트
 
 			toggleSidePanel();//사이드 패널 열기
-        }
-    }
-
-    // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 넣는 함수
-    function updateCart(productName, productPrice, productCode, sellerNo, quoteNo) {
-        const activeComponent = document.querySelector('.component.active');
-
-        if (activeComponent) {
-            const productDetail = activeComponent.querySelector('#product-detail');
-            const productPriceDiv = activeComponent.querySelector('#product-price');
-            const quantityControls = createQuantityControls(productPrice);
-
-            if (productDetail) {
-                productDetail.innerHTML = `<p class="cartproductcode" data-productcode="${productCode}">${productName}</p>`; // 제품 이름 출력
-            }
-            if (productPriceDiv) {
-                productPriceDiv.innerHTML = ''; // 기존 가격 제거
-                productPriceDiv.appendChild(quantityControls); // 수량 조절 추가
-            }
-
-            // 장바구니에 추가
-            const componentName = activeComponent.dataset.component;
-            currentCart[componentName] = {
-                product_code: productCode,
-                name: productName,
-                price: parseInt(productPrice),
-                seller_no: sellerNo,
-                quantity: 1, // 기본 수량 :1
-                quote_no: quoteNo,
-            };
-
-
-            updateTotalPrice(); // 총합 업데이트
-
-            toggleSidePanel();//사이드 패널 열기
         }
     }
 
