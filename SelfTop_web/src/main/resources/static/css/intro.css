@@ -1,0 +1,134 @@
+@charset "UTF-8";
+
+body{
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center; 
+  height: 100vh; 
+  text-align:center;
+	
+}
+.intro{
+  display: flex;
+  align-items: flex-end; 
+  position:relative;
+  margin-bottom: 20px; 
+}
+
+.intro h2{
+  margin: 0; 
+  bottom: 0; 
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    border: 2px solid #008ADA;
+    border-radius: 25px;
+    overflow: hidden;
+    background-color: #fff;
+    width: 830px;
+    margin: 20px 0;
+}
+
+.search-box {
+    flex: 1;
+    border: none;
+    padding: 10px 15px;
+    outline: none;
+    font-size: 16px;
+    color: #333;
+}
+
+.search-button {
+    background-image: url('/img/search-icon.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    background-color: #fff;
+    margin-right: 10px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    outline: none;
+}
+
+.search-box::placeholder {
+    color: #999;
+}
+
+.category-select {
+    border: none;
+    padding: 10px 15px;
+    margin-left: 10px;
+    color: #333;
+    font-size: 16px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    flex-grow: 1;
+    background-color: transparent;
+    z-index: 2;
+}
+
+/* 셀렉트 박스 화살표 커스텀 스타일 */
+.category-select::-ms-expand {
+    display: none; /* IE에서 기본 화살표 제거 */
+}
+
+.category-select::after {
+    content: "\25BC";
+    position: absolute;
+    right: 15px;
+    top: 0;
+    bottom: 0;
+    background-color: #fff;
+    pointer-events: none; /* 화살표 부분 클릭 방지 */
+}
+
+.select-arrow {
+    position: absolute;
+    right: 15px;
+    color: #333;
+    pointer-events: none; /* 화살표 부분 클릭 방지 */
+    font-size: 16px;
+    z-index: 1;
+}
+
+.select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-right: 2px solid #008ADA;
+}
+
+.buttonicon {
+	width:80px;
+	height:80px;
+}
+
+.buttondiv {
+	cursor : pointer;
+	margin-right:30px;
+}
+
+.buttondiv p{
+	font-weight:bold;
+}
+
+#not_member{
+	display: flex;
+	align-items:center;
+	
+}
+#member{
+	display: none;
+	align-items:center;
+	
+}
+
+

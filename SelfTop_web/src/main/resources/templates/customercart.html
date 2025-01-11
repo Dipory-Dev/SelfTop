@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Customer_cartPage</title>
+<title>SELFTOP</title>
+<link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/img/favicon.ico" type="image/x-icon">
 <link rel="stylesheet" href="/css/customercart.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="/js/customercart.js"></script>
@@ -57,7 +59,11 @@
         </div>
     </div>
     <!-- 메인 내역 -->
-		<h1>내가 담은 견적리스트를 확인해보세요!</h1>
+	 	<div class="main-header">
+			<p> 내가 담은 견적리스트를 확인해보세요! </p>
+
+		</div>
+		
 		<hr>
 		<div class="cartinfosection">
 			<div  id ="quotelist" class="selectcartlist">
@@ -74,7 +80,7 @@
 					<tbody id="cart_view">
 						<tr th:each="dto : ${quote}">
 							<td ><input type="checkbox" name="selectquote_no" th:value="${dto.quote_no}" /></td>
-							<td th:text="${#dates.format(dto.quote_date, 'YY/MM/dd')}"></td>
+							<td th:text="${#dates.format(dto.quote_date, 'yy/MM/dd')}"></td>
 							<td th:text=${dto.quote_name} th:data-quote-no="${dto.quote_no} "
 								th:onclick="'loadquotedetail(' + ${dto.quote_no} +')'"
 								class="quotename"></td>
@@ -146,7 +152,7 @@
 
 				</div>
 				<div class="detailbottombutton">
-					<button class="detailbutton">결제</button>
+					<button class="detailbutton" onclick="goPay()">결제</button>
 					<button id = "openModalBtn" class="detailbutton">호환성 체크</button>
 					<button id ="changeamount" class="detailbutton">변경적용</button>
 				</div>

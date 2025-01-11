@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.HashMap;
@@ -210,6 +211,24 @@ public class CustomerController {
 		}
 
 		return "mainPage";
+	}
+
+	@GetMapping("/mainPage")
+	public String showMainPage(@RequestParam("category") String category, @RequestParam("search") String search, Model model) {
+	    ProductBiz<?> productBiz = productBizFactory.getBiz(category);
+	    if (productBiz == null) {
+	        model.addAttribute("error", "Invalid category: " + category);
+	        return "errorPage";
+	    }
+
+	    try {
+	        List<?> products = productBiz.filterProducts(Collections.emptyMap(), "byname", search);
+	        model.addAttribute("products", products);
+	        return "mainPage";
+	    } catch (Exception e) {
+	        model.addAttribute("error", "Error processing request");
+	        return "errorPage";
+	    }
 	}
 
 	@GetMapping("/quote")
@@ -769,7 +788,6 @@ public class CustomerController {
 	public ResponseEntity<?> filterProducts(
 			@PathVariable String category,
 			@RequestBody Map<String, List<String>> filters,
-//			filters = {Formfactor=[e-atx, atx, m-atx, m-itx, atx, m-atx, m-itx]}
 			@RequestParam(value = "sort", defaultValue = "byname") String sort,
 			@RequestParam(value = "search", required = false) String search) {
 
@@ -837,7 +855,6 @@ public class CustomerController {
 			);
 
 			model.addAttribute("quotedetail", dummycategory);
-
 		model.addAttribute("quote", res);
 
 		return "customercart";
@@ -887,7 +904,7 @@ public class CustomerController {
 	        @RequestParam("product_code") int productCode,
 	        @RequestParam(value="category", required=false) String category,
 	        Model model) {
-
+				
         ProductInfoDto dto = productInfoBiz.selectOne(productCode);
         model.addAttribute("product", dto);
 

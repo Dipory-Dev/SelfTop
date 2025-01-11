@@ -5,6 +5,9 @@ let currentFilters = {};
 // 검색어를 저장할 변수
 let currentSearchTerm = '';
 
+let cartInfo = [];
+let cartDetails = [];
+
 document.addEventListener("DOMContentLoaded", () => {
 	const searchInput = document.getElementById('search-input');
 	const searchButton = document.querySelector('.search-button');
@@ -35,6 +38,12 @@ document.addEventListener("DOMContentLoaded", () => {
         displayCpuDetails(); // CPU 세부 정보 표시
         fetchCpuAttributes(); // CPU 속성 정보를 가져오는 함수 호출
     }
+
+	//intro에서 검색한 데이터를 처리하고 보여주는 함수
+	const urlParams = new URLSearchParams(window.location.search);
+	const categoryFromUrl = urlParams.get('category');
+	const searchFromUrl = urlParams.get('search');
+
 
 	/* 검색 기능 */
 	searchButton.addEventListener('click', () => {
@@ -71,12 +80,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (!isAssemblyRequested) {
                     isAssemblyRequested = true;
                     currentCart['assembly_price'] = assemblyPrice;
+
+					// cartInfo의 assembly를 '조립신청'으로 업데이트
+	                cartDetails.forEach(cartItem => {
+	                    cartItem.assembly = '조립 신청';
+	                });
                 }
             } else if (radio.value === 'not_requested' && radio.checked) {
                 // 조립 미신청이 선택되었을 때
                 if (isAssemblyRequested) {
                     isAssemblyRequested = false;
                     delete currentCart['assembly_price'];
+
+					// cartInfo의 assembly를 '조립신청'으로 업데이트
+	                cartDetails.forEach(cartItem => {
+	                    cartItem.assembly = '조립 미신청';
+	                });
                 }
             }
             updateTotalPrice(); // 총 가격 즉시 업데이트
@@ -625,13 +644,14 @@ document.addEventListener("DOMContentLoaded", () => {
                         </div>
                     </div>
                     <div class="product-price" style="text-align: right; margin-left: 10px; font-weight: bold; color: #333;">
-                        ${product.price ? `${product.price}원` : '품절'}
+                        ${product.price ? `${product.price.toLocaleString()}원` : '품절'}
                         <div>
                             <span style="color:rgb(245, 166, 35);" class="stars">★</span>
                             <span class="stars">${(product.avg_rating).toFixed(1)}</span>
                         </div>
                         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px;">
-                            <button class="btn add-to-cart" data-seller-no="${product.seller_no}" data-product-code="${product.product_code}" data-product-name="${product.product_name}" data-product-price="${product.price}">담기</button>
+                            <button class="btn add-to-cart" data-seller-no="${product.seller_no}" data-product-code="${product.product_code}" data-product-name="${product.product_name}" data-product-price="${product.price}" 
+							 data-product-thumbnail="${product.thumbnail}" data-product-stock="${product.stock}">담기</button>
                             <button class="btn buy-now">바로구매</button>
                         </div>
                     </div>
@@ -648,7 +668,7 @@ document.addEventListener("DOMContentLoaded", () => {
             button.addEventListener('click', (event) => {
                 const productDiv = event.target.closest('.product-box');
                 const productName = productDiv.querySelector('.product-info a').textContent.trim();
-                const productPrice = productDiv.querySelector('.product-price').childNodes[0].textContent.trim().replace('원', '');
+                const productPrice = productDiv.querySelector('.product-price').childNodes[0].textContent.trim().replace('원','').replace(',','');
                 const productThumbnail = productDiv.querySelector('img').src;
 				const productStock = productDiv.querySelector('.product-stock').textContent.trim();
 				const productCode = button.closest('.product-box').querySelector('.add-to-cart').getAttribute('data-product-code');
@@ -662,7 +682,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     quantity: 1,
 					stock: productStock,
 					product_code: productCode,
-					seller_no: sellerNo
+					seller_no: sellerNo,
+					assembly: '조립 미신청',
                 };
                 localStorage.setItem('selectedProduct', JSON.stringify(productInfo));
 
@@ -681,13 +702,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 const productPrice = button.getAttribute('data-product-price'); // 가격 가져오기
                 const productCode = button.getAttribute('data-product-code');
                 const sellerNo = button.getAttribute('data-seller-no');
+				const productThumbnail = button.getAttribute('data-product-thumbnail');
+				const productStock = button.getAttribute('data-product-stock');
 
                 if(productPrice==0){
                     alert("품절된 상품은 담을 수 없습니다.");
                     return;
                 }
 
-                addToCart(productName, productPrice, productCode, sellerNo);
+                addToCart(productName, productPrice, productCode, sellerNo, productThumbnail, productStock);
             });
         });
     }
@@ -704,6 +727,10 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("견적을 선택해주세요.");
             return;
         }
+
+        // 사이드 패널 상태 확인
+        const sidePanel = document.querySelector('.side-panel');
+        const wasSidePanelActive = sidePanel?.classList.contains('active'); // 기존 활성화 상태 저장
 
         // 기존 사이드 패널 정보 비우기
         resetQuote();
@@ -722,6 +749,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         activeComponent.classList.remove('active');
                     }
                 };
+
+                toggleButton.click('active');
 
                 // 각 category에 대해 처리
                 for (const category in data) {
@@ -745,6 +774,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (cpuComponent) {
                     deactivateActiveComponent(); // 마지막으로 기존 활성화 제거
                     cpuComponent.classList.add('active'); // CPU 활성화
+                }
+
+                // 사이드 패널 상태 복원
+                if (sidePanel && wasSidePanelActive) {
+                    sidePanel.classList.add('active');
                 }
             })
             .catch(error => console.error('Error fetching quote details:', error));
@@ -799,7 +833,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 넣는 함수
-    function addToCart(productName, productPrice, productCode, sellerNo) {
+    function addToCart(productName, productPrice, productCode, sellerNo, productThumbnail, productStock) {
         const activeComponent = document.querySelector('.component.active');
 
         if (activeComponent) {
@@ -824,6 +858,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 seller_no: sellerNo,
                 quantity: 1, // 기본 수량 :1
             };
+
+			cartInfo = {
+				thumbnail: productThumbnail,
+			    category: componentName,
+			    name: productName,
+			    price: parseInt(productPrice),
+				stock: productStock,
+	            quantity: 1,
+				product_code: productCode,
+                seller_no: sellerNo,
+				assembly: isAssemblyRequested ? '조립 신청' : '조립 미신청',
+			};
 
             updateTotalPrice(); // 총합 업데이트
 
@@ -908,7 +954,7 @@ document.addEventListener("DOMContentLoaded", () => {
         increaseButton.classList.add('quantity-increase');
 
         const priceDisplay = document.createElement('div');
-        priceDisplay.textContent = `${productPrice}원`;
+        priceDisplay.textContent = `${productPrice.toLocaleString()}원`;
         priceDisplay.classList.add('price-display');
 
         container.appendChild(decreaseButton);
@@ -1058,6 +1104,8 @@ function deleteCompo(event) {
     // 'active' 클래스 제거
     component.classList.remove('active');
 
+
+
     // currentCart에서 해당 컴포넌트 제거
     const componentName = component.dataset.component;
     if (currentCart[componentName]) {
@@ -1123,41 +1171,6 @@ function resetCart(){
 
 // 구매하기 버튼 클릭 이벤트
 function goPayPage() {
-    const components = document.querySelectorAll('.component'); // 모든 컴포넌트 선택
-    const cartDetails = []; // 장바구니에 담을 데이터 배열
-
-    components.forEach(component => {
-        const category = component.getAttribute('data-component'); // 카테고리 추출
-        const nameElement = component.querySelector('.component-body .cpu-name, .ram-name, .ssd-name, .power-name, .cooler-name, .mainboard-name, .graphicCard-name, .hdd-name, .case-name');
-        const name = nameElement ? nameElement.innerText.trim() : 'N/A'; // 이름 추출
-
-        const priceElement = component.querySelector('#product-price');
-        const price = priceElement ? parseInt(priceElement.innerText.replace(/[^0-9]/g, '')) : 0; // 가격 추출
-
-        const quantityElement = component.querySelector('.quantity-controls-wrapper input[type="number"]');
-        const quantity = quantityElement ? parseInt(quantityElement.value) : 1; // 수량 추출 (기본값: 1)
-
-        const imageElement = component.querySelector('.component-body img');
-        const image = imageElement ? imageElement.src : ''; // 이미지 경로 추출
-
-        const stockElement = component.getAttribute('data-stock'); // 재고 정보 (예시)
-        const productCodeElement = component.getAttribute('data-product-code'); // 제품 코드 (예시)
-        const sellerNoElement = component.getAttribute('data-seller-no'); // 판매자 번호 (예시)
-
-        // 각 제품의 정보를 객체로 저장
-        const productInfo = {
-            category,
-            name,
-            price,
-            quantity,
-            image,
-            stock: stockElement || '정보 없음', // 재고 정보
-            product_code: productCodeElement || '정보 없음', // 제품 코드
-            seller_no: sellerNoElement || '정보 없음', // 판매자 번호
-        };
-
-        cartDetails.push(productInfo); // 배열에 추가
-    });
 
     // 선택된 제품이 없을 경우 경고 메시지 표시
     if (cartDetails.length === 0) {

@@ -50,7 +50,8 @@ function moveorder(){
 		        type: "GET",
 		        success: function(response) {
 		            $("#tablesection").html(response);
-
+					changeprice();
+					
 		        },
 		        error: function(xhr, status, error) {
 
@@ -101,6 +102,27 @@ function updatestock(data){
 		alert("오류가 발생했습니다.");
 		});
 }
+
+function changeprice(){
+	const pricerow = document.querySelectorAll(".productprice");
+	pricerow.forEach(value => {
+		const pricevalue = parseInt(value.dataset.price, 10);
+		const convertprice = pricevalue.toLocaleString();
+
+		// 금액 업데이트
+
+		value.textContent = convertprice + " 원 ";
+		});
+};
+
+
+document.addEventListener("DOMContentLoaded", () => {
+	changeprice();
+
+
+});
+
+
 	
 function savestockchange() {
 	const stockdata = stockselect(); 
@@ -223,8 +245,7 @@ document.addEventListener('click', function(event) {
 	                location.reload(); // 페이지 새로고침
 	            })
 	            .catch(error => {
-	                console.error('Error:', error);
-	                alert(error.message);
+	                alert("이미 존재하는 제품입니다.");
 	            });
 	    }
 
@@ -453,7 +474,6 @@ document.querySelectorAll('.btn-save').forEach(button => {
         // 해당 제품의 가격 및 재고 입력 필드에서 값 가져오기
         const priceInput = document.querySelector(`input[data-id="${productCode}"].stockprice`);
         const stockInput = document.querySelector(`input[data-id="${productCode}"].stockamount`);
-
         const updatedPrice = priceInput.value;
         const updatedStock = stockInput.value;
 

@@ -3,177 +3,527 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer_Pay</title>
+    <title>SELFTOP</title>
+	<link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/css/customerPay.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://js.tosspayments.com/v2/standard"></script>
     <script>
-        // 전화번호 숫자로만 입력
-        function validatePhoneInput(input) {
-            input.value = input.value.replace(/[^0-9]/g, '');
-        }
+	 // 전화번호 숫자로만 입력
+	    function validatePhoneInput(input) {
+	        input.value = input.value.replace(/[^0-9]/g, '');
+	    }
+	
+	    // 주소검색 팝업창
+	    function goPopup() {
+	        const popupUrl = '/seller/addressPopup';
+	        window.open(popupUrl, 'pop', "width=570,height=420, scrollbars=yes, resizable=yes");
+	    }
+	
+	    function jusoCallBack(zipNo, roadAddrPart1, addrDetail) {
+	        document.getElementById("zipNo").value = zipNo;
+	        document.getElementById("address1").value = roadAddrPart1;
+	        document.getElementById("address2").value = addrDetail;
+	    }
+	
+	    let currentOrder = {};
+		// 페이지가 로드되면 실행되는 함수
+		document.addEventListener("DOMContentLoaded", function() {
+			// 바로 구매 시 selectedProduct에서 데이터 가져오기
+		    const productInfo = JSON.parse(localStorage.getItem('selectedProduct'));
+		 	// 장바구니에서 구매할 경우 CartDetails에서 데이터 가져오기
+		    const cartInfo = JSON.parse(localStorage.getItem('CartDetails'));
+		 	// 견적함에서 구매할 경우 QuoteDetails에서 데이터 가져오기
+		    const quoteInfo = JSON.parse(localStorage.getItem('QuoteDetails'));
 
-        // 주소검색 팝업창
-        function goPopup() {
-            const popupUrl = '/seller/addressPopup';
-            window.open(popupUrl, 'pop', "width=570,height=420, scrollbars=yes, resizable=yes");
-        }
+		     if (productInfo) {
+		    	 currentOrder['product_code'] = productInfo.product_code;
+			     currentOrder['seller_no'] = productInfo.seller_no;
+			     console.log(productInfo);
 
-        function jusoCallBack(zipNo, roadAddrPart1, addrDetail) {
-            document.getElementById("zipNo").value = zipNo;
-            document.getElementById("address1").value = roadAddrPart1;
-            document.getElementById("address2").value = addrDetail;
-        }
+		         // 장바구니 데이터 초기화 (바로 구매 시)
+		         localStorage.removeItem('CartDetails'); // 장바구니 데이터 삭제
+		      	 // 견적함 데이터 초기화 (바로 구매 시)
+		         localStorage.removeItem('QuoteDetails'); // 견적함 데이터 삭제
 
-        let currentOrder = {};
-     	// 페이지가 로드되면 실행되는 함수
-        document.addEventListener("DOMContentLoaded", function() {
-            // localStorage에서 저장된 'selectedProduct' 가져오기
-            const productInfo = JSON.parse(localStorage.getItem('selectedProduct'));
-            currentOrder['product_code'] = productInfo.product_code;
-            currentOrder['seller_no'] = productInfo.seller_no;
+		         // 테이블 초기화 (바로 구매 시)
+		         const tbody = document.querySelector('#order-table tbody');
+		         tbody.innerHTML = '';  // 기존 테이블 내용 초기화
 
-            if (productInfo) {
-                // 가져온 데이터가 존재할 경우, 각 요소에 값 삽입
-                const productImage = document.querySelector('.product-image');
-                const productCategory = document.querySelector('.product-type');
-                const productName = document.querySelector('.product-name');
-                const productPrice = document.querySelector('.product-price');
-                const productAmount = document.querySelector('.quantity-input');
-                const productOrderPrice = document.querySelector('.order-price');
-                const productTotalPrice = document.querySelector('.total-price');
+		         // 테이블에 바로 구매 상품 추가
+		         const row = document.createElement('tr');
+		         const productNameCell = document.createElement('td');
+		         productNameCell.innerHTML = `
+		             <div class="product-container">
+		                 <img class="product-image" src="${productInfo.thumbnail}" alt="${productInfo.name}">
+		                 <div class="product-details">
+		                     <p class="product-type">${productInfo.category}</p>
+		                     <p class="product-name">${productInfo.name}</p>
+		                 </div>
+		             </div>
+		         `;
 
-                if (productImage && productCategory && productName && productPrice && productAmount && productOrderPrice && productTotalPrice) {
-                    productImage.src = productInfo.thumbnail; // 상품 이미지
-                    productCategory.textContent = productInfo.category; // 상품 분류
-                    productName.textContent = productInfo.name; // 상품 이름
-                    productPrice.textContent = productInfo.price.toLocaleString() + '원'; // 상품 가격
-                    productOrderPrice.textContent = productInfo.price.toLocaleString() + '원'; // 상품 가격
-                    productTotalPrice.textContent = productInfo.price.toLocaleString() + '원';
-                    productAmount.textContent = productInfo.quantity; // 상품 수량 1로 고정
-                 	// 선택상품 총금액과 최종 결제금액 업데이트
-                    updatePayment(productInfo.price, productInfo.quantity);
-                }
-            }
-            
-          //로고 누르면 메인페이지
-    		document.getElementById('logo').addEventListener('click', function() {
-    		    window.location.href = '/main';
-    		});
-        });
+		         const productPriceCell = document.createElement('td');
+		         productPriceCell.classList.add('product-price');
+		         productPriceCell.innerText = `${productInfo.price.toLocaleString()}원`;
 
-        document.addEventListener("DOMContentLoaded", function() {
-            // localStorage에서 저장된 주문 데이터 가져오기
-            const orderData = JSON.parse(localStorage.getItem('CartDetails'));
-            console.log(orderData);
+		         const quantityCell = document.createElement('td');
+		         quantityCell.classList.add('quantity');
+		         quantityCell.innerHTML = `
+		             <button type="button" class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
+		             <p class="quantity-input">1</p>
+		             <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
+		         `;
 
-            if (orderData && orderData.length > 0) {
-                // 테이블의 tbody를 가져옵니다.
-                const tbody = document.querySelector('#order-table tbody');
+		         const orderPriceCell = document.createElement('td');
+		         orderPriceCell.classList.add('order-price');
+		         const totalPrice = productInfo.price * 1; // 수량 1로 설정
+		         orderPriceCell.innerText = `${totalPrice.toLocaleString()}원`;
 
-                // 기존 테이블 내용 초기화
-                tbody.innerHTML = '';
+		         const shippingFeeCell = document.createElement('td');
+		         shippingFeeCell.classList.add('shipping-fee');
+		         shippingFeeCell.innerText = `5,000원\n(${productInfo.assembly})`;
 
-                // 주문 데이터로 테이블 업데이트
-                orderData.forEach(item => {
-                    const row = document.createElement('tr');
+		         row.appendChild(productNameCell);
+		         row.appendChild(productPriceCell);
+		         row.appendChild(quantityCell);
+		         row.appendChild(orderPriceCell);
+		         row.appendChild(shippingFeeCell);
 
-                    // 상품 이름
-                    const productNameCell = document.createElement('td');
-                    productNameCell.innerHTML = `
-                        <div class="product-container">
-                            <img class="product-image" src="${item.image}" alt="${item.name}">
-                            <div class="product-details">
-                                <p class="product-type">${item.category}</p>
-                                <p class="product-name">${item.name}</p>
-                            </div>
-                        </div>
-                    `;
+		         tbody.appendChild(row);
 
-                    // 상품 가격
-                    const productPriceCell = document.createElement('td');
-                    productPriceCell.classList.add('product-price');
-                    productPriceCell.innerText = `${item.price.toLocaleString()}원`;
+		         // 선택상품 총금액과 최종 결제금액 업데이트
+		         updatePayment(productInfo.price, 1);
+		         currentOrder['assemblyStatus'] = '조립 미신청';
+		     }
 
-                    // 수량
-                    const quantityCell = document.createElement('td');
-                    quantityCell.classList.add('quantity');
-                    quantityCell.innerHTML = `
-                        <p class="quantity-input">${item.quantity}</p>
-                    `;
+		     if (cartInfo && cartInfo.length > 0) {
+		    	 console.log(cartInfo);
 
-                    // 주문 금액 (상품 가격 * 수량)
-                    const orderPriceCell = document.createElement('td');
-                    orderPriceCell.classList.add('order-price');
-                    const totalPrice = item.price * item.quantity;
-                    orderPriceCell.innerText = `${totalPrice.toLocaleString()}원`;
+		         // 바로구매 데이터 초기화 (장바구니 구매 시)
+		         localStorage.removeItem('selectedProduct'); // 바로구매 데이터 삭제
+		      	 // 견적함 데이터 초기화 (장바구니 구매 시)
+		         localStorage.removeItem('QuoteDetails'); // 견적함 데이터 삭제
+		         // 테이블의 tbody를 가져옵니다.
+		         const tbody = document.querySelector('#order-table tbody');
 
-                    // 배송 금액 (임의로 설정)
-                    const shippingFeeCell = document.createElement('td');
-                    shippingFeeCell.classList.add('shipping-fee');
-                    shippingFeeCell.innerText = '5,000원\n(조립미신청)';
+		         // 기존 테이블 내용 초기화
+		         tbody.innerHTML = '';
 
-                    // 테이블 행에 추가
-                    row.appendChild(productNameCell);
-                    row.appendChild(productPriceCell);
-                    row.appendChild(quantityCell);
-                    row.appendChild(orderPriceCell);
-                    row.appendChild(shippingFeeCell);
+		         let totalAmount = 0;
+                 let assemblyFeeAdded = false;
 
-                    // tbody에 행 추가
-                    tbody.appendChild(row);
-                });
-            } else {
-                // 주문 데이터가 없을 경우 메시지 표시
-                const tbody = document.querySelector('#order-table tbody');
-                const row = document.createElement('tr');
-                const cell = document.createElement('td');
-                cell.colSpan = 5;
-                cell.innerText = "장바구니에 담긴 상품이 없습니다.";
-                row.appendChild(cell);
-                tbody.appendChild(row);
-            }
-        });
+		         // 주문 데이터로 테이블 업데이트
+		         cartInfo.forEach((item, index) => {
+		             // 제품 이름이 null이 아니면 테이블에 추가
+		             if (item.name !== null && item.name !== '') {
+		                 const row = document.createElement('tr');
 
-        let newQuantity;
-        function updateQuantity(button, change) {
-        	
-        	// localStorage에서 저장된 'selectedProduct' 가져오기
-            const productInfo = JSON.parse(localStorage.getItem('selectedProduct'));
-        	
-            const quantityTag = button.parentElement.querySelector('.quantity-input');
-            let currentQuantity = parseInt(quantityTag.textContent); // 현재 수량
-            newQuantity = currentQuantity + change; // 변경된 수량
-            if (newQuantity < 1) newQuantity = 1; // 최소 수량 제한
-            if (newQuantity > productInfo.stock) {
-            	alert("재고수를 초과하였습니다!");
-            	newQuantity = productInfo.stock;
-            }
-            quantityTag.textContent = newQuantity; // 수량 업데이트
-            updatePrice(quantityTag);
-        }
+		                 // 상품 이름
+		                 const productNameCell = document.createElement('td');
+		                 productNameCell.innerHTML = `
+		                     <div class="product-container">
+		                         <img class="product-image" src="${item.thumbnail}" alt="${item.thumbnail}">
+		                         <div class="product-details">
+		                             <p class="product-type">${item.category}</p>
+		                             <p class="product-name">${item.name}</p>
+		                         </div>
+		                     </div>
+		                 `;
 
-        function updatePrice(quantityTag) {
-            const row = quantityTag.closest('tr'); // 현재 행 선택
-            const price = parseInt(row.querySelector('.product-price').textContent.replace(/,/g, '')); // 상품 가격
-            const quantity = parseInt(quantityTag.textContent); // 수량
-            const orderPriceCell = row.querySelector('.order-price'); // 주문 금액 셀
-            const orderPrice = price * quantity; // 주문 금액 계산
-            orderPriceCell.textContent = orderPrice.toLocaleString() + '원'; // 업데이트
+		                 // 상품 가격
+		                 const productPriceCell = document.createElement('td');
+		                 productPriceCell.classList.add('product-price');
+		                 productPriceCell.innerText = `${item.price.toLocaleString()}원`;
 
-         	// 선택상품 총금액과 최종 결제금액 업데이트
-            updatePayment(price, quantity);
-        }
+		                 // 수량
+		                 const quantityCell = document.createElement('td');
+		                 quantityCell.classList.add('quantity');
+		                 quantityCell.innerHTML = `
+		                     <button type="button" class="quantity-btn" onclick="updateQuantityCart(${index}, -1)">-</button>
+		                     <p class="quantity-input">${item.quantity}</p>
+		                     <button type="button" class="quantity-btn" onclick="updateQuantityCart(${index}, 1)">+</button>
+		                 `;
+
+		                 // 주문 금액 (상품 가격 * 수량)
+		                 const orderPriceCell = document.createElement('td');
+		                 orderPriceCell.classList.add('order-price');
+		                 const totalPrice = item.price * item.quantity;
+		                 orderPriceCell.innerText = `${totalPrice.toLocaleString()}원`;
+
+		              	 // 총 금액 계산
+						 if (item.assembly === '조립 신청' && !assemblyFeeAdded) {
+							totalAmount += totalPrice + 20000; // 조립 신청 시 2만원 추가
+						    assemblyFeeAdded = true; // 한 번만 추가되도록 설정
+						 } else {
+						    totalAmount += totalPrice; // 조립 미신청 시 추가 금액 없음
+						 }
+
+		                 // 배송 금액 설정
+		                 const shippingFeeCell = document.createElement('td');
+		                 shippingFeeCell.classList.add('shipping-fee');
+		                 shippingFeeCell.innerText = `5,000원\n(${item.assembly})`;
+
+		                 // 테이블 행에 추가
+		                 row.appendChild(productNameCell);
+		                 row.appendChild(productPriceCell);
+		                 row.appendChild(quantityCell);
+		                 row.appendChild(orderPriceCell);
+		                 row.appendChild(shippingFeeCell);
+
+		                 // tbody에 행 추가
+		                 tbody.appendChild(row);
+		             }
+		         });
+
+		         mergeFixedShippingFee();
+
+		     	 // 선택상품 총금액과 최종 결제금액 업데이트
+			     const shippingAmount = 5000; // 배송비
+			     const finalAmount = totalAmount + shippingAmount;
+			     updatePayment(totalAmount, finalAmount);
+		     }
+
+		     if (quoteInfo && quoteInfo.length > 0) {
+		    	 console.log(quoteInfo);
+
+		         // 바로구매 데이터 초기화 (견적함 구매 시)
+		         localStorage.removeItem('selectedProduct'); // 바로구매 데이터 삭제
+		      	 // 장바구니 데이터 초기화 (견적함 구매 시)
+		         localStorage.removeItem('CartDetails'); // 장바구니 데이터 삭제
+		         // 테이블의 tbody를 가져옵니다.
+		         const tbody = document.querySelector('#order-table tbody');
+
+		         // 기존 테이블 내용 초기화
+		         tbody.innerHTML = '';
+
+		         let totalAmount = 0;
+                 let assemblyFeeAdded = false;
+
+		         // 주문 데이터로 테이블 업데이트
+		         quoteInfo.forEach((item, index) => {
+		             // 제품 이름이 null이 아니면 테이블에 추가
+		             if (item.name !== null && item.name !== '') {
+		                 const row = document.createElement('tr');
+
+		                 // 상품 이름
+		                 const productNameCell = document.createElement('td');
+		                 productNameCell.innerHTML = `
+		                     <div class="product-container">
+		                         <img class="product-image" src="${item.thumbnail}" alt="${item.thumbnail}">
+		                         <div class="product-details">
+		                             <p class="product-type">${item.category}</p>
+		                             <p class="product-name">${item.name}</p>
+		                         </div>
+		                     </div>
+		                 `;
+
+		                 // 상품 가격
+		                 const productPriceCell = document.createElement('td');
+		                 productPriceCell.classList.add('product-price');
+		                 productPriceCell.innerText = `${item.price.toLocaleString()}원`;
+
+		                 // 수량
+		                 const quantityCell = document.createElement('td');
+		                 quantityCell.classList.add('quantity');
+		                 quantityCell.innerHTML = `
+		                     <button type="button" class="quantity-btn" onclick="updateQuantityQuote(${index}, -1)">-</button>
+		                     <p class="quantity-input">${item.quantity}</p>
+		                     <button type="button" class="quantity-btn" onclick="updateQuantityQuote(${index}, 1)">+</button>
+		                 `;
+
+		                 // 주문 금액 (상품 가격 * 수량)
+		                 const orderPriceCell = document.createElement('td');
+		                 orderPriceCell.classList.add('order-price');
+		                 const totalPrice = item.price * item.quantity;
+				         orderPriceCell.innerText = `${totalPrice.toLocaleString()}원`;
+		                 
+		              	 // 총 금액 계산
+						 if (item.assembly === '조립 신청' && !assemblyFeeAdded) {
+							totalAmount += totalPrice + 20000; // 조립 신청 시 2만원 추가
+						    assemblyFeeAdded = true; // 한 번만 추가되도록 설정
+						 } else {
+						    totalAmount += totalPrice; // 조립 미신청 시 추가 금액 없음
+						 }
+
+		                 // 배송 금액 설정
+		                 const shippingFeeCell = document.createElement('td');
+		                 shippingFeeCell.classList.add('shipping-fee');
+		                 shippingFeeCell.innerText = `5,000원\n(${item.assembly})`;
+
+		                 // 테이블 행에 추가
+		                 row.appendChild(productNameCell);
+		                 row.appendChild(productPriceCell);
+		                 row.appendChild(quantityCell);
+		                 row.appendChild(orderPriceCell);
+		                 row.appendChild(shippingFeeCell);
+
+		                 // tbody에 행 추가
+		                 tbody.appendChild(row);
+		             }
+		         });
+
+		         mergeFixedShippingFee();
+
+		     	 // 선택상품 총금액과 최종 결제금액 업데이트
+			     const shippingAmount = 5000; // 배송비
+			     const finalAmount = totalAmount + shippingAmount;
+			     updatePayment(totalAmount, finalAmount);
+		     }
+		 });
+
+		 // 수량 조절 함수 (바로 구매에서)
+		 function updateQuantity(button, change) {
+		     const productInfo = JSON.parse(localStorage.getItem('selectedProduct'));
+		     const quantityTag = button.parentElement.querySelector('.quantity-input');
+		     let currentQuantity = parseInt(quantityTag.textContent); // 현재 수량
+		     let newQuantity = currentQuantity + change; // 변경된 수량
+		     if (newQuantity < 1) newQuantity = 1; // 최소 수량 제한
+		     if (newQuantity > productInfo.stock) {
+		         alert("재고수를 초과하였습니다!");
+		         newQuantity = productInfo.stock;
+		     }
+		     quantityTag.textContent = newQuantity; // 수량 업데이트
+		     updatePrice(quantityTag);
+            currentOrder['amount'] = newQuantity;
+            currentOrder['order_price'] = productInfo.price * newQuantity;
+		 }
+
+		 // 가격 업데이트 함수 (수량 변경 시)
+		 function updatePrice(quantityTag) {
+		     const row = quantityTag.closest('tr'); // 현재 행 선택
+		     const price = parseInt(row.querySelector('.product-price').textContent.replace(/,/g, '')); // 상품 가격
+		     const quantity = parseInt(quantityTag.textContent); // 수량
+		     const orderPriceCell = row.querySelector('.order-price'); // 주문 금액 셀
+		     const orderPrice = price * quantity; // 주문 금액 계산
+		     orderPriceCell.textContent = orderPrice.toLocaleString() + '원'; // 업데이트
+
+		     // 선택상품 총금액과 최종 결제금액 업데이트
+		     updatePayment(price, quantity);
+		 }
+
+		 // 수량 조절 함수 (장바구니에서)
+		 function updateQuantityCart(index, change) {
+		     // localStorage에서 저장된 주문 데이터 가져오기
+		     const cartInfo = JSON.parse(localStorage.getItem('CartDetails'));
+
+		     if (cartInfo && cartInfo[index]) {
+		         // 수량 업데이트
+		         let newQuantity = cartInfo[index].quantity + change; // 변경된 수량
+
+			     if (newQuantity < 1) newQuantity = 1; // 최소 수량 제한
+			     if (newQuantity > cartInfo[index].stock) {
+			         alert("재고수를 초과하였습니다!");
+			         newQuantity = cartInfo[index].stock-1;
+			     }
+			     
+			     // 업데이트된 수량을 cartInfo 배열에 반영
+			     cartInfo[index].quantity = newQuantity;
+	
+		         // localStorage에 업데이트된 주문 데이터 저장
+		         localStorage.setItem('CartDetails', JSON.stringify(cartInfo));
+
+		         // 테이블을 갱신
+		         updateCartTable(cartInfo);
+		         
+		     }
+		 }
+
+		 // 장바구니 테이블 갱신 함수
+		 function updateCartTable(cartInfo) {
+		     const tbody = document.querySelector('#order-table tbody');
+		     tbody.innerHTML = ''; // 기존 내용 삭제
+
+		     let totalAmount = 0; // 선택상품 총금액 초기화
+             let assemblyFeeAdded = false; // 2만원 추가 여부를 추적하는 변수
+
+          	 // currentOrder를 빈 객체로 초기화
+             currentOrder = {}; 
+             let assemblyStatus = cartInfo[0].assembly;
+             currentOrder['assemblyStatus'] = assemblyStatus;
+		     cartInfo.forEach((item, index) => {
+		         const row = document.createElement('tr');
+		         const productNameCell = document.createElement('td');
+		         productNameCell.innerHTML = `
+		             <div class="product-container">
+		                 <img class="product-image" src="${item.thumbnail}" alt="${item.thumbnail}">
+		                 <div class="product-details">
+		                     <p class="product-type">${item.category}</p>
+		                     <p class="product-name">${item.name}</p>
+		                 </div>
+		             </div>
+		         `;
+		         const productPriceCell = document.createElement('td');
+		         productPriceCell.classList.add('product-price');
+		         productPriceCell.innerText = `${item.price.toLocaleString()}원`;
+
+		         const quantityCell = document.createElement('td');
+		         quantityCell.classList.add('quantity');
+		         quantityCell.innerHTML = `
+		             <button type="button" class="quantity-btn" onclick="updateQuantityCart(${index}, -1)">-</button>
+		             <p class="quantity-input">${item.quantity}</p>
+		             <button type="button" class="quantity-btn" onclick="updateQuantityCart(${index}, 1)">+</button>
+		         `;
+
+		         const orderPriceCell = document.createElement('td');
+		         orderPriceCell.classList.add('order-price');
+		         const totalPrice = item.price * item.quantity;
+		         orderPriceCell.innerText = `${totalPrice.toLocaleString()}원`;
+
+		      	 // 총 금액 계산
+				 if (item.assembly === '조립 신청' && !assemblyFeeAdded) {
+					totalAmount += totalPrice + 20000; // 조립 신청 시 2만원 추가
+				    assemblyFeeAdded = true; // 한 번만 추가되도록 설정
+				 } else {
+				    totalAmount += totalPrice; // 조립 미신청 시 추가 금액 없음
+				 }
+
+		         const shippingFeeCell = document.createElement('td');
+		         shippingFeeCell.classList.add('shipping-fee');
+		         shippingFeeCell.innerText = `5,000원\n(${item.assembly})`;
+
+		         row.appendChild(productNameCell);
+		         row.appendChild(productPriceCell);
+		         row.appendChild(quantityCell);
+		         row.appendChild(orderPriceCell);
+		         row.appendChild(shippingFeeCell);
+
+		         tbody.appendChild(row);
+
+		      	 // currentOrder 객체에 각 제품의 quantity를 업데이트
+		         currentOrder[`item${index}`] = {
+		      	     product_code: item.product_code,
+		      	     seller_no: item.seller_no,
+		      		 amount: item.quantity,
+		             assemblyStatus: item.assembly,
+		             order_price: item.price * item.quantity,
+		         };
+
+		     });
+
+		     // 배송 금액 병합 호출
+		     mergeFixedShippingFee();
+
+		  	 // 선택상품 총금액과 최종 결제금액 업데이트
+		     const shippingAmount = 5000; // 배송비
+		     const finalAmount = totalAmount + shippingAmount;
+		     updatecartPayment(totalAmount, finalAmount);
+		 }
+
+		 // 수량 조절 함수 (장바구니에서)
+		 function updateQuantityQuote(index, change) {
+		     // localStorage에서 저장된 주문 데이터 가져오기
+		     const quoteInfo = JSON.parse(localStorage.getItem('QuoteDetails'));
+
+		     if (quoteInfo && quoteInfo[index]) {
+		         // 수량 업데이트
+		         let newQuantity = quoteInfo[index].quantity + change; // 변경된 수량
+
+			     if (newQuantity < 1) newQuantity = 1; // 최소 수량 제한
+
+			     // 업데이트된 수량을 cartInfo 배열에 반영
+			     quoteInfo[index].quantity = newQuantity;
+
+		         // localStorage에 업데이트된 주문 데이터 저장
+		         localStorage.setItem('QuoteDetails', JSON.stringify(quoteInfo));
+
+		         // 테이블을 갱신
+		         updateQuoteTable(quoteInfo);
+
+		     }
+		 }
+	
+		 // 장바구니 테이블 갱신 함수
+		 function updateQuoteTable(quoteInfo) {
+		     const tbody = document.querySelector('#order-table tbody');
+		     tbody.innerHTML = ''; // 기존 내용 삭제
+
+		     let totalAmount = 0; // 선택상품 총금액 초기화
+             let assemblyFeeAdded = false; // 2만원 추가 여부를 추적하는 변수
+
+          	 // currentOrder를 빈 객체로 초기화
+             currentOrder = {};
+             let assemblyStatus = quoteInfo[0].assembly;
+             currentOrder['assemblyStatus'] = assemblyStatus;
+		     quoteInfo.forEach((item, index) => {
+		         const row = document.createElement('tr');
+		         const productNameCell = document.createElement('td');
+		         productNameCell.innerHTML = `
+		             <div class="product-container">
+		                 <img class="product-image" src="${item.thumbnail}" alt="${item.thumbnail}">
+		                 <div class="product-details">
+		                     <p class="product-type">${item.category}</p>
+		                     <p class="product-name">${item.name}</p>
+		                 </div>
+		             </div>
+		         `;
+		         const productPriceCell = document.createElement('td');
+		         productPriceCell.classList.add('product-price');
+		         productPriceCell.innerText = `${item.price.toLocaleString()}원`;
+
+		         const quantityCell = document.createElement('td');
+		         quantityCell.classList.add('quantity');
+		         quantityCell.innerHTML = `
+		             <button type="button" class="quantity-btn" onclick="updateQuantityCart(${index}, -1)">-</button>
+		             <p class="quantity-input">${item.quantity}</p>
+		             <button type="button" class="quantity-btn" onclick="updateQuantityCart(${index}, 1)">+</button>
+		         `;
+
+		         const orderPriceCell = document.createElement('td');
+		         orderPriceCell.classList.add('order-price');
+		         const totalPrice = item.price * item.quantity;
+		         orderPriceCell.innerText = `${totalPrice.toLocaleString()}원`;
+
+		      	 // 총 금액 계산
+				 if (item.assembly === '조립 신청' && !assemblyFeeAdded) {
+					totalAmount += totalPrice + 20000; // 조립 신청 시 2만원 추가
+				    assemblyFeeAdded = true; // 한 번만 추가되도록 설정
+				 } else {
+				    totalAmount += totalPrice; // 조립 미신청 시 추가 금액 없음
+				 }
+
+		         const shippingFeeCell = document.createElement('td');
+		         shippingFeeCell.classList.add('shipping-fee');
+		         shippingFeeCell.innerText = `5,000원\n(${item.assembly})`;
+
+		         row.appendChild(productNameCell);
+		         row.appendChild(productPriceCell);
+		         row.appendChild(quantityCell);
+		         row.appendChild(orderPriceCell);
+		         row.appendChild(shippingFeeCell);
+
+		         tbody.appendChild(row);
+
+		      	 // currentOrder 객체에 각 제품의 quantity를 업데이트
+		         currentOrder[`item${index}`] = {
+		      	     product_code: item.product_code,
+		      	     seller_no: item.seller_no,
+		      		 amount: item.quantity,
+		             assemblyStatus: item.assembly,
+		             order_price: item.price * item.quantity,
+		         };
+
+		     });
+
+		     // 배송 금액 병합 호출
+		     mergeFixedShippingFee();
+
+		  	 // 선택상품 총금액과 최종 결제금액 업데이트
+		     const shippingAmount = 5000; // 배송비
+		     const finalAmount = totalAmount + shippingAmount;
+		     updatecartPayment(totalAmount, finalAmount);
+		 }
 
         // 배송금액 하나로 병합
-        document.addEventListener("DOMContentLoaded", () => {
-            const mergeFixedShippingFee = () => {
-                const rows = document.querySelectorAll("#order-table tbody tr");
-                if (rows.length === 0) return;
+        function mergeFixedShippingFee() {
+        	const rows = document.querySelectorAll("#order-table tbody tr");
+            if (rows.length === 0) return;
 
-                // 첫 번째 행의 배송 금액 셀 가져오기
-                const firstFeeCell = rows[0].querySelector(".shipping-fee");
-                firstFeeCell.rowSpan = rows.length;
+          	// 첫 번째 행의 배송 금액 셀 가져오기
+            const firstFeeCell = rows[0].querySelector(".shipping-fee");
+            if (firstFeeCell) {
+            	firstFeeCell.rowSpan = rows.length;
 
                 // 나머지 행의 배송 금액 셀 삭제
                 rows.forEach((row, index) => {
@@ -182,10 +532,8 @@
                         if (feeCell) feeCell.remove();
                     }
                 });
-            };
-
-            mergeFixedShippingFee();
-        });
+            }
+        }
 
      	// 전역에서 widgets 객체를 선언
         let widgets;
@@ -205,6 +553,28 @@
             baseAmount = finalAmount; // 최종 결제 금액을 baseAmount로 설정
             updatePaymentUI(baseAmount); // 결제 UI 업데이트
      	}
+        function updatecartPayment(totalAmount, finalAmount) {
+            // 선택상품 총금액과 최종 결제금액 업데이트
+            document.querySelector('.total-price').textContent = `${totalAmount.toLocaleString()}원`; // 선택상품 총금액
+            document.querySelector('.pay-price').textContent = `${finalAmount.toLocaleString()}원`; // 최종 결제금액
+
+            console.log(document.querySelector('.total-price').textContent);
+            console.log(document.querySelector('.pay-price').textContent);
+            // baseAmount 업데이트
+            baseAmount = finalAmount; // 최종 결제 금액을 baseAmount로 설정
+            updatePaymentUI(baseAmount); // 결제 UI 업데이트
+        }
+        function updatequotePayment(totalAmount, finalAmount) {
+            // 선택상품 총금액과 최종 결제금액 업데이트
+            document.querySelector('.total-price').textContent = `${totalAmount.toLocaleString()}원`; // 선택상품 총금액
+            document.querySelector('.pay-price').textContent = `${finalAmount.toLocaleString()}원`; // 최종 결제금액
+
+            console.log(document.querySelector('.total-price').textContent);
+            console.log(document.querySelector('.pay-price').textContent);
+            // baseAmount 업데이트
+            baseAmount = finalAmount; // 최종 결제 금액을 baseAmount로 설정
+            updatePaymentUI(baseAmount); // 결제 UI 업데이트
+        }
 
         let tossPayments;
      	// 결제 UI 업데이트 함수
@@ -256,9 +626,6 @@
 
 	            currentOrder['address'] = address1 + ' ' + address2;
             	currentOrder['request'] = document.getElementById("request").value;
-                currentOrder['assemblyStatus'] = '조립 미신청';
-                currentOrder['amount'] = newQuantity;
-                currentOrder['order_price'] = baseAmount;
 
                 const currentordergetdata = encodeURIComponent(JSON.stringify(currentOrder));
 				console.log(currentordergetdata);
@@ -274,7 +641,7 @@
 	                const paymentResult = await widgets.requestPayment({
 	                    orderId: "ORDER_ID_1234", // 고유 주문 번호
 	                    orderName: "그래픽 카드 구매", // 주문 이름
-	                    successUrl: `http://localhost:8080/api/order?orderdata=${currentordergetdata}`, // 결제 성공 시 리다이렉트 URL
+	                    successUrl: `http://localhost:8080/api/order?orderData=${currentordergetdata}`, // 결제 성공 시 리다이렉트 URL
 	                    failUrl: "http://localhost:8080/payfail", // 결제 실패 시 리다이렉트 URL
 	                    customerName: name,
 	                    customerMobilePhone: phone,
@@ -427,139 +794,6 @@
 			                </td>
                             <td class="order-price"></td>
                             <td class="shipping-fee"><span>5000원</span><br><span>조립미신청</span></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="product-container">
-                                    <img class="product-image">
-                                    <div class="product-details">
-                                        <p class="product-type"></p>
-                                        <p class="product-name"></p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="product-price"></td>
-                            <td class="quantity">
-			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
-			                    <p class="quantity-input"></p>
-			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
-			                </td>
-                            <td class="order-price"></td>
-                            <td class="shipping-fee"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="product-container">
-                                    <img class="product-image">
-                                    <div class="product-details">
-                                        <p class="product-type"></p>
-                                        <p class="product-name"></p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="product-price"></td>
-                            <td class="quantity">
-			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
-			                    <p class="quantity-input"></p>
-			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
-			                </td>
-                            <td class="order-price"></td>
-                            <td class="shipping-fee"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="product-container">
-                                    <img class="product-image">
-                                    <div class="product-details">
-                                        <p class="product-type"></p>
-                                        <p class="product-name"></p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="product-price"></td>
-                            <td class="quantity">
-			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
-			                    <p class="quantity-input"></p>
-			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
-			                </td>
-                            <td class="order-price"></td>
-                            <td class="shipping-fee"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="product-container">
-                                    <img class="product-image">
-                                    <div class="product-details">
-                                        <p class="product-type"></p>
-                                        <p class="product-name"></p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="product-price"></td>
-                            <td class="quantity">
-			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
-			                    <p class="quantity-input"></p>
-			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
-			                </td>
-                            <td class="order-price"></td>
-                            <td class="shipping-fee"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="product-container">
-                                    <img class="product-image">
-                                    <div class="product-details">
-                                        <p class="product-type"></p>
-                                        <p class="product-name"></p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="product-price"></td>
-                            <td class="quantity">
-			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
-			                    <p class="quantity-input"></p>
-			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
-			                </td>
-                            <td class="order-price"></td>
-                            <td class="shipping-fee"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="product-container">
-                                    <img class="product-image">
-                                    <div class="product-details">
-                                        <p class="product-type"></p>
-                                        <p class="product-name"></p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="product-price"></td>
-                            <td class="quantity">
-			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
-			                    <p class="quantity-input"></p>
-			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
-			                </td>
-                            <td class="order-price"></td>
-                            <td class="shipping-fee"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="product-container">
-                                    <img class="product-image">
-                                    <div class="product-details">
-                                        <p class="product-type"></p>
-                                        <p class="product-name"></p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="product-price"></td>
-                            <td class="quantity">
-			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
-			                    <p class="quantity-input"></p>
-			                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
-			                </td>
-                            <td class="order-price"></td>
-                            <td class="shipping-fee"></td>
                         </tr>
                         <tr>
                             <td>
