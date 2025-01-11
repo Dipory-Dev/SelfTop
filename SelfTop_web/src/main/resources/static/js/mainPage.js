@@ -644,7 +644,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         </div>
                     </div>
                     <div class="product-price" style="text-align: right; margin-left: 10px; font-weight: bold; color: #333;">
-                        ${product.price ? `${product.price}원` : '품절'}
+                        ${product.price ? `${product.price.toLocaleString()}원` : '품절'}
                         <div>
                             <span style="color:rgb(245, 166, 35);" class="stars">★</span>
                             <span class="stars">${(product.avg_rating).toFixed(1)}</span>
@@ -668,7 +668,7 @@ document.addEventListener("DOMContentLoaded", () => {
             button.addEventListener('click', (event) => {
                 const productDiv = event.target.closest('.product-box');
                 const productName = productDiv.querySelector('.product-info a').textContent.trim();
-                const productPrice = productDiv.querySelector('.product-price').childNodes[0].textContent.trim().replace('원', '');
+                const productPrice = productDiv.querySelector('.product-price').childNodes[0].textContent.trim().replace('원','').replace(',','');
                 const productThumbnail = productDiv.querySelector('img').src;
 				const productStock = productDiv.querySelector('.product-stock').textContent.trim();
 				const productCode = button.closest('.product-box').querySelector('.add-to-cart').getAttribute('data-product-code');
@@ -954,7 +954,7 @@ document.addEventListener("DOMContentLoaded", () => {
         increaseButton.classList.add('quantity-increase');
 
         const priceDisplay = document.createElement('div');
-        priceDisplay.textContent = `${productPrice}원`;
+        priceDisplay.textContent = `${productPrice.toLocaleString()}원`;
         priceDisplay.classList.add('price-display');
 
         container.appendChild(decreaseButton);
