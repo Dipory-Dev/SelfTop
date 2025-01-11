@@ -626,42 +626,42 @@ document.addEventListener("DOMContentLoaded", () => {
         fetchFilteredProducts(component, filters, selectedSort, currentSearchTerm);
     }
 
-    // 서버에 필터링 요청을 보내는 함수
-    function fetchFilteredProducts(component, filters, sort, search) {
-        const query = new URLSearchParams({ sort, search }).toString();
-        const url = `/api/products/filter/${component}?${query}`;
+	// 서버에 필터링 요청을 보내는 함수
+	function fetchFilteredProducts(component, filters, sort, search) {
+		const query = new URLSearchParams({ sort, search }).toString();
+		const url = `/api/products/filter/${component}?${query}`;
 
-        console.log('Sending filters to server:', JSON.stringify(filters), 'with sort:', sort, 'and search:', search); // 필터 및 정렬 데이터 로깅
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(filters)
-        })
-            .then(response => {
-                if (!response.ok) {
-                    console.error('Server responded with:', response.status, response.statusText);
-                    contentBox.innerHTML = `<p>Error loading products: ${response.statusText}</p>`; // 에러 메시지 업데이트
-                    categoryCountElement.textContent = `${component.toUpperCase()}: 0개`; // 제품이 없는 경우에도 카운트를 0으로 설정
-                    return Promise.reject(response.statusText);
-                }
-                return response.json();
-            })
-            .then(products => {
-                if (products.length === 0) {
-                    contentBox.innerHTML = `<p>조건에 맞는 ${component.toUpperCase()} 아이템을 찾을 수 없습니다.</p>`;
-                    categoryCountElement.textContent = `${component.toUpperCase()}: 0개`; // 제품이 없는 경우에도 카운트를 0으로 설정
-                } else {
-                    displayProducts(products, component);
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching filtered products:', error);
-                contentBox.innerHTML = `<p>조건에 맞는 ${component.toUpperCase()} 아이템을 찾을 수 없습니다.</p>`;
-                categoryCountElement.textContent = `${component.toUpperCase()}: 0개`; // 오류 발생 시에도 카운트를 0으로 설정
-            });
-    }
+	    console.log('Sending filters to server:', JSON.stringify(filters), 'with sort:', sort, 'and search:', search); // 필터 및 정렬 데이터 로깅
+		fetch(url, {
+		        method: 'POST',
+		        headers: {
+		            'Content-Type': 'application/json'
+		        },
+		        body: JSON.stringify(filters)
+	    })
+	    .then(response => {
+	        if (!response.ok) {
+	            console.error('Server responded with:', response.status, response.statusText);
+	            contentBox.innerHTML = `<p>Error loading products: ${response.statusText}</p>`; // 에러 메시지 업데이트
+	            categoryCountElement.textContent = `${component.toUpperCase()}: 0개`; // 제품이 없는 경우에도 카운트를 0으로 설정
+	            return Promise.reject(response.statusText);
+	        }
+	        return response.json();
+	    })
+	    .then(products => {
+	        if (products.length === 0) {
+	            contentBox.innerHTML = `<p>조건에 맞는 ${component.toUpperCase()} 아이템을 찾을 수 없습니다.</p>`;
+	            categoryCountElement.textContent = `${component.toUpperCase()}: 0개`; // 제품이 없는 경우에도 카운트를 0으로 설정
+	        } else {
+	            displayProducts(products, component);
+	        }
+	    })
+	    .catch(error => {
+	        console.error('Error fetching filtered products:', error);
+	        contentBox.innerHTML = `<p>조건에 맞는 ${component.toUpperCase()} 아이템을 찾을 수 없습니다.</p>`;
+	        categoryCountElement.textContent = `${component.toUpperCase()}: 0개`; // 오류 발생 시에도 카운트를 0으로 설정
+	    });
+	}
 
     /* 제품 정렬 기능 */
     // 정렬 목록 클릭 이벤트
@@ -697,13 +697,13 @@ document.addEventListener("DOMContentLoaded", () => {
 	        });
 	}
 
-    // 제품 정보를 콘텐츠 박스에 동적으로 표시하는 함수
-    function displayProducts(products, component) {
-        if (!products || products.length === 0) {
-            contentBox.innerHTML = `<p>No products found for ${component.toUpperCase()}.</p>`;
-            categoryCountElement.textContent = `${component.toUpperCase()}: 0개`;
-            return;
-        }
+	// 제품 정보를 콘텐츠 박스에 동적으로 표시하는 함수
+	function displayProducts(products, component) {
+		if (!products || products.length === 0) {
+	        contentBox.innerHTML = `<p>No products found for ${component.toUpperCase()}.</p>`;
+	        categoryCountElement.textContent = `${component.toUpperCase()}: 0개`;
+	        return;
+	    }
 
         let htmlContent = `<div style="display: flex; flex-direction: column; width: 1300px; max-height: 600px; overflow-y: auto;">`;
 
@@ -749,10 +749,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 const productName = productDiv.querySelector('.product-info a').textContent.trim();
                 const productPrice = productDiv.querySelector('.product-price').childNodes[0].textContent.trim().replace('원','').replace(',','');
                 const productThumbnail = productDiv.querySelector('img').src;
-                const productStock = productDiv.querySelector('.product-stock').textContent.trim();
-                const productCode = button.closest('.product-box').querySelector('.add-to-cart').getAttribute('data-product-code');
-                const sellerNo = button.closest('.product-box').querySelector('.add-to-cart').getAttribute('data-seller-no');
-
+				const productStock = productDiv.querySelector('.product-stock').value.trim();
+				const productCode = button.closest('.product-box').querySelector('.add-to-cart').getAttribute('data-product-code');
+				const sellerNo = button.closest('.product-box').querySelector('.add-to-cart').getAttribute('data-seller-no');
+				
                 const productInfo = {
                     thumbnail: productThumbnail,
                     category: component,
@@ -844,7 +844,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         component.classList.add('active');
 
                         // 장바구니에 추가
-                        updateCart(categoryData.product_name, categoryData.price, categoryData.product_code, categoryData.seller_no, quote_no);
+                        addToCart(categoryData.product_name, categoryData.price, categoryData.product_code, categoryData.seller_no, categoryData.productThumbnail, categoryData.productQuantity);
                     }
                 }
 
@@ -950,44 +950,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 assembly: isAssemblyRequested ? '조립 신청' : '조립 미신청',
             };
 
-            updateTotalPrice(); // 총합 업데이트
-
-            toggleSidePanel();//사이드 패널 열기
-        }
-    }
-
-    // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 넣는 함수
-    function updateCart(productName, productPrice, productCode, sellerNo, quoteNo) {
-        const activeComponent = document.querySelector('.component.active');
-
-        if (activeComponent) {
-            const productDetail = activeComponent.querySelector('#product-detail');
-            const productPriceDiv = activeComponent.querySelector('#product-price');
-            const quantityControls = createQuantityControls(productPrice);
-
-            if (productDetail) {
-                productDetail.innerHTML = `<p class="cartproductcode" data-productcode="${productCode}">${productName}</p>`; // 제품 이름 출력
-            }
-            if (productPriceDiv) {
-                productPriceDiv.innerHTML = ''; // 기존 가격 제거
-                productPriceDiv.appendChild(quantityControls); // 수량 조절 추가
-            }
-
-            // 장바구니에 추가
-            const componentName = activeComponent.dataset.component;
-            currentCart[componentName] = {
-                product_code: productCode,
-                name: productName,
-                price: parseInt(productPrice),
-                seller_no: sellerNo,
-                quantity: 1, // 기본 수량 :1
-                quote_no: quoteNo,
-            };
-
+			// 배열에 추가
+			cartDetails.push(cartInfo);
 
             updateTotalPrice(); // 총합 업데이트
 
-            toggleSidePanel();//사이드 패널 열기
+			toggleSidePanel();//사이드 패널 열기
         }
     }
 

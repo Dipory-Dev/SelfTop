@@ -429,11 +429,21 @@ input[type="number"]::-webkit-outer-spin-button {
 	margin:3px;
 	
 }
-#assemblecheck{
-	display:flex;
-	height: 80px;
-	max-height:80px;
-	margin:3px;
+#assemblecheck {
+    display: flex;
+    justify-content: flex-end; /* 모든 요소를 오른쪽 정렬 */
+    align-items: center;
+    gap: 10px; /* 요소 간 간격 */
+}
+
+#assemblecheck label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+#assemblecheck input[type="radio"] {
+    margin-right: 5px; /* 체크박스와 텍스트 간 간격 */
 }
 
 /* 모달 시작영역*/
