@@ -20,13 +20,13 @@
 	 <header>
         <div class="header-content">
             <img src="/img/logo.png" id="logo" style="cursor: pointer;">
-           	<p th:unless= "${username != null}"><a href="loginform"><img src="/img/lock-icon.png" class="lock-icon"></a></p> 
+           	<p th:unless= "${username != null}"><a href="loginform"><img src="/img/lock-icon.png" class="lock-icon"></a></p>
            	<p th:if="${username != null}">
            		<span th:text="${username}+ 님"></span>&nbsp|
            		<a href="mypage">
            			<img src="/img/human-icon.png" class="human-icon">
            		</a>
-           		<a href="cartpage"> 
+           		<a href="cartpage">
            			<img src="/img/cart-icon.png" class="cart-icon">
            		</a>
            		<a href="/logout">
@@ -67,6 +67,7 @@
 	    	<div class="side-panel">
             	<div class="panel-header">
             		<div>
+						<div>
 						<select class="saved-quote" id="saved-quote" th:onchange="fetchQuoteDetail(this.value)">
 							<option value="none" selected>견적을 선택해주세요.</option>
 							<option th:each="cart : ${cartList}"
@@ -74,8 +75,11 @@
 									th:text="${cart.quote_name}">
 							</option>
 						</select>
-	            			<button id="current-cart" >현재 견적 카트</button>
-            				<input type="text" id="quote-name" placeholder="견적 이름을 작성해주세요" />
+						</div>
+						<div>
+							<input type="text" id="quote-name" placeholder="견적 이름을 작성해주세요" />
+						</div>
+            				
             		</div>
         		</div>
         		<div class="components">
@@ -189,19 +193,21 @@
 						</div>
 						<div class="select-option">
 							<div>
-								<label><input type="radio" name="assembly" value="requested" /> (*별도 20,000원) 조립신청</label>
+								<label><input type="radio" name="assembly" value="requested" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									(*별도 20,000원) 조립신청</label>
 							</div>
 							<div>
-								<label><input type="radio" name="assembly" value="not_requested" checked /> 조립미신청</label>
+								<label><input type="radio" name="assembly" value="not_requested" checked />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									조립미신청</label>
 							</div>
 						</div>
             			
         			</div>
         		</div>
         		<div class="total">
-            		<span>총 견적 금액 : </span><span class="total-price">0원</span>
+            		총 견적 금액 : <span class="total-price">0원</span>
         		</div>
-        		<div class="actions">
+        		<div class="actions" id="side_pannel_btns">
 					<button class="button compatibility-check-btn" id="openModalBtn">호환성 체크</button>
             		<button class="button save-cart-btn" id="save-quote">견적 저장</button>
 					<button class="button reset-btn" onclick="resetCart();">초기화</button>

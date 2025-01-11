@@ -226,42 +226,6 @@ public class CustomerController {
 
 	    return "mainPage";
 	}
-	
-	@GetMapping("/mainPage")
-	public String showMainPage(@RequestParam("category") String category, @RequestParam("search") String search, Model model) {
-	    ProductBiz<?> productBiz = productBizFactory.getBiz(category);
-	    if (productBiz == null) {
-	        model.addAttribute("error", "Invalid category: " + category);
-	        return "errorPage";
-	    }
-
-	    try {
-	        List<?> products = productBiz.filterProducts(Collections.emptyMap(), "byname", search);
-	        model.addAttribute("products", products);
-	        return "mainPage";
-	    } catch (Exception e) {
-	        model.addAttribute("error", "Error processing request");
-	        return "errorPage";
-	    }
-	}
-	
-	@GetMapping("/mainPage")
-	public String showMainPage(@RequestParam("category") String category, @RequestParam("search") String search, Model model) {
-	    ProductBiz<?> productBiz = productBizFactory.getBiz(category);
-	    if (productBiz == null) {
-	        model.addAttribute("error", "Invalid category: " + category);
-	        return "errorPage";
-	    }
-
-	    try {
-	        List<?> products = productBiz.filterProducts(Collections.emptyMap(), "byname", search);
-	        model.addAttribute("products", products);
-	        return "mainPage";
-	    } catch (Exception e) {
-	        model.addAttribute("error", "Error processing request");
-	        return "errorPage";
-	    }
-	}
 
 	@GetMapping("/quote")
 	public ResponseEntity<?> selectCartDetail(@RequestParam("quote_no") int quote_no) {
@@ -294,7 +258,6 @@ public class CustomerController {
 			productData.put("price", productStatus.getPrice());
 			productData.put("seller_no", productStatus.getSeller_no());
 			productData.put("amount", amount);
-			productData.put("thumbnail", productInfo.getThumbnail());
 			productData.put("product_code", p_code);
 
 
@@ -335,7 +298,7 @@ public class CustomerController {
 		}
 
 		Integer member_no = (Integer) session.getAttribute("member_no");
-		
+
 		CustomerDto dto = customerBiz.selectCustomer(member_no);
 		model.addAttribute("customer", dto);
 		return "customerPay";
@@ -888,6 +851,7 @@ public class CustomerController {
 			);
 
 			model.addAttribute("quotedetail", dummycategory);
+
 		model.addAttribute("quote", res);
 
 		return "customercart";
