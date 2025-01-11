@@ -6,13 +6,24 @@
     <title>Seller_SignUp</title>
     <link rel="stylesheet" href="/css/sellerSignUp.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+    <script>
+	document.addEventListener('DOMContentLoaded', function() {
+		//로고 누르면 메인페이지
+		document.getElementById('logo').addEventListener('click', function() {
+		    window.location.href = '/main';
+		});
+	});
+	</script>
 </head>
 <body>
     <header>
         <div class="header-content">
-            <img src="/img/logo.png">
-           	<p>로그인</p>
+            <img src="/img/logo.png" id="logo" style="cursor: pointer;">
+           	<p>
+				<a href="/login">
+	          		<img src="/img/lock-icon.png" class="lock-icon">
+	          	</a>
+			</p>
         </div>
     </header>
 

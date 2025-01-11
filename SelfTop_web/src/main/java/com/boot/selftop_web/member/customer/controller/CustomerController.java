@@ -11,8 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-
+import java.util.Locale;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,10 +53,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.util.StringUtils;
-
 import java.io.File;
 import java.io.IOException;
+import java.text.NumberFormat;
 
 @Controller
 @RequestMapping("/")
@@ -492,6 +490,7 @@ public class CustomerController {
 		List<Integer> productCodes = reviewsearchres.stream()
 			    .map(reviewsearchDto::getProduct_code)  // OrderDTO에서 productCode만 추출
 			    .collect(Collectors.toList());
+
 		model.addAttribute("productcodes",productCodes);
 		try {
 			model.addAttribute("review",new ObjectMapper().writeValueAsString(reviewsearchres));
@@ -502,7 +501,8 @@ public class CustomerController {
 		model.addAttribute("membername", session.getAttribute("name"));
 		model.addAttribute("orderinfo",res);
 		model.addAttribute("ordernum",orderNum);
-		model.addAttribute("orderprice",orderprice);
+		model.addAttribute("orderprice", NumberFormat.getInstance(Locale.KOREA).format(Integer.parseInt(orderprice)));
+		model.addAttribute("allprice", NumberFormat.getInstance(Locale.KOREA).format(Integer.parseInt(orderprice)+ 5000));
 		model.addAttribute("orderstatus",res.get(0).getOrder_status());
 		model.addAttribute("product_code", product_code);
 		model.addAttribute("orderdate",orderdate);
@@ -563,7 +563,7 @@ public class CustomerController {
 		}else {
 			res = customerBiz.insertReview(dbPath, content, rating, productCode, member_no);
 		}
-		
+
 		if (res > 0) {
 			System.out.println("upload success");
 		} else {
@@ -614,9 +614,27 @@ public class CustomerController {
 
 	@GetMapping("/api/cpu/attributes")
 	public ResponseEntity<Map<String, List<String>>> getCpuAttributes() {
+		List<String> ddrLs = productMapper.findAllcpuDdr();
+		List<String> ddrres = new ArrayList<>();
+		for (String ddr : ddrLs) {
+			if (ddr != null && ddr.contains(",")) {
+				for (String f : ddr.split(",")) {
+					if (!ddrres.contains(f.trim())) {
+						ddrres.add(f.trim());
+					}
+				}
+			} else {
+				if (ddr != null && !ddr.trim().isEmpty()) {
+					ddrres.add(ddr.trim());
+				} else {
+					ddrres.add(ddr);
+				}
+			}
+		}
+
 	    Map<String, List<String>> attributes = new HashMap<>();
 	    attributes.put("Socket", productMapper.findAllcpuSocket());
-	    attributes.put("DDR", productMapper.findAllcpuDdr());
+	    attributes.put("DDR", ddrres);
         attributes.put("Generation", productMapper.findAllcpuGeneration());
 	    attributes.put("Spec", productMapper.findAllcpuSpec());
 	    attributes.put("Inner_VGA", productMapper.findAllcpuInnerVga());
@@ -700,11 +718,48 @@ public class CustomerController {
 	@GetMapping("/api/case/attributes")
 	public ResponseEntity<Map<String, List<String>>> getCaseAttributes() {
 	    Map<String, List<String>> attributes = new HashMap<>();
+
+		List<String> formfactorLs = productMapper.findAllcaseFormfactor();
+		List<String> fres = new ArrayList<>();
+		for (String fftor : formfactorLs) {
+			if (fftor != null && fftor.contains(",")) {
+				for (String f : fftor.split(",")) {
+					if (!fres.contains(f.trim())) {
+						fres.add(f.trim());
+					}
+				}
+			} else {
+				if (fftor != null && !fftor.trim().isEmpty()) {
+					fres.add(fftor.trim());
+				} else {
+					fres.add(fftor);
+				}
+			}
+		}
+
+		List<String> powersizeLs = productMapper.findAllcasePower_Size();
+		List<String> psres = new ArrayList<>();
+		for (String psize : powersizeLs) {
+			if (psize != null && psize.contains(",")) {
+				for (String f : psize.split(",")) {
+					if (!psres.contains(f.trim())) {
+						psres.add(f.trim());
+					}
+				}
+			} else {
+				if (psize != null && !psize.trim().isEmpty()) {
+					psres.add(psize.trim());
+				} else {
+					psres.add(psize);
+				}
+			}
+		}
+
 	    attributes.put("Power_Status", productMapper.findAllcasePower_Status());
-	    attributes.put("Formfactor", productMapper.findAllcaseFormfactor());
+		attributes.put("Formfactor", fres);
 	    attributes.put("Tower_Size", productMapper.findAllcaseTower_Size());
 	    attributes.put("VGA_Length", productMapper.findAllcaseVga_Length());
-	    attributes.put("Power_Size", productMapper.findAllcasePower_Size());
+	    attributes.put("Power_Size", psres);
 	    attributes.put("Company", productMapper.findAllcaseCompany());
 	    return ResponseEntity.ok(attributes);
 	}
@@ -714,10 +769,10 @@ public class CustomerController {
 	public ResponseEntity<?> filterProducts(
 			@PathVariable String category,
 			@RequestBody Map<String, List<String>> filters,
+//			filters = {Formfactor=[e-atx, atx, m-atx, m-itx, atx, m-atx, m-itx]}
 			@RequestParam(value = "sort", defaultValue = "byname") String sort,
 			@RequestParam(value = "search", required = false) String search) {
 
-		System.out.println("Received filters: " + filters + ", sort: " + sort + ", search: " + search);
 	    ProductBiz<?> productBiz = productBizFactory.getBiz(category);
 	    if (productBiz == null) {
 	        return ResponseEntity.badRequest().body("Invalid category: " + category);
@@ -756,6 +811,7 @@ public class CustomerController {
 	    if (products.isEmpty()) {
 	        return ResponseEntity.noContent().build();
 	    }
+
 	    return ResponseEntity.ok(products);
 	}
 
@@ -790,11 +846,17 @@ public class CustomerController {
 
 	@GetMapping("/quotedetail")
 	@ResponseBody
-	public List<QuoteDetailDto> cartpagedetail(@RequestParam("quote_no") int quoteNo) {
-		List<QuoteDetailDto> selectres=quoteBiz.QuoteDetailinfo(quoteNo);
+	public Map<String, Object> cartpagedetail(@RequestParam("quote_no") int quoteNo) {
+		List<QuoteDetailDto> selectres = quoteBiz.QuoteDetailinfo(quoteNo);
+		char res = quoteBiz.assemblecheck(quoteNo);
+		System.out.println(res);
 
+		Map<String, Object> responseMap = new HashMap<>();
+		responseMap.put("products", selectres);  
+	    responseMap.put("assemblecheck", String.valueOf(res)); 
+	    System.out.println(responseMap);
 
-		return selectres;
+		return responseMap;
 	}
 	
 	@PostMapping("/comparison")
@@ -1013,8 +1075,8 @@ public class CustomerController {
 			}else {
 				powersize="itx";
 			}
-			System.out.println(powersize);	
-			
+			System.out.println(powersize);
+
 			if (caseformlist.contains(powersize)) {
 				casepowerompatibility = true;
 			}
@@ -1043,5 +1105,12 @@ public class CustomerController {
 
 
     }
+	@GetMapping("/loadquotelist")
+	public String getQuoteDiv(Model model,HttpSession session) {
+		Integer member_no = (Integer) session.getAttribute("member_no");
+		List<QuoteDto> res =quoteBiz.SelectQuote(member_no);
+		model.addAttribute("quote", res);
+	    return "fragmentcartquotelist :: cart_view"; // 특정 타임리프 fragment 반환
+	}
 
 }

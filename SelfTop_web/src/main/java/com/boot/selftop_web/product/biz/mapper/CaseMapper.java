@@ -57,10 +57,10 @@ public interface CaseMapper {
             "   </foreach>" +
             "</if>" +
             "<if test='filters.Formfactor != null'>" +
-            "   AND c.FORMFACTOR IN " +
-            "   <foreach item='formfactor' collection='filters.Formfactor' open='(' separator=',' close=')'>" +
-            "       #{formfactor}" +
-            "   </foreach>" +
+            "   AND  " +
+            "   <foreach item='formfactor' collection='filters.Formfactor' open='(' separator=' or ' close=')'>" +
+            "       c.FORMFACTOR LIKE '%' || #{formfactor} || '%'" +
+            "   </foreach> " +
             "</if>" +
             "<if test='filters.Tower_Size != null'>" +
             "   AND c.TOWER_SIZE IN " +
@@ -75,10 +75,10 @@ public interface CaseMapper {
             "   </foreach>" +
             "</if>" +
             "<if test='filters.Power_Size != null'>" +
-            "   AND c.POWER_SIZE IN " +
-            "   <foreach item='powerSize' collection='filters.Power_Size' open='(' separator=',' close=')'>" +
-            "       #{powerSize}" +
-            "   </foreach>" +
+            "   AND " +
+            "   <foreach item='powerSize' collection='filters.Power_Size' open='(' separator=' or ' close=')'>" +
+            "       c.POWER_SIZE LIKE '%' || #{powerSize} || '%'" +
+            "   </foreach> " +
             "</if>" +
             "GROUP BY p.PRODUCT_CODE, p.PRODUCT_NAME, p.THUMBNAIL, p.ETC" +
             "<if test='sort != null'>" +  // 정렬 조건 추가

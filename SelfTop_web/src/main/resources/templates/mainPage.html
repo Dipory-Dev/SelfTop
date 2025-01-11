@@ -5,19 +5,28 @@
 	<title>SELFTOP</title>
 	<link rel="stylesheet" href="/css/mainPage.css">
 	<script type="text/javascript" src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
-
+	<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		//로고 누르면 메인페이지
+		document.getElementById('logo').addEventListener('click', function() {
+		    window.location.href = '/main';
+		});
+	});
+	</script>
 </head>
 <body>
 	 <header>
         <div class="header-content">
-            <img src="/img/logo.png">
-           	<p th:unless= "${username != null}"><a href="loginform">로그인</a></p> 
+            <img src="/img/logo.png" id="logo" style="cursor: pointer;">
+           	<p th:unless= "${username != null}"><a href="loginform"><img src="/img/lock-icon.png" class="lock-icon"></a></p> 
            	<p th:if="${username != null}">
            		<span th:text="${username}+ 님"></span>&nbsp|
            		<a href="mypage">
            			<img src="/img/human-icon.png" class="human-icon">
            		</a>
-           		<a href="cartpage"> <img src="/img/cart-icon.png" class="cart-icon"></a>
+           		<a href="cartpage"> 
+           			<img src="/img/cart-icon.png" class="cart-icon">
+           		</a>
            		<a href="/logout">
            			<img src="/img/lock-icon.png" class="lock-icon">
            		</a>

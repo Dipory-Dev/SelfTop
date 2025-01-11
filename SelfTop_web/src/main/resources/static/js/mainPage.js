@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const radioButtons = document.querySelectorAll('input[name="assembly"]');
     const assemblyPrice = 20000; // 조립 신청 시 추가금액
     let isAssemblyRequested = false; // 현재 조립 신청 상태
-
+	
 	// mainPage처음 들어왔을때 CPU가 자동으로 선택되도록 설정
     const cpuComponent = document.querySelector('.component[data-component="CPU"]');
     if (cpuComponent) {
@@ -418,13 +418,7 @@ document.addEventListener("DOMContentLoaded", () => {
         topBoxLarge.innerHTML = attributesHtml;
     }
 
-    // 제품 정보를 콘텐츠 박스에 동적으로 표시하는 함수
-    function displayProducts(products, component) {
-        if (!products || products.length === 0) {
-            contentBox.innerHTML = `<p>No products found for ${component.toUpperCase()}.</p>`;
-            return;
-        }
-    }
+    
     //HDD의 필터를 html에 보여주는 기능
     function displayHddDetails() {
         let detailsHtml = `
@@ -596,6 +590,14 @@ document.addEventListener("DOMContentLoaded", () => {
 	            contentBox.innerHTML = `<p>Error loading products: ${error.message}</p>`;
 	        });
 	}
+	
+	// 제품 정보를 콘텐츠 박스에 동적으로 표시하는 함수
+	    function displayProducts(products, component) {
+	        if (!products || products.length === 0) {
+	            contentBox.innerHTML = `<p>No products found for ${component.toUpperCase()}.</p>`;
+	            return;
+	        }
+	    }
 
 	// 제품 정보를 콘텐츠 박스에 동적으로 표시하는 함수
 	function displayProducts(products, component) {
@@ -618,13 +620,16 @@ document.addEventListener("DOMContentLoaded", () => {
                                     ${product.product_name}
                                 </a>
                             </div>
-							<div class="product-stock">${product.stock}</div>
+							<input type="hidden" class="product-stock" value="${product.stock}">
                             <div style="color: #666; font-size: 0.9em; width: 1000px;">${product.etc}</div>
                         </div>
                     </div>
                     <div class="product-price" style="text-align: right; margin-left: 10px; font-weight: bold; color: #333;">
                         ${product.price ? `${product.price}원` : '품절'}
-                        <div><span class="stars">★★★★★</span></div>
+                        <div>
+                            <span style="color:rgb(245, 166, 35);" class="stars">★</span>
+                            <span class="stars">${(product.avg_rating).toFixed(1)}</span>
+                        </div>
                         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px;">
                             <button class="btn add-to-cart" data-seller-no="${product.seller_no}" data-product-code="${product.product_code}" data-product-name="${product.product_name}" data-product-price="${product.price}">담기</button>
                             <button class="btn buy-now">바로구매</button>

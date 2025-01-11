@@ -57,9 +57,9 @@ public interface CPUMapper {
             "   </foreach>" +
             "</if>" +
             "<if test='filters.DDR != null'>" +
-            "   AND c.DDR IN " +
-            "   <foreach item='ddr' collection='filters.DDR' open='(' separator=',' close=')'>" +
-            "       #{ddr}" +
+            "   AND " +
+            "   <foreach item='ddr' collection='filters.DDR' open='(' separator=' OR ' close=')'>" +
+            "       c.DDR LIKE '%' || #{ddr} || '%'" +
             "   </foreach>" +
             "</if>" +
             "<if test='filters.Generation != null'>" +

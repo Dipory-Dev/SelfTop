@@ -13,17 +13,21 @@
 		if (message) {
 			alert(message);
 		}
+		//로고 누르면 메인페이지
+		document.getElementById('logo').addEventListener('click', function() {
+		    window.location.href = '/main';
+		});
 	});
 </script>
 </head>
 <body>
 	<header>
 		<div class="header-content">
-			<img src="/img/logo.png">
+            <img src="/img/logo.png" id="logo" style="cursor: pointer;">
 			<p>
 				<span th:text="${membername} + 님"></span>&nbsp| <a href="mypage">
 					<img src="/img/human-icon.png" class="human-icon">
-				</a> <a href="cart"> <img src="/img/cart-icon.png" class="cart-icon">
+				</a> <a href="cartpage"> <img src="/img/cart-icon.png" class="cart-icon">
 				</a> <a href="signup"> <img src="/img/lock-icon.png"
 					class="lock-icon">
 				</a>
@@ -113,7 +117,7 @@
 					<p>배송비</p>
 				</div>
 				<div class="orderprice_data">
-					<p>5000원</p>
+					<p>5,000원</p>
 				</div>
 			</div>
 			<div class="total_price">
@@ -121,7 +125,7 @@
 					<p>결제금액</p>
 				</div>
 				<div class="orderprice_data">
-					<p th:text="${orderprice} +5000 +원"></p>
+					<p th:text="${allprice} +원"></p>
 				</div>
 			</div>
 		</div>
@@ -164,9 +168,9 @@
 						<button th:if="${productcodes.contains(dto.product_code)}" class="openModalBtn btn" th:data-product-code="${dto.product_code}" data-reviewedit="true" th:data-reviewlist="${review}">후기수정</button>						
 					</th>
 					<th th:text="${dto.product_name}"></th>
-					<th th:text="${dto.price} * ${dto.amount} +원"></th>
+					<th class = "pricevalue" th:data-price="${dto.price} * ${dto.amount}"></th>
 					<th th:text="${dto.amount} +개"></th>
-					<th class="same-delivery">5000원</th>
+					<th class="same-delivery">5,000원</th>
 				</tr>
 			</table>
 		</div>

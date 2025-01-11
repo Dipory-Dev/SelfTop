@@ -75,9 +75,44 @@ body {
     background-color: #C7E6FF;
 }
 
-.var .menuselect {
-    font-weight: bold;
-} 
+.review-sort-var{
+    display: none;
+    padding: 0;  
+    margin: 0;
+    border-bottom: 2px solid #ccc;
+    align-items: center;
+    height: 40px; 
+    width: 1120px;
+    margin-left:10px;
+    margin-bottom:-33px;
+}
+
+.review-sort-var button{
+    background: white;
+    height:100%;
+    width:9%;
+    border: none;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+}
+
+.review-sort-var button.active:hover {
+    background-color: #C7E6FF; 
+}
+
+.review-sort-var button:not(.active):hover {
+    background-color: #C7E6FF;
+}
+
+.review-sort-var button.active {
+    background-color: #C7E6FF;
+    transition: background-color 0.3s ease;
+}
 
 .content {
     padding-top:25px;
@@ -87,7 +122,6 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    
 }
 
 .content .image-placeholder {
@@ -177,11 +211,11 @@ body {
 }
 
 .one-part{
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     border-radius: 10px;
     border: 1px solid #f6f6f6; 
-    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1); 
-    padding: 10px; 
+    box-shadow: 2px 3px 3px 3px rgba(0, 0, 0, 0.1); 
+    padding: 5px; 
 }
 
 .review-body{
@@ -193,7 +227,7 @@ body {
 }
 
 .review-table th, .review-table td {
-    border: 1px solid #ddd;
+   
     padding: 12px;
     text-align: left;
     vertical-align: top;
@@ -202,6 +236,7 @@ body {
 .review-table th {
     background-color: #f2f2f2;
     font-weight: bold;
+    border:solid 1px #666;
 }
 
 .username-part{
@@ -246,15 +281,16 @@ body {
 }
 
 .content-part {
-    
-    display: flex;
-    align-items: center; 
-    padding: 0 10px; 
+    display: block; 
+    padding: 10px; 
     margin-right:10px;
     width:990px ;
     height:110px;
-    
     border-radius: 2px;
+    overflow-y: auto; 
+    overflow-x: hidden; 
+    word-break: break-word;
+    box-sizing: border-box; 
 }
 
 .stars::before {

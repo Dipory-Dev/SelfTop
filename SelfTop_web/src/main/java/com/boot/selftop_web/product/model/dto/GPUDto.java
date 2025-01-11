@@ -17,6 +17,8 @@ public class GPUDto extends ProductStatusDto implements ProductDto {
     private String content_img;
     private String etc;
 
+    private double avg_rating;
+
     private String series;
     private int storage;
     private int length;
@@ -24,7 +26,7 @@ public class GPUDto extends ProductStatusDto implements ProductDto {
 
     public GPUDto() {}
 
-    public GPUDto(int product_code, String category, String product_name, String company, Date upload_date, String thumbnail, String content_img, String etc, String series, int storage, int length, int watt) {
+    public GPUDto(int product_code, String category, String product_name, String company, Date upload_date, String thumbnail, String content_img, String etc, double avg_rating, String series, int storage, int length, int watt) {
         this.product_code = product_code;
         this.category = category;
         this.product_name = product_name;
@@ -33,6 +35,7 @@ public class GPUDto extends ProductStatusDto implements ProductDto {
         this.thumbnail = thumbnail;
         this.content_img = content_img;
         this.etc = etc;
+        this.avg_rating = avg_rating;
         this.series = series;
         this.storage = storage;
         this.length = length;
@@ -135,6 +138,14 @@ public class GPUDto extends ProductStatusDto implements ProductDto {
         this.watt = watt;
     }
 
+    public double getAvg_rating() {
+        return avg_rating;
+    }
+
+    public void setAvg_rating(double avg_rating) {
+        this.avg_rating = avg_rating;
+    }
+
     @Override
     public String toString() {
         return "GPUDto{" +
@@ -146,6 +157,7 @@ public class GPUDto extends ProductStatusDto implements ProductDto {
                 ", thumbnail='" + thumbnail + '\'' +
                 ", content_img='" + content_img + '\'' +
                 ", etc='" + etc + '\'' +
+                ", avg_rating=" + avg_rating +
                 ", series='" + series + '\'' +
                 ", storage=" + storage +
                 ", length=" + length +

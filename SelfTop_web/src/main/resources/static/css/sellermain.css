@@ -1,67 +1,60 @@
 header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1000;
     padding: 10px 20px;
     border-bottom: 1px solid #ccc;
-    position:fixed;
-    padding: 10px 20px;
-    z-index: 1000;
-    width: 100%;
-    top: 0;
-    left: 0;
-    background-color: white;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-
 .header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.logo{
+.header-content img {
+    width: 150px;
     margin-left: 10%;
-    height: 70px;
-    cursor: pointer;
 }
 
 .header-content p {
     margin-right: 12%;
+    font-size: 20px;
     display: flex;
     align-items: center;
 }
 
 .header-content p span {
 	font-size: 20px;
+    cursor: default;
+    color:black;
 }
 
-.lock-icon{
-    width: 22px;
-    height: 22px;
-    margin-left: 5px;
-    margin-top:5px;
-    transition: transform 0.3s ease;
-}
-
-.human-icon{
+.header-content p img {
     width: 30px;
     height: 30px;
-    margin-left: 5px;
-    margin-top:5px;
     transition: transform 0.3s ease;
+}
+
+.header-content p .human-icon {
+	width: 40px;
+	height: 40px;
+    margin-left: 10px;
+}
+
+.header-content p .cart-icon {
+    margin-left: 10px;
+}
+
+.header-content p .lock-icon {
+    margin-left: 20px;
 }
 
 .header-content p img:hover {
     transform: scale(1.5);
-}
-
-.header-user p {
-    margin-left: 15px;
-    display: inline-block; /* 이 속성을 추가하여 p 태그를 수평으로 정렬 */
-    white-space: nowrap;
-}
-
-.header-user a{
-    display: inline-block;
-    white-space: nowrap;
-    margin-left:220px;
 }
 
 html, body {
@@ -81,11 +74,10 @@ main{
   padding-bottom:100px;
   align-items: center;
   width:1710px;
+  margin-top: 90px;
   margin-left:auto;
   margin-right:auto;
   border:1px solid #ccc ;
-  margin-top:160px;
-
 }
 
 
@@ -238,7 +230,7 @@ input[readonly] {
 
 footer {
     background-color: #E8E8E8;
-    font-size: 12px;
+    font-size: 14px;
     height: 120px;
     width: 100%;
 }
@@ -251,10 +243,8 @@ footer {
 }
 
 .footer-content img {
-  width: 150px;
-  margin-left: 10%;
-  height: 70px;
-
+    max-height: 50px;
+    margin-left: 10%;
 }
 
 .footer-text {
@@ -264,6 +254,16 @@ footer {
 
 .footer-text p, .footer-text span {
     margin: 5px 0;
+}
+
+.footer-message{
+    font-size:16px;
+    text-align: center;
+}
+
+.footer-message> p{
+    font-size:18px;
+    font-weight:500;
 }
 
 .modal {

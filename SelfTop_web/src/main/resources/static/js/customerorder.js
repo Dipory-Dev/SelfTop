@@ -10,6 +10,19 @@ function Search(){
 			}
 	}).done(function (fragment) {
 		$("#orderview").replaceWith(fragment);
+		const pricerow = document.querySelectorAll(".pricedata");
+
+		pricerow.forEach(value => {
+			const pricevalue = parseInt(value.dataset.price, 10);
+			const convertprice = pricevalue.toLocaleString();
+
+			// 금액 업데이트
+
+			value.textContent = convertprice;
+
+
+		});	
+		
 		        }).fail(function(xhr, status, error) {
 		        	console.error("오류:", error);
 		        	alert("검색 오류");
@@ -21,6 +34,21 @@ function Reset(){
 
 	 Search();
 	}
+document.addEventListener("DOMContentLoaded", () => {
+const pricerow = document.querySelectorAll(".pricedata");
+
+pricerow.forEach(value => {
+	const pricevalue = parseInt(value.dataset.price, 10);
+	const convertprice = pricevalue.toLocaleString();
+	console.log(pricevalue);
+
+	// 금액 업데이트
+
+	value.textContent = convertprice;
+
+
+});	
+});
 
 function sendordernum(element) {
 	var orderNum = element.getAttribute('data-order-num');
@@ -67,3 +95,4 @@ function confirmOrder(orderNum) {
         alert('오류가 발생했습니다.');
     });
 }
+

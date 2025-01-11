@@ -16,7 +16,7 @@
             <button class="product-detail" onclick="showProductDetail();">제품 상세정보</button>
             <button class="product-review" onclick="showReviews();">
                 제품 후기(
-                    <span id="reviewCountSpan" style="color:#008ADA" th:text="${reviewList != null ? #lists.size(reviewList) : 0}">0</span>
+                <span id="reviewCountSpan" style="color:#008ADA" th:text="${reviewList != null ? #lists.size(reviewList) : 0}">0</span>
                 )개
             </button>
         </div>
@@ -31,48 +31,46 @@
 
             <!-- 리뷰 섹션 -->
             <div class="review-section fade" id="reviewSection">
-                
                 <!-- 후기 없을 때 -->
                 <div th:if="${#lists.isEmpty(reviewList)}">
                     <p>아직 등록된 후기가 없습니다.</p>
                 </div>
 
                 <!-- 후기 있을 때 -->
+                <div class="review-sort-var">
+                    <button class="sort-bydate">최신순</button>
+                    <button class="sort-byrate">별점순</button>
+                </div>
                 <table th:if="${not #lists.isEmpty(reviewList)}" class="review-table">
-                    
-                    <tbody >
+                    <tbody>
                         <tr th:each="review : ${reviewList}" class="separate-part">
-                            <div class="one-part">
-                                <div class="review-top">
-                                    <div data-label="작성자" class="username-part"
-                                    th:text="${review.memberName != null ? review.memberName : '익명 사용자'}"
-                                    th:classappend="${review.memberName != null} ? 'registered-user' : 'anonymous-user'">
-                                    익명 사용자
+                            <td>
+                                <div class="one-part">
+                                    <div class="review-top">
+                                        <div data-label="작성자" class="username-part"
+                                            th:text="${review.memberName != null ? review.memberName : '익명 사용자'}"
+                                            th:classappend="${review.memberName != null} ? 'registered-user' : 'anonymous-user'">
+                                        익명 사용자
+                                        </div>
+                                        <div data-label="날짜" class="date-part"
+                                            th:text="${review.reviewDate != null ? #dates.format(review.reviewDate, 'yyyy-MM-dd') : '1970-01-01'}">
+                                        </div>
+                                        <div data-label="평점" class="rating-part">
+                                            <span class="stars" th:data-rating="${review.rating != null ? review.rating : 0}">
+                                                ★★★★★
+                                            </span>
+                                            (<span th:text="${review.rating != null ? review.rating : 0}">0</span>)
+                                        </div>
                                     </div>
-    
-                                    <div data-label="날짜" class="date-part"
-                                    th:text="${#dates.format(review.reviewDate, 'yyyy-MM-dd')}">
-    
-                                    </div>
-                                    <div data-label="평점" class="rating-part">
-                                        <span class="stars" th:data-rating="${review.rating}">
-                                            ★★★★★
-                                        </span>
-                                        (<span th:text="${review.rating}">0</span>)
+                                    <div class="review-body">
+                                        <div data-label="이미지" class="img-part">
+                                            <img class="review-img" th:src="@{${review.reviewImg}}"
+                                                th:alt="'리뷰 이미지: ' + ${review.content}" style="width:100px; height:auto;" />
+                                        </div>
+                                        <div data-label="리뷰 내용" class="content-part" th:text="${review.content}"></div>
                                     </div>
                                 </div>
-                                <div class="review-body">
-                                    <div data-label="이미지" class="img-part">
-                                        <img class="review-img" th:src="@{${review.reviewImg}}"
-                                             th:alt="'리뷰 이미지: ' + ${review.content}"
-                                             style="width:100px; height:auto;" />
-                                    </div>
-    
-                                    <div data-label="리뷰 내용" class="content-part"
-                                    th:text="${review.content}">리뷰 내용</div>
-                                </div>
-                            </div>
-                            
+                            </td>
                         </tr>
                     </tbody>
                 </table>

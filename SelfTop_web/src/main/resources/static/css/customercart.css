@@ -7,15 +7,15 @@
 
 header {
 	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1000;
     padding: 10px 20px;
     border-bottom: 1px solid #ccc;
-    z-index: 1000;
-    width: 100%;
-    top: 0;
-    left: 0;
-    background-color: white;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-
 .header-content {
     display: flex;
     justify-content: space-between;
@@ -23,20 +23,21 @@ header {
 }
 
 .header-content img {
-    width: 170px;
+    width: 150px;
     margin-left: 10%;
-    height: 70px;
 }
 
 .header-content p {
     margin-right: 12%;
+    font-size: 20px;
     display: flex;
     align-items: center;
 }
 
 .header-content p span {
 	font-size: 20px;
-    cursor: pointer;
+    cursor: default;
+    color:black;
 }
 
 .header-content p img {
@@ -57,10 +58,6 @@ header {
 
 .header-content p .lock-icon {
     margin-left: 20px;
-}
-
-.header-content p span:hover {
-    text-decoration: underline;
 }
 
 .header-content p img:hover {
@@ -244,7 +241,7 @@ span {
 .detailbottombutton{
 	flex:1;
 }
-.viewcartproduct .orderproduct {
+.viewcartproduct .orderproduct,#assemblecheck  {
    /* border-bottom: 1px solid #ddd; */
     border:1px solid #ddd;
     /*padding: 10px;*/
@@ -255,7 +252,7 @@ span {
     
 }
 
-.viewcartproduct .orderproduct > div  {
+.viewcartproduct .orderproduct > div,#assemblecheck  > div  {
 	border-right: 1px solid #ddd;
 	padding-right: 10px;
 	padding-left: 10px;
@@ -370,6 +367,12 @@ input[type="number"]::-webkit-outer-spin-button {
 	max-height:80px;
 	margin:3px;
 	
+}
+#assemblecheck{
+	display:flex;
+	height: 80px; 
+	max-height:80px;
+	margin:3px;
 }
 
 /* 모달 시작영역*/
@@ -755,8 +758,8 @@ h5{
 footer {
     background-color: #E8E8E8;
     font-size: 14px;
-    color: #4f4f4f;
     height: 120px;
+    width: 100%;
 }
 
 .footer-content {
@@ -767,9 +770,8 @@ footer {
 }
 
 .footer-content img {
-	width: 170px;
+    max-height: 50px;
     margin-left: 10%;
-    height: 90px;
 }
 
 .footer-text {
@@ -779,4 +781,14 @@ footer {
 
 .footer-text p, .footer-text span {
     margin: 5px 0;
+}
+
+.footer-message{
+    font-size:16px;
+    text-align: center;
+}
+
+.footer-message> p{
+    font-size:18px;
+    font-weight:500;
 }

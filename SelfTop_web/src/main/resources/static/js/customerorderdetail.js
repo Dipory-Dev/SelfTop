@@ -9,6 +9,22 @@ const cancelordernum = cancelopenModal.getAttribute("data-ordernum");
 const cancelusername = cancelopenModal.getAttribute("data-userid");
 const cancelmodalusername = document.querySelector(".username");
 const deliveryinfo = document.getElementById("deliveryinfo");
+
+const pricerow= document.querySelectorAll(".pricevalue");
+
+pricerow.forEach(value=>{
+	const pricevalue =parseInt(value.dataset.price,10);
+	const convertprice =pricevalue.toLocaleString();
+	console.log(pricevalue);
+
+	// 금액 업데이트
+	
+	value.textContent=convertprice + " 원 ";
+	
+	
+});
+
+
 cancelopenModal.addEventListener('click', () => {
 	if (["취소요청","취소완료","취소거절"].includes(deliveryinfo.textContent)){
 		alert("이미 취소처리가 진행중인 주문입니다");
@@ -92,6 +108,13 @@ openModalBtns.forEach(button => {
 			
 		}else{
 			reviewcondition.value=reviewedit;
+			star.querySelectorAll('.star').forEach((starrating,index)=> {
+							if (index <= (rating.value-1)) {
+								$(starrating).addClass('on');
+							} else {
+								$(starrating).removeClass('on');
+							}
+						});
 		}
 		
 		 modal.style.display = 'block';

@@ -21,6 +21,12 @@
 			if (message && message.trim().length > 0) {
 				alert(message);
 			}
+			document.addEventListener('DOMContentLoaded', function() {
+				//로고 누르면 메인페이지
+				document.getElementById('logo').addEventListener('click', function() {
+				    window.location.href = '/main';
+				});
+			});
 		});
 	</script>
 
@@ -28,7 +34,7 @@
 <body>
     <header>
         <div class="header-content">
-            <img class="logo" src="/img/logo.png" onclick="location.href='main'">
+            <img src="/img/logo.png" id="logo" style="cursor: pointer;">
            	<p>
            		<span th:text="${sellerInfo.name}+님"></span>&nbsp|
            		<a href="myPage">
