@@ -44,13 +44,15 @@
 	<div id="compare-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">견적 비교</div>
-            <p>장바구니에 담은 견적을 동시에 비교해보세요. 🛒</p>
-            <h5 >견적은 최소 2개이상, 3개까지 비교할 수 있습니다.</h5>
-            <div class="check">
-                <input type="checkbox" id="quote1" value="0">
-                <label for="quote1">견적 1</label>
-            </div>
-            <button class="btn" id="compare-button">비교하기</button>
+			<div class="modal-check-quote">
+				<p>장바구니에 담은 견적을 동시에 비교해보세요. 🛒</p>
+				<p >*견적은 최소 2개이상, 3개까지 비교할 수 있습니다.</p>
+				<div class="check">
+					<input type="checkbox" id="quote1" value="0">
+					<label for="quote1">견적 1</label>
+				</div>
+				<button class="btn" id="compare-button">비교하기</button>
+			</div>
             <hr>
             <div id="table-container"></div>
             <div class="modal-footer">
@@ -60,7 +62,7 @@
     </div>
     <!-- 메인 내역 -->
 	 	<div class="main-header">
-			<p> 내가 담은 견적리스트를 확인해보세요! </p>
+			<p> 내가 담은 견적리스트를 확인해보세요. 🛒 </p>
 
 		</div>
 
@@ -98,61 +100,64 @@
 
 				</table>
 				<div class="bottombutton">
-					<button  id ="showcomparison" class="cartbutton">견적 비교</button>
-					<button  id = "deletebutton" class="cartbutton" >견적 삭제</button>
+					<button id ="showcomparison" class="cartbutton">견적 비교</button>
+					<button id = "deletebutton" class="cartbutton" >견적 삭제</button>
 				</div>
 				</div>
 
 			</div>
 
-			<div id="detailview" class="viewcartproduct">
-				<div class="items-box">
-					<div class="namesection">
-						<p>견적별 부품 현황</p>
-					</div>
-					<div th:fragment="#detailvew" th:each="detail : ${quotedetail}"
-						class="orderproduct">
-						<div class="category">
-							<p th:text="${detail.category}"></p>
+			<div class="viewcartproduct-container">
+				<div id="detailview" class="viewcartproduct">
+					<div class="items-box">
+						<div class="namesection">
+							<p>견적별 부품 현황</p>
 						</div>
-						<div class="thumbnail">
-							<img th:if="${detail.thumbnail != '-'}" th:src="${detail.thumbnail}"></img>
-							<div th:if="${detail.thumbnail == '-'}" class="no-thumbnail"></div>
-						</div>
-						<div class="productname">
-							<p th:text="${detail.product_name}"></p>
-						</div>
-						<div class="priceamount">
-							<div>
-								<p th:if ="${detail.price != 0}" th:text="${detail.price} + 원"></p>
-								<div th:if="${detail.amount != 0}" class="quantity-control">
-									<button type="button" class="quantity-decrease">−</button>
-									<input type="number" class="amount-input"
-										th:value="${detail.amount}"
-										 min="0" />
-									<button type="button" class="quantity-increase">+</button>
+						<div th:fragment="#detailvew" th:each="detail : ${quotedetail}" class="orderproduct">
+							<div class="category">
+								<p th:text="${detail.category}"></p>
+							</div>
+							<div class="thumbnail">
+								<img th:if="${detail.thumbnail != '-'}" th:src="${detail.thumbnail}" />
+								<div th:if="${detail.thumbnail == '-'}" class="no-thumbnail"></div>
+							</div>
+							<div class="productname">
+								<p th:text="${detail.product_name}"></p>
+							</div>
+							<div class="priceamount">
+								<div>
+									<p th:if="${detail.price != 0}" th:text="${detail.price} + 원"></p>
+									<div th:if="${detail.amount != 0}" class="quantity-control">
+										<button type="button" class="quantity-decrease">−</button>
+										<input type="number" class="amount-input" th:value="${detail.amount}" min="0" />
+										<button type="button" class="quantity-increase">+</button>
+									</div>
 								</div>
 							</div>
 						</div>
-
+						<div id="assemblecheck">
+							<label>
+								<input type="radio" name="assemble" value="apply" />
+								<span>(*별도 20,000원) 조립신청</span>
+							</label>
+							<label>
+								<input type="radio" name="assemble" value="no-apply" checked />
+								<span>조립미신청</span>
+							</label>
+						</div>
+					</div>
 				</div>
-				<div id="assemblecheck">
-				    <label>
-				        <input type="radio" name="assemble" value="apply" />
-				        <span>(*별도 20,000원) 조립신청</span>
-				    </label>
-				    <label>
-				        <input type="radio" name="assemble" value="no-apply" checked/>
-				        <span>조립미신청</span>
-				    </label>
+		
+				<div class="detailbottombutton">
+					<button class="detailbutton" onclick="goPay()">결제</button>
+					<button id="openModalBtn" class="detailbutton">호환성 체크</button>
+					<button id="changeamount" class="detailbutton">변경적용</button>
 				</div>
-                <div class="detailbottombutton">
-                    <button class="detailbutton" onclick="goPay()">결제</button>
-                    <button id = "openModalBtn" class="detailbutton">호환성 체크</button>
-                    <button id ="changeamount" class="detailbutton">변경적용</button>
-                </div>
 			</div>
+			
 		</div>
+		
+		
 		
 		
 		<!-----호환성체크 모달창----->
