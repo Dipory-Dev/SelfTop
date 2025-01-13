@@ -257,41 +257,46 @@ document.addEventListener("DOMContentLoaded", () => {
 	// 모달 열기
 	openModalButton.addEventListener('click', () => {
 		const checkElements = document.querySelectorAll(".check");
-		checkElements.forEach((element) => {
-		    element.remove(); 
-		});
-		const selectquote = document.querySelectorAll('input[name="selectquote_no"]:checked');
-		if(selectquote.length === 0){
-			alert("견적을 선택해주세요");
-			return;
-		}
-		const quotenovalue = Array.from(selectquote).map(checkbox => checkbox.value);
-		const checkquotename = Array.from(selectquote).map(checkbox => checkbox.closest('tr').querySelector('.quotename').textContent
-		);
-		const addcheckbox = document.querySelector("#compare-button");
-		quotenovalue.forEach((quotenovalue, index) => {
-			const quotename = checkquotename[index];
-		
-		const checkdiv = document.createElement('div');
-		checkdiv.classList.add("check");
-		
-		const checkbox=document.createElement("input");
-		checkbox.type="checkbox";
-		checkbox.id="quote"+quotenovalue;
-		checkbox.name="modalcheckbox";
-		checkbox.value=quotenovalue;
-		
-		const label = document.createElement("label");
-		label.setAttribute("for", 'quote' + quotenovalue);
-		label.textContent = quotename;
-		
-		checkdiv.appendChild(checkbox);
-		checkdiv.appendChild(label);
-		
-		addcheckbox.insertAdjacentElement('beforebegin',checkdiv);
-		
-		});
-	    modal.style.display = 'block';
+    checkElements.forEach((element) => {
+        element.remove(); 
+    });
+    const selectquote = document.querySelectorAll('input[name="selectquote_no"]:checked');
+    if (selectquote.length === 0) {
+        alert("견적을 선택해주세요");
+        return;
+    }
+    const quotenovalue = Array.from(selectquote).map(checkbox => checkbox.value);
+    const checkquotename = Array.from(selectquote).map(checkbox => 
+        checkbox.closest('tr').querySelector('.quotename').textContent
+    );
+    const addcheckbox = document.querySelector("#compare-button");
+    quotenovalue.forEach((quotenovalue, index) => {
+        const quotename = checkquotename[index];
+
+        const checkdiv = document.createElement('div');
+        checkdiv.classList.add("check");
+
+        // 스타일 추가
+        checkdiv.style.display = "flex"; // 가로 정렬
+        checkdiv.style.alignItems = "center"; // 수직 가운데 정렬
+        checkdiv.style.gap = "10px"; // 간격 조정
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = "quote" + quotenovalue;
+        checkbox.name = "modalcheckbox";
+        checkbox.value = quotenovalue;
+
+        const label = document.createElement("label");
+        label.setAttribute("for", "quote" + quotenovalue);
+        label.textContent = quotename;
+
+        checkdiv.appendChild(checkbox);
+        checkdiv.appendChild(label);
+
+        addcheckbox.insertAdjacentElement('beforebegin', checkdiv);
+    });
+    	modal.style.display = 'block';
 	});
 
 	// 모달 닫기

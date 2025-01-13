@@ -6,11 +6,11 @@
 }
 
 html, body {
-    height: 100%; /* 전체 화면 높이를 기준으로 컨테이너를 조정 */
+    height: 100%; 
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column; /* 수직 레이아웃 */
+    flex-direction: column; 
 }
 
 header {
@@ -78,7 +78,7 @@ body {
 }
 
 main{
-    flex: 1; /* 내용이 부족하면 남는 공간을 채움 */
+    flex: 1; 
     width: 1300px;
     margin: 0 auto;
 }
@@ -86,8 +86,9 @@ main{
 .main-header{
     width:1300px;
     font-size:20px;
+    font-weight:bold;
     height: 50px;
-    padding-top:21px;
+    padding-top:23px;
     margin-bottom:2px;
 }
 
@@ -146,24 +147,29 @@ span {
 .cartinfosection{
     display: flex;
     align-items: stretch;
-    height: calc(100vh - 120px); /* 전체 화면 높이에서 header와 footer 크기를 뺀 값 */
     gap: 10px;
+    height: calc(100vh - 120px); 
 }
 
 .viewcartproduct{
-	flex: 2;
+	flex: 1;
+    display: flex;
+    flex-direction: column;
     padding: 5px;
-    border: 1px solid #ddd;
-    width: 100%; /* 부모 요소의 너비에 따라 조정 */
-    height: calc(100% - 30px); /* 부모 컨테이너 높이에 맞게 조정 */
-    box-sizing: border-box; /* 패딩과 보더 포함 */
-    overflow: auto; /* 내용이 초과될 경우 스크롤 활성화 */
+    border:#ddd 1px solid;
+    box-sizing: border-box;
+    overflow-y: auto; 
+    width:500px;
+    height: calc(100vh - 120px);
+    max-height: calc(100vh - 220px);
 }
 
-.selectcartlist,
-.viewcartproduct {
-    height: 100%; /* 부모 컨테이너의 높이를 기준으로 동일하게 설정 */
-    box-sizing: border-box; /* padding과 border를 포함하여 크기 계산 */
+.viewcartproduct-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1; 
+    width: 100%; 
+    box-sizing: border-box; 
 }
 
 .selectcartlist {
@@ -191,37 +197,36 @@ span {
 
 .carttable{
 	flex-grow: 1;
-    border-left: #ddd 0.7px solid;
-    border-right: #ddd 0.7px solid;
-    border-bottom: #ddd 0.7px solid;
-    height: 655px;
-    position: relative;
+    border: 1px solid #ddd;
+    height: calc(100vh - 120px);
+    max-height: calc(100vh - 220px); 
+    overflow-y: auto; 
+    width:620px;
 }
 
 .bottombutton {
     display: flex;
     flex-direction: row-reverse;
     gap: 10px;
-    width: 95%;
-    height: 15px;
-    padding: 10px;
-    border-top: 1px solid #ddd;
+    width:620px;
+    height: 80px;
+    padding-top: 10px;
+    padding-right: -10px;
     position: absolute;
     bottom: 0;
     left: 0;
     background-color: #fff;
+    
 }
 
 .detailbottombutton{
     display: flex;
-    flex-direction: row-reverse;
+    justify-content: flex-end; 
     gap: 10px;
     padding: 10px;
-    height: 38px;
-    align-items: center;
-    border-top: 1px solid #ddd;
     background-color: #fff;
-    margin-top: 190px;
+    height: 60px;
+    
 }
 
 .selectcartlist table {
@@ -263,8 +268,9 @@ span {
 	height:38px;
     width: 82px;
 	cursor:pointer;
-    font-size:12px;
+    font-size:13px;
     margin-top:4px;
+    margin-right:10px;
 
 }
 
@@ -278,10 +284,10 @@ span {
 	color:#FFFFFF;
 	border-radius:4px;
 	border:none;
-	height:36px;
-    width: 80px;
+	height:38px;
+    width: 82px;
 	cursor:pointer;
-    font-size:12px;
+    font-size:13px;
 }
 
 .detailbutton:hover{
@@ -290,21 +296,31 @@ span {
 }
 
 .viewcartproduct{
-	flex: 2;
+	flex: 1; 
+    width: 670px; 
+    height: 690px;
     padding: 5px;
-    border: 1px solid #ddd;
-    width: 100%;
+    box-sizing: border-box;
+    overflow-y: auto; 
 }
+
 .detailbottombutton{
-	flex:1;
+	display: flex;
+    justify-content: flex-end; 
+    padding: 10px;
+    background-color: #fff;
+    position: relative; 
+    margin-top: auto; 
+    width: 660px;
 }
+
 .viewcartproduct .orderproduct {
-   /* border-bottom: 1px solid #ddd; */
     border:1px solid #ddd;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex:1;
+   
 }
 
 .viewcartproduct .orderproduct > div,#assemblecheck  > div  {
@@ -355,11 +371,11 @@ span {
     border: 1px solid #ccc;
     border-radius: 5px;
     overflow: hidden;
+    margin-top:3px;
 }
 
 .quotename{
-	min-width:191px;
-	max-width:191px;
+	min-width:140px;
 	cursor:pointer;
 	font-Weight:normal;
 	text-decoration: none;
@@ -367,14 +383,12 @@ span {
 
 .quotename:hover{
     font-weight:bold;
-}
-
-#detailview{
-    width:1000px;
+    color:#008ADA;
 }
 
 .quoteprice{
 	width:100px;
+    font-size:14px;
 }
 
 .quantity-control button {
@@ -427,13 +441,16 @@ input[type="number"]::-webkit-outer-spin-button {
 	height: 80px; 
 	max-height:80px;
 	margin:3px;
+    height:65px;
 	
 }
+
 #assemblecheck {
     display: flex;
-    justify-content: flex-end; /* 모든 요소를 오른쪽 정렬 */
+    justify-content: flex-end; 
     align-items: center;
-    gap: 10px; /* 요소 간 간격 */
+    gap: 10px; 
+    margin-top:13px;
 }
 
 #assemblecheck label {
@@ -443,7 +460,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 #assemblecheck input[type="radio"] {
-    margin-right: 5px; /* 체크박스와 텍스트 간 간격 */
+    margin-right: 5px;
 }
 
 /* 모달 시작영역*/
@@ -469,20 +486,22 @@ input[type="number"]::-webkit-outer-spin-button {
     padding: 20px;
     border: 1px solid #888;
     width: 1250px;
-    height:1000px;
+    height:1130px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.check{
-    display: inline-block;
-    width:8px;
-    height:8px;
+.check {
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    margin-top:10px;
 }
 
 .check:hover{
-    transform: scale(1.1); 
-    transition: transform 0.2s ease;
+    font-weight: bold;
+    color:#008ADA;
+    transition: 0.2s;
 }
 
 .modal-header {
@@ -495,6 +514,26 @@ input[type="number"]::-webkit-outer-spin-button {
     text-align: center;
     font-size: 18px;
     font-weight:bolder;
+}
+
+.modal-check-quote{
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+}
+
+.modal-check-quote .check {
+    display: flex; 
+    flex-wrap: wrap; 
+    align-items: center; 
+    gap: 10px; 
+}
+
+.modal-check-quote label {
+    display: flex;
+    align-items: center;
+    cursor: pointer; 
+    gap: 5px; 
 }
 
 #table-container {
@@ -530,7 +569,11 @@ input[type="number"]::-webkit-outer-spin-button {
 #compare-button{
     background-color: #008ADA;
     color: white;
-    margin-left: 57px;
+    margin-left:1148px;
+    width: 95px;
+    height: 35px;
+    padding-bottom:3px;
+    text-align: center;
 }
 
 #compare-button:hover{
@@ -690,8 +733,8 @@ h5{
 .pair {
     display: flex;
     align-items: center;
-    flex-basis: calc(50% - 20px);
-    max-width: calc(50% - 20px);
+    flex-basis: calc(40% - 15px);
+    max-width: calc(40% - 15px);
     margin-left: 15px;
     margin-right: 90px;
     flex-shrink: 0;
