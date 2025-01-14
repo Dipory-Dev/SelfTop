@@ -63,7 +63,7 @@
 			<p> 내가 담은 견적리스트를 확인해보세요! </p>
 
 		</div>
-		
+
 		<hr>
 		<div class="cartinfosection">
 			<div  id ="quotelist" class="selectcartlist">
@@ -76,7 +76,6 @@
 						<th>수량</th>
 						<th>가격</th>
 					</tr>
-
 					<tbody id="cart_view">
 						<tr th:each="dto : ${quote}">
 							<td ><input type="checkbox" name="selectquote_no" th:value="${dto.quote_no}" /></td>
@@ -98,64 +97,60 @@
 					</tbody>
 
 				</table>
-				</div>
 				<div class="bottombutton">
 					<button  id ="showcomparison" class="cartbutton">견적 비교</button>
 					<button  id = "deletebutton" class="cartbutton" >견적 삭제</button>
-
 				</div>
+				</div>
+
 			</div>
 
 			<div id="detailview" class="viewcartproduct">
-				<div class="namesection">
-					<h2>견적별 부품 현황</h2>
-				</div>
-				<div th:fragment="#detailvew" th:each="detail : ${quotedetail}"
-					class="orderproduct">
-					<div class="category">
-						<p th:text="${detail.category}"></p>
+				<div class="items-box">
+					<div class="namesection">
+						<p>견적별 부품 현황</p>
 					</div>
-					<div class="thumbnail">
-						<img th:if="${detail.thumbnail != '-'}" th:src="${detail.thumbnail}"></img>
-						<div th:if="${detail.thumbnail == '-'}" class="no-thumbnail"></div>
-					</div>
-					<div class="productname">
-						<p th:text="${detail.product_name}"></p>
-					</div>
-					<div class="priceamount">
-						<div>
-							<p th:if ="${detail.price != 0}" th:text="${detail.price} + 원"></p>
-							<div th:if="${detail.amount != 0}" class="quantity-control">
-								<button type="button" class="quantity-decrease">−</button>
-								<input type="number" class="amount-input"
-									th:value="${detail.amount}"
-									 min="0" />
-								<button type="button" class="quantity-increase">+</button>
+					<div th:fragment="#detailvew" th:each="detail : ${quotedetail}"
+						class="orderproduct">
+						<div class="category">
+							<p th:text="${detail.category}"></p>
+						</div>
+						<div class="thumbnail">
+							<img th:if="${detail.thumbnail != '-'}" th:src="${detail.thumbnail}"></img>
+							<div th:if="${detail.thumbnail == '-'}" class="no-thumbnail"></div>
+						</div>
+						<div class="productname">
+							<p th:text="${detail.product_name}"></p>
+						</div>
+						<div class="priceamount">
+							<div>
+								<p th:if ="${detail.price != 0}" th:text="${detail.price} + 원"></p>
+								<div th:if="${detail.amount != 0}" class="quantity-control">
+									<button type="button" class="quantity-decrease">−</button>
+									<input type="number" class="amount-input"
+										th:value="${detail.amount}"
+										 min="0" />
+									<button type="button" class="quantity-increase">+</button>
+								</div>
 							</div>
 						</div>
-					</div>
 
 				</div>
-				<div id="assemblecheck" >
-					<div class="category">
-						<p >조립 신청</p>
-					</div>
-					<div class="thumbnail">
-						<img src="" style="display:none"></img>
-					</div>
-					<div class="productname">
-						
-					</div>
-					<div class="priceamount">
-					</div>
-
-
+				<div id="assemblecheck">
+				    <label>
+				        <input type="radio" name="assemble" value="apply" />
+				        <span>(*별도 20,000원) 조립신청</span>
+				    </label>
+				    <label>
+				        <input type="radio" name="assemble" value="no-apply" checked/>
+				        <span>조립미신청</span>
+				    </label>
 				</div>
-				<div class="detailbottombutton">
-					<button class="detailbutton" onclick="goPay()">결제</button>
-					<button id = "openModalBtn" class="detailbutton">호환성 체크</button>
-					<button id ="changeamount" class="detailbutton">변경적용</button>
-				</div>
+                <div class="detailbottombutton">
+                    <button class="detailbutton" onclick="goPay()">결제</button>
+                    <button id = "openModalBtn" class="detailbutton">호환성 체크</button>
+                    <button id ="changeamount" class="detailbutton">변경적용</button>
+                </div>
 			</div>
 		</div>
 		

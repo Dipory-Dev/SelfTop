@@ -30,7 +30,7 @@ public class OrderController {
     private OrderBizImpl orderBizImpl;
 
     @GetMapping("/order")
-    public ResponseEntity<Map<String, Object>> receiveItems(@RequestParam("orderdata") String orderdata, HttpSession session) {
+    public ResponseEntity<Map<String, Object>> receiveItems(@RequestParam("orderData") String orderdata, HttpSession session) {
         Integer member_no = (Integer) session.getAttribute("member_no");
 
         Map<String, Object> param1 = new HashMap<>();
@@ -61,7 +61,7 @@ public class OrderController {
                 productInfo.put("amount", items.get("amount"));
                 productInfo.put("order_price", items.get("order_price"));
                 param2.add(productInfo);*/
-            	
+
             	// 단일 제품 처리 (item0, item1, item2와 같은 항목들을 처리)
                 Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
                 while (fields.hasNext()) {
@@ -77,7 +77,7 @@ public class OrderController {
                 param1.put("address", items.get("address"));
                 param1.put("request", items.get("request"));
                 param1.put("assemblyStatus", items.get("assemblyStatus"));*/
-                
+
              // param1에 member_no와 address, request, assemblyStatus 추가
                 param1.put("member_no", member_no);
                 param1.put("address", rootNode.get("address").asText());
@@ -115,7 +115,7 @@ public class OrderController {
             e.printStackTrace();
             Map<String, Object> result = new HashMap<>();
             result.put("msg", "주문 처리 중 오류가 발생했습니다.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+            return ResponseEntity.status(HttpStatus.FOUND).header("Location", "/payfail").body(result);
         }
     }
 }

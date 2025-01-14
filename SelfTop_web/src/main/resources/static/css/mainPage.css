@@ -125,7 +125,7 @@ main{
 .component-body{
     width:105%;
     height:50px;
-    font-size:11px;
+    font-size:10px;
 }
 
 .product-quantity {
@@ -185,12 +185,12 @@ main{
 }
 
 .price-display {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
     color: #333;
     padding-top: 2px;
     margin-top: -5px;
-    margin-left: 7px;
+    margin-left: 4px;
     transform: translateY(-7px);
 }
 
@@ -419,7 +419,7 @@ h5{
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 .saved-quote select {
@@ -429,14 +429,14 @@ h5{
     border: none;
     outline: none;
     background: transparent;
-    -webkit-appearance: none; 
+    -webkit-appearance: none;
     appearance: none;
     cursor: pointer;
-    z-index: 1; 
+    z-index: 1;
 }
 
 .saved-quote::after {
-    content: "▼"; 
+    content: "▼";
     position: absolute;
     right: 10px;
     top: 50%;
@@ -464,7 +464,7 @@ h5{
     border-color: #008ADA;
     outline: none;
     border: solid 3px #008ADA;
-}  
+}
 
 #quote-name:hover {
     cursor: pointer;
@@ -512,16 +512,16 @@ h5{
 }
 
 .total-price {
-    margin: 5px 20px 10px 335px;
+    margin: 5px 20px 10px 315px;
     font-size: 18px;
     justify-content: space-between;
-    
+
 }
 
 .select-option{
     margin-top:20px;
     margin-left:10px;
-    
+
 }
 
 .total{

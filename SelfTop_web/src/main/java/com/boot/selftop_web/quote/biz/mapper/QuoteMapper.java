@@ -38,7 +38,7 @@ public interface QuoteMapper {
 	@Select("SELECT qd.*,p.CATEGORY,p.THUMBNAIL ,p.PRODUCT_NAME,ps.price\r\n"
 			+ " FROM QUOTE_DETAIL qd\r\n"
 			+ " JOIN PRODUCT p ON qd.PRODUCT_CODE = p.PRODUCT_CODE \r\n"
-			+ " JOIN PRODUCT_STATUS ps ON ps.PRODUCT_CODE =qd.PRODUCT_CODE "
+			+ " JOIN PRODUCT_STATUS ps ON ps.PRODUCT_CODE =qd.PRODUCT_CODE AND ps.SELLER_NO = qd.SELLER_NO "
 			+ " WHERE quote_no=#{quote_no}")
 	List<QuoteDetailDto> QuoteDetailinfo(@Param("quote_no")int quote_no);
 
