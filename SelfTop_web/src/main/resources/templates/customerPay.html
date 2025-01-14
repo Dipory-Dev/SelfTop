@@ -30,6 +30,12 @@
 	    let currentOrder = {};
 		// 페이지가 로드되면 실행되는 함수
 		document.addEventListener("DOMContentLoaded", function() {
+			
+			//로고 누르면 메인페이지
+			document.getElementById('logo').addEventListener('click', function() {
+			    window.location.href = '/main';
+			});
+			
 			// 바로 구매 시 selectedProduct에서 데이터 가져오기
 		    const productInfo = JSON.parse(localStorage.getItem('selectedProduct'));
 		 	// 장바구니에서 구매할 경우 CartDetails에서 데이터 가져오기
