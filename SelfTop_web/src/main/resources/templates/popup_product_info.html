@@ -64,8 +64,11 @@
                                     </div>
                                     <div class="review-body">
                                         <div data-label="이미지" class="img-part">
-                                            <img class="review-img" th:src="@{${review.reviewImg}}"
-                                                th:alt="'리뷰 이미지: ' + ${review.content}" style="width:100px; height:auto;" />
+                                            <img 
+                                                class="review-img"
+                                                th:src="@{${review.reviewImg}}"
+                                                th:alt="'리뷰 이미지: ' + ${review.content != null ? review.content : '리뷰 이미지'}"
+                                                style="width: 100px; height: auto;" />
                                         </div>
                                         <div data-label="리뷰 내용" class="content-part" th:text="${review.content}"></div>
                                     </div>

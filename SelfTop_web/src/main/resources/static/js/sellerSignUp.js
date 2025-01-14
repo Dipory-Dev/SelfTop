@@ -10,6 +10,8 @@ let isCrpValid = false;
 let hasCheckedDuplicateID = false; // ID 중복 확인 버튼 클릭 여부
 let hasCrpValidChk = false; //사업자등록번호 확인 버튼 클릭 여부
 
+let isIdDuplicate = false; //ID가 중복인 경우(기본값: false)
+
 function updateSignupButtonState(){
 
 	validatePassword();
@@ -90,6 +92,7 @@ function checkDuplicateID() {
 				idError.textContent = "이미 사용 중인 ID입니다.";
 				idError.style.color = "red";
 				isIdValid1=false;
+				isIdDuplicate=true;
 				hasCheckedDuplicateID = true;
 			}
 		})
@@ -256,7 +259,8 @@ document.getElementById("business_license").addEventListener("input", function(e
 
 form.addEventListener("submit", (event) => {
 	// 동작(이벤트)을 실행하지 못하게 막는 메서드입니다.
-	if(false == updateSignupButtonState()) {
+	if(false == updateSignupButtonState() || false == isIdDuplicate ) {
 		event.preventDefault();
+		signupButton.disabled=true;
 	}
   });

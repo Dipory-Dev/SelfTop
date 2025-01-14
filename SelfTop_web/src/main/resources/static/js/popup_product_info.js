@@ -14,6 +14,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const sortByDateButton = document.querySelector(".sort-bydate");
     const sortByRateButton = document.querySelector(".sort-byrate");
     const reviewSortVar = document.querySelector(".review-sort-var");
+    const defaultImageSrc = "/img/review-default-image.png"; // 리뷰에 이미지가 없을 시- 기본이미지
+
 
     // 리뷰가 존재하는 경우만 정렬 바 표시
     if (reviews.length > 0) {
@@ -80,20 +82,28 @@ document.addEventListener("DOMContentLoaded", function() {
             renderSortedReviews(sortedByRate);
         });
     }
-    
-    images.forEach(image => {
+
+    // 이미지가 없을 경우 기본 이미지로 설정
+    // 리뷰 이미지가 없는 경우 기본 이미지를 설정
+    images.forEach((image) => {
+        // 이미지의 src가 비어 있거나 유효하지 않을 경우 기본 이미지 설정
+        if (!image.src || image.src.trim() === "" || image.src.includes("undefined")) {
+            image.src = defaultImageSrc;
+        }
+
+        // 이미지 클릭 이벤트 추가 (팝업)
         image.addEventListener("click", function () {
-            
             const popupOverlay = document.createElement("div");
             popupOverlay.classList.add("popup-overlay");
+
             const popupImage = document.createElement("img");
             popupImage.src = this.src;
             popupImage.classList.add("popup-image");
+
             const closeButton = document.createElement("button");
             closeButton.classList.add("popup-close");
             closeButton.innerText = "×";
 
-            
             closeButton.addEventListener("click", function () {
                 document.body.removeChild(popupOverlay);
             });
@@ -103,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     document.body.removeChild(popupOverlay);
                 }
             });
-            
+
             popupOverlay.appendChild(popupImage);
             popupOverlay.appendChild(closeButton);
             document.body.appendChild(popupOverlay);
