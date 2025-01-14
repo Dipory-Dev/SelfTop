@@ -14,19 +14,19 @@
 	    function validatePhoneInput(input) {
 	        input.value = input.value.replace(/[^0-9]/g, '');
 	    }
-	
+
 	    // 주소검색 팝업창
 	    function goPopup() {
 	        const popupUrl = '/seller/addressPopup';
 	        window.open(popupUrl, 'pop', "width=570,height=420, scrollbars=yes, resizable=yes");
 	    }
-	
+
 	    function jusoCallBack(zipNo, roadAddrPart1, addrDetail) {
 	        document.getElementById("zipNo").value = zipNo;
 	        document.getElementById("address1").value = roadAddrPart1;
 	        document.getElementById("address2").value = addrDetail;
 	    }
-	
+
 	    let currentOrder = {};
 		// 페이지가 로드되면 실행되는 함수
 		document.addEventListener("DOMContentLoaded", function() {
@@ -204,7 +204,7 @@
 		         // 주문 데이터로 테이블 업데이트
 		         quoteInfo.forEach((item, index) => {
 		             // 제품 이름이 null이 아니면 테이블에 추가
-		             if (item.name !== null && item.name !== '') {
+		             if (item.name !== undefined && item.name !== '') {
 		                 const row = document.createElement('tr');
 
 		                 // 상품 이름
@@ -238,7 +238,7 @@
 		                 orderPriceCell.classList.add('order-price');
 		                 const totalPrice = item.price * item.quantity;
 				         orderPriceCell.innerText = `${totalPrice.toLocaleString()}원`;
-		                 
+
 		              	 // 총 금액 계산
 						 if (item.assembly === '조립 신청' && !assemblyFeeAdded) {
 							totalAmount += totalPrice + 20000; // 조립 신청 시 2만원 추가
@@ -317,16 +317,16 @@
 			         alert("재고수를 초과하였습니다!");
 			         newQuantity = cartInfo[index].stock-1;
 			     }
-			     
+
 			     // 업데이트된 수량을 cartInfo 배열에 반영
 			     cartInfo[index].quantity = newQuantity;
-	
+
 		         // localStorage에 업데이트된 주문 데이터 저장
 		         localStorage.setItem('CartDetails', JSON.stringify(cartInfo));
 
 		         // 테이블을 갱신
 		         updateCartTable(cartInfo);
-		         
+
 		     }
 		 }
 
@@ -339,7 +339,7 @@
              let assemblyFeeAdded = false; // 2만원 추가 여부를 추적하는 변수
 
           	 // currentOrder를 빈 객체로 초기화
-             currentOrder = {}; 
+             currentOrder = {};
              let assemblyStatus = cartInfo[0].assembly;
              currentOrder['assemblyStatus'] = assemblyStatus;
 		     cartInfo.forEach((item, index) => {
@@ -411,7 +411,7 @@
 		     updatecartPayment(totalAmount, finalAmount);
 		 }
 
-		 // 수량 조절 함수 (장바구니에서)
+		 // 수량 조절 함수 (견적함에서)
 		 function updateQuantityQuote(index, change) {
 		     // localStorage에서 저장된 주문 데이터 가져오기
 		     const quoteInfo = JSON.parse(localStorage.getItem('QuoteDetails'));
@@ -433,8 +433,8 @@
 
 		     }
 		 }
-	
-		 // 장바구니 테이블 갱신 함수
+
+		 // 견적함 테이블 갱신 함수
 		 function updateQuoteTable(quoteInfo) {
 		     const tbody = document.querySelector('#order-table tbody');
 		     tbody.innerHTML = ''; // 기존 내용 삭제
@@ -512,7 +512,7 @@
 		  	 // 선택상품 총금액과 최종 결제금액 업데이트
 		     const shippingAmount = 5000; // 배송비
 		     const finalAmount = totalAmount + shippingAmount;
-		     updatecartPayment(totalAmount, finalAmount);
+		     updatequotePayment(totalAmount, finalAmount);
 		 }
 
         // 배송금액 하나로 병합

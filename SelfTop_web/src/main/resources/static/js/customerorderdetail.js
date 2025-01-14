@@ -15,7 +15,6 @@ const pricerow= document.querySelectorAll(".pricevalue");
 pricerow.forEach(value=>{
 	const pricevalue =parseInt(value.dataset.price,10);
 	const convertprice =pricevalue.toLocaleString();
-	console.log(pricevalue);
 
 	// 금액 업데이트
 	
