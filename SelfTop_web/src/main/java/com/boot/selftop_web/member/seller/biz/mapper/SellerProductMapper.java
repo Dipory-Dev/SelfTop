@@ -15,7 +15,7 @@ import com.boot.selftop_web.member.seller.model.dto.SellerStockDto;
 @Mapper
 public interface SellerProductMapper {
 	
-	@Select("SELECT * FROM viewsellerorder WHERE seller_no= #{member_no} ")
+	@Select("SELECT * FROM viewsellerorder WHERE seller_no= #{member_no} order by order_date desc")
 	List<SellerOrderDto> selectList(@Param("member_no") int member_no);
 	
 	@Select("SELECT * FROM sellerstock WHERE seller_no= #{member_no} ")
@@ -35,7 +35,7 @@ public interface SellerProductMapper {
 	        "<if test='keyword != null and !keyword.isEmpty()'>" +
 	        " AND product_name LIKE '%' || #{keyword} || '%' " +	
 	        "</if>" +
-	        "ORDER BY product_name DESC" +
+	        "ORDER BY order_date DESC" +
 	        "</script>")
 
 	List<SellerOrderDto> selectSearch(@Param("startdate") String startdate, @Param("enddate") String enddate,

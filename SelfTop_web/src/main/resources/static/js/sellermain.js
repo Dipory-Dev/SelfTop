@@ -12,6 +12,15 @@ function Search(){
 			}
 	}).done(function (fragment) {
 		$("#product_view").replaceWith(fragment);
+		const pricerow = document.querySelectorAll(".productprice");
+			pricerow.forEach(value => {
+				const pricevalue = parseInt(value.dataset.price, 10);
+				const convertprice = pricevalue.toLocaleString();
+
+				// 금액 업데이트
+
+				value.textContent = convertprice + " 원 ";
+				});
 		        }).fail(function(xhr, status, error) {
 		        	console.error("오류:", error);
 		        	alert("검색 오류");
