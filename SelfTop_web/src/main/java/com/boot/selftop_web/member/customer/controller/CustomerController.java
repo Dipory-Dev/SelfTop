@@ -318,7 +318,7 @@ public class CustomerController {
 		}
 
 		Integer member_no = (Integer) session.getAttribute("member_no");
-
+		
 		CustomerDto dto = customerBiz.selectCustomer(member_no);
 		model.addAttribute("customer", dto);
 		return "customerPay";

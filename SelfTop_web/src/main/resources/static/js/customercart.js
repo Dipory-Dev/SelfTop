@@ -711,7 +711,7 @@ function goPay() {
 	// 각 제품 정보를 담는 객체 생성
     document.querySelectorAll(".orderproduct").forEach((product) => {
 		const productCode = product.querySelector(".amount-input")?.dataset.productcode;
-		const sellerNo = product.querySelector(".amount-input")?.dataset.sellerNo;
+		const sellerNo = product.querySelector(".amount-input")?.dataset.sellerno;
 		// 조립 신청 여부 체크
 
         quoteInfo = {

@@ -32,7 +32,6 @@ public class OrderController {
     @GetMapping("/order")
     public ResponseEntity<Map<String, Object>> receiveItems(@RequestParam("orderData") String orderdata, HttpSession session) {
         Integer member_no = (Integer) session.getAttribute("member_no");
-
         Map<String, Object> param1 = new HashMap<>();
         List<Map<String, Object>> param2 = new ArrayList<>();
 
@@ -46,6 +45,7 @@ public class OrderController {
 
             // JSON 데이터가 단일 제품인지 여러 제품인지 확인
             JsonNode rootNode = objectMapper.readTree(decodedata);
+            System.out.println(rootNode);
             if (rootNode.isArray()) {
                 // 여러 제품 처리
                 for (JsonNode node : rootNode) {
@@ -82,7 +82,8 @@ public class OrderController {
                 param1.put("member_no", member_no);
                 param1.put("address", rootNode.get("address").asText());
                 param1.put("request", rootNode.get("request").asText());
-                param1.put("assemblyStatus", rootNode.get("assemblyStatus").asText());
+//                param1.put("assemblyStatus", rootNode.get("assemblyStatus").asText());
+                param1.put("assemblyStatus", 'N');
             }
 
             // param1과 param2 출력

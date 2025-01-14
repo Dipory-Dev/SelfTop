@@ -179,6 +179,13 @@
 
 		                 // tbody에 행 추가
 		                 tbody.appendChild(row);
+		                 currentOrder[`item${index}`] = {
+					      	     product_code: item.product_code,
+					      	     seller_no: item.seller_no,
+					      		 amount: item.quantity,
+					             assemblyStatus: item.assembly,
+					             order_price: item.price * item.quantity,
+					         };
 		             }
 		         });
 
@@ -187,6 +194,8 @@
 		     	 // 선택상품 총금액과 최종 결제금액 업데이트
 			     const shippingAmount = 5000; // 배송비
 			     const finalAmount = totalAmount + shippingAmount;
+			    
+			     console.log(currentOrder);
 			     updatePayment(totalAmount, 1);
 		     }
 
@@ -266,6 +275,14 @@
 
 		                 // tbody에 행 추가
 		                 tbody.appendChild(row);
+		                 
+		                 currentOrder[`item${index}`] = {
+		    		      	     product_code: item.product_code,
+		    		      	     seller_no: item.seller_no,
+		    		      		 amount: item.quantity,
+		    		             assemblyStatus: item.assembly,
+		    		             order_price: item.price * item.quantity,
+		    		         };
 		             }
 		         });
 
