@@ -190,7 +190,19 @@ document.addEventListener('click', function(event) {
         if (orderStatus === '배송중') {
             alert('이미 배송을 시작했습니다.');
             return;
-        }
+        }else if(orderStatus === '배송완료'){
+			alert('이미 배송을 완료했습니다.')
+			return;
+		}else if(orderStatus === '취소요청'){
+			alert('취소 요청중 입니다.')
+			return;
+		}else if(orderStatus === '취소거절'){
+			alert('취소가 거절된 상태입니다.')
+			return;
+		}else if(orderStatus === '취소완료'){
+			alert('취소가 완료된 상태입니다.')
+			return;
+		}
 
         startDelivery(orderNo);
     }

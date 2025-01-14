@@ -17,10 +17,10 @@ pricerow.forEach(value=>{
 	const convertprice =pricevalue.toLocaleString();
 
 	// 금액 업데이트
-	
+
 	value.textContent=convertprice + " 원 ";
-	
-	
+
+
 });
 
 

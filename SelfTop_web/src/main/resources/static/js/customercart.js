@@ -589,6 +589,18 @@ function refreshQuotelist() {
 		success: function(html) {
 			const targetDiv = document.querySelector('#cart_view'); 
 			targetDiv.innerHTML = html; 
+			const pricerow = document.querySelectorAll(".quoteprice");
+
+			pricerow.forEach(value => {
+				const pricevalue = parseInt(value.dataset.price, 10);
+				const convertprice = pricevalue.toLocaleString();
+
+				// 금액 업데이트
+
+				value.textContent = convertprice + "원";
+
+
+			});
 		},
 		error: function() {
 			alert("div를 새로고침하는 중 오류가 발생했습니다.");

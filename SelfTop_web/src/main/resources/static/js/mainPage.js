@@ -953,41 +953,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 넣는 함수
-    function updateCart(productName, productPrice, productCode, sellerNo, quoteNo) {
-        const activeComponent = document.querySelector('.component.active');
-
-        if (activeComponent) {
-            const productDetail = activeComponent.querySelector('#product-detail');
-            const productPriceDiv = activeComponent.querySelector('#product-price');
-            const quantityControls = createQuantityControls(productPrice);
-
-            if (productDetail) {
-                productDetail.innerHTML = `<p class="cartproductcode" data-productcode="${productCode}">${productName}</p>`; // 제품 이름 출력
-            }
-            if (productPriceDiv) {
-                productPriceDiv.innerHTML = ''; // 기존 가격 제거
-                productPriceDiv.appendChild(quantityControls); // 수량 조절 추가
-            }
-
-            // 장바구니에 추가
-            const componentName = activeComponent.dataset.component;
-            currentCart[componentName] = {
-                product_code: productCode,
-                name: productName,
-                price: parseInt(productPrice),
-                seller_no: sellerNo,
-                quantity: 1, // 기본 수량 :1
-                quote_no: quoteNo,
-            };
-
-
-            updateTotalPrice(); // 총합 업데이트
-
-            toggleSidePanel();//사이드 패널 열기
-        }
-    }
-
     // 총합 업데이트 함수
     function updateTotalPrice() {
         let total = 0;
