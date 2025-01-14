@@ -838,7 +838,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         component.classList.add('active');
 
                         // 장바구니에 추가
-                        addToCart(categoryData.product_name, categoryData.price, categoryData.product_code, categoryData.seller_no, categoryData.productThumbnail, categoryData.productQuantity);
+                        addToCart(categoryData.product_name, categoryData.price, categoryData.product_code, categoryData.seller_no, categoryData.thumbnail, categoryData.amount);
                     }
                 }
 

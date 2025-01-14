@@ -277,6 +277,7 @@ public class CustomerController {
 			productData.put("price", productStatus.getPrice());
 			productData.put("seller_no", productStatus.getSeller_no());
 			productData.put("amount", amount);
+			productData.put("thumbnail", productInfo.getThumbnail());
 			productData.put("product_code", p_code);
 
 

@@ -5,15 +5,17 @@ public class CartDetailDto {
     private int customer_no;
     private int product_code;
     private int seller_no;
+    private String thumbnail;
     private int amount;
 
     public CartDetailDto() {}
 
-    public CartDetailDto(int quote_no, int customer_no, int product_code, int seller_no, int amount) {
+    public CartDetailDto(int quote_no, int customer_no, int product_code, int seller_no, String thumbnail, int amount) {
         this.quote_no = quote_no;
         this.customer_no = customer_no;
         this.product_code = product_code;
         this.seller_no = seller_no;
+        this.thumbnail = thumbnail;
         this.amount = amount;
     }
 
@@ -49,6 +51,14 @@ public class CartDetailDto {
         this.seller_no = seller_no;
     }
 
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
     public int getAmount() {
         return amount;
     }
@@ -64,6 +74,7 @@ public class CartDetailDto {
                 ", customer_no=" + customer_no +
                 ", product_code=" + product_code +
                 ", seller_no=" + seller_no +
+                ", thumbnail='" + thumbnail +
                 ", amount=" + amount +
                 '}';
     }
