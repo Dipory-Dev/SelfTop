@@ -15,7 +15,7 @@
 				<button type="button" class="quantity-increase">+</button>
 			</div>
 		</td>
-		<td  class ="quoteprice" th:text="${dto.price  * dto.quote_amount } +원 "></td>
+		<td class ="quoteprice" th:data-price="${dto.price * dto.quote_amount} " ></td>
 	</tr>
 </tbody>
 
