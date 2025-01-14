@@ -227,6 +227,25 @@ public class CustomerController {
 	    return "mainPage";
 	}
 
+	@GetMapping("/mainPage")
+	public String showMainPage(@RequestParam("category") String category, @RequestParam("search") String search, Model model) {
+	    ProductBiz<?> productBiz = productBizFactory.getBiz(category);
+	    if (productBiz == null) {
+	        model.addAttribute("error", "Invalid category: " + category);
+	        return "errorPage";
+	    }
+
+	    try {
+	        List<?> products = productBiz.filterProducts(Collections.emptyMap(), "byname", search);
+	        model.addAttribute("products", products);
+	        return "mainPage";
+	    } catch (Exception e) {
+	        model.addAttribute("error", "Error processing request");
+	        return "errorPage";
+	    }
+	}
+
+
 	@GetMapping("/quote")
 	public ResponseEntity<?> selectCartDetail(@RequestParam("quote_no") int quote_no) {
 		System.out.println(quote_no);
@@ -851,7 +870,6 @@ public class CustomerController {
 			);
 
 			model.addAttribute("quotedetail", dummycategory);
-
 		model.addAttribute("quote", res);
 
 		return "customercart";
@@ -907,6 +925,15 @@ public class CustomerController {
 
 
         List<ReviewDto> reviewList = reviewBiz.getReviewsByProductCode(productCode);
+
+        // 리뷰 이미지 기본값 설정
+        final String defaultImage = "/img/review-default-image.png";
+        for (ReviewDto review : reviewList) {
+            if (review.getReviewImg() == null || review.getReviewImg().trim().isEmpty()) {
+                review.setReviewImg(defaultImage); // 기본 이미지로 설정
+            }
+        }
+
         model.addAttribute("reviewList", reviewList);
 
 
