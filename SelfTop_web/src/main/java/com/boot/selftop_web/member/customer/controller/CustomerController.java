@@ -1157,4 +1157,9 @@ public class CustomerController {
 	    return "fragmentcartquotelist :: cart_view"; // 특정 타임리프 fragment 반환
 	}
 
+	@GetMapping("/nopage")
+	public String noPage() {
+		return "404";
+	}
+
 }

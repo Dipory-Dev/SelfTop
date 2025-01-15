@@ -37,6 +37,11 @@ public class RoleInterceptor implements HandlerInterceptor {
         if (role == 'S' && !request.getRequestURI().startsWith("/seller")) {
             response.sendRedirect("/seller/main");
             return false;
+        } else if (role == 'C') {
+            if (requestURI.startsWith("/seller")) {
+                response.sendRedirect("/nopage"); // `/seller` 접근 시 `/main`으로 리다이렉트
+                return false; // 요청 차단
+            }
         }
 
         // 기본적으로 모든 요청 허용
