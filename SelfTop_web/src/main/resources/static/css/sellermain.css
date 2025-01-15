@@ -210,6 +210,22 @@ input[readonly] {
 	cursor:pointer;
 }
 
+.delivery_go{
+	background-color:#008ADA;
+	color:#FFFFFF;
+	border-radius:5px;
+	border:none;
+	height:30px;
+	cursor:pointer;
+}
+
+.searchbutton:hover,
+.info-button:hover,
+.delivery_go:hover {
+    background: #006bb3;
+    transition: background-color 0.3s ease;
+}
+
 .btn-update,
 .btn-save,
 .btn-delete {
