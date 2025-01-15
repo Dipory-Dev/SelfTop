@@ -41,16 +41,11 @@ function loadquotedetail(quoteNo) {
 			const ascontent = `<p>조립여부</p>`;
 			assemblecontent.innerHTML=ascontent.trim();*/
 
-			const assembleamount =assemblesection.querySelector(".priceamount");
-			if(assemblecheck == 'Y'){
-			assembleamount.innerHTML =`<p>20000 원</p>
-							<div class="detailamountcontrol">
-							<button type="button" class="amount-decrease">−</button>
-							<input type="number" class="amount-input" value="1" 
-							data-price="20000" min="0" max="1" />
-							 <button type="button" class="amount-increase">+</button>
-							 </div>`;
-			}
+			if (assemblecheck === 'Y') {
+			        document.querySelector("input[name='assemble'][value='apply']").checked = true;
+			    } else if (assemblecheck === 'N') {
+			        document.querySelector("input[name='assemble'][value='no-apply']").checked = true;
+			    }
 
 			/*if(assemblecheck == 'N'){
 						assembleamount.innerHTML =`<p>20000 원</p>
@@ -708,11 +703,44 @@ function compatibilityviewchange(data){
 function goPay() {
 	const radioButtons = document.querySelectorAll('#assemblecheck input[type="radio"]');
 	let isAssemblyRequested = false; // 현재 조립 신청 상태
+
+	const elements = document.querySelectorAll('.quotename');
+	let quoteno=0;
+	// 스타일을 기준으로 필터링
+	elements.forEach(element => {
+		const style = window.getComputedStyle(element);
+		// 예: 텍스트 색상이 빨간색인 요소 찾기
+		if (style.fontWeight === 'bold' || style.fontWeight === '700' ) {
+			quoteno=element.dataset.quoteNo;
+		}
+
+	});
+	if (quoteno == 0){
+		alert("견적을 선택해주세요!");
+		return;
+	}
+	const quoteTd = document.querySelector(`td[data-quote-no='${quoteno}']`);
+
+	// 해당 tr 찾기
+	const tr = quoteTd.closest('tr');
+
+	// tr 내의 quantity-input input 값 가져오기
+	const quantityInput = tr.querySelector('.quantity-input');
+	const quantityValue = quantityInput.value;
+
 	// 각 제품 정보를 담는 객체 생성
     document.querySelectorAll(".orderproduct").forEach((product) => {
 		const productCode = product.querySelector(".amount-input")?.dataset.productcode;
 		const sellerNo = product.querySelector(".amount-input")?.dataset.sellerno;
+
 		// 조립 신청 여부 체크
+		const assemblecheck=document.querySelector("input[name='assemble']:checked").value;
+		let assemblevalue;
+		if(assemblecheck === 'apply'){
+			assemblevalue = '조립 신청';
+		}else{
+			assemblevalue = '조립 미신청';
+		}
 
         quoteInfo = {
             thumbnail: product.querySelector(".thumbnail img")?.src,
@@ -720,10 +748,10 @@ function goPay() {
             name: product.querySelector(".productname p")?.innerText,
 			price: parseInt(product.querySelector(".priceamount p")?.innerText.replace(/[^0-9]/g, "")) /
 			       parseInt(product.querySelector(".amount-input")?.value), // 총 가격을 수량으로 나눔
-            quantity: parseInt(product.querySelector(".amount-input")?.value),
+            quantity: parseInt((product.querySelector(".amount-input")?.value) * quantityValue),
             product_code: productCode,
             seller_no: sellerNo, // 판매자 정보 필요
-            assembly: "조립 미신청", // 조립 여부는 기본값으로 설정
+            assembly: assemblevalue, // 조립 여부는 기본값으로 설정
         };
 
 		// 배열에 추가

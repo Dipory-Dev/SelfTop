@@ -226,7 +226,7 @@ public class CustomerController {
 
 	    return "mainPage";
 	}
-
+	
 	@GetMapping("/mainPage")
 	public String showMainPage(@RequestParam("category") String category, @RequestParam("search") String search, Model model) {
 	    ProductBiz<?> productBiz = productBizFactory.getBiz(category);
@@ -244,7 +244,6 @@ public class CustomerController {
 	        return "errorPage";
 	    }
 	}
-
 
 	@GetMapping("/quote")
 	public ResponseEntity<?> selectCartDetail(@RequestParam("quote_no") int quote_no) {
@@ -277,6 +276,7 @@ public class CustomerController {
 			productData.put("price", productStatus.getPrice());
 			productData.put("seller_no", productStatus.getSeller_no());
 			productData.put("amount", amount);
+			productData.put("thumbnail", productInfo.getThumbnail());
 			productData.put("product_code", p_code);
 
 
@@ -420,6 +420,8 @@ public class CustomerController {
 
 
 		model.addAttribute("membername", session.getAttribute("name"));
+		CustomerDto dto = customerBiz.selectCustomer(member_no);
+		model.addAttribute("customer", dto);
 		model.addAttribute("customerorder",orderres);
 		int waitdepositcount = 0; // 입금대기
 		int completepaycount = 0; // 결제완료

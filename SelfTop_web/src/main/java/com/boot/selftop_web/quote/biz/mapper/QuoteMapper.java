@@ -49,7 +49,7 @@ public interface QuoteMapper {
 	@Select("select product_code, amount from quote_detail where quote_no = #{quote_no}")
 	List<CartDetailDto> selectCartDetail(@Param("quote_no")int quote_no);
 
-	@Select("select product_name, category from product where product_code = #{product_code}")
+	@Select("select product_name, category, thumbnail from product where product_code = #{product_code}")
 	ProductInfoDto selectProduct(@Param("product_code")int product_code);
 
 	@Select("select seller_no, price from product_status where product_code = #{product_code} " +

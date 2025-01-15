@@ -47,12 +47,14 @@
 			<div class="modal-check-quote">
 				<p>장바구니에 담은 견적을 동시에 비교해보세요. 🛒</p>
 				<p >*견적은 최소 2개이상, 3개까지 비교할 수 있습니다.</p>
-				<div class="check">
-					<input type="checkbox" id="quote1" value="0">
-					<label for="quote1">견적 1</label>
+					<div class="checkboxsection">
+						<div class="check">
+							<input type="checkbox" id="quote1" value="0"> <label
+								for="quote1">견적 1</label>
+						</div>
+						<button class="btn" id="compare-button">비교하기</button>
+					</div>
 				</div>
-				<button class="btn" id="compare-button">비교하기</button>
-			</div>
             <hr>
             <div id="table-container"></div>
             <div class="modal-footer">
@@ -147,19 +149,19 @@
 						</div>
 					</div>
 				</div>
-		
+
 				<div class="detailbottombutton">
 					<button class="detailbutton" onclick="goPay()">결제</button>
 					<button id="openModalBtn" class="detailbutton">호환성 체크</button>
 					<button id="changeamount" class="detailbutton">변경적용</button>
 				</div>
 			</div>
-			
+
 		</div>
 		
 		
-		
-		
+
+
 		<!-----호환성체크 모달창----->
     <div id="modal" class="compatibilitymodal">
         <div class="compatibilitymodal-content">
