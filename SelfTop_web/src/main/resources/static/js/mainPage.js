@@ -691,7 +691,8 @@
              })
              .catch(error => {
                  console.error('Error loading products:', error);
-                 contentBox.innerHTML = `<p>Error loading products: ${error.message}</p>`;
+                 //contentBox.innerHTML = `<p>Error loading products: ${error.message}</p>`;
+				 contentBox.innerHTML = `<p>조건에 맞는 ${category} 아이템을 찾을 수 없습니다.</p>`;
              });
      }
 
