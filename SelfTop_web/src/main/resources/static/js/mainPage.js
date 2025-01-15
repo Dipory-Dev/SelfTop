@@ -820,6 +820,9 @@ document.addEventListener("DOMContentLoaded", () => {
     
                 // 컴포넌트 업데이트
                 updateComponents(data);
+                
+                // 조립 상태를 추적
+                let overallAssemblyStatus = 'N';
     
                 // 기존 활성화된 컴포넌트 비활성화
                 const deactivateActiveComponent = () => {
@@ -831,7 +834,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
                 toggleButton.click('active');
     
-                let overallAssemblyStatus = 'N'; // 전체 조립 상태 추적 (기본값: 'N')
+                
     
                 for (const category in data) {
                     const categoryData = data[category];
@@ -857,22 +860,30 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
     
-                // 조립 신청 여부 반영
-                const assemblyRadios = document.querySelectorAll('input[name="assembly"]');
-                if (assemblyRadios) {
-                    assemblyRadios.forEach(radio => {
-                        if (
-                            (overallAssemblyStatus === 'Y' && radio.value === 'requested') ||
-                            (overallAssemblyStatus === 'N' && radio.value === 'not_requested')
-                        ) {
-                            radio.checked = true;
-                        }
-                    });
-    
-                    // 현재 조립 신청 상태 업데이트
-                    isAssemblyRequested = overallAssemblyStatus === 'Y';
-                    updateTotalPrice(); // 총 금액 업데이트
+                // 조립 상태에 따른 라디오 버튼 업데이트
+                const radioRequested = document.querySelector('input[value="requested"]');
+                const radioNotRequested = document.querySelector('input[value="not_requested"]');
+
+                if (overallAssemblyStatus === 'Y') {
+                    radioRequested.checked = true;
+                    isAssemblyRequested = true;
+
+                    // 조립 신청 상태 장바구니 반영
+                    if (!currentCart['assembly_price']) {
+                        currentCart['assembly_price'] = assemblyPrice;
+                    }
+                    cartDetails.forEach(item => (item.assembly = '조립 신청'));
+                } else {
+                    radioNotRequested.checked = true;
+                    isAssemblyRequested = false;
+
+                    // 조립 미신청 상태 장바구니 반영
+                    delete currentCart['assembly_price'];
+                    cartDetails.forEach(item => (item.assembly = '조립 미신청'));
                 }
+
+                // 총 가격 즉각 업데이트
+                updateTotalPrice();
     
                 // CPU 컴포넌트 활성화
                 const cpuComponent = document.querySelector('.component[data-component="CPU"]');
@@ -893,6 +904,18 @@ document.addEventListener("DOMContentLoaded", () => {
          // 데이터를 기반으로 화면에 부품 정보 출력
          console.log("Component details:", details);
      }
+
+     // 조립 신청 여부에 따른 상태 업데이트 함수
+    function updateAssemblyStatus() {
+        if (isAssemblyRequested) {
+            currentCart['assembly_price'] = assemblyPrice;
+            cartDetails.forEach(item => item.assembly = '조립 신청');
+        } else {
+            delete currentCart['assembly_price'];
+            cartDetails.forEach(item => item.assembly = '조립 미신청');
+        }
+        updateTotalPrice(); // 총 가격 업데이트
+    }
 
      // 전역으로 노출
      window.fetchQuoteDetail = fetchQuoteDetail;
@@ -970,7 +993,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     thumbnail: productThumbnail,
                     category: componentName,
                     name: productName,
-                    price: productPrice * initialQuantity, // 초기 수량 반영 가격 설정
+                    price: productPrice, // 초기 수량 반영 가격 설정
                     stock: initialQuantity, // 초기 수량 설정
                     quantity: initialQuantity,
                     product_code: productCode,
@@ -1262,19 +1285,41 @@ document.addEventListener("DOMContentLoaded", () => {
  // 구매하기 버튼 클릭 이벤트
  function goPayPage() {
 
-     // 선택된 제품이 없을 경우 경고 메시지 표시
-     if (cartDetails.length === 0) {
-         alert("선택된 제품이 없습니다. 장바구니를 확인해주세요.");
-         return;
-     }
+    // 선택된 제품이 없을 경우 경고 메시지 표시
+    if (cartDetails.length === 0) {
+        alert("선택된 제품이 없습니다. 장바구니를 확인해주세요.");
+        return;
+    }
+    
+    // 라디오 버튼 상태 확인
+    const radioButtons = document.querySelectorAll('input[name="assembly"]');
+    let assemblyStatus = 'N';
 
-     // localStorage에 저장
-     localStorage.setItem('CartDetails', JSON.stringify(cartDetails));
+    // 라디오 버튼 변경 시 즉각 반영
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (radio.value === 'requested' && radio.checked) {
+                isAssemblyRequested = true;
+            } else if (radio.value === 'not_requested' && radio.checked) {
+                isAssemblyRequested = false;
+            }
+            updateAssemblyStatus();
+        });
+    });
 
-     // 결제 페이지로 이동 (주석 해제 시 활성화)
-     window.location.href = '/pay'; // 결제 페이지 URL로 이동
+    // 조립 신청 여부에 따라 assemblyStatus 반영
+    cartDetails.forEach(item => {
+        item.assemblyStatus = assemblyStatus;
+    });
 
-     console.log(cartDetails); // 가져온 데이터 확인
+    // localStorage에 저장
+    localStorage.setItem('CartDetails', JSON.stringify(cartDetails));
+
+    // 결제 페이지로 이동
+    window.location.href = '/pay';
+
+    console.log("결제페이지에 넘길 데이터: ");
+    console.log(cartDetails); // 확인용 로그
  }
 
  //토글 버튼 눌러서 사이드 패널 보여주기
