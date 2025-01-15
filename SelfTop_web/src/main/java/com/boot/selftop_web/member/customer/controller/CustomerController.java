@@ -211,7 +211,13 @@ public class CustomerController {
 	        model.addAttribute("cartList", cartList);
 	        model.addAttribute("username", username);
 	        CustomerDto dto = customerBiz.selectCustomer(member_no);
-			model.addAttribute("customer", dto);
+	        if (dto == null) {
+	            dto = new CustomerDto(); // 기본값 설정
+	            dto.setName("Guest");
+	        }
+	        model.addAttribute("customer", dto);
+	    } else {
+	        model.addAttribute("customer", null); // 로그인하지 않은 상태
 	    }
 
 	    if (category != null && search != null) {
