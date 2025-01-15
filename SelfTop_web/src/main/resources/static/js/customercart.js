@@ -43,9 +43,9 @@ function loadquotedetail(quoteNo) {
 
 			if (assemblecheck === 'Y') {
 			        document.querySelector("input[name='assemble'][value='apply']").checked = true;
-			    } else if (assemblecheck === 'N') {
-			        document.querySelector("input[name='assemble'][value='no-apply']").checked = true;
-			    }
+			} else if (assemblecheck === 'N') {
+				document.querySelector("input[name='assemble'][value='no-apply']").checked = true;
+			}
 
 			/*if(assemblecheck == 'N'){
 						assembleamount.innerHTML =`<p>20000 원</p>

@@ -844,8 +844,21 @@ document.addEventListener("DOMContentLoaded", () => {
                         categoryData.product_code,
                         categoryData.seller_no,
                         categoryData.thumbnail,
-                        categoryData.productQuantity
+                        categoryData.amount
                     );
+                    const assembleCheck = categoryData.assemblyStatus;
+                    const assemblyRadios = document.querySelectorAll('input[name="assembly"]');
+                    console.log("assemblyRadios : ", assemblyRadios);
+                    console.log("amount : " , categoryData.amount);
+
+                    // assemblyRadios에서 'value' 값에 따라 선택
+                    assemblyRadios.forEach((radio) => {
+                        if ((assembleCheck === 'Y' && radio.value === 'apply') ||
+                            (assembleCheck === 'N' && radio.value === 'noApply')) {
+                            radio.checked = true;
+                        }
+                    });
+
                 }
             }
 

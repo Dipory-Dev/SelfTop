@@ -256,6 +256,11 @@ public class CustomerController {
 		// 견적 상세 정보를 가져옴
 		List<CartDetailDto> quote_detail = quoteBiz.selectCartDetail(quote_no);
 
+		// 조립여부 확인
+		char assemblyStatus = quoteBiz.assemblecheck(quote_no);
+
+		System.out.println("assemblyStatus: " + assemblyStatus);
+
 		// 결과를 저장할 Map
 		Map<String, Object> res = new HashMap<>();
 
@@ -263,6 +268,7 @@ public class CustomerController {
 		for (CartDetailDto cartDetailDto : quote_detail) {
 			int p_code = cartDetailDto.getProduct_code();
 			int amount = cartDetailDto.getAmount();
+			System.out.println("amount: " + amount);
 
 			System.out.println("p_code: " + p_code);
 
@@ -282,7 +288,7 @@ public class CustomerController {
 			productData.put("amount", amount);
 			productData.put("thumbnail", productInfo.getThumbnail());
 			productData.put("product_code", p_code);
-
+			productData.put("assemblyStatus", assemblyStatus);
 
 			res.put(productInfo.getCategory(), productData);
 		}
