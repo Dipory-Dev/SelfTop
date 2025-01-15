@@ -703,6 +703,7 @@ function compatibilityviewchange(data){
 function goPay() {
 	const radioButtons = document.querySelectorAll('#assemblecheck input[type="radio"]');
 	let isAssemblyRequested = false; // 현재 조립 신청 상태
+	quoteDetails=[];
 
 	const elements = document.querySelectorAll('.quotename');
 	let quoteno=0;
@@ -792,6 +793,7 @@ function goPay() {
     }
 
     // localStorage에 저장
+	localStorage.clear();
     localStorage.setItem('QuoteDetails', JSON.stringify(quoteDetails));
 
     // 결제 페이지로 이동 (주석 해제 시 활성화)

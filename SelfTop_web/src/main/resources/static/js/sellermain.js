@@ -127,6 +127,7 @@ function changeprice(){
 
 document.addEventListener("DOMContentLoaded", () => {
 	changeprice();
+	let cancelcheck;
 
 
 });
@@ -275,6 +276,9 @@ document.addEventListener('click', function(event) {
 		const info = event.target.getAttribute('data-info');
 		// 모달 제어 스크립트
 		const modal = document.getElementById('modal');
+		const orderRow = event.target.closest('tr');
+		const orderStatus = orderRow.querySelector('td:nth-child(8)').textContent;
+		cancelcheck=orderStatus;
 		fetch("/seller/informorder", {
 			method: "POST",
 			headers: {
@@ -312,6 +316,19 @@ document.addEventListener('click', function(event) {
 	if(event.target.id ==='cancelorder'){
 		let cancelconfirm;
 		const ordernum =document.getElementById('ordernum').textContent;
+		if (cancelcheck === '배송중') {
+			alert('취소 요청을 한 주문이 아닙니다.');
+			return;
+		} else if (cancelcheck === '배송완료') {
+			alert('취소 요청을 한 주문이 아닙니다.')
+			return;
+		} else if (cancelcheck === '취소거절') {
+			alert('이미 취소거절한 주문입니다.')
+			return;
+		} else if (cancelcheck === '취소완료') {
+			alert('이미 취소가 완료된 주문입니다.')
+			return;
+		}
 		if(event.target.classList.contains('btn-approve') && event.target.classList.contains('btn') ){
 			cancelconfirm =true;
 		}

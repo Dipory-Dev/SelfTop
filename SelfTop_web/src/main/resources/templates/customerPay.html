@@ -17,7 +17,7 @@
 
 	    // 주소검색 팝업창
 	    function goPopup() {
-	        const popupUrl = '/seller/addressPopup';
+	        const popupUrl = '/addressPopup';
 	        window.open(popupUrl, 'pop', "width=570,height=420, scrollbars=yes, resizable=yes");
 	    }
 
@@ -37,12 +37,11 @@
 			});
 			
 			// 바로 구매 시 selectedProduct에서 데이터 가져오기
-		    let productInfo = JSON.parse(localStorage.getItem('selectedProduct'));
+		    const productInfo = JSON.parse(localStorage.getItem('selectedProduct'));
 		 	// 장바구니에서 구매할 경우 CartDetails에서 데이터 가져오기
-		    let cartInfo = JSON.parse(localStorage.getItem('CartDetails'));
+		    const cartInfo = JSON.parse(localStorage.getItem('CartDetails'));
 		 	// 견적함에서 구매할 경우 QuoteDetails에서 데이터 가져오기
-	 	
-		    let quoteInfo = JSON.parse(localStorage.getItem('QuoteDetails'));
+		    const quoteInfo = JSON.parse(localStorage.getItem('QuoteDetails'));
 		 	
 		     if (productInfo) {
 		    	 currentOrder['product_code'] = productInfo.product_code;
@@ -101,7 +100,6 @@
 
 		         // 선택상품 총금액과 최종 결제금액 업데이트
 		         updatePayment(productInfo.price, 1);
-		         localStorage.clear();
 		         currentOrder['assemblyStatus'] = '조립 미신청';
 		     }
 
@@ -197,7 +195,6 @@
 			     const finalAmount = totalAmount + shippingAmount;
 			    
 			     console.log(currentOrder);
-			     localStorage.clear();
 			     updatePayment(totalAmount, 1);
 		     }
 
@@ -292,9 +289,6 @@
 		     	 // 선택상품 총금액과 최종 결제금액 업데이트
 			     const shippingAmount = 5000; // 배송비
 			     const finalAmount = totalAmount + shippingAmount;
-			     localStorage.clear();
-			     console.log(quoteInfo);
-			     quoteInfo = null;
 			     updatePayment(totalAmount, 1);
 		     }
 		 });
@@ -441,7 +435,7 @@
 		 function updateQuantityQuote(index, change) {
 		     // localStorage에서 저장된 주문 데이터 가져오기
 		     const quoteInfo = JSON.parse(localStorage.getItem('QuoteDetails'));
-
+		     
 		     if (quoteInfo && quoteInfo[index]) {
 		         // 수량 업데이트
 		         let newQuantity = quoteInfo[index].quantity + change; // 변경된 수량

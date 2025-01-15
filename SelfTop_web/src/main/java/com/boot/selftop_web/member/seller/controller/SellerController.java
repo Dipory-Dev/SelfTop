@@ -89,6 +89,7 @@ public class SellerController {
 	@GetMapping("/datesearch")
 	public String searchByDate(@RequestParam(required = false) String startdate, @RequestParam(required = false) String enddate,
 							   @RequestParam(required = false) String keyword,  Model model,HttpSession session) {
+		
 		if (startdate == null || startdate.isEmpty()) {
 			startdate = null;
 		}

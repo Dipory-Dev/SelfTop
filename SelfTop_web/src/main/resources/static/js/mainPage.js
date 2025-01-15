@@ -763,6 +763,7 @@ document.addEventListener("DOMContentLoaded", () => {
                      seller_no: sellerNo,
                      assembly: '조립 미신청',
                  };
+				 localStorage.clear();
                  localStorage.setItem('selectedProduct', JSON.stringify(productInfo));
 
                  if(productPrice=="품절") {
@@ -1306,6 +1307,11 @@ document.addEventListener("DOMContentLoaded", () => {
             updateAssemblyStatus();
         });
     });
+
+     // localStorage에 저장
+	 localStorage.clear();
+     localStorage.setItem('CartDetails', JSON.stringify(cartDetails));
+
 
     // 조립 신청 여부에 따라 assemblyStatus 반영
     cartDetails.forEach(item => {

@@ -49,6 +49,7 @@ import com.boot.selftop_web.order.model.dto.OrderBoardDto;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
@@ -1180,6 +1181,31 @@ public class CustomerController {
 	@GetMapping("/nopage")
 	public String noPage() {
 		return "404";
+	}
+	
+	@RequestMapping(value="/addressPopup")
+	public ModelAndView addressPopup(HttpServletRequest request, @RequestParam HashMap<String, String> p, Locale locale) {
+
+		// callback 함수가 실행되어야하니 호출한 html 파일로 return
+		ModelAndView mav = new ModelAndView("addressPopup");
+
+		String inputYn = request.getParameter("inputYn");
+		String zipNo = request.getParameter("zipNo");
+		String roadAddrPart1 = request.getParameter("roadAddrPart1");
+		String roadAddrPart2 = request.getParameter("roadAddrPart2");
+		String addrDetail = request.getParameter("addrDetail");
+		String jibunAddr = request.getParameter("jibunAddr");
+
+
+		mav.addObject("inputYn", inputYn);
+		mav.addObject("zipNo", zipNo);
+		mav.addObject("roadAddrPart1", roadAddrPart1);
+		mav.addObject("roadAddrPart2", roadAddrPart2);
+		mav.addObject("jibunAddr", jibunAddr);
+		mav.addObject("addrDetail", addrDetail);
+
+
+		return mav;
 	}
 
 }

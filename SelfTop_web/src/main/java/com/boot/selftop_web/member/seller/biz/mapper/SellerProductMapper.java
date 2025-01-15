@@ -30,7 +30,7 @@ public interface SellerProductMapper {
 	        "   AND order_date &gt;= #{startdate} " +
 	        "</if>" +
 	        "<if test='enddate != null and !enddate.isEmpty()'>" +
-	        "   AND order_date &lt;= #{enddate} " +
+	        "   AND order_date &lt;= TO_DATE(#{enddate}, 'yyyy/mm/dd') + INTERVAL '1' DAY " +
 	        "</if>" +
 	        "<if test='keyword != null and !keyword.isEmpty()'>" +
 	        " AND product_name LIKE '%' || #{keyword} || '%' " +	
