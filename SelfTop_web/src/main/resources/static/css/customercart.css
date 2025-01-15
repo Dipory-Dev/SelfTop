@@ -75,7 +75,7 @@ main{
     width: 1300px;
     margin: 0 auto;
     min-height: calc(100vh - 120px);
- 
+
 }
 
 #title {
@@ -167,8 +167,8 @@ span {
     bottom: 0px; /* 하단에서 10px 띄움 */
     text-align: center;
     right:0;
-	display: flex; 
-	flex-direction: row-reverse; 
+	display: flex;
+	flex-direction: row-reverse;
 	gap:10px;
 	margin-top:10px;
 	padding-top:5px;
@@ -176,13 +176,13 @@ span {
 	}
 
 .detailbottombutton{
-	display: flex; 
-	flex-direction: row-reverse; 
+	display: flex;
+	flex-direction: row-reverse;
 	gap:10px;
 	margin-top:10px;
 	padding-top:5px;
 	border-top: 1px solid #ddd;
-	
+
 }
 
 
@@ -211,7 +211,7 @@ span {
     padding: 10px;
     text-align: center; /* 텍스트 가운데 정렬 */
     border : 1px solid #ddd;
-    
+
 }
 
 .cartbutton{
@@ -249,7 +249,7 @@ span {
     justify-content: space-between;
     align-items: center;
     flex:1;
-    
+
 }
 
 .viewcartproduct .orderproduct > div  {
@@ -271,7 +271,7 @@ span {
 
 .category{
 	flex:1;
-	
+
 }
 
 .thumbnail{
@@ -366,7 +366,7 @@ input[type="number"]::-webkit-outer-spin-button {
 	height: 80px; 
 	max-height:80px;
 	margin:3px;
-	
+
 }
 
 /* 모달 시작영역*/
@@ -397,13 +397,15 @@ input[type="number"]::-webkit-outer-spin-button {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.check{
-    display: inline-block;
-    margin-left:7px;
+.check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top:10px;
 }
 
 .check:hover{
-    transform: scale(1.1); 
+    transform: scale(1.1);
     transition: transform 0.2s ease;
 }
 
@@ -417,6 +419,26 @@ input[type="number"]::-webkit-outer-spin-button {
     text-align: center;
     font-size: 18px;
     font-weight:bolder;
+}
+
+.modal-check-quote{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-check-quote .check {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-check-quote label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 5px;
 }
 
 #table-container {
