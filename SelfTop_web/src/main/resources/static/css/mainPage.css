@@ -23,6 +23,11 @@ header {
     align-items: center;
 }
 
+.header-login:hover{
+    font-weight:bold;
+    color:#008ADA;
+}
+
 .header-content img {
     width: 150px;
     margin-left: 10%;
