@@ -105,3 +105,24 @@ document.addEventListener("DOMContentLoaded", () => {
 	// 초기 상태
 	updateSignupButtonState();
 });
+
+// 이메일 도메인 선택 시 자동으로 입력되도록 하는 함수
+function updateEmailDomain() {
+    var domainSelect = document.getElementById('email-domain-select');
+    var domainInput = document.getElementById('email-domain');
+    
+    // 선택한 도메인이 '직접 입력'일 경우
+    if (domainSelect.value === 'direct') {
+        domainInput.readOnly = false;
+        domainInput.value = '';
+    } else {
+        domainInput.readOnly = true;
+        domainInput.value = domainSelect.value;
+    }
+}
+
+// 페이지 로드 시, 기본적으로 이메일 도메인 입력란을 비활성화 상태로 설정
+window.onload = function() {
+    document.getElementById('email-domain').readOnly = true;
+	
+};
