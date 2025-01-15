@@ -1,8 +1,17 @@
+
 * {
 	margin: 0;
     padding: 0;
     font-family: 'Inter', sans-serif;
     color: #666;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
@@ -71,11 +80,17 @@ body {
 
 main{
     flex: 1;
-    align-items: center;
     width: 1300px;
     margin: 0 auto;
-    min-height: calc(100vh - 120px);
+}
 
+.main-header{
+    width:1300px;
+    font-size:20px;
+    font-weight:bold;
+    height: 50px;
+    padding-top:23px;
+    margin-bottom:2px;
 }
 
 #title {
@@ -131,120 +146,177 @@ span {
 }
 
 .cartinfosection{
-	display:flex;
-   align-items: stretch;
-   height: calc(100vh);
-   gap:10px;
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+    height: calc(100vh - 120px);
 }
 
 .viewcartproduct{
-	flex:2;
-	padding:5px;
-	border: 1px solid #ddd;
-	height: calc(100% - 30px);
+	flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    border:#ddd 1px solid;
+    box-sizing: border-box;
+    overflow-y: auto;
+    width:500px;
+    height: calc(100vh - 120px);
+    max-height: calc(100vh - 220px);
 }
+
+.viewcartproduct-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
+    box-sizing: border-box;
+}
+
 .selectcartlist {
-	flex:1.5;
+	flex: 1.5;
     display: flex;
     flex-direction: column;
     position: relative;
-     height: calc(100% - 30px);
-    border: 1px solid #ddd;
-    padding:5px;
+
 }
 
-
 .namesection{
-	height:42px;
+	height:45px;
 	text-align:center;
+    font-size:18px;
+    font-weight: bold;
+    margin-top:-6px;
+    background-color: #f9f9f9;
+    margin-left:-5px;
+    margin-right:-5px;
+}
+
+.namesection> p {
+    padding-top: 7px;
 }
 
 .carttable{
 	flex-grow: 1;
+    border: 1px solid #ddd;
+    height: calc(100vh - 120px);
+    max-height: calc(100vh - 220px);
+    overflow-y: auto;
+    width:620px;
 }
+
 .bottombutton {
-	border-top: 1px solid #ddd;
-    bottom: 0px; /* 하단에서 10px 띄움 */
-    text-align: center;
-    right:0;
-	display: flex;
-	flex-direction: row-reverse;
-	gap:10px;
-	margin-top:10px;
-	padding-top:5px;
-	width:100%;
-	}
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 10px;
+    width:620px;
+    height: 80px;
+    padding-top: 10px;
+    padding-right: -10px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+
+}
 
 .detailbottombutton{
-	display: flex;
-	flex-direction: row-reverse;
-	gap:10px;
-	margin-top:10px;
-	padding-top:5px;
-	border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 10px;
+    background-color: #fff;
+    height: 60px;
 
 }
-
 
 .selectcartlist table {
     border-collapse: collapse;
     width: 100%;
 }
-.namesection{
-	background-color:#EAEAEA;
-}
-
 
 .selectcartlist table tr {
-    border-bottom: 1px solid #ddd; /* 각 행 하단에 구분선 */
+    border-bottom: 1px solid #ddd;
     
 }
 
 .selectcartlist table th {
-    background-color: #f9f9f9; /* 헤더 배경 색 */
-    border-bottom: 2px solid #ddd; /* 헤더 하단에 두꺼운 구분선 */
-    padding: 10px;
+    background-color: #f9f9f9;
     text-align: center;
+    height: 45px;
+    margin-top:-10px;
+    width: 340px;
+}
+
+.selectcartlist table th:hover{
+    background-color: #C7E6FF;
+    transition:0.6s;
 }
 
 .selectcartlist table td {
     padding: 10px;
-    text-align: center; /* 텍스트 가운데 정렬 */
+    text-align: center;
     border : 1px solid #ddd;
+    height:35px;
 
 }
 
 .cartbutton{
 	background-color:#008ADA;
 	color:#FFFFFF;
-	border-radius:3px;
+	border-radius:4px;
 	border:none;
-	height:25px;
+	height:38px;
+    width: 82px;
 	cursor:pointer;
+    font-size:13px;
+    margin-top:4px;
+    margin-right:10px;
+
+}
+
+.cartbutton:hover{
+    transition: 0.3s;
+    background-color:#006bb3;
 }
 
 .detailbutton{
 	background-color:#008ADA;
 	color:#FFFFFF;
-	border-radius:3px;
+	border-radius:4px;
 	border:none;
-	height:25px;
+	height:38px;
+    width: 82px;
 	cursor:pointer;
+    font-size:13px;
 }
 
-/* 견적별 부품 현황 스타일 */
+.detailbutton:hover{
+    transition: 0.3s;
+    background-color:#006bb3;
+}
 
 .viewcartproduct{
-	display:flex;
-	flex-direction: column;
+	flex: 1;
+    width: 670px;
+    height: 690px;
+    padding: 5px;
+    box-sizing: border-box;
+    overflow-y: auto;
 }
+
 .detailbottombutton{
-	flex:1;
+	display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+    background-color: #fff;
+    position: relative;
+    margin-top: auto;
+    width: 660px;
 }
+
 .viewcartproduct .orderproduct {
-   /* border-bottom: 1px solid #ddd; */
     border:1px solid #ddd;
-    /*padding: 10px;*/
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -252,7 +324,7 @@ span {
 
 }
 
-.viewcartproduct .orderproduct > div  {
+.viewcartproduct .orderproduct > div,#assemblecheck  > div  {
 	border-right: 1px solid #ddd;
 	padding-right: 10px;
 	padding-left: 10px;
@@ -261,8 +333,8 @@ span {
 	box-sizing: border-box;
 	height: 100%;
 	align-items: center;
-	 justify-content: center;
-	}
+	justify-content: center;
+}
 
 .thumbnail >img{
 	height:50px;
@@ -271,7 +343,6 @@ span {
 
 .category{
 	flex:1;
-
 }
 
 .thumbnail{
@@ -284,7 +355,7 @@ span {
 	flex:1.5;
 	flex-direction: column;
 }
-/* 마지막 요소에는 구분선을 제거 */
+
 .viewcartproduct .orderproduct > div:last-child {
     border-bottom: none;
 }
@@ -301,20 +372,25 @@ span {
     border: 1px solid #ccc;
     border-radius: 5px;
     overflow: hidden;
+    margin-top:3px;
 }
 
 .quotename{
-	min-width:191px;
-	max-width:191px;
+	min-width:140px;
 	cursor:pointer;
 	font-Weight:normal;
-	text-decoration: underline;
+	text-decoration: none;
+}
+
+.quotename:hover{
+    font-weight:bold;
+    color:#008ADA;
 }
 
 .quoteprice{
 	width:100px;
+    font-size:14px;
 }
-
 
 .quantity-control button {
     background-color: #f9f9f9;
@@ -366,7 +442,26 @@ input[type="number"]::-webkit-outer-spin-button {
 	height: 80px; 
 	max-height:80px;
 	margin:3px;
+    height:65px;
 
+}
+
+#assemblecheck {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-top:13px;
+}
+
+#assemblecheck label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+#assemblecheck input[type="radio"] {
+    margin-right: 5px;
 }
 
 /* 모달 시작영역*/
@@ -392,7 +487,7 @@ input[type="number"]::-webkit-outer-spin-button {
     padding: 20px;
     border: 1px solid #888;
     width: 1250px;
-    height:1000px;
+    height:1130px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -405,8 +500,9 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .check:hover{
-    transform: scale(1.1);
-    transition: transform 0.2s ease;
+    font-weight: bold;
+    color:#008ADA;
+    transition: 0.2s;
 }
 
 .modal-header {
@@ -474,7 +570,11 @@ input[type="number"]::-webkit-outer-spin-button {
 #compare-button{
     background-color: #008ADA;
     color: white;
-    margin-left: 57px;
+    margin-left:1148px;
+    width: 95px;
+    height: 35px;
+    padding-bottom:3px;
+    text-align: center;
 }
 
 #compare-button:hover{
@@ -490,17 +590,25 @@ input[type="number"]::-webkit-outer-spin-button {
 
 #table-container table {
     border-collapse: collapse;
-    width: 100%; /* 테이블 기본 너비 */
-    max-width: 400px; /* 최대 너비 제한 */
+    width: 100%;
+    max-width: 400px;
     border: 1px solid #ddd;
     font-size: 14px;
     height:680px;
 }
 
-#table-container th, #table-container td {
+#table-container td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
+}
+
+#table-container th{
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    text-decoration:none;
+
 }
 
 #table-container th {
@@ -626,8 +734,8 @@ h5{
 .pair {
     display: flex;
     align-items: center;
-    flex-basis: calc(50% - 20px);
-    max-width: calc(50% - 20px);
+    flex-basis: calc(40% - 15px);
+    max-width: calc(40% - 15px);
     margin-left: 15px;
     margin-right: 90px;
     flex-shrink: 0;
@@ -776,6 +884,8 @@ footer {
     font-size: 14px;
     height: 120px;
     width: 100%;
+    position: relative;
+    bottom: 0;
 }
 
 .footer-content {
