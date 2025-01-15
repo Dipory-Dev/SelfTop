@@ -105,7 +105,8 @@
 		     }
 
 		     if (cartInfo && cartInfo.length > 0) {
-				console.log(cartInfo);
+		    	 console.log(cartInfo);
+
 		         // 바로구매 데이터 초기화 (장바구니 구매 시)
 		         localStorage.removeItem('selectedProduct'); // 바로구매 데이터 삭제
 		      	 // 견적함 데이터 초기화 (장바구니 구매 시)
@@ -179,13 +180,6 @@
 
 		                 // tbody에 행 추가
 		                 tbody.appendChild(row);
-		                 currentOrder[`item${index}`] = {
-					      	     product_code: item.product_code,
-					      	     seller_no: item.seller_no,
-					      		 amount: item.quantity,
-					             assemblyStatus: item.assembly,
-					             order_price: item.price * item.quantity,
-					         };
 		             }
 		         });
 
@@ -194,13 +188,10 @@
 		     	 // 선택상품 총금액과 최종 결제금액 업데이트
 			     const shippingAmount = 5000; // 배송비
 			     const finalAmount = totalAmount + shippingAmount;
-			    
-			     console.log(currentOrder);
-			     updatePayment(totalAmount, 1);
+			     updatePayment(totalAmount, finalAmount);
 		     }
 
 		     if (quoteInfo && quoteInfo.length > 0) {
-		    	 console.log(quoteInfo);
 
 		         // 바로구매 데이터 초기화 (견적함 구매 시)
 		         localStorage.removeItem('selectedProduct'); // 바로구매 데이터 삭제
@@ -275,14 +266,6 @@
 
 		                 // tbody에 행 추가
 		                 tbody.appendChild(row);
-		                 
-		                 currentOrder[`item${index}`] = {
-		    		      	     product_code: item.product_code,
-		    		      	     seller_no: item.seller_no,
-		    		      		 amount: item.quantity,
-		    		             assemblyStatus: item.assembly,
-		    		             order_price: item.price * item.quantity,
-		    		         };
 		             }
 		         });
 
@@ -291,7 +274,7 @@
 		     	 // 선택상품 총금액과 최종 결제금액 업데이트
 			     const shippingAmount = 5000; // 배송비
 			     const finalAmount = totalAmount + shippingAmount;
-			     updatePayment(totalAmount, 1);
+			     updatePayment(totalAmount, finalAmount);
 		     }
 		 });
 

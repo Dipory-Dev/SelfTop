@@ -28,7 +28,7 @@
 		<div class="header-content">
             <img src="/img/logo.png" id="logo" style="cursor: pointer;">
 			<p>
-				<span th:text="${membername} + 님"></span>&nbsp| 
+				<span th:text="${customer.name} + 님"></span>&nbsp| 
 				<a href="mypage"> <img src="/img/human-icon.png" class="human-icon">
 				</a> 
 				<a href="cartpage"> <img src="/img/cart-icon.png" class="cart-icon">
@@ -113,7 +113,7 @@
 				        <button class="confirm_button" th:if="${dto.order_status == '배송중'}" th:data-order-num="${dto.order_num}">구매확정</button>
 				    </div>
 					<div>
-						<p><span style="margin: 0;" th:data-price="${dto.price}" class = "pricedata" ></span><span style="margin: 0; font-weight: bold;"> 원</span></p>
+						<p><span style="margin: 0;" th:text="${dto.price}"></span><span style="margin: 0; font-weight: bold;"> 원</span></p>
 					</div>
 				</div>
 			</div>

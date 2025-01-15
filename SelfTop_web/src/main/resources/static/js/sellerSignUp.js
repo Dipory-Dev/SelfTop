@@ -14,28 +14,14 @@ let isIdDuplicate = false; //ID가 중복인 경우(기본값: false)
 
 function updateSignupButtonState(){
 
-	validatePassword();
-	validateConfirmPassword();
-	updateEmailDomain();
+	// 아이디 중복, 사업자번호 유효성 확인, 비밀번호 유효성 확인
+    if (isIdDuplicate || !isCrpValid || !isPwValid || !isPwValid1) {
+        signupButton.disabled = true; // 비활성화
+    } else {
+        signupButton.disabled = false; // 활성화
+    }
 
 
-	// ID 중복 확인 여부 확인
-	if (!hasCheckedDuplicateID) {
-		alert("ID 중복확인을 해주세요.");
-		return false; // 중복 확인하지 않았으면 진행 중단
-	}
-	// 사업자등록번호 확인 여부 확인 (필요 시 추가)
-	else if (!hasCrpValidChk) {
-		alert("사업자등록번호를 확인하세요.");
-		return false; // 확인하지 않았으면 진행 중단
-	}
-	else {
-		// 모든 조건 충족 시 회원가입 진행
-		alert("회원가입이 완료되었습니다.");
-		return true;
-	}
-
-	return false;
 }
 
 //비밀번호 유효 체크 함수
@@ -59,20 +45,20 @@ function checkDuplicateID() {
 	// 빈 입력 처리
 	if (id === "") {
 		idError.textContent = "ID를 입력해주세요.";
-		idError.style.color = "red";
-		hasCheckedDuplicateID = false; // 중복 체크 상태 초기화
-		alert("ID를 입력해주세요."); // Alert 추가
-		return;
+        idError.style.color = "red";
+        isIdDuplicate = true;
+        updateSignupButtonState();
+        return;
 	}
 
 	// 유효성 검사
 	const idPattern = /^[a-z0-9]+$/; // 영문 소문자와 숫자만 허용
 	if (!idPattern.test(id)) {
 		idError.textContent = "영문 소문자와 숫자만 가능합니다.";
-		idError.style.color = "red";
-		isIdValid = false;
-		hasCheckedDuplicateID = false; // 중복 체크 상태 초기화
-		return;
+        idError.style.color = "red";
+        isIdDuplicate = true;
+        updateSignupButtonState();
+        return;
 	}
 	else{
 		isIdValid = true;
@@ -86,22 +72,19 @@ function checkDuplicateID() {
 			if (data === true) {
 				idError.textContent = "사용 가능한 ID입니다.";
 				idError.style.color = "green";
-				isIdValid1 = true;
-				hasCheckedDuplicateID = true;
+				isIdDuplicate = false;
 			} else {
 				idError.textContent = "이미 사용 중인 ID입니다.";
 				idError.style.color = "red";
-				isIdValid1=false;
-				isIdDuplicate=true;
-				hasCheckedDuplicateID = true;
+				isIdDuplicate = true;
 			}
+			updateSignupButtonState();
 		})
 		.catch(error => {
 			idError.textContent = "중복 확인 중 문제가 발생했습니다.";
 			idError.style.color = "red";
-			console.error(error);
-			isIdValid1 = false;
-			hasCheckedDuplicateID = true; 
+			isIdDuplicate = true;
+			updateSignupButtonState();
 		});
 
 		
@@ -109,9 +92,8 @@ function checkDuplicateID() {
 
 // ID 입력 시 중복 상태 초기화
 document.getElementById("id").addEventListener("input", function () {
-    isIdValid = false; // ID 형식이 바뀌었으므로 유효성 초기화
-    isIdValid1 = false; // 중복 확인 상태 초기화
-    hasCheckedDuplicateID = false; // 중복 확인 버튼 상태 초기화
+    isIdDuplicate = true; // 입력 변경 시 중복 상태 초기화
+    updateSignupButtonState();
 });
 
 // 비밀번호 조건 검사
@@ -160,8 +142,11 @@ function corp_chk() {
 	const confirmError = document.getElementById("business-error");
 	
 	if (!reg_num) {
-		alert("사업자등록번호를 입력해주세요.");
-		return false;
+		confirmError.textContent = "사업자등록번호를 입력해주세요.";
+        confirmError.style.color = "red";
+        isCrpValid = false;
+        updateSignupButtonState();
+        return;
 	}
 
 	var data = { "b_no": [reg_num] };
@@ -171,7 +156,7 @@ function corp_chk() {
 		url: "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=P7t7mjzfLQo8EBOtv4VHqd1mcQED0dwuGmfOOrQ32dnxlfjZpbIG0KBUE5UoE9ywBHbeFirq2C59XQSJNvD0GA%3D%3D",  // 실제 서비스 키로 대체
 		type: "POST",
 		data: JSON.stringify(data),
-		dataType: "json",  // 응답 형식을 JSON으로 설정
+		dataType: "json",
 		traditional: true,
 		contentType: "application/json; charset=UTF-8",
 		accept: "application/json",
@@ -180,19 +165,19 @@ function corp_chk() {
 			if (result.match_cnt == "1") {
 				confirmError.textContent = "사업자등록번호가 유효합니다.";
 				confirmError.style.color = "green";
-				hasCrpValidChk = true;
 				isCrpValid =true;
 			} else {
 				confirmError.textContent = "유효하지 않은 사업자등록번호입니다";
 				confirmError.style.color = "red";
-				hasCrpValidChk= true;
 				isCrpValid = false;
 			}
+			updateSignupButtonState();
 		},
 		error: function(result) {
 			console.log("error");
 			console.log(result.responseText); //responseText의 에러메세지 확인
 			isCrpValid = false;
+			updateSignupButtonState();
 		}
 	});
 
@@ -251,16 +236,18 @@ document.getElementById("checkDuplicate").addEventListener("click", checkDuplica
 document.getElementById("pw").addEventListener("input", validatePassword);
 document.getElementById("confirmPassword").addEventListener("input", confirmPassword);
 document.getElementById("checkBusinessInfo").addEventListener("click", corp_chk);
-document.getElementById("business_license").addEventListener("input", function(e) { // 사업자등록번호 입력 시 숫자만 입력받기
-	var value = e.target.value;
-	// 숫자 이외의 문자 제거
-	e.target.value = value.replace(/[^0-9]/g, "");
+document.getElementById("business_license").addEventListener("input", function () {
+    isCrpValid = false; // 입력 변경 시 유효성 초기화
+    updateSignupButtonState();
 });
+
+// 초기 상태 설정
+updateSignupButtonState();
 
 form.addEventListener("submit", (event) => {
 	// 동작(이벤트)을 실행하지 못하게 막는 메서드입니다.
 	if(false == updateSignupButtonState() || false == isIdDuplicate ) {
-		event.preventDefault();
+		//event.preventDefault();
 		signupButton.disabled=true;
 	}
   });

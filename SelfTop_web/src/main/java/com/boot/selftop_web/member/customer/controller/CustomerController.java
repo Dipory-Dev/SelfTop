@@ -277,6 +277,7 @@ public class CustomerController {
 			productData.put("price", productStatus.getPrice());
 			productData.put("seller_no", productStatus.getSeller_no());
 			productData.put("amount", amount);
+			productData.put("thumbnail", productInfo.getThumbnail());
 			productData.put("product_code", p_code);
 
 
@@ -420,6 +421,8 @@ public class CustomerController {
 
 
 		model.addAttribute("membername", session.getAttribute("name"));
+		CustomerDto dto = customerBiz.selectCustomer(member_no);
+		model.addAttribute("customer", dto);
 		model.addAttribute("customerorder",orderres);
 		int waitdepositcount = 0; // 입금대기
 		int completepaycount = 0; // 결제완료
@@ -925,7 +928,7 @@ public class CustomerController {
 
 
         List<ReviewDto> reviewList = reviewBiz.getReviewsByProductCode(productCode);
-        
+
         // 리뷰 이미지 기본값 설정
         final String defaultImage = "/img/review-default-image.png";
         for (ReviewDto review : reviewList) {
@@ -933,7 +936,7 @@ public class CustomerController {
                 review.setReviewImg(defaultImage); // 기본 이미지로 설정
             }
         }
-        
+
         model.addAttribute("reviewList", reviewList);
 
 
@@ -1152,6 +1155,11 @@ public class CustomerController {
 		List<QuoteDto> res =quoteBiz.SelectQuote(member_no);
 		model.addAttribute("quote", res);
 	    return "fragmentcartquotelist :: cart_view"; // 특정 타임리프 fragment 반환
+	}
+
+	@GetMapping("/nopage")
+	public String noPage() {
+		return "404";
 	}
 
 }
