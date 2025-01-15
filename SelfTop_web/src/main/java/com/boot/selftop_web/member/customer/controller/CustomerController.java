@@ -205,10 +205,13 @@ public class CustomerController {
 	                          @RequestParam(required = false) String search) {
 	    Integer member_no = (Integer) session.getAttribute("member_no");
 	    String username = (String) session.getAttribute("name");
+	    
 	    if (member_no != null) {
 	        List<CartDTO> cartList = quoteBiz.selectCart(member_no);
 	        model.addAttribute("cartList", cartList);
 	        model.addAttribute("username", username);
+	        CustomerDto dto = customerBiz.selectCustomer(member_no);
+			model.addAttribute("customer", dto);
 	    }
 
 	    if (category != null && search != null) {
@@ -536,6 +539,8 @@ public class CustomerController {
 			e.printStackTrace();
 		}
 		model.addAttribute("membername", session.getAttribute("name"));
+		CustomerDto dto = customerBiz.selectCustomer(member_no);
+		model.addAttribute("customer", dto);
 		model.addAttribute("orderinfo",res);
 		model.addAttribute("ordernum",orderNum);
 		model.addAttribute("orderprice", NumberFormat.getInstance(Locale.KOREA).format(Integer.parseInt(orderprice)));
@@ -858,6 +863,7 @@ public class CustomerController {
 		}
 
 		model.addAttribute("membername", session.getAttribute("name"));
+		
 		Integer member_no = (Integer) session.getAttribute("member_no");
 		List<QuoteDto> res =quoteBiz.SelectQuote(member_no); //견적리스트
 		List<QuoteDetailDto> dummycategory = Arrays.asList(
@@ -872,7 +878,9 @@ public class CustomerController {
 			    new QuoteDetailDto(0, 0, 0, 0, 0, "케이스", "-", "-", 0)
 			);
 
-			model.addAttribute("quotedetail", dummycategory);
+		model.addAttribute("quotedetail", dummycategory);
+		CustomerDto dto = customerBiz.selectCustomer(member_no);
+		model.addAttribute("customer", dto);
 		model.addAttribute("quote", res);
 
 		return "customercart";
