@@ -420,6 +420,8 @@ public class CustomerController {
 
 
 		model.addAttribute("membername", session.getAttribute("name"));
+		CustomerDto dto = customerBiz.selectCustomer(member_no);
+		model.addAttribute("customer", dto);
 		model.addAttribute("customerorder",orderres);
 		int waitdepositcount = 0; // 입금대기
 		int completepaycount = 0; // 결제완료
