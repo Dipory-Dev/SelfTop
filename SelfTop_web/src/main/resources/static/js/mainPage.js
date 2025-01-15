@@ -842,7 +842,7 @@
                         categoryData.price,
                         categoryData.product_code,
                         categoryData.seller_no,
-                        categoryData.productThumbnail,
+                        categoryData.thumbnail,
                         categoryData.productQuantity
                     );
                 }
