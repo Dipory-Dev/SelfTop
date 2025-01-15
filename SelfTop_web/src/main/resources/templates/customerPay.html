@@ -37,16 +37,16 @@
 			});
 			
 			// 바로 구매 시 selectedProduct에서 데이터 가져오기
-		    const productInfo = JSON.parse(localStorage.getItem('selectedProduct'));
+		    let productInfo = JSON.parse(localStorage.getItem('selectedProduct'));
 		 	// 장바구니에서 구매할 경우 CartDetails에서 데이터 가져오기
-		    const cartInfo = JSON.parse(localStorage.getItem('CartDetails'));
+		    let cartInfo = JSON.parse(localStorage.getItem('CartDetails'));
 		 	// 견적함에서 구매할 경우 QuoteDetails에서 데이터 가져오기
-		    const quoteInfo = JSON.parse(localStorage.getItem('QuoteDetails'));
-
+	 	
+		    let quoteInfo = JSON.parse(localStorage.getItem('QuoteDetails'));
+		 	
 		     if (productInfo) {
 		    	 currentOrder['product_code'] = productInfo.product_code;
 			     currentOrder['seller_no'] = productInfo.seller_no;
-			     console.log(productInfo);
 
 		         // 장바구니 데이터 초기화 (바로 구매 시)
 		         localStorage.removeItem('CartDetails'); // 장바구니 데이터 삭제
@@ -101,12 +101,12 @@
 
 		         // 선택상품 총금액과 최종 결제금액 업데이트
 		         updatePayment(productInfo.price, 1);
+		         localStorage.clear();
 		         currentOrder['assemblyStatus'] = '조립 미신청';
 		     }
 
 		     if (cartInfo && cartInfo.length > 0) {
-		    	 console.log(cartInfo);
-
+				console.log(cartInfo);
 		         // 바로구매 데이터 초기화 (장바구니 구매 시)
 		         localStorage.removeItem('selectedProduct'); // 바로구매 데이터 삭제
 		      	 // 견적함 데이터 초기화 (장바구니 구매 시)
@@ -180,6 +180,13 @@
 
 		                 // tbody에 행 추가
 		                 tbody.appendChild(row);
+		                 currentOrder[`item${index}`] = {
+					      	     product_code: item.product_code,
+					      	     seller_no: item.seller_no,
+					      		 amount: item.quantity,
+					             assemblyStatus: item.assembly,
+					             order_price: item.price * item.quantity,
+					         };
 		             }
 		         });
 
@@ -188,7 +195,10 @@
 		     	 // 선택상품 총금액과 최종 결제금액 업데이트
 			     const shippingAmount = 5000; // 배송비
 			     const finalAmount = totalAmount + shippingAmount;
-			     updatePayment(totalAmount, finalAmount);
+			    
+			     console.log(currentOrder);
+			     localStorage.clear();
+			     updatePayment(totalAmount, 1);
 		     }
 
 		     if (quoteInfo && quoteInfo.length > 0) {
@@ -266,6 +276,14 @@
 
 		                 // tbody에 행 추가
 		                 tbody.appendChild(row);
+		                 
+		                 currentOrder[`item${index}`] = {
+		    		      	     product_code: item.product_code,
+		    		      	     seller_no: item.seller_no,
+		    		      		 amount: item.quantity,
+		    		             assemblyStatus: item.assembly,
+		    		             order_price: item.price * item.quantity,
+		    		         };
 		             }
 		         });
 
@@ -274,7 +292,10 @@
 		     	 // 선택상품 총금액과 최종 결제금액 업데이트
 			     const shippingAmount = 5000; // 배송비
 			     const finalAmount = totalAmount + shippingAmount;
-			     updatePayment(totalAmount, finalAmount);
+			     localStorage.clear();
+			     console.log(quoteInfo);
+			     quoteInfo = null;
+			     updatePayment(totalAmount, 1);
 		     }
 		 });
 
@@ -470,9 +491,9 @@
 		         const quantityCell = document.createElement('td');
 		         quantityCell.classList.add('quantity');
 		         quantityCell.innerHTML = `
-		             <button type="button" class="quantity-btn" onclick="updateQuantityCart(${index}, -1)">-</button>
+		             <button type="button" class="quantity-btn" onclick="updateQuantityQuote(${index}, -1)">-</button>
 		             <p class="quantity-input">${item.quantity}</p>
-		             <button type="button" class="quantity-btn" onclick="updateQuantityCart(${index}, 1)">+</button>
+		             <button type="button" class="quantity-btn" onclick="updateQuantityQuote(${index}, 1)">+</button>
 		         `;
 
 		         const orderPriceCell = document.createElement('td');
