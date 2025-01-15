@@ -1,34 +1,34 @@
- //견적 담을 장바구니
- let currentCart = {};
- //필터링 된 상태에서 정렬기능 구현을 위해 현재 정렬된 정보를 담기
- let currentFilters = {};
- // 검색어를 저장할 변수
- let currentSearchTerm = '';
+//견적 담을 장바구니
+let currentCart = {};
+//필터링 된 상태에서 정렬기능 구현을 위해 현재 정렬된 정보를 담기
+let currentFilters = {};
+// 검색어를 저장할 변수
+let currentSearchTerm = '';
 
- let cartInfo = [];
- let cartDetails = [];
+let cartInfo = [];
+let cartDetails = [];
 
- document.addEventListener("DOMContentLoaded", () => {
-     const searchInput = document.getElementById('search-input');
-     const searchButton = document.querySelector('.search-button');
-     const toggleButton = document.getElementById("toggle-button");
-     const sidePanel = document.querySelector(".side-panel");
-     const components = document.querySelectorAll('.component');
-     const selectedPartDiv = document.querySelector('.selected-part');
-     const currentCartButton = document.getElementById("current-cart");
-     const savedQuoteSelect = document.querySelector('.saved-quote');
-     const saveQuoteButton = document.getElementById("save-quote");
-     const quoteNameInput = document.getElementById("quote-name");
-     const contentBox = document.querySelector('.content-box');
-     const sortButtons = document.querySelectorAll('.sortBtn');
-     let selectedSort = 'bypopular';
+document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById('search-input');
+    const searchButton = document.querySelector('.search-button');
+    const toggleButton = document.getElementById("toggle-button");
+    const sidePanel = document.querySelector(".side-panel");
+    const components = document.querySelectorAll('.component');
+    const selectedPartDiv = document.querySelector('.selected-part');
+    const currentCartButton = document.getElementById("current-cart");
+    const savedQuoteSelect = document.querySelector('.saved-quote');
+    const saveQuoteButton = document.getElementById("save-quote");
+    const quoteNameInput = document.getElementById("quote-name");
+    const contentBox = document.querySelector('.content-box');
+    const sortButtons = document.querySelectorAll('.sortBtn');
+    let selectedSort = 'bypopular';
 
-     const categoryCountElement = document.getElementById('category-count');
-     const topBoxSmall = document.querySelector('.top-box.small');
-     const topBoxLarge = document.querySelector('.top-box.large');
-     const radioButtons = document.querySelectorAll('input[name="assembly"]');
-     const assemblyPrice = 20000; // 조립 신청 시 추가금액
-     let isAssemblyRequested = false; // 현재 조립 신청 상태
+    const categoryCountElement = document.getElementById('category-count');
+    const topBoxSmall = document.querySelector('.top-box.small');
+    const topBoxLarge = document.querySelector('.top-box.large');
+    const radioButtons = document.querySelectorAll('input[name="assembly"]');
+    const assemblyPrice = 20000; // 조립 신청 시 추가금액
+    let isAssemblyRequested = false; // 현재 조립 신청 상태
 
 
      // mainPage처음 들어왔을때 CPU가 자동으로 선택되도록 설정

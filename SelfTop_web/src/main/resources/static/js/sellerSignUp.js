@@ -21,7 +21,7 @@ function updateSignupButtonState(){
         signupButton.disabled = false; // 활성화
     }
 
-	
+
 }
 
 //비밀번호 유효 체크 함수
@@ -156,7 +156,7 @@ function corp_chk() {
 		url: "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=P7t7mjzfLQo8EBOtv4VHqd1mcQED0dwuGmfOOrQ32dnxlfjZpbIG0KBUE5UoE9ywBHbeFirq2C59XQSJNvD0GA%3D%3D",  // 실제 서비스 키로 대체
 		type: "POST",
 		data: JSON.stringify(data),
-		dataType: "json",  
+		dataType: "json",
 		traditional: true,
 		contentType: "application/json; charset=UTF-8",
 		accept: "application/json",
