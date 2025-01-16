@@ -543,7 +543,6 @@ public class CustomerController {
 		List<Integer> productCodes = reviewsearchres.stream()
 			    .map(reviewsearchDto::getProduct_code)  // OrderDTO에서 productCode만 추출
 			    .collect(Collectors.toList());
-
 		model.addAttribute("productcodes",productCodes);
 		try {
 			model.addAttribute("review",new ObjectMapper().writeValueAsString(reviewsearchres));
