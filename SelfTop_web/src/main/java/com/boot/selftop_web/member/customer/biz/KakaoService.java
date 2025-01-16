@@ -40,7 +40,8 @@ public class KakaoService {
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=66f3a9b8a7fc33ae96bc2f1fbc513320");  //발급받은 key
-            sb.append("&redirect_uri=http://localhost:8080/kakaoLogin");     // 본인이 설정해 놓은 redirect_uri 주소
+//            sb.append("&redirect_uri=http://localhost:8080/kakaoLogin");     // 로컬
+            sb.append("&redirect_uri=http://15.168.89.127:8999/kakaoLogin");     // 서버
             sb.append("&code=" + authorize_code);
             bw.write(sb.toString());
             bw.flush();

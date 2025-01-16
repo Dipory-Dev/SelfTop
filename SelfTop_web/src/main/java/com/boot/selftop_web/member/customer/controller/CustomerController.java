@@ -633,8 +633,10 @@ public class CustomerController {
 	@RequestMapping(value = "/loginform/getKakaoAuthUrl")
 	public @ResponseBody String getKakaoAuthUrl(HttpServletRequest request) throws Exception {
 
-		String reqUrl =
-				"https://kauth.kakao.com/oauth/authorize?client_id=66f3a9b8a7fc33ae96bc2f1fbc513320&redirect_uri=http://localhost:8080/kakaoLogin&response_type=code";
+		// 로컬
+//		String reqUrl = "https://kauth.kakao.com/oauth/authorize?client_id=66f3a9b8a7fc33ae96bc2f1fbc513320&redirect_uri=http://localhost:8080/kakaoLogin&response_type=code";
+		// 서버
+		String reqUrl = "https://kauth.kakao.com/oauth/authorize?client_id=66f3a9b8a7fc33ae96bc2f1fbc513320&redirect_uri=http://15.168.89.127:8999/kakaoLogin&response_type=code";
 		return reqUrl;
 	}
 

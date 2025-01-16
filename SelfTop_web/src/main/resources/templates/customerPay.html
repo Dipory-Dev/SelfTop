@@ -661,56 +661,21 @@
 	                const paymentResult = await widgets.requestPayment({
 	                    orderId: "ORDER_ID_1234", // 고유 주문 번호
 	                    orderName: "그래픽 카드 구매", // 주문 이름
-	                    successUrl: `http://localhost:8080/api/order?orderData=${currentordergetdata}`, // 결제 성공 시 리다이렉트 URL
-	                    failUrl: "http://localhost:8080/payfail", // 결제 실패 시 리다이렉트 URL
+
+                        // local
+	                    // successUrl: `http://localhost:8080/api/order?orderData=${currentordergetdata}`, // 결제 성공 시 리다이렉트 URL
+	                    // failUrl: "http://localhost:8080/payfail", // 결제 실패 시 리다이렉트 URL
+
+                        // server
+                        successUrl: `http://15.168.89.127:8999/api/order?orderData=${currentordergetdata}`, // 결제 성공 시 리다이렉트 URL
+                        failUrl: "http://15.168.89.127:8999/payfail", // 결제 실패 시 리다이렉트 URL
+
 	                    customerName: name,
 	                    customerMobilePhone: phone,
 
 	                });
 	                console.log("결제 결과:", paymentResult);
 
-	                // 결제 승인 처리 (결제 성공 시)
-	             /*    if (paymentResult.status === "SUCCESS") {
-	                	// currentOrder에 추가
-	                    currentOrder['address'] = address1 + ' ' + address2;
-	                	currentOrder['request'] = document.getElementById("request").value;
-	                    currentOrder['assemblyStatus'] = '조립 미신청';
-	                    // JSON으로 변환
-	                    const jsonOrder = JSON.stringify(currentOrder);
-	                    console.log("json형식:", jsonOrder);
-	                	//서버로 전송
-	                    fetch('http://localhost:8080/api/order', {
-	                        method: 'POST',
-	                        headers: {
-	                            'Content-Type': 'application/json',
-	                        },
-	                        body: jsonOrder,
-	                    })
-	                        .then((response) => {
-	                            if (response.status === 401) {
-	                                // 로그인이 필요한 경우
-	                                return response.json().then(data => {
-	                                    alert(data.msg);
-	                                    window.location.href = data.url;
-	                                });
-	                            }
-	                            if (!response.ok) {
-	                                throw new Error('주문 내역 저장 실패');
-	                            }
-	                            return response.json();
-	                        })
-	                        .then((data) => {
-	                            alert(data.msg);
-	                            window.location.href = "http://localhost:8080/paysuccess";
-	                        })
-	                        .catch((error) => {
-	                            console.error('저장 오류:', error);
-	                            alert('주문 내역 저장 중 오류가 발생했습니다.');
-	                        });
-	                } else {
-	                    alert("결제에 실패하였습니다. 다시 시도해주세요.");
-	                    window.location.href = "http://localhost:8080/payfail";
-	                } */
 	            } catch (error) {
 	                console.error("결제 처리 중 오류 발생:", error);
 	                alert("결제 처리 중 오류가 발생했습니다. 다시 시도해주세요.");

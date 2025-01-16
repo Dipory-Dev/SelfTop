@@ -223,6 +223,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const jsonCart = JSON.stringify(currentCart);
         console.log("전송할 JSON 데이터:", jsonCart);
 
+        // local
+        // fetch('http://localhost:8080/api/items', {
+        // server
         fetch('http://localhost:8080/api/items', {
             method: 'POST',
             headers: {
