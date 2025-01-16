@@ -226,7 +226,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // local
         // fetch('http://localhost:8080/api/items', {
         // server
-        fetch('http://localhost:8080/api/items', {
+        fetch('http://15.168.89.127:8999/api/items', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
