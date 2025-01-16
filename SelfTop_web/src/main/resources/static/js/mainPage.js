@@ -50,6 +50,20 @@ document.addEventListener("DOMContentLoaded", () => {
          searchInput.value = search; // 검색어 표시
          const activeComponent = document.querySelector(`.component[data-component="${category}"]`);
 
+        // 사이드 패널 토글 버튼 동작 수정
+        document.body.addEventListener('click', function (event) {
+            const target = event.target;
+
+        if (target.matches('button, a, input[type="submit"], input[type="button"], input[type="checkbox"], input[type="radio"]')) {
+            // 페이지 상태 초기화 함수
+            window.history.replaceState(null, null, '/main'); // URL 리셋
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.value = ''; // 검색 입력 상자 초기화
+            }
+        }
+
+    });
          // 해당 카테고리를 활성화하고 제품 목록을 불러옴
          if (activeComponent) {
              activateComponent(activeComponent);
@@ -61,27 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
          activateDefaultComponent();
      }
 
-     // 사이드 패널 토글 버튼 동작 수정
-     document.body.addEventListener('click', function (event) {
-         const target = event.target;
-
-         // 수량 버튼을 클릭한 경우 예외 처리
-        if (target.classList.contains('quantity-button')) {
-            return; // 수량 버튼 클릭 시 다른 동작 방지
-        }
-
-        if (
-            target.matches('button, a, input[type="submit"], input[type="button"], input[type="checkbox"], input[type="radio"]')
-        ) {
-            // 페이지 상태 초기화 함수
-            window.history.replaceState(null, null, '/main'); // URL 리셋
-            const searchInput = document.getElementById('search-input');
-            if (searchInput) {
-                searchInput.value = ''; // 검색 입력 상자 초기화
-            }
-        }
-
-     });
+    
 
      // 기본 컴포넌트 활성화 함수
      function activateDefaultComponent() {
@@ -777,6 +771,8 @@ document.addEventListener("DOMContentLoaded", () => {
              });
          });
 
+        
+
          // "담기" 버튼 이벤트 추가
          document.querySelectorAll('.add-to-cart').forEach(button => {
              button.addEventListener('click', () => {
@@ -792,7 +788,7 @@ document.addEventListener("DOMContentLoaded", () => {
                      return;
                  }
 
-                 addToCart(productName, productPrice, productCode, sellerNo, productThumbnail, productStock);
+                 addToCartforButton(productName, productPrice, productCode, sellerNo, productThumbnail, productStock);
              });
          });
      }
@@ -802,6 +798,55 @@ document.addEventListener("DOMContentLoaded", () => {
          window.open(`/productDetail?product_code=${product_code}&category=${category}`, "제품상세이미지팝업", "width=1000, height=1500, left=100, top=50, scrollbars=1");
      };
 
+
+     //담기버튼 눌렀을때 담기는 함수
+     function addToCartforButton(productName, productPrice, productCode, sellerNo, productThumbnail, productStock){
+        const activeComponent = document.querySelector('.component.active');
+
+        if (activeComponent) {
+            const productDetail = activeComponent.querySelector('#product-detail');
+            const productPriceDiv = activeComponent.querySelector('#product-price');
+            const quantityControls = createQuantityControls(productPrice, productCode);
+
+            if (productDetail) {
+                productDetail.innerHTML = `<p class="cartproductcode" data-productcode="${productCode}">${productName}</p>`;
+            }
+
+            if (productPriceDiv) {
+                productPriceDiv.innerHTML = '';
+                productPriceDiv.appendChild(quantityControls);
+            }
+
+            const componentName = activeComponent.dataset.component;
+            currentCart[componentName] = {
+                product_code: productCode,
+                name: productName,
+                price: parseInt(productPrice, 10),
+                seller_no: sellerNo,
+                quantity: 1,
+            };
+
+            const existingCartItem = cartDetails.find(item => item.product_code === productCode);
+            if (!existingCartItem) {
+                cartDetails.push({
+                    thumbnail: productThumbnail,
+                    category: componentName,
+                    name: productName,
+                    price: parseInt(productPrice, 10),
+                    stock: productStock,
+                    quantity: 1,
+                    product_code: productCode,
+                    seller_no: sellerNo,
+                    assembly: isAssemblyRequested ? '조립 신청' : '조립 미신청',
+                });
+            }
+
+            updateTotalPrice();
+
+
+            toggleSidePanel();//사이드 패널 열기
+        }
+     }
 
      // 견적 리스트 선택 시 부품 불러오는 곳
      function fetchQuoteDetail(quote_no) {
@@ -964,7 +1009,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
      }
 
-     // 담기 버튼 클릭 시 장바구니에 상품 이름 및 수량 넣는 함수
+     // 저장된 견적 불러와서 카트에 담는 함수
      function addToCart(productName, productPrice, productCode, sellerNo, productThumbnail, initialQuantity = 1) {
         const activeComponent = document.querySelector('.component.active');
     
