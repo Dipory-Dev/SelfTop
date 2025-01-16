@@ -50,7 +50,6 @@ public class OrderController {
                 // 여러 제품 처리
                 for (JsonNode node : rootNode) {
                     Map<String, Object> productInfo = objectMapper.convertValue(node, Map.class);
-                    System.out.println(productInfo + "!!!!2번");
                     param2.add(productInfo);
                 }
             } else {
@@ -63,16 +62,18 @@ public class OrderController {
                 productInfo.put("order_price", items.get("order_price"));
                 param2.add(productInfo);*/
 
-            	// 단일 제품 처리 (item0, item1, item2와 같은 항목들을 처리)
-                Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
-                System.out.println(fields);
-                while (fields.hasNext()) {
-                    Map.Entry<String, JsonNode> field = fields.next();
-                    if (field.getKey().startsWith("item")) {
-                        Map<String, Object> productInfo = objectMapper.convertValue(field.getValue(), Map.class);
-                        param2.add(productInfo);
-                    }
-                }
+            	// 단일 제품 처리
+            	if (rootNode.has("product_code") && rootNode.has("seller_no") &&
+            	        rootNode.has("amount") && rootNode.has("order_price")) {
+
+            	        Map<String, Object> productInfo = new HashMap<>();
+            	        productInfo.put("product_code", rootNode.get("product_code").asInt());
+            	        productInfo.put("seller_no", rootNode.get("seller_no").asInt());
+            	        productInfo.put("amount", rootNode.get("amount").asInt());
+            	        productInfo.put("order_price", rootNode.get("order_price").asInt());
+
+            	        param2.add(productInfo); // param2에 추가
+            	}
 
                 // param1에 member_no와 address, request, assemblyStatus 추가
                 /*param1.put("member_no", member_no);
@@ -80,7 +81,7 @@ public class OrderController {
                 param1.put("request", items.get("request"));
                 param1.put("assemblyStatus", items.get("assemblyStatus"));*/
 
-             // param1에 member_no와 address, request, assemblyStatus 추가
+            	// param1에 member_no와 address, request, assemblyStatus 추가
                 param1.put("member_no", member_no);
                 param1.put("address", rootNode.get("address").asText());
                 param1.put("request", rootNode.get("request").asText());
