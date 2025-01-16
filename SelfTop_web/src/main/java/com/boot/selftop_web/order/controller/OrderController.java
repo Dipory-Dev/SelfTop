@@ -50,6 +50,7 @@ public class OrderController {
                 // 여러 제품 처리
                 for (JsonNode node : rootNode) {
                     Map<String, Object> productInfo = objectMapper.convertValue(node, Map.class);
+                    System.out.println(productInfo + "!!!!2번");
                     param2.add(productInfo);
                 }
             } else {
@@ -64,6 +65,7 @@ public class OrderController {
 
             	// 단일 제품 처리 (item0, item1, item2와 같은 항목들을 처리)
                 Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
+                System.out.println(fields);
                 while (fields.hasNext()) {
                     Map.Entry<String, JsonNode> field = fields.next();
                     if (field.getKey().startsWith("item")) {
