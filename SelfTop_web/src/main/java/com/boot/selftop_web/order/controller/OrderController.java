@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.boot.selftop_web.member.customer.biz.CustomerBiz;
+import com.boot.selftop_web.member.customer.model.dto.CustomerDto;
 import com.boot.selftop_web.order.biz.OrderBizImpl;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,12 +30,17 @@ import jakarta.servlet.http.HttpSession;
 public class OrderController {
     @Autowired
     private OrderBizImpl orderBizImpl;
+    @Autowired
+	private CustomerBiz customerBiz;
 
     @GetMapping("/order")
     public ResponseEntity<Map<String, Object>> receiveItems(@RequestParam("orderData") String orderdata, HttpSession session) {
-        Integer member_no = (Integer) session.getAttribute("member_no");
+        Integer member_nocheck = (Integer) session.getAttribute("member_no");
+        System.out.println(member_nocheck);
         Map<String, Object> param1 = new HashMap<>();
         List<Map<String, Object>> param2 = new ArrayList<>();
+        // assemblyStatus 값을 저장할 리스트 생성
+        List<String> assemblyStatusList = new ArrayList<>();
 
         try {
             // URL 디코딩
@@ -42,51 +49,59 @@ public class OrderController {
 
             // JSON 파싱
             ObjectMapper objectMapper = new ObjectMapper();
-
-            // JSON 데이터가 단일 제품인지 여러 제품인지 확인
             JsonNode rootNode = objectMapper.readTree(decodedata);
-            System.out.println(rootNode);
-            if (rootNode.isArray()) {
-                // 여러 제품 처리
-                for (JsonNode node : rootNode) {
-                    Map<String, Object> productInfo = objectMapper.convertValue(node, Map.class);
-                    param2.add(productInfo);
-                }
-            } else {
-                // 단일 제품 처리
-                /*Map<String, Object> items = objectMapper.convertValue(rootNode, Map.class);
+            int member_no = rootNode.get("memberno").asInt();
+
+            // 단품 여부 확인
+            boolean isSingleProduct = rootNode.has("product_code") && rootNode.has("seller_no") &&
+                                       rootNode.has("amount") && rootNode.has("order_price");
+
+            if (isSingleProduct) {
+                // 단품 처리
                 Map<String, Object> productInfo = new HashMap<>();
-                productInfo.put("product_code", items.get("product_code"));
-                productInfo.put("seller_no", items.get("seller_no"));
-                productInfo.put("amount", items.get("amount"));
-                productInfo.put("order_price", items.get("order_price"));
-                param2.add(productInfo);*/
+                productInfo.put("product_code", rootNode.get("product_code").asInt());
+                productInfo.put("seller_no", rootNode.get("seller_no").asInt());
+                productInfo.put("amount", rootNode.get("amount").asInt());
+                productInfo.put("order_price", rootNode.get("order_price").asInt());
+                param2.add(productInfo);
 
-            	// 단일 제품 처리
-            	if (rootNode.has("product_code") && rootNode.has("seller_no") &&
-            	        rootNode.has("amount") && rootNode.has("order_price")) {
-
-            	        Map<String, Object> productInfo = new HashMap<>();
-            	        productInfo.put("product_code", rootNode.get("product_code").asInt());
-            	        productInfo.put("seller_no", rootNode.get("seller_no").asInt());
-            	        productInfo.put("amount", rootNode.get("amount").asInt());
-            	        productInfo.put("order_price", rootNode.get("order_price").asInt());
-
-            	        param2.add(productInfo); // param2에 추가
-            	}
-
-                // param1에 member_no와 address, request, assemblyStatus 추가
-                /*param1.put("member_no", member_no);
-                param1.put("address", items.get("address"));
-                param1.put("request", items.get("request"));
-                param1.put("assemblyStatus", items.get("assemblyStatus"));*/
-
-            	// param1에 member_no와 address, request, assemblyStatus 추가
+                // param1에 member_no와 address, request 추가
                 param1.put("member_no", member_no);
                 param1.put("address", rootNode.get("address").asText());
                 param1.put("request", rootNode.get("request").asText());
-//                param1.put("assemblyStatus", rootNode.get("assemblyStatus").asText());
-                param1.put("assemblyStatus", 'N');
+                param1.put("assemblyStatus", 'N'); // 기본값 설정
+            } else {
+                // 다품 처리
+                for (Iterator<String> it = rootNode.fieldNames(); it.hasNext(); ) {
+                    String fieldName = it.next();
+                    if (fieldName.startsWith("item")) { // item으로 시작하는 필드만 처리
+                        JsonNode itemNode = rootNode.get(fieldName);
+                        
+                        // assemblyStatus가 존재하면 리스트에 추가
+                        if (itemNode.hasNonNull("assemblyStatus")) {
+                            String assemblyStatus = itemNode.get("assemblyStatus").asText();
+                            assemblyStatusList.add(assemblyStatus); // 모든 item의 assemblyStatus를 리스트에 추가
+                        }
+                        
+                        if (itemNode.hasNonNull("product_code") && itemNode.hasNonNull("seller_no") &&
+                            itemNode.hasNonNull("amount") && itemNode.hasNonNull("order_price")) {
+                            Map<String, Object> productInfo = new HashMap<>();
+                            productInfo.put("product_code", itemNode.get("product_code").asInt());
+                            productInfo.put("seller_no", itemNode.get("seller_no").asInt());
+                            productInfo.put("amount", itemNode.get("amount").asInt());
+                            productInfo.put("order_price", itemNode.get("order_price").asInt());
+                            param2.add(productInfo);
+                        } else {
+                            System.out.println("Skipping invalid item: " + itemNode.toPrettyString());
+                        }
+                    }
+                }
+
+                // param1에 member_no와 address, request 추가
+                param1.put("member_no", member_no);
+                param1.put("address", rootNode.get("address").asText());
+                param1.put("request", rootNode.get("request").asText());
+                param1.put("assemblyStatus", assemblyStatusList);
             }
 
             // param1과 param2 출력
@@ -95,12 +110,15 @@ public class OrderController {
 
             // 주문 저장
             orderBizImpl.saveOrder(param1, param2);
-
+            CustomerDto dto = customerBiz.selectCustomer(member_no);
+            session.setAttribute("role", dto.getRole());
+			session.setAttribute("member_no", dto.getMember_no());
+			session.setAttribute("name", dto.getName());
             // 성공 메시지 반환
             Map<String, Object> result = new HashMap<>();
 
             // 로그인 체크
-            if (member_no == null) {
+            if (member_no == 0) {
                 result.put("url", "/loginform");
                 result.put("msg", "로그인이 필요한 서비스입니다.");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);

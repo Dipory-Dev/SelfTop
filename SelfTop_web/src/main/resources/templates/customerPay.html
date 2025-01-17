@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="/css/customerPay.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://js.tosspayments.com/v2/standard"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const customer = [[${customer}]]; // Java 객체를 JSON 형식으로 변환하여 전달
+        /*]]>*/
+    </script>
     <script>
 	 // 전화번호 숫자로만 입력
 	    function validatePhoneInput(input) {
@@ -183,7 +188,7 @@
 					      	     seller_no: item.seller_no,
 					      		 amount: item.quantity,
 					             assemblyStatus: item.assembly,
-					             order_price: item.price * item.quantity,
+					             order_price: item.price,
 					         };
 		             }
 		         });
@@ -240,10 +245,10 @@
 		                 const quantityCell = document.createElement('td');
 		                 quantityCell.classList.add('quantity');
 		                 quantityCell.innerHTML = `
-		                     <button type="button" class="quantity-btn" onclick="updateQuantityQuote(${index}, -1)">-</button>
-		                     <p class="quantity-input">${item.quantity}</p>
-		                     <button type="button" class="quantity-btn" onclick="updateQuantityQuote(${index}, 1)">+</button>
-		                 `;
+				        	    <!-- <button type="button" class="quantity-btn" onclick="updateQuantityQuote(${index}, -1)">-</button> -->
+				        	    <p class="quantity-input">${item.quantity}</p>
+				        	    <!-- <button type="button" class="quantity-btn" onclick="updateQuantityQuote(${index}, 1)">+</button> -->
+				         `;
 
 		                 // 주문 금액 (상품 가격 * 수량)
 		                 const orderPriceCell = document.createElement('td');
@@ -279,7 +284,7 @@
 		    		      	     seller_no: item.seller_no,
 		    		      		 amount: item.quantity,
 		    		             assemblyStatus: item.assembly,
-		    		             order_price: item.price * item.quantity,
+		    		             order_price: item.price,
 		    		         };
 		             }
 		         });
@@ -307,7 +312,7 @@
 		     quantityTag.textContent = newQuantity; // 수량 업데이트
 		     updatePrice(quantityTag);
             currentOrder['amount'] = newQuantity;
-            currentOrder['order_price'] = productInfo.price * newQuantity;
+            currentOrder['order_price'] = productInfo.price;
 		 }
 
 		 // 가격 업데이트 함수 (수량 변경 시)
@@ -381,9 +386,9 @@
 		         const quantityCell = document.createElement('td');
 		         quantityCell.classList.add('quantity');
 		         quantityCell.innerHTML = `
-		             <button type="button" class="quantity-btn" onclick="updateQuantityCart(${index}, -1)">-</button>
-		             <p class="quantity-input">${item.quantity}</p>
-		             <button type="button" class="quantity-btn" onclick="updateQuantityCart(${index}, 1)">+</button>
+		        	    <button type="button" class="quantity-btn" onclick="updateQuantityCart(${index}, -1)">-</button>
+		        	    <p class="quantity-input">${item.quantity}</p>
+		        	    <button type="button" class="quantity-btn" onclick="updateQuantityCart(${index}, 1)">+</button>
 		         `;
 
 		         const orderPriceCell = document.createElement('td');
@@ -417,7 +422,7 @@
 		      	     seller_no: item.seller_no,
 		      		 amount: item.quantity,
 		             assemblyStatus: item.assembly,
-		             order_price: item.price * item.quantity,
+		             order_price: item.price,
 		         };
 
 		     });
@@ -432,7 +437,7 @@
 		 }
 
 		 // 수량 조절 함수 (견적함에서)
-		 function updateQuantityQuote(index, change) {
+		 /*function updateQuantityQuote(index, change) {
 		     // localStorage에서 저장된 주문 데이터 가져오기
 		     const quoteInfo = JSON.parse(localStorage.getItem('QuoteDetails'));
 		     
@@ -452,10 +457,10 @@
 		         updateQuoteTable(quoteInfo);
 
 		     }
-		 }
+		 }*/
 
 		 // 견적함 테이블 갱신 함수
-		 function updateQuoteTable(quoteInfo) {
+		 /*function updateQuoteTable(quoteInfo) {
 		     const tbody = document.querySelector('#order-table tbody');
 		     tbody.innerHTML = ''; // 기존 내용 삭제
 
@@ -485,9 +490,9 @@
 		         const quantityCell = document.createElement('td');
 		         quantityCell.classList.add('quantity');
 		         quantityCell.innerHTML = `
-		             <button type="button" class="quantity-btn" onclick="updateQuantityQuote(${index}, -1)">-</button>
-		             <p class="quantity-input">${item.quantity}</p>
-		             <button type="button" class="quantity-btn" onclick="updateQuantityQuote(${index}, 1)">+</button>
+		        	    <!-- <button type="button" class="quantity-btn" onclick="updateQuantityQuote(${index}, -1)">-</button> -->
+		        	    <p class="quantity-input">${item.quantity}</p>
+		        	    <!-- <button type="button" class="quantity-btn" onclick="updateQuantityQuote(${index}, 1)">+</button> -->
 		         `;
 
 		         const orderPriceCell = document.createElement('td');
@@ -533,7 +538,7 @@
 		     const shippingAmount = 5000; // 배송비
 		     const finalAmount = totalAmount + shippingAmount;
 		     updatequotePayment(totalAmount, finalAmount);
-		 }
+		 }*/
 
         // 배송금액 하나로 병합
         function mergeFixedShippingFee() {
@@ -646,6 +651,8 @@
 
 	            currentOrder['address'] = address1 + ' ' + address2;
             	currentOrder['request'] = document.getElementById("request").value;
+            	currentOrder['memberno']= customer.member_no;
+            	const membernovalue=customer.member_no;
 
                 const currentordergetdata = encodeURIComponent(JSON.stringify(currentOrder));
 				console.log(currentordergetdata);
@@ -663,12 +670,12 @@
 	                    orderName: "그래픽 카드 구매", // 주문 이름
 
                         // local
-	                    // successUrl: `http://localhost:8080/api/order?orderData=${currentordergetdata}`, // 결제 성공 시 리다이렉트 URL
-	                    // failUrl: "http://localhost:8080/payfail", // 결제 실패 시 리다이렉트 URL
+	                    successUrl: `http://localhost:8080/api/order?orderData=${currentordergetdata}`, // 결제 성공 시 리다이렉트 URL
+	                    failUrl: `http://localhost:8080/payfail?orderData=${membernovalue}`, // 결제 실패 시 리다이렉트 URL
 
                         // server
-                        successUrl: `http://15.168.89.127:8999/api/order?orderData=${currentordergetdata}`, // 결제 성공 시 리다이렉트 URL
-                        failUrl: "http://15.168.89.127:8999/payfail", // 결제 실패 시 리다이렉트 URL
+                        //successUrl: `http://15.168.89.127:8999/api/order?orderData=${currentordergetdata}`, // 결제 성공 시 리다이렉트 URL
+                        //failUrl: `http://15.168.89.127:8999/payfail?orderData=${membernovalue}`, // 결제 실패 시 리다이렉트 URL
 
 	                    customerName: name,
 	                    customerMobilePhone: phone,
@@ -717,7 +724,7 @@
             <form action="/mypage" method="post">
                 <table>
                     <tr>
-                        <td><label>카드소유주명</label></td>
+                        <td><label>성 함</label></td>
                         <td><input type="text" id="name" name="name"></td>
                     </tr>
                     <tr>

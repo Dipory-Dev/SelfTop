@@ -5,7 +5,6 @@ let currentFilters = {};
 // 검색어를 저장할 변수
 let currentSearchTerm = '';
 
-let cartInfo = [];
 let cartDetails = [];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -218,9 +217,9 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("전송할 JSON 데이터:", jsonCart);
 
         // local
-        // fetch('http://localhost:8080/api/items', {
+        fetch('http://localhost:8080/api/items', {
         // server
-        fetch('http://15.168.89.127:8999/api/items', {
+        //fetch('http://15.168.89.127:8999/api/items', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

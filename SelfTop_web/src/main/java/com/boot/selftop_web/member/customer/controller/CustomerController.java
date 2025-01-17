@@ -341,15 +341,13 @@ public class CustomerController {
 	}
 
 	@GetMapping("/payfail")
-	public String showPayFail(HttpSession session, Model model) {
-		if(session.getAttribute("member_no") == null) {
-			return "redirect:/loginform";
-		}
-
-		Integer member_no = (Integer) session.getAttribute("member_no");
-
-		CustomerDto dto = customerBiz.selectCustomer(member_no);
+	public String showPayFail(HttpSession session, Model model,@RequestParam("orderData") String orderdata) {
+		int memberno = Integer.parseInt(orderdata);
+		CustomerDto dto = customerBiz.selectCustomer(memberno);
 		model.addAttribute("customer", dto);
+        session.setAttribute("role", dto.getRole());
+		session.setAttribute("member_no", dto.getMember_no());
+		session.setAttribute("name", dto.getName());
 		return "payFail";
 	}
 
@@ -633,9 +631,9 @@ public class CustomerController {
 	public @ResponseBody String getKakaoAuthUrl(HttpServletRequest request) throws Exception {
 
 		// 로컬
-//		String reqUrl = "https://kauth.kakao.com/oauth/authorize?client_id=66f3a9b8a7fc33ae96bc2f1fbc513320&redirect_uri=http://localhost:8080/kakaoLogin&response_type=code";
+		String reqUrl = "https://kauth.kakao.com/oauth/authorize?client_id=66f3a9b8a7fc33ae96bc2f1fbc513320&redirect_uri=http://localhost:8080/kakaoLogin&response_type=code";
 		// 서버
-		String reqUrl = "https://kauth.kakao.com/oauth/authorize?client_id=66f3a9b8a7fc33ae96bc2f1fbc513320&redirect_uri=http://15.168.89.127:8999/kakaoLogin&response_type=code";
+		//String reqUrl = "https://kauth.kakao.com/oauth/authorize?client_id=66f3a9b8a7fc33ae96bc2f1fbc513320&redirect_uri=http://15.168.89.127:8999/kakaoLogin&response_type=code";
 		return reqUrl;
 	}
 

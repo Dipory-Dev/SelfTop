@@ -84,7 +84,7 @@ function loadquotedetail(quoteNo) {
 				data-quote-no="${detail.quote_no}" 
 				data-productcode="${detail.product_code}" 
 				data-sellerno="${detail.seller_no}" 
-				data-price="${detail.price}" min="0" />
+				data-price="${detail.price}" min="1" />
 				 <button type="button" class="amount-increase">+</button>
 				 </div>`;
 

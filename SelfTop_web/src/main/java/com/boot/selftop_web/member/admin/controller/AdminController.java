@@ -230,7 +230,7 @@ public class AdminController {
                 coolerDto.setCooler_type(request.getParameter("cooler_type"));
                 coolerDto.setSocket(request.getParameter("socket"));
                 coolerDto.setWatt(Integer.parseInt(request.getParameter("watt")));
-                biz.insert(coolerDto);
+                response = sendMSG(biz, coolerDto);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid category: " + category);

@@ -42,7 +42,7 @@ header {
 
 .header-content p span {
 	font-size: 20px;
-    cursor: pointer;
+    cursor: default;
     color:black;
 }
 
