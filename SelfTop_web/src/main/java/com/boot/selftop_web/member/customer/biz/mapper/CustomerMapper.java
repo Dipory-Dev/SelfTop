@@ -61,7 +61,7 @@ public interface CustomerMapper {
 	        "   AND order_date &gt;= #{startdate} " +
 	        "</if>" +
 	        "<if test='enddate != null and !enddate.isEmpty()'>" +
-	        "   AND order_date &lt;= #{enddate} " +
+	        "   AND order_date &lt;= TO_DATE(#{enddate}, 'yyyy/mm/dd') + INTERVAL '1' DAY " +
 	        "</if>" +
 	        "order by order_date desc" +
 	        "</script>")

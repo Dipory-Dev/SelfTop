@@ -51,6 +51,8 @@
 		     if (productInfo) {
 		    	 currentOrder['product_code'] = productInfo.product_code;
 			     currentOrder['seller_no'] = productInfo.seller_no;
+			     currentOrder['order_price'] = productInfo.price
+			     currentOrder['amount'] = '1';
 
 		         // 장바구니 데이터 초기화 (바로 구매 시)
 		         localStorage.removeItem('CartDetails'); // 장바구니 데이터 삭제
