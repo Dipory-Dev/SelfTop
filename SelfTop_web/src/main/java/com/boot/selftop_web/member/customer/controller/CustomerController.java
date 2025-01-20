@@ -350,6 +350,12 @@ public class CustomerController {
 		session.setAttribute("name", dto.getName());
 		return "payFail";
 	}
+	
+	@GetMapping("/payfailed")
+	public String showPayFail(HttpSession session, Model model) {
+		
+		return "payFail";
+	}
 
 	@GetMapping("/paysuccess")
 	public String showPaySuccess(HttpSession session, Model model) {
@@ -631,9 +637,9 @@ public class CustomerController {
 	public @ResponseBody String getKakaoAuthUrl(HttpServletRequest request) throws Exception {
 
 		// 로컬
-		String reqUrl = "https://kauth.kakao.com/oauth/authorize?client_id=66f3a9b8a7fc33ae96bc2f1fbc513320&redirect_uri=http://localhost:8080/kakaoLogin&response_type=code";
+		//String reqUrl = "https://kauth.kakao.com/oauth/authorize?client_id=66f3a9b8a7fc33ae96bc2f1fbc513320&redirect_uri=http://localhost:8080/kakaoLogin&response_type=code";
 		// 서버
-		//String reqUrl = "https://kauth.kakao.com/oauth/authorize?client_id=66f3a9b8a7fc33ae96bc2f1fbc513320&redirect_uri=http://15.168.89.127:8999/kakaoLogin&response_type=code";
+		String reqUrl = "https://kauth.kakao.com/oauth/authorize?client_id=66f3a9b8a7fc33ae96bc2f1fbc513320&redirect_uri=http://15.168.89.127:8999/kakaoLogin&response_type=code";
 		return reqUrl;
 	}
 

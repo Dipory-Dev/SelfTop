@@ -672,12 +672,12 @@
 	                    orderName: "그래픽 카드 구매", // 주문 이름
 
                         // local
-	                    successUrl: `http://localhost:8080/api/order?orderData=${currentordergetdata}`, // 결제 성공 시 리다이렉트 URL
-	                    failUrl: `http://localhost:8080/payfail?orderData=${membernovalue}`, // 결제 실패 시 리다이렉트 URL
+	                   // successUrl: `http://localhost:8080/api/order?orderData=${currentordergetdata}`, // 결제 성공 시 리다이렉트 URL
+	                   // failUrl: `http://localhost:8080/payfail?orderData=${membernovalue}`, // 결제 실패 시 리다이렉트 URL
 
                         // server
-                        //successUrl: `http://15.168.89.127:8999/api/order?orderData=${currentordergetdata}`, // 결제 성공 시 리다이렉트 URL
-                        //failUrl: `http://15.168.89.127:8999/payfail?orderData=${membernovalue}`, // 결제 실패 시 리다이렉트 URL
+                        successUrl: `http://15.168.89.127:8999/api/order?orderData=${currentordergetdata}`, // 결제 성공 시 리다이렉트 URL
+                        failUrl: `http://15.168.89.127:8999/payfail?orderData=${membernovalue}`, // 결제 실패 시 리다이렉트 URL
 
 	                    customerName: name,
 	                    customerMobilePhone: phone,

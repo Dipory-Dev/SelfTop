@@ -217,9 +217,9 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("전송할 JSON 데이터:", jsonCart);
 
         // local
-        fetch('http://localhost:8080/api/items', {
+        //fetch('http://localhost:8080/api/items', {
         // server
-        //fetch('http://15.168.89.127:8999/api/items', {
+        fetch('http://15.168.89.127:8999/api/items', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -859,6 +859,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const wasSidePanelActive = sidePanel?.classList.contains('active'); // 기존 활성화 상태 저장
     
         // 기존 사이드 패널 정보 비우기
+		cartDetails = [];
         resetQuote();
     
         fetch(`/quote?quote_no=${quote_no}`)

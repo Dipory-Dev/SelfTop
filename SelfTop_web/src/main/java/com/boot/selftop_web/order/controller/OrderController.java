@@ -64,12 +64,14 @@ public class OrderController {
                 productInfo.put("amount", rootNode.get("amount").asInt());
                 productInfo.put("order_price", rootNode.get("order_price").asInt());
                 param2.add(productInfo);
-
+                
                 // param1에 member_no와 address, request 추가
                 param1.put("member_no", member_no);
                 param1.put("address", rootNode.get("address").asText());
                 param1.put("request", rootNode.get("request").asText());
                 param1.put("assemblyStatus", 'N'); // 기본값 설정
+                orderBizImpl.stockupdate(rootNode.get("product_code").asInt(), rootNode.get("seller_no").asInt(), rootNode.get("amount").asInt());
+                
             } else {
                 // 다품 처리
                 for (Iterator<String> it = rootNode.fieldNames(); it.hasNext(); ) {
@@ -90,6 +92,8 @@ public class OrderController {
                             productInfo.put("seller_no", itemNode.get("seller_no").asInt());
                             productInfo.put("amount", itemNode.get("amount").asInt());
                             productInfo.put("order_price", itemNode.get("order_price").asInt());
+                            orderBizImpl.stockupdate(itemNode.get("product_code").asInt(), itemNode.get("seller_no").asInt(), itemNode.get("amount").asInt());
+
                             param2.add(productInfo);
                         } else {
                             System.out.println("Skipping invalid item: " + itemNode.toPrettyString());
@@ -137,7 +141,7 @@ public class OrderController {
             e.printStackTrace();
             Map<String, Object> result = new HashMap<>();
             result.put("msg", "주문 처리 중 오류가 발생했습니다.");
-            return ResponseEntity.status(HttpStatus.FOUND).header("Location", "/payfail").body(result);
+            return ResponseEntity.status(HttpStatus.FOUND).header("Location", "/payfailed"  ).body(result);
         }
     }
 }

@@ -104,5 +104,9 @@ public class OrderBizImpl {
 
 	    return res;
 	}
+	
+	public int stockupdate(int product_code,int seller_no,int amount) {
+		return mapper.stockupdate(product_code, seller_no, amount);
+	}
 
 }
