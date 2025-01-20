@@ -857,7 +857,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // 사이드 패널 상태 확인
         const sidePanel = document.querySelector('.side-panel');
         const wasSidePanelActive = sidePanel?.classList.contains('active'); // 기존 활성화 상태 저장
-    
+		
+		cartDetails = [];
         // 기존 사이드 패널 정보 비우기
         resetQuote();
     
